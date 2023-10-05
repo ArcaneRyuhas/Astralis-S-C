@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AstralisServer")]
+[assembly: AssemblyTitle("MessageService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AstralisServer")]
+[assembly: AssemblyProduct("MessageService")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a0bd499f-dd38-4f82-a7b8-33e7e3d28f24")]
+[assembly: Guid("c86159ef-cf95-4596-8bf9-b0123627e93b")]
 
 // Version information for an assembly consists of the following four values:
 //

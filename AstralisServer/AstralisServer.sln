@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstralisServer", "AstralisServer.csproj", "{A0BD499F-DD38-4F82-A7B8-33E7E3D28F24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageService", "MessageService\MessageService.csproj", "{C86159EF-CF95-4596-8BF9-B0123627E93B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Host\Host.csproj", "{5F161A1E-56E8-4622-9FEB-06CCD8B0477D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A0BD499F-DD38-4F82-A7B8-33E7E3D28F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0BD499F-DD38-4F82-A7B8-33E7E3D28F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A0BD499F-DD38-4F82-A7B8-33E7E3D28F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0BD499F-DD38-4F82-A7B8-33E7E3D28F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C86159EF-CF95-4596-8BF9-B0123627E93B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C86159EF-CF95-4596-8BF9-B0123627E93B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C86159EF-CF95-4596-8BF9-B0123627E93B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C86159EF-CF95-4596-8BF9-B0123627E93B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F161A1E-56E8-4622-9FEB-06CCD8B0477D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F161A1E-56E8-4622-9FEB-06CCD8B0477D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F161A1E-56E8-4622-9FEB-06CCD8B0477D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F161A1E-56E8-4622-9FEB-06CCD8B0477D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
