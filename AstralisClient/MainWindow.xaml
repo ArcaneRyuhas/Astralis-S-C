@@ -5,8 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Astralis"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:p = "clr-namespace:Astralis.Properties"
+        Title="{x:Static p:Resources.title}" Height="650" Width= "1440">
+
+
     <Grid>
-        
+        <Grid x:Name="RegistrationGrid" Background="Black">
+            <Label x:Name="lblRegistration" Content="{x:Static p:Resources.lblRegistration}" HorizontalAlignment="Center" Margin="0,32,0,0" VerticalAlignment="Top" Height="58" Width="184" FontFamily="Arial Black" FontSize="36" Foreground="#FFB52727"/>
+            <Label x:Name="lblNickname" Content="{x:Static p:Resources.lblNickname}" Margin="612,122,644,0" VerticalAlignment="Top" Height="40" Width="184" FontFamily="Arial Black" FontSize="24" Foreground="#FFB52727"/>
+            <Label x:Name="lblMail" Content="{x:Static p:Resources.lblMail}" HorizontalAlignment="Left" Margin="612,220,0,0" VerticalAlignment="Top" Height="40" Width="184" FontFamily="Arial Black" FontSize="24" Foreground="#FFB52727"/>
+            <Label x:Name="lblPassword" Content="{x:Static p:Resources.lblPassword}" HorizontalAlignment="Left" Margin="612,317,0,0" VerticalAlignment="Top" Height="40" Width="184" FontFamily="Arial Black" FontSize="24" Foreground="#FFB52727"/>
+            <Label x:Name="lblConfirmPassword" Content="{x:Static p:Resources.lblConfirmPassword}" HorizontalAlignment="Left" Margin="555,413,0,0" VerticalAlignment="Top" Height="40" Width="299" FontFamily="Arial Black" FontSize="24" Foreground="#FFB52727"/>
+            <Button x:Name="btnRegister" Content="{x:Static p:Resources.btnRegister}" HorizontalAlignment="Left" Margin="97,514,0,0" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="24" Height="38" Width="165" Click="Button_Register"/>
+            <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" HorizontalAlignment="Left" Margin="1189,525,0,0" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="24" Height="37" Width="133" Click="Button_Cancel"/>
+            <TextBox HorizontalAlignment="Left" Margin="539,167,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
+            <TextBox HorizontalAlignment="Left" Margin="538,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="332" Height="33"/>
+            <TextBox HorizontalAlignment="Left" Margin="539,362,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
+            <TextBox HorizontalAlignment="Left" Margin="538,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
+        </Grid>
     </Grid>
+
 </Window>

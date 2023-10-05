@@ -24,5 +24,15 @@ namespace Astralis
         {
             InitializeComponent();
         }
+
+        private void Button_Cancel(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Register(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

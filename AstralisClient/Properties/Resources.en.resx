@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCancel" xml:space="preserve">
-    <value>Cancelar</value>
+    <value>Cancel</value>
   </data>
   <data name="btnRegister" xml:space="preserve">
-    <value>Registrarse</value>
+    <value>Register</value>
   </data>
   <data name="lblConfirmPassword" xml:space="preserve">
-    <value>Confirmar contraseña</value>
+    <value>Confirm password</value>
   </data>
   <data name="lblMail" xml:space="preserve">
-    <value>Correo</value>
+    <value>Mail</value>
   </data>
   <data name="lblNickname" xml:space="preserve">
-    <value>Mi apodo</value>
+    <value>Nickname</value>
   </data>
   <data name="lblPassword" xml:space="preserve">
-    <value>Contraseña</value>
+    <value>Password</value>
   </data>
   <data name="lblRegistration" xml:space="preserve">
-    <value>Registro</value>
+    <value>Registration</value>
   </data>
   <data name="lblTitle" xml:space="preserve">
     <value>ASTRALIS</value>
