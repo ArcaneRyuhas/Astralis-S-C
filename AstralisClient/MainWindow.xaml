@@ -18,10 +18,10 @@
             <Label x:Name="lblConfirmPassword" Content="{x:Static p:Resources.lblConfirmPassword}" HorizontalAlignment="Left" Margin="555,413,0,0" VerticalAlignment="Top" Height="40" Width="299" FontFamily="Arial Black" FontSize="24" Foreground="#FFB52727"/>
             <Button x:Name="btnRegister" Content="{x:Static p:Resources.btnRegister}" HorizontalAlignment="Left" Margin="97,514,0,0" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="24" Height="38" Width="165" Click="Button_Register"/>
             <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" HorizontalAlignment="Left" Margin="1189,525,0,0" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="24" Height="37" Width="133" Click="Button_Cancel"/>
-            <TextBox HorizontalAlignment="Left" Margin="539,167,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
-            <TextBox HorizontalAlignment="Left" Margin="538,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="332" Height="33"/>
-            <TextBox HorizontalAlignment="Left" Margin="539,362,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
-            <TextBox HorizontalAlignment="Left" Margin="538,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
+            <TextBox x:Name="txtNickname" HorizontalAlignment="Left" Margin="539,167,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
+            <TextBox x:Name="txtMail" HorizontalAlignment="Left" Margin="538,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="332" Height="33"/>
+            <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="539,362,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
+            <TextBox x:Name="txtConfirmPassword" HorizontalAlignment="Left" Margin="538,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
         </Grid>
     </Grid>
 
