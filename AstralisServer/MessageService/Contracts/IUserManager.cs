@@ -17,6 +17,9 @@ namespace MessageService
         [OperationContract]
         User GetUserByNickname(string nickname);
 
+        [OperationContract]
+        bool FindUserByNickname(string nickname);
+
 
     }
 
@@ -41,4 +44,5 @@ namespace MessageService
         public string Password { get { return password; } set { password = value; } }
     
     }
+    
 }

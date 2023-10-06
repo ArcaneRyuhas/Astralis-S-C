@@ -54,25 +54,57 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\Model1.Designer.cs">
+    <Compile Include="Contracts\IUserManager.cs" />
+    <Compile Include="Database\AtralisDB.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
+      <DependentUpon>AtralisDB.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Contracts\IUserManager.cs" />
+    <Compile Include="Database\AtralisDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AtralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\AtralisDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AtralisDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Database\User.cs">
+      <DependentUpon>AtralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\UserSession.cs">
+      <DependentUpon>AtralisDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DAO\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EntityDeploy Include="Database\Model1.edmx">
+    <EntityDeploy Include="Database\AtralisDB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+      <LastGenOutput>AtralisDB.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Database\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
+    <None Include="Database\AtralisDB.edmx.diagram">
+      <DependentUpon>AtralisDB.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Database\AtralisDB.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AtralisDB.edmx</DependentUpon>
+      <LastGenOutput>AtralisDB.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Database\AtralisDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AtralisDB.edmx</DependentUpon>
+      <LastGenOutput>AtralisDB.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

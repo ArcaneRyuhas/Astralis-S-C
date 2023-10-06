@@ -25,7 +25,6 @@ namespace Astralis
         {
             InitializeComponent();
             //BORRAR ESTO DESPUES, InitializeNames me sirve para llenar los componentes de TXT
-            InitializeNames();
         }
 
         private void Button_Cancel(object sender, RoutedEventArgs e)
@@ -35,7 +34,34 @@ namespace Astralis
 
         private void Button_Register(object sender, RoutedEventArgs e)
         {
+            UserManager.User user = new UserManager.User();
 
+            if (txtPassword.Text == txtConfirmPassword.Text)
+            {
+                user.Nickname = txtNickname.Text;
+                user.Password = txtPassword.Text;
+                user.ImageId = 1;
+                user.Mail = txtMail.Text;
+
+                UserManager.UserManagerClient client = new UserManager.UserManagerClient();
+
+                if (!client.FindUserByNickname(user.Nickname))
+                {
+                    if (client.AddUser(user) > 0)
+                    {
+                        //Mensaje de registro exitoso
+                    }
+                }
+                else 
+                {
+                    lblErrorNickname.Visibility = Visibility.Visible;
+                }
+            }
+            else 
+            {
+                //TODO
+            }
+            
         }
 
         private void InitializeNames()

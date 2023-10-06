@@ -22,6 +22,7 @@
             <TextBox x:Name="txtMail" HorizontalAlignment="Left" Margin="538,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="332" Height="33"/>
             <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="539,362,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
             <TextBox x:Name="txtConfirmPassword" HorizontalAlignment="Left" Margin="538,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Height="33"/>
+            <Label x:Name="lblErrorNickname" Content="Label" HorizontalAlignment="Left" Margin="539,205,0,0" VerticalAlignment="Top" Foreground="Red" Visibility="Hidden"/>
         </Grid>
     </Grid>
 

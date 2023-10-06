@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AstralisDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="nickName" />
+          </Key>
+          <Property Name="nickName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="mail" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="imageId" Type="int" Nullable="false" />
+          <Property Name="userSessionFk" Type="int" />
+        </EntityType>
+        <EntityType Name="UserSession">
+          <Key>
+            <PropertyRef Name="userSessionId" />
+          </Key>
+          <Property Name="userSessionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_User_UserSession">
+          <End Role="UserSession" Type="Self.UserSession" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserSession">
+              <PropertyRef Name="userSessionId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="userSessionFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AstralisDBModelStoreContainer">
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserSession" EntityType="Self.UserSession" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_User_UserSession" Association="Self.FK_User_UserSession">
+            <End Role="UserSession" EntitySet="UserSession" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AstralisDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="nickName" />
+          </Key>
+          <Property Name="nickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="imageId" Type="Int32" Nullable="false" />
+          <Property Name="userSessionFk" Type="Int32" />
+          <NavigationProperty Name="UserSession" Relationship="Self.FK_User_UserSession" FromRole="User" ToRole="UserSession" />
+        </EntityType>
+        <EntityType Name="UserSession">
+          <Key>
+            <PropertyRef Name="userSessionId" />
+          </Key>
+          <Property Name="userSessionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_UserSession" FromRole="UserSession" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_User_UserSession">
+          <End Role="UserSession" Type="Self.UserSession" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserSession">
+              <PropertyRef Name="userSessionId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="userSessionFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AstralisDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="UserSession" EntityType="Self.UserSession" />
+          <AssociationSet Name="FK_User_UserSession" Association="Self.FK_User_UserSession">
+            <End Role="UserSession" EntitySet="UserSession" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AstralisDBModelStoreContainer" CdmEntityContainer="AstralisDBEntities">
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="AstralisDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="nickName" ColumnName="nickName" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="imageId" ColumnName="imageId" />
+                <ScalarProperty Name="userSessionFk" ColumnName="userSessionFk" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserSession">
+            <EntityTypeMapping TypeName="AstralisDBModel.UserSession">
+              <MappingFragment StoreEntitySet="UserSession">
+                <ScalarProperty Name="userSessionId" ColumnName="userSessionId" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

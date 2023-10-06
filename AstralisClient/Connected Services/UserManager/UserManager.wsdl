@@ -48,6 +48,12 @@
   <wsdl:message name="IUserManager_GetUserByNickname_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetUserByNicknameResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserManager_FindUserByNickname_InputMessage">
+    <wsdl:part name="parameters" element="tns:FindUserByNickname" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_FindUserByNickname_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FindUserByNicknameResponse" />
+  </wsdl:message>
   <wsdl:portType name="IUserManager">
     <wsdl:operation name="AddUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
@@ -56,6 +62,10 @@
     <wsdl:operation name="GetUserByNickname">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/GetUserByNickname" message="tns:IUserManager_GetUserByNickname_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/GetUserByNicknameResponse" message="tns:IUserManager_GetUserByNickname_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FindUserByNickname">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/FindUserByNickname" message="tns:IUserManager_FindUserByNickname_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/FindUserByNicknameResponse" message="tns:IUserManager_FindUserByNickname_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
@@ -79,6 +89,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="FindUserByNickname">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/FindUserByNickname" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="UserManager">
     <wsdl:port name="NetTcpBinding_IUserManager" binding="tns:NetTcpBinding_IUserManager">
@@ -86,7 +105,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>PC-RECAN\mario</Upn>
+          <Upn>DESKTOP-CGUI3D0\mario</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
