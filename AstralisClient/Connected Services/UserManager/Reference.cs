@@ -116,11 +116,11 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddUser", ReplyAction="http://tempuri.org/IUserManager/AddUserResponse")]
         System.Threading.Tasks.Task<int> AddUserAsync(Astralis.UserManager.User user);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/GetUserByNickname", ReplyAction="http://tempuri.org/IUserManager/GetUserByNicknameResponse")]
-        Astralis.UserManager.User GetUserByNickname(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUser", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserResponse")]
+        int ConfirmUser(string nickname, string password);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/GetUserByNickname", ReplyAction="http://tempuri.org/IUserManager/GetUserByNicknameResponse")]
-        System.Threading.Tasks.Task<Astralis.UserManager.User> GetUserByNicknameAsync(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUser", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserResponse")]
+        System.Threading.Tasks.Task<int> ConfirmUserAsync(string nickname, string password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/FindUserByNickname", ReplyAction="http://tempuri.org/IUserManager/FindUserByNicknameResponse")]
         bool FindUserByNickname(string nickname);
@@ -164,12 +164,12 @@ namespace Astralis.UserManager {
             return base.Channel.AddUserAsync(user);
         }
         
-        public Astralis.UserManager.User GetUserByNickname(string nickname) {
-            return base.Channel.GetUserByNickname(nickname);
+        public int ConfirmUser(string nickname, string password) {
+            return base.Channel.ConfirmUser(nickname, password);
         }
         
-        public System.Threading.Tasks.Task<Astralis.UserManager.User> GetUserByNicknameAsync(string nickname) {
-            return base.Channel.GetUserByNicknameAsync(nickname);
+        public System.Threading.Tasks.Task<int> ConfirmUserAsync(string nickname, string password) {
+            return base.Channel.ConfirmUserAsync(nickname, password);
         }
         
         public bool FindUserByNickname(string nickname) {

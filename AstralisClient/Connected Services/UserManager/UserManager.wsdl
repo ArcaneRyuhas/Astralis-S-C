@@ -42,11 +42,11 @@
   <wsdl:message name="IUserManager_AddUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddUserResponse" />
   </wsdl:message>
-  <wsdl:message name="IUserManager_GetUserByNickname_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetUserByNickname" />
+  <wsdl:message name="IUserManager_ConfirmUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmUser" />
   </wsdl:message>
-  <wsdl:message name="IUserManager_GetUserByNickname_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetUserByNicknameResponse" />
+  <wsdl:message name="IUserManager_ConfirmUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmUserResponse" />
   </wsdl:message>
   <wsdl:message name="IUserManager_FindUserByNickname_InputMessage">
     <wsdl:part name="parameters" element="tns:FindUserByNickname" />
@@ -59,9 +59,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/AddUserResponse" message="tns:IUserManager_AddUser_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetUserByNickname">
-      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/GetUserByNickname" message="tns:IUserManager_GetUserByNickname_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/GetUserByNicknameResponse" message="tns:IUserManager_GetUserByNickname_OutputMessage" />
+    <wsdl:operation name="ConfirmUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/ConfirmUser" message="tns:IUserManager_ConfirmUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/ConfirmUserResponse" message="tns:IUserManager_ConfirmUser_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="FindUserByNickname">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/FindUserByNickname" message="tns:IUserManager_FindUserByNickname_InputMessage" />
@@ -80,8 +80,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetUserByNickname">
-      <soap12:operation soapAction="http://tempuri.org/IUserManager/GetUserByNickname" style="document" />
+    <wsdl:operation name="ConfirmUser">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/ConfirmUser" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -105,7 +105,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DESKTOP-CGUI3D0\mario</Upn>
+          <Upn>DESKTOP-RE19IRK\kirbi</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

@@ -64,16 +64,6 @@ namespace Astralis
             
         }
 
-        private void InitializeNames()
-        {
-            //BORRAR ESTO DESPUES, Creo un objeto de tipo cliente y lo uso para llamar a los metodos, despues creo un objeto segun el servicio para guardar el objeto.
-            UserManager.UserManagerClient client = new UserManager.UserManagerClient();
-            UserManager.User user = client.GetUserByNickname("");
 
-            txtNickname.Text = user.Nickname;
-            txtMail.Text = user.Mail;
-            txtPassword.Text = user.Password;
-            txtConfirmPassword.Text = user.Password;
-        }
     }
 }
