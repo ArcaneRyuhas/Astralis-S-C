@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Astralis"
         mc:Ignorable="d"
         xmlns:p = "clr-namespace:Astralis.Properties"
-        Title="{x:Static p:Resources.title}" Height="650" Width= "1440">
+        Title="{x:Static p:Resources.title}" Height="850" Width= "1340">
 
 
     <Grid>

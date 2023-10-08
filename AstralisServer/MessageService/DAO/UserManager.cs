@@ -8,10 +8,31 @@ using System.Threading.Tasks;
 namespace MessageService
 {
     public class UserManager : IUserManager
+
+
     {
-        public User GetUserByNickname(string nickname)
+        public int ConfirmUser(string nickname, string password)
         {
-            throw new NotImplementedException();
+            int result = 0;
+
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+
+                var databaseUser = context.User.Find(nickname);
+
+                    var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
+
+                    if (databaseUsersession != null && databaseUsersession.password == password)
+                    {
+                        result = 1;
+                    }
+                    else
+                    {
+                        result = 0;
+                    }
+            }
+            return result;
         }
 
         public int AddUser(User user)

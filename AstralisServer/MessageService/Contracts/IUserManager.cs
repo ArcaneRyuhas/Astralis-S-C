@@ -15,7 +15,7 @@ namespace MessageService
         int AddUser(User user);
 
         [OperationContract]
-        User GetUserByNickname(string nickname);
+        int ConfirmUser(string nickname, string password);
 
         [OperationContract]
         bool FindUserByNickname(string nickname);
