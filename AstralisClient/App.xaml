@@ -8,6 +8,7 @@
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Foreground" Value="#B52727" />
+            <Setter Property="FontFamily" Value="Fonts/#Pixelify Sans"/>
         </Style>
 
         <Style TargetType="TextBox">
@@ -16,6 +17,7 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#B52727"/>
             <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="FontFamily" Value="Fonts/#Pixelify Sans"/>
             
         </Style>
 
@@ -25,6 +27,7 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#B52727"/>
             <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="FontFamily" Value="Fonts/#Pixelify Sans"/>
         </Style>
 
         <Style TargetType="Button">
@@ -34,6 +37,7 @@
             <Setter Property="BorderBrush" Value="#B52727"/>
             <Setter Property="BorderThickness" Value="0,0,0,0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Fonts/#Pixelify Sans"/>
         </Style>
         
         

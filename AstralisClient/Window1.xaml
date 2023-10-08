@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Astralis.Windows"
         mc:Ignorable="d"
+        xmlns:p = "clr-namespace:Astralis.Properties"
         Title="LogIn" Height="650" Width="500" Foreground="Black" Background="Black">
     <Grid Background="Black">
-        <Label Content="Astralis&#xD;&#xA;" HorizontalAlignment="Center" Margin="0,64,0,0" VerticalAlignment="Top" FontSize="48" Height="76" FontFamily="Fonts/#PixelFont"/>
+        <Label Content="{x:Static p:Resources.lblTitle}" HorizontalAlignment="Center" Margin="0,64,0,0" VerticalAlignment="Top" FontSize="48" Height="76"/>
         <TextBox x:Name="tbNickname" HorizontalAlignment="Center" Margin="0,243,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <PasswordBox x:Name="pbPassword" HorizontalAlignment="Center" Margin="0,380,0,0" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="lbUser" Content="Usuario" HorizontalAlignment="Center" Margin="0,195,0,0" VerticalAlignment="Top" FontSize="25"/>
-        <Label x:Name="lbPassword" Content="Contraseña" HorizontalAlignment="Center" Margin="0,345,0,0" VerticalAlignment="Top" FontSize="25"/>
-        <Button x:Name="btnLogIn" Content="Entrar" HorizontalAlignment="Left" Margin="92,562,0,0" VerticalAlignment="Top" Click="Click_LogIn" FontSize="25"/>
-        <Button x:Name="btnSignIn" Content="Registrarse" HorizontalAlignment="Left" Margin="328,562,0,0" VerticalAlignment="Top" Click="Click_Register" FontSize="25" RenderTransformOrigin="0.439,-0.481"/>
+        <Label x:Name="lbUser" Content="{x:Static p:Resources.lblNickname}" HorizontalAlignment="Center" Margin="0,195,0,0" VerticalAlignment="Top" FontSize="25"/>
+        <Label x:Name="lbPassword" Content="{x:Static p:Resources.lblPassword}" HorizontalAlignment="Center" Margin="0,345,0,0" VerticalAlignment="Top" FontSize="25"/>
+        <Button x:Name="btnLogIn" Content="{x:Static p:Resources.btnLogIn}" HorizontalAlignment="Left" Margin="74,562,0,0" VerticalAlignment="Top" Click="Click_LogIn" FontSize="25"/>
+        <Button x:Name="btnSignIn" Content="{x:Static p:Resources.btnRegister}" HorizontalAlignment="Left" Margin="288,562,0,0" VerticalAlignment="Top" Click="Click_Register" FontSize="25" RenderTransformOrigin="0.439,-0.481"/>
     </Grid>
 </Window>

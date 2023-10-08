@@ -33,9 +33,9 @@ namespace Astralis.Windows
             UserManager.UserManagerClient client = new UserManager.UserManagerClient();
             if(client.ConfirmUser(nickname, password) == 1)
             {
-                MainWindow mainWindow = new MainWindow();
+                GameWindow gameWindow = new GameWindow();
                 this.Close();
-                mainWindow.Show();
+                gameWindow.Show();
             }
         }
 

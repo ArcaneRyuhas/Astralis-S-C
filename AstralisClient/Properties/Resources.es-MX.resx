@@ -120,6 +120,9 @@
   <data name="btnCancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="btnLogIn" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
   <data name="btnRegister" xml:space="preserve">
     <value>Registrarse</value>
   </data>
@@ -130,7 +133,7 @@
     <value>Correo</value>
   </data>
   <data name="lblNickname" xml:space="preserve">
-    <value>Mi apodo</value>
+    <value>Usuario</value>
   </data>
   <data name="lblPassword" xml:space="preserve">
     <value>Contraseña</value>

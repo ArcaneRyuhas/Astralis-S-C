@@ -70,6 +70,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entrar.
+        /// </summary>
+        public static string btnLogIn {
+            get {
+                return ResourceManager.GetString("btnLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registrarse.
         /// </summary>
         public static string btnRegister {
