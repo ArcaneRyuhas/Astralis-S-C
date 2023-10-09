@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Security.Cryptography;
+using Astralis.Windows;
 
 namespace Astralis
 {
@@ -24,22 +26,23 @@ namespace Astralis
         public MainWindow()
         {
             InitializeComponent();
-            //BORRAR ESTO DESPUES, InitializeNames me sirve para llenar los componentes de TXT
         }
 
         private void Button_Cancel(object sender, RoutedEventArgs e)
         {
-
+            Window1 window1 = new Window1();
+            this.Close();
+            window1.Show();
         }
 
         private void Button_Register(object sender, RoutedEventArgs e)
         {
             UserManager.User user = new UserManager.User();
 
-            if (txtPassword.Text == txtConfirmPassword.Text)
+            if (pbPassword.Password == pbConfirmPassword.Password)
             {
                 user.Nickname = txtNickname.Text;
-                user.Password = txtPassword.Text;
+                user.Password = CreateSha2(pbPassword.Password);
                 user.ImageId = 1;
                 user.Mail = txtMail.Text;
 
@@ -52,18 +55,33 @@ namespace Astralis
                         //Mensaje de registro exitoso
                     }
                 }
-                else 
+                else
                 {
                     lblErrorNickname.Visibility = Visibility.Visible;
                 }
             }
-            else 
+            else
             {
                 //TODO
             }
-            
+
         }
 
+        private string CreateSha2(string password)
+        {
+            string hash = string.Empty;
 
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashValue = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                foreach (byte b in hashValue)
+                {
+                    hash += $"{b:X2}";
+                }
+            }
+
+            return hash;
+        }
     }
 }
