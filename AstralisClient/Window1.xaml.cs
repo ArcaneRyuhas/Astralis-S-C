@@ -11,12 +11,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Astralis.Properties;
 
 namespace Astralis.Windows
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
+    /// 
+
     public partial class Window1 : Window
     {
         public Window1()
@@ -29,15 +32,38 @@ namespace Astralis.Windows
         {
             string password = pbPassword.Password;
             string nickname = tbNickname.Text;
+            bool noEmptyFields = true;
 
             UserManager.UserManagerClient client = new UserManager.UserManagerClient();
-            if(client.ConfirmUser(nickname, password) == 1)
+
+            if(string.IsNullOrEmpty(password))
+            {
+                txbPasswordError.Text = Astralis.Properties.Resources.txbEmptyFieldError;
+                txbPasswordError.Visibility = Visibility.Visible;
+                noEmptyFields = false;
+            }
+
+            if (string.IsNullOrEmpty(nickname))
+            {
+                txbUserError.Text = Astralis.Properties.Resources.txbEmptyFieldError;
+                txbUserError.Visibility = Visibility.Visible;
+                noEmptyFields = false;
+            }
+
+            if (noEmptyFields && client.ConfirmUser(nickname, password) == 1)
             {
                 GameWindow gameWindow = new GameWindow();
                 this.Close();
                 gameWindow.Show();
             }
+            else
+            {
+                txbInvalidFields.Text = Astralis.Properties.Resources.txbInvalidFields;
+                txbInvalidFields.Visibility = Visibility.Visible;
+            }
         }
+
+
 
         private void Click_Register(object sender, RoutedEventArgs e)
         {

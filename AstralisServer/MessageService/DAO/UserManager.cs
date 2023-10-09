@@ -14,12 +14,13 @@ namespace MessageService
         public int ConfirmUser(string nickname, string password)
         {
             int result = 0;
-
-            using (var context = new AstralisDBEntities())
+            if(FindUserByNickname(nickname))
             {
-                context.Database.Log = Console.WriteLine;
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
 
-                var databaseUser = context.User.Find(nickname);
+                    var databaseUser = context.User.Find(nickname);
 
                     var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
 
@@ -31,7 +32,9 @@ namespace MessageService
                     {
                         result = 0;
                     }
+                }
             }
+            
             return result;
         }
 

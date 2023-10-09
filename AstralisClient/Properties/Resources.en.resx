@@ -147,4 +147,10 @@
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>
   </data>
+  <data name="txbEmptyFieldError" xml:space="preserve">
+    <value>This field cannot be empty</value>
+  </data>
+  <data name="txbInvalidFields" xml:space="preserve">
+    <value>Invalid credentials, please enter a valid user</value>
+  </data>
 </root>

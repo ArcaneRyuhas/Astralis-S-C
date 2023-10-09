@@ -149,5 +149,23 @@ namespace Astralis.Properties {
                 return ResourceManager.GetString("title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Este campo no puede estar vacío.
+        /// </summary>
+        public static string txbEmptyFieldError {
+            get {
+                return ResourceManager.GetString("txbEmptyFieldError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credenciales invalidas, favor de introducir un usuario valido.
+        /// </summary>
+        public static string txbInvalidFields {
+            get {
+                return ResourceManager.GetString("txbInvalidFields", resourceCulture);
+            }
+        }
     }
 }
