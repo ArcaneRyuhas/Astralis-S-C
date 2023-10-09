@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# AppConfig - The configuration for the database to both members of the proyect
+AstralisServer/Host/App.config
+AstralisServer/MessageService/App.config
