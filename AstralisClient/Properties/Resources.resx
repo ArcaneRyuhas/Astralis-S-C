@@ -129,6 +129,21 @@
   <data name="lblConfirmPassword" xml:space="preserve">
     <value>Confirmar contraseña</value>
   </data>
+  <data name="lblErrorMail" xml:space="preserve">
+    <value>Introduzca un correo existente</value>
+  </data>
+  <data name="lblErrorNickname" xml:space="preserve">
+    <value>El nombre no debe incluir espacios</value>
+  </data>
+  <data name="lblErrorNicknameRepeated" xml:space="preserve">
+    <value>Este usuario ya existe</value>
+  </data>
+  <data name="lblErrorPassword" xml:space="preserve">
+    <value>La contraseña es muy debil</value>
+  </data>
+  <data name="lblErrorPasswordsNoMatch" xml:space="preserve">
+    <value>Las contraseñas no coinciden</value>
+  </data>
   <data name="lblMail" xml:space="preserve">
     <value>Correo</value>
   </data>
@@ -144,13 +159,19 @@
   <data name="lblTitle" xml:space="preserve">
     <value>ASTRALIS</value>
   </data>
+  <data name="msgUserAddedSucceed" xml:space="preserve">
+    <value>¡Registro exitoso!</value>
+  </data>
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>
   </data>
+  <data name="titleUserAdded" xml:space="preserve">
+    <value>Registro</value>
+  </data>
   <data name="txbEmptyFieldError" xml:space="preserve">
-    <value>Este campo no puede estar vacío</value>
+    <value>El campo no puede estar vacio</value>
   </data>
   <data name="txbInvalidFields" xml:space="preserve">
-    <value>Credenciales invalidas, favor de introducir un usuario valido</value>
+    <value>Campo invalido</value>
   </data>
 </root>
