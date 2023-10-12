@@ -79,7 +79,7 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registrarse.
+        ///   Looks up a localized string similar to Registro.
         /// </summary>
         public static string btnRegister {
             get {
@@ -93,6 +93,51 @@ namespace Astralis.Properties {
         public static string lblConfirmPassword {
             get {
                 return ResourceManager.GetString("lblConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Introduzca un correo existente.
+        /// </summary>
+        public static string lblErrorMail {
+            get {
+                return ResourceManager.GetString("lblErrorMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El nombre no debe incluir espacios.
+        /// </summary>
+        public static string lblErrorNickname {
+            get {
+                return ResourceManager.GetString("lblErrorNickname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Este usuario ya existe.
+        /// </summary>
+        public static string lblErrorNicknameRepeated {
+            get {
+                return ResourceManager.GetString("lblErrorNicknameRepeated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La contraseña es muy debil.
+        /// </summary>
+        public static string lblErrorPassword {
+            get {
+                return ResourceManager.GetString("lblErrorPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Las contraseñas no coinciden.
+        /// </summary>
+        public static string lblErrorPasswordsNoMatch {
+            get {
+                return ResourceManager.GetString("lblErrorPasswordsNoMatch", resourceCulture);
             }
         }
         
@@ -142,11 +187,47 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ¡Registro exitoso!.
+        /// </summary>
+        public static string msgUserAddedSucceed {
+            get {
+                return ResourceManager.GetString("msgUserAddedSucceed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ASTRALIS.
         /// </summary>
         public static string title {
             get {
                 return ResourceManager.GetString("title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registro.
+        /// </summary>
+        public static string titleUserAdded {
+            get {
+                return ResourceManager.GetString("titleUserAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El nombre de usuario debe incluir letras de la A a la Z, numeros y signos como: !@#$%&amp;.
+        /// </summary>
+        public static string tpNicknameHelp {
+            get {
+                return ResourceManager.GetString("tpNicknameHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El nombre de usuario debe tener mas de 2 y menos de 30 caracteres.
+        /// </summary>
+        public static string tpNicknameLenghtHelp {
+            get {
+                return ResourceManager.GetString("tpNicknameLenghtHelp", resourceCulture);
             }
         }
         

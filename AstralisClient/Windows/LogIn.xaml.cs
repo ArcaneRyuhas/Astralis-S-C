@@ -20,9 +20,9 @@ namespace Astralis.Windows
     /// </summary>
     /// 
 
-    public partial class Window1 : Window
+    public partial class LogIn : Window
     {
-        public Window1()
+        public LogIn()
         {
             InitializeComponent();
         }
@@ -38,15 +38,13 @@ namespace Astralis.Windows
 
             if(string.IsNullOrEmpty(password))
             {
-                txbPasswordError.Text = Astralis.Properties.Resources.txbEmptyFieldError;
-                txbPasswordError.Visibility = Visibility.Visible;
+                //AgregarToolTip
                 noEmptyFields = false;
             }
 
             if (string.IsNullOrEmpty(nickname))
             {
-                txbUserError.Text = Astralis.Properties.Resources.txbEmptyFieldError;
-                txbUserError.Visibility = Visibility.Visible;
+                //Agregar ToolTip
                 noEmptyFields = false;
             }
 
@@ -67,9 +65,9 @@ namespace Astralis.Windows
 
         private void Click_Register(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new MainWindow();
+            SignUp signUp = new SignUp();
             this.Close();
-            mainWindow.Show();
+            signUp.Show();
         }
     }
 }
