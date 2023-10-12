@@ -13,7 +13,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="220"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -24,13 +24,13 @@
 
 
             <Label Content="{x:Static p:Resources.lblTitle}" HorizontalAlignment="Center" Margin="0,42,0,0" VerticalAlignment="Top" FontSize="48" Height="76" Grid.Row="0" Grid.Column="1"/>
-            <TextBox x:Name="tbNickname" HorizontalAlignment="Center" Margin="0,243,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="0" Grid.Column="1"/>
-            <PasswordBox x:Name="pbPassword" HorizontalAlignment="Center" Margin="0,380,0,0" VerticalAlignment="Top" Width="120" Grid.Row="0" Grid.Column="1"/>
+            <TextBox Template="{DynamicResource TextBoxTemplateNormal}" x:Name="tbNickname" HorizontalAlignment="Center" Margin="0,243,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="0" Grid.Column="1"/>
+            <PasswordBox Template="{DynamicResource PasswordBoxTemplate}" x:Name="pbPassword" HorizontalAlignment="Center" Margin="0,380,0,0" VerticalAlignment="Top" Width="120" Grid.Row="0" Grid.Column="1"/>
             <Label x:Name="lbUser" Content="{x:Static p:Resources.lblNickname}" HorizontalAlignment="Center" Margin="0,195,0,0" VerticalAlignment="Top" FontSize="25" Grid.Row="0" Grid.Column="1"/>
-            <Label x:Name="lbPassword" Content="{x:Static p:Resources.lblPassword}" HorizontalAlignment="Center" Margin="0,338,0,0" VerticalAlignment="Top" FontSize="25" Grid.Row="0" Grid.Column="1"/>
-            <Button x:Name="btnLogIn" Content="{x:Static p:Resources.btnLogIn}" HorizontalAlignment="Left" Margin="21,0,0,0" VerticalAlignment="Center" Click="Click_LogIn" FontSize="25" Grid.Row="1" Grid.Column="0"/>
-            <Button x:Name="btnSignIn" Content="{x:Static p:Resources.btnRegister}" HorizontalAlignment="Right" Margin="0,0,20,0" VerticalAlignment="Center" Click="Click_Register" FontSize="25" RenderTransformOrigin="0.439,-0.481" Grid.Column="2" Grid.Row="1"/>
-            <TextBlock Style="{StaticResource TextBlockError}" x:Name="txbInvalidFields" HorizontalAlignment="Center" Margin="0,470,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Visibility="Hidden" Grid.Row="0" Grid.Column="1"/>
+            <Label x:Name="lbPassword" Content="{x:Static p:Resources.lblPassword}" HorizontalAlignment="Center" Margin="0,330,0,0" VerticalAlignment="Top" FontSize="25" Grid.Row="0" Grid.Column="1"/>
+            <Button Template="{DynamicResource ButtonTemplateNormal}" x:Name="btnLogIn" Content="{x:Static p:Resources.btnLogIn}" HorizontalAlignment="Left" Margin="21,0,0,0" VerticalAlignment="Center" Click="Click_LogIn" FontSize="25" Grid.Row="1" Grid.Column="0"/>
+            <Button Template="{DynamicResource ButtonTemplateNormal}" x:Name="btnSignIn" Content="{x:Static p:Resources.btnRegister}" HorizontalAlignment="Right" Margin="0,0,20,0" VerticalAlignment="Center" Click="Click_Register" FontSize="25" RenderTransformOrigin="0.439,-0.481" Grid.Column="2" Grid.Row="1"/>
+            <TextBlock Style="{StaticResource TextBlockError}" TextAlignment="Center" x:Name="txbInvalidFields" Margin="0,432,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Visibility="Hidden" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
 </Window>
