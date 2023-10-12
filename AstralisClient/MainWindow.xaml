@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:validation="clr-namespace:Astralis.Validations"
         xmlns:local="clr-namespace:Astralis"
         mc:Ignorable="d"
         xmlns:p = "clr-namespace:Astralis.Properties"
-        Title="{x:Static p:Resources.title}" Height="700" Width= "1040">
+        Title="{x:Static p:Resources.title}" Height="750" Width= "1040">
 
 
     <Grid>
@@ -24,18 +25,46 @@
             </Grid.ColumnDefinitions>
 
             <Label x:Name="lblRegistration" Content="{x:Static p:Resources.lblRegistration}" HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Margin="0,32,0,0" VerticalAlignment="Top" Height="71" Width="447" FontSize="50" Foreground="#FFB52727"/>
-            <Label x:Name="lblNickname" Content="{x:Static p:Resources.lblNickname}" HorizontalContentAlignment="Center" Grid.Column="1" Margin="128,127,128,0" VerticalAlignment="Top" Height="40" FontSize="24" Foreground="#FFB52727"/>
-            <Label x:Name="lblMail" Content="{x:Static p:Resources.lblMail}" HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Margin="0,228,0,0" VerticalAlignment="Top" Height="40" Width="330" FontSize="24" Foreground="#FFB52727"/>
-            <Label x:Name="lblPassword" Content="{x:Static p:Resources.lblPassword}" HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Margin="0,334,0,0" VerticalAlignment="Top" Height="40" Width="330" FontSize="24" Foreground="#FFB52727"/>
-            <Label x:Name="lblConfirmPassword" Content="{x:Static p:Resources.lblConfirmPassword}" HorizontalContentAlignment="Center" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,439,0,0" VerticalAlignment="Top" Height="40" Width="332" FontSize="24" Foreground="#FFB52727"/>
+            <Label x:Name="lblNickname" Content="{x:Static p:Resources.lblNickname}" HorizontalContentAlignment="Center" Grid.Column="1" Margin="128,127,128,0" VerticalAlignment="Top" Height="40" FontSize="24" Background="Transparent"/>
+            <Label x:Name="lblMail" Content="{x:Static p:Resources.lblMail}" HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Margin="0,233,0,0" VerticalAlignment="Top" Height="35" Width="330" FontSize="24" Background="Transparent"/>
+            <Label x:Name="lblPassword" Content="{x:Static p:Resources.lblPassword}" HorizontalContentAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Margin="0,348,0,0" VerticalAlignment="Top" Height="40" Width="330" FontSize="24" Background="Transparent"/>
+            <Label x:Name="lblConfirmPassword" Content="{x:Static p:Resources.lblConfirmPassword}" HorizontalContentAlignment="Center" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,473,0,0" VerticalAlignment="Top" Height="40" Width="332" FontSize="24" Background="Transparent"/>
             <Button x:Name="btnRegister" Content="{x:Static p:Resources.btnRegister}" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" FontSize="30" Height="38" Width="206" Click="Button_Register" Margin="20,3,0,0"/>
             <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" HorizontalAlignment="Center" Grid.Column="2" VerticalAlignment="Top" FontSize="30" Height="37" Width="170" Click="Button_Cancel" Margin="0,3,0,0" Grid.Row="1"/>
-            <TextBox x:Name="txtNickname" HorizontalAlignment="Center" Grid.Column="1" Margin="0,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="330" Height="33" FontSize="20"/>
-            <TextBox x:Name="txtMail" HorizontalAlignment="Center" Grid.Column="1" Margin="0,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="332" Height="33" FontSize="20"/>
-            <PasswordBox x:Name="pbConfirmPassword" HorizontalAlignment="Center" Grid.Column="1" Margin="0,483,0,0" VerticalAlignment="Top" Width="332" Height="33"/>
-            <PasswordBox x:Name="pbPassword" HorizontalAlignment="Center" Margin="0,379,0,0" VerticalAlignment="Top" Width="330" Height="31" Grid.Column="1"/>
-            <Label x:Name="lblErrorNickname" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="539,205,0,0" VerticalAlignment="Top" Foreground="Red" Visibility="Hidden"/>
-            <ToggleButton x:Name="tbPasswordHelp" Height="30" Width="36" HorizontalAlignment="Left" Grid.Column="1" Margin="464,339,0,215"/>
+            <TextBox x:Name="txtNickname" Background="Transparent" PreviewTextInput="TextFilterForNickname" HorizontalAlignment="Center" Grid.Column="1" Margin="0,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="330" Height="33" FontSize="20">
+                <TextBox.Text>
+                    <Binding Path="Nickname"
+                            UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validation:UserValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="Foreground" Value="#B52727"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="#B52727"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                        <Setter Property="FontFamily" Value="Fonts/#Pixelify Sans"/>
+                        <Setter Property="Cursor" Value="Pen"/>
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError" Value="True">
+                                <Setter Property="ToolTip"
+                                        Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                    Path=(Validation.Errors)/ErrorContent}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <TextBox x:Name="txtMail"  PreviewTextInput="TextLimiterForMail" HorizontalAlignment="Center" Grid.Column="1" Margin="0,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="332" Height="33" FontSize="20"/>
+            <PasswordBox x:Name="pbConfirmPassword" HorizontalAlignment="Center" Grid.Column="1" Margin="0,517,0,0" VerticalAlignment="Top" Width="332" Height="33"/>
+            <PasswordBox x:Name="pbPassword" HorizontalAlignment="Center" Margin="0,393,0,0" VerticalAlignment="Top" Width="330" Height="31" Grid.Column="1"/>
+            <Label x:Name="lblErrorNickname" Content="El usuario ya existe" Grid.Column="1" HorizontalAlignment="Left" Margin="60,200,0,0" VerticalAlignment="Top" Foreground="Red" Visibility="Hidden"/>
+            <Label x:Name="lblErrorPassword" Grid.Column="1" Visibility="Hidden" Margin="60,427,58,126" HorizontalAlignment="Left" VerticalAlignment="Top" Content="La contraseÃ±a es insegura"/>
+            <Label x:Name="lblErrorMail" Grid.Column="1" Visibility="Hidden" Margin="58,306,58,248" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Ingrese un correo valido" Foreground="Red"/>
         </Grid>
     </Grid>
 

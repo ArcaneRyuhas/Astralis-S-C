@@ -25,6 +25,7 @@ namespace Astralis
     /// </summary>
     /// 
 
+
     public partial class MainWindow : Window
     {
         private const string NICKNAME_REGEX = @"[a-zA-Z0-9]+";
@@ -35,6 +36,8 @@ namespace Astralis
         public MainWindow()
         {
             InitializeComponent();
+            UserManager.User viewModel = new UserManager.User();
+            DataContext = viewModel;
         }
 
         private void Button_Cancel(object sender, RoutedEventArgs e)
