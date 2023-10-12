@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using Astralis.Properties;
 
 namespace Astralis.Validations
 {
@@ -20,11 +21,11 @@ namespace Astralis.Validations
 
             if (!userRegex.IsMatch(input))
             {
-                result = new ValidationResult(false, "tpErrorUsername");
+                result = new ValidationResult(false, Resources.tpNicknameHelp);
 
                 if(input.Length < 2 || input.Length >30)
                 {
-                    result = new ValidationResult(false, "tpErrorUsernameLength");
+                    result = new ValidationResult(false, Resources.tpNicknameLenghtHelp);
                 }
             }
 

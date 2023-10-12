@@ -26,14 +26,16 @@ namespace Astralis
     /// 
 
 
-    public partial class MainWindow : Window
+    public partial class SignUp : Window
     {
-        private const string NICKNAME_REGEX = @"[a-zA-Z0-9]+";
+        private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";
+        private const string NICKNAME_REGEX = @"^[a-zA-Z0-9]{2,30}$";
         private const string MAIL_REGEX = @"^.+@[^\.].*\.[a-z]{2,}$";
-        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$";
+        private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9/S]{0,40}$";
+        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,40})\S$";
         private const int MAX_FIELDS_LENGHT = 49;
 
-        public MainWindow()
+        public SignUp()
         {
             InitializeComponent();
             UserManager.User viewModel = new UserManager.User();
@@ -42,9 +44,9 @@ namespace Astralis
 
         private void Button_Cancel(object sender, RoutedEventArgs e)
         {
-            Window1 window1 = new Window1();
+            LogIn logIn = new LogIn();
             this.Close();
-            window1.Show();
+            logIn.Show();
         }
 
         private void Button_Register(object sender, RoutedEventArgs e)
@@ -120,7 +122,7 @@ namespace Astralis
             TextBox textBox = (TextBox)sender;
             string fullString= textBox.Text + e.Text;
 
-            if (!Regex.IsMatch(fullString, NICKNAME_REGEX))
+            if (!Regex.IsMatch(fullString, DELIMITER_NICKNAME_REGEX))
             {
                 e.Handled = true;
             }

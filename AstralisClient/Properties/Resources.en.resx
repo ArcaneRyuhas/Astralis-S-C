@@ -124,10 +124,25 @@
     <value>Log In</value>
   </data>
   <data name="btnRegister" xml:space="preserve">
-    <value>Register</value>
+    <value>Sign up</value>
   </data>
   <data name="lblConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>
+  </data>
+  <data name="lblErrorMail" xml:space="preserve">
+    <value>Enter an existing email</value>
+  </data>
+  <data name="lblErrorNickname" xml:space="preserve">
+    <value>The name must not include spaces and have at least two characters</value>
+  </data>
+  <data name="lblErrorNicknameRepeated" xml:space="preserve">
+    <value>This user already exists</value>
+  </data>
+  <data name="lblErrorPassword" xml:space="preserve">
+    <value>Password is weak</value>
+  </data>
+  <data name="lblErrorPasswordsNoMatch" xml:space="preserve">
+    <value>Passwords do not match</value>
   </data>
   <data name="lblMail" xml:space="preserve">
     <value>Mail</value>
@@ -144,8 +159,20 @@
   <data name="lblTitle" xml:space="preserve">
     <value>ASTRALIS</value>
   </data>
+  <data name="msgUserAddedSucceed" xml:space="preserve">
+    <value>Sign up successful!</value>
+  </data>
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>
+  </data>
+  <data name="titleUserAdded" xml:space="preserve">
+    <value>Sign up</value>
+  </data>
+  <data name="tpNicknameHelp" xml:space="preserve">
+    <value>Username can include letters from A to Z, numbers and signs:  !@#$%&amp;</value>
+  </data>
+  <data name="tpNicknameLenghtHelp" xml:space="preserve">
+    <value>Username must have more than 2 and less than 30 characters</value>
   </data>
   <data name="txbEmptyFieldError" xml:space="preserve">
     <value>This field cannot be empty</value>
