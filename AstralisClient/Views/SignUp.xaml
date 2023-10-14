@@ -1,12 +1,12 @@
-﻿<Window x:Class="Astralis.SignUp"
+﻿<Window x:Class="Astralis.Views.SignUp"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:validation="clr-namespace:Astralis.Validations"
-        xmlns:local="clr-namespace:Astralis"
+        xmlns:local="clr-namespace:Astralis.Views"
         mc:Ignorable="d"
-        xmlns:p = "clr-namespace:Astralis.Properties"
+        xmlns:p = "clr-namespace:Astralis.Properties" xmlns:astralis="clr-namespace:Astralis"
         Title="{x:Static p:Resources.title}" Height="750" Width= "1040"
         ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
 

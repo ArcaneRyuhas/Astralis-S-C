@@ -1,14 +1,15 @@
-﻿using MessageService.Database;
+﻿using MessageService.Contracts;
+using MessageService.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MessageService
 {
-    public class UserManager : IUserManager
-
+    public partial class UserManager : IUserManager
 
     {
         public int ConfirmUser(string nickname, string password)
@@ -48,7 +49,6 @@ namespace MessageService
                 context.Database.Log = Console.WriteLine;
 
                 var newSession = context.UserSession.Add(new UserSession() { password = user.Password });
-                //context.SaveChanges(); 
 
                 Database.User databaseUser = new Database.User();
                 databaseUser.nickName = user.Nickname;
@@ -84,6 +84,25 @@ namespace MessageService
             }
 
             return isFound;
+        }
+    }
+
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    public partial class UserManager : ILobbyManager
+    {
+        public void CreateLobby(Contracts.User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void JoinLobby(Contracts.User user)
+        {
+            OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>().UpdateLobby(user);
+        }
+
+        public void ChangeLobbyUserTeam(Contracts.User user, int team)
+        {
+            throw new NotImplementedException();
         }
     }
 }

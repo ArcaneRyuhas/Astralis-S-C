@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\ILobbyManager.cs" />
     <Compile Include="Contracts\IUserManager.cs" />
     <Compile Include="Database\AtralisDB.Context.cs">
       <AutoGen>True</AutoGen>

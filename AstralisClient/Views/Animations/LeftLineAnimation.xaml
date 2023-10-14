@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="Astralis.Views.Animations.LeftLineAnimation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Astralis.Views.Animations"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="800">
+    <Grid>
+        <Path Data="M9 25.9899C10.0821 18.2834 32.6964 11.7688 40.148 9.60269C63.6503 2.77069 89.4733 4.28337 113.397 9.33183C158.793 18.9114 204.492 33.8076 252.365 29.1048C280.605 26.3306 309.934 17.1715 334 5.26889 "
+              StrokeDashOffset="0"
+              StrokeThickness="5"
+              Stretch="Uniform"
+              StrokeStartLineCap="Triangle"
+              StrokeEndLineCap="Triangle"
+              StrokeDashArray="500"
+              x:Name="LeftLine"
+              SnapsToDevicePixels="True" Margin="0,0,550,0">
+
+            <Path.Stroke>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop x:Name="LeftLineStroke" Color="Red" Offset="0.0"/>
+                </LinearGradientBrush>
+            </Path.Stroke>
+
+            <Path.Triggers>
+                <EventTrigger RoutedEvent="Path.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="LeftLine"
+                                  Storyboard.TargetProperty="StrokeDashOffset"
+                                  From="500" To="0"
+                                  Duration="0:0:6"
+                                  BeginTime="0:0:0"/>
+                            <DoubleAnimation Storyboard.TargetName="LeftLineStroke"
+                                  Storyboard.TargetProperty="Offset"
+                                  From="0.0" To="1.1"
+                                  AutoReverse="True"
+                                  BeginTime="0:0:0"
+                                  Duration="0:0:6"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Path.Triggers>
+        </Path>
+
+        
+
+        <Path Data="M334 25.9899C332.918 18.2834 310.304 11.7688 302.852 9.60269C279.35 2.77069 253.527 4.28337 229.603 9.33183C184.207 18.9114 138.508 33.8076 90.6351 29.1048C62.3946 26.3306 33.0658 17.1715 9.00001 5.26889"
+            StrokeDashOffset="0"
+            StrokeThickness="5"
+            Stretch="Uniform"
+            StrokeStartLineCap="Triangle"
+            StrokeEndLineCap="Triangle"
+            StrokeDashArray="500"
+            x:Name="RightLine"
+            SnapsToDevicePixels="True" Margin="550,0,0,0">
+
+            <Path.Stroke>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop x:Name="RightLineStroke" Color="Red" Offset="0.0"/>
+                </LinearGradientBrush>
+            </Path.Stroke>
+
+            <Path.Triggers>
+                <EventTrigger RoutedEvent="Path.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="RightLine"
+                                             Storyboard.TargetProperty="StrokeDashOffset"
+                                             From="500" To="0"
+                                             Duration="0:0:6"
+                                             BeginTime="0:0:0"/>
+                            <DoubleAnimation Storyboard.TargetName="RightLineStroke"
+                                             Storyboard.TargetProperty="Offset"
+                                             From="0.0" To="1.1"
+                                             AutoReverse="True"
+                                             BeginTime="0:0:0"
+                                             Duration="0:0:6"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Path.Triggers>
+        </Path>
+
+
+    </Grid>
+</UserControl>

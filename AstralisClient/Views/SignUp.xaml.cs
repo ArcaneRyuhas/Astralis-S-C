@@ -14,11 +14,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Security.Cryptography;
-using Astralis.Windows;
 using System.Text.RegularExpressions;
 using Astralis.Properties;
 
-namespace Astralis
+namespace Astralis.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -94,14 +93,14 @@ namespace Astralis
                 band = false;
             }
 
-            if(!Regex.IsMatch(user.Password, PASSWORD_REGEX))
+            if(!Regex.IsMatch(pbPassword.Password, PASSWORD_REGEX))
             {
                 lblErrorPassword.Visibility = Visibility.Visible;
                 lblErrorPassword.Content = Properties.Resources.lblErrorPassword;
                 band = false;
             }
 
-            if (pbPassword.Password == pbConfirmPassword.Password)
+            if (pbPassword.Password != pbConfirmPassword.Password)
             {
                 lblErrorPassword.Visibility = Visibility.Visible;
                 lblErrorPassword.Content = Properties.Resources.lblErrorPasswordsNoMatch;
@@ -146,7 +145,7 @@ namespace Astralis
         private User SetUserInformation(User user)
         {
             user.Nickname = txtNickname.Text;
-            user.Password = CreateSha2(pbPassword.Password);
+            user.Password = pbPassword.Password;
             user.ImageId = 1;
             user.Mail = txtMail.Text;
 

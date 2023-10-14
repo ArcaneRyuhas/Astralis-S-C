@@ -1,0 +1,63 @@
+﻿<UserControl  x:Class="Astralis.Views.AstralisAnimation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Astralis.Views"
+        mc:Ignorable="d"
+        Height="80" Width="200"
+        Background="Transparent">
+
+    <Grid>
+        <Path Data="M0.9 42.78V12.75H6.815V6.9H12.665V0.984997H19.295V6.9H25.145V12.75H31.125V42.78H24.495V31.015H7.465V42.78H0.9ZM7.465 24.45H24.495V13.4H18.645V7.55H13.315V13.4H7.465V24.45ZM44.9009 42.78V36.93H38.9859V30.365H45.5509V36.28H62.5809V25.1H44.9009V19.25H38.9859V6.9H44.9009V0.984997H63.2309V6.9H69.2109V13.4H62.5809V7.55H45.5509V18.665H63.2309V24.45H69.2109V36.93H63.2309V42.78H44.9009ZM87.5673 42.78V7.55H82.3673V13.4H75.8023V6.9H81.7173V0.984997H100.047V6.9H106.027V13.4H99.3973V7.55H94.1973V42.78H87.5673ZM111.286 42.78V6.9H117.201V0.984997H135.531V6.9H141.511V25.1H135.531V31.015H132.671V36.28H138.521V42.78H132.021V36.93H126.041V31.015H117.851V42.78H111.286ZM117.851 24.45H134.881V7.55H117.851V24.45ZM149.372 42.78V12.75H155.287V6.9H161.137V0.984997H167.767V6.9H173.617V12.75H179.597V42.78H172.967V31.015H155.937V42.78H149.372ZM155.937 24.45H172.967V13.4H167.117V7.55H161.787V13.4H155.937V24.45ZM193.373 42.78V36.93H187.458V0.984997H194.023V36.28H211.053V30.365H217.683V36.93H211.703V42.78H193.373ZM225.544 42.78V36.28H231.459V7.55H225.544V0.984997H243.939V7.55H237.959V36.28H243.939V42.78H225.544ZM257.738 42.78V36.93H251.823V30.365H258.388V36.28H275.418V25.1H257.738V19.25H251.823V6.9H257.738V0.984997H276.068V6.9H282.048V13.4H275.418V7.55H258.388V18.665H276.068V24.45H282.048V36.93H276.068V42.78H257.738Z"
+              StrokeDashOffset="0"
+              StrokeThickness="1"
+              Stretch="Uniform"
+              StrokeStartLineCap="Triangle"
+              StrokeEndLineCap="Triangle"
+              StrokeDashArray="500"
+              x:Name="AstralisAnimated"
+              SnapsToDevicePixels="True" Margin="0,0,0,0">
+
+            <Path.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop x:Name="pathFill" Color="Transparent" Offset="0.0"/>
+                </LinearGradientBrush>
+            </Path.Fill>
+
+            <Path.Stroke>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop x:Name="lineStroke" Color="Red" Offset="0.0"/>
+                </LinearGradientBrush>
+            </Path.Stroke>
+
+            <Path.Triggers>
+                <EventTrigger RoutedEvent="Path.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="AstralisAnimated"
+                                             Storyboard.TargetProperty="StrokeDashOffset"
+                                             From="500" To="0"
+                                             Duration="0:0:10"
+                                             BeginTime="0:0:0"/>
+                            <DoubleAnimation Storyboard.TargetName="lineStroke"
+                                             Storyboard.TargetProperty="Offset"
+                                             From="0.0" To="1.1" 
+                                             AutoReverse="True"
+                                             BeginTime="0:0:0"
+                                             Duration="0:0:10"/>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="pathFill"
+                                             Storyboard.TargetProperty="Color">
+                                <EasingColorKeyFrame Value="Transparent" KeyTime="0:0:0"/>
+                                <EasingColorKeyFrame Value="#FFB52727" KeyTime="0:0:10"/>
+                            </ColorAnimationUsingKeyFrames>
+
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Path.Triggers>
+
+
+        </Path>
+    </Grid>
+</UserControl>
