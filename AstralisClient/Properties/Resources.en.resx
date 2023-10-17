@@ -120,11 +120,32 @@
   <data name="btnCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="btnCreateGame" xml:space="preserve">
+    <value>CREATE GAME</value>
+  </data>
+  <data name="btnDecks" xml:space="preserve">
+    <value>DECKS</value>
+  </data>
+  <data name="btnExit" xml:space="preserve">
+    <value>EXIT</value>
+  </data>
+  <data name="btnJoinGame" xml:space="preserve">
+    <value>JOIN GAME</value>
+  </data>
+  <data name="btnLeaderbord" xml:space="preserve">
+    <value>LEADERBORD</value>
+  </data>
   <data name="btnLogIn" xml:space="preserve">
     <value>Log In</value>
   </data>
+  <data name="btnMyProfile" xml:space="preserve">
+    <value>My profile</value>
+  </data>
   <data name="btnRegister" xml:space="preserve">
     <value>Sign up</value>
+  </data>
+  <data name="btnSettings" xml:space="preserve">
+    <value>SETTINGS</value>
   </data>
   <data name="lblConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>

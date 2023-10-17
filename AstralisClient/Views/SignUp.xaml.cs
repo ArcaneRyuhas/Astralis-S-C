@@ -37,7 +37,7 @@ namespace Astralis.Views
         public SignUp()
         {
             InitializeComponent();
-            UserManager.User viewModel = new UserManager.User();
+            User viewModel = new User();
             DataContext = viewModel;
         }
 

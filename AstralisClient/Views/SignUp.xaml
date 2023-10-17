@@ -6,7 +6,8 @@
         xmlns:validation="clr-namespace:Astralis.Validations"
         xmlns:local="clr-namespace:Astralis.Views"
         mc:Ignorable="d"
-        xmlns:p = "clr-namespace:Astralis.Properties" xmlns:astralis="clr-namespace:Astralis"
+        xmlns:p = "clr-namespace:Astralis.Properties" 
+        xmlns:astralis="clr-namespace:Astralis"
         Title="{x:Static p:Resources.title}" Height="750" Width= "1040"
         ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
 

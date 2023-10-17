@@ -70,6 +70,51 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CREAR PARTIDA.
+        /// </summary>
+        public static string btnCreateGame {
+            get {
+                return ResourceManager.GetString("btnCreateGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAZOS.
+        /// </summary>
+        public static string btnDecks {
+            get {
+                return ResourceManager.GetString("btnDecks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SALIR.
+        /// </summary>
+        public static string btnExit {
+            get {
+                return ResourceManager.GetString("btnExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UNIRSE A PARTIDA.
+        /// </summary>
+        public static string btnJoinGame {
+            get {
+                return ResourceManager.GetString("btnJoinGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TABLERO.
+        /// </summary>
+        public static string btnLeaderbord {
+            get {
+                return ResourceManager.GetString("btnLeaderbord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entrar.
         /// </summary>
         public static string btnLogIn {
@@ -79,11 +124,29 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mi perfil.
+        /// </summary>
+        public static string btnMyProfile {
+            get {
+                return ResourceManager.GetString("btnMyProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registro.
         /// </summary>
         public static string btnRegister {
             get {
                 return ResourceManager.GetString("btnRegister", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONFIGURACIÓN.
+        /// </summary>
+        public static string btnSettings {
+            get {
+                return ResourceManager.GetString("btnSettings", resourceCulture);
             }
         }
         
