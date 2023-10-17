@@ -142,6 +142,17 @@ namespace Astralis.Views
             }
         }
 
+        private void TextLimeterForPassword (object sender, TextCompositionEventArgs e)
+        {
+            PasswordBox passwordBox = (PasswordBox)sender;
+            String passwordString = passwordBox.Password;
+
+            if (!Regex.IsMatch(passwordString, DELIMITER_PASSWORD_REGEX))
+            {
+                e.Handled = true;
+            }
+        }
+
         private User SetUserInformation(User user)
         {
             user.Nickname = txtNickname.Text;
