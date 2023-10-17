@@ -21,16 +21,18 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="250"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Column="1" Content="Button" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"/>
-            <Button Grid.Column="1" Content="Button" HorizontalAlignment="Center" Margin="0,60,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"/>
-            <Button Grid.Column="1" Content="Button" HorizontalAlignment="Center" Margin="0,120,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"/>
-            <Button Grid.Column="1" Content="Button" HorizontalAlignment="Center" Margin="0,180,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"/>
-            <Button Grid.Column="1" Content="Button" HorizontalAlignment="Center" Margin="0,240,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36" />
-            <Button Grid.Column="1" Content="Button" HorizontalAlignment="Center" Margin="0,300,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"  />
+            <Button Grid.Column="1" Content="{x:Static p:Resources.btnCreateGame}" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36" Click="Button_Click_1"/>
+            <Button Grid.Column="1" Content="{x:Static p:Resources.btnJoinGame}" HorizontalAlignment="Center" Margin="0,60,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"/>
+            <Button Grid.Column="1" Content="{x:Static p:Resources.btnDecks}" HorizontalAlignment="Center" Margin="0,120,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"/>
+            <Button Grid.Column="1" Content="{x:Static p:Resources.btnLeaderbord}" HorizontalAlignment="Center" Margin="0,180,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"/>
+            <Button Grid.Column="1" Content="{x:Static p:Resources.btnSettings}" HorizontalAlignment="Center" Margin="0,240,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36" />
+            <Button Grid.Column="1" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" Margin="0,300,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="36"  />
+            <Button Grid.Column="0" Content="{x:Static p:Resources.btnMyProfile}" HorizontalAlignment="Left"  Grid.Row="0" VerticalAlignment="Top" FontSize="36" Click="Button_Click_1" Margin="10,10,0,0"/>
+            <Button Grid.Column="2" Content="{x:Static p:Resources.btnFriends}" HorizontalAlignment="Left"  Grid.Row="0" VerticalAlignment="Top" FontSize="36" Click="Button_Click_1" Margin="213,10,0,0"/>
 
 
 
