@@ -135,6 +135,9 @@
   <data name="btnJoinGame" xml:space="preserve">
     <value>JOIN GAME</value>
   </data>
+  <data name="btnKickout" xml:space="preserve">
+    <value>Kickout</value>
+  </data>
   <data name="btnLeaderbord" xml:space="preserve">
     <value>LEADERBORD</value>
   </data>

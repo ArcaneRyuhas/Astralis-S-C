@@ -13,22 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Astralis.Views
+namespace Astralis.Views.Animations
 {
     /// <summary>
-    /// Interaction logic for Lobby.xaml
+    /// Interaction logic for LobbyUserCard.xaml
     /// </summary>
-    public partial class Lobby : Page
+    public partial class LobbyUserCard : UserControl
     {
-        public Lobby()
+        public LobbyUserCard()
         {
             InitializeComponent();
         }
-
-        private void btnExit_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.GoBack();
-        }
-
     }
 }

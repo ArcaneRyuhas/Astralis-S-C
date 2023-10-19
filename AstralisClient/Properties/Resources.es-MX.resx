@@ -135,6 +135,9 @@
   <data name="btnJoinGame" xml:space="preserve">
     <value>UNIRSE A PARTIDA</value>
   </data>
+  <data name="btnKickout" xml:space="preserve">
+    <value>Expulsar</value>
+  </data>
   <data name="btnLeaderbord" xml:space="preserve">
     <value>TABLERO</value>
   </data>

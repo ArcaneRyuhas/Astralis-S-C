@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://172.20.10.10:8082" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8082" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="e54a540d-038d-455f-b5ae-7878567f8b30" SourceId="1" SourceUrl="http://172.20.10.10:8082/?xsd=xsd0" />
-    <MetadataFile FileName="UserManager.wsdl" MetadataType="Wsdl" ID="6db45a4f-c7a4-418c-b647-034e17e57bf7" SourceId="1" SourceUrl="http://172.20.10.10:8082/?wsdl" />
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="a80d92bb-1f52-46b7-9f3a-39d9d1ede825" SourceId="1" SourceUrl="http://172.20.10.10:8082/?disco" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="f5f08a1e-0695-47ae-bb4d-2f1a79339f2a" SourceId="1" SourceUrl="http://172.20.10.10:8082/?xsd=xsd1" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="eaf2a4ac-b4e5-424d-bdb5-ce7b9383d7b3" SourceId="1" SourceUrl="http://172.20.10.10:8082/?xsd=xsd2" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="9873fae7-08a3-4da3-843c-1f3b1386abc0" SourceId="1" SourceUrl="http://localhost:8082/?xsd=xsd2" />
+    <MetadataFile FileName="UserManager1.wsdl" MetadataType="Wsdl" ID="0be17912-7958-4dea-8c62-03e4996375d0" SourceId="1" SourceUrl="http://localhost:8082/?wsdl" />
+    <MetadataFile FileName="item31.xsd" MetadataType="Schema" ID="71b48d0f-ce5a-4c66-be82-3f528c154f9e" SourceId="1" SourceUrl="http://localhost:8082/?xsd=xsd0" />
+    <MetadataFile FileName="item1.disco" MetadataType="Disco" ID="421a5a31-9cfa-48f3-8050-f0f9c6ac209a" SourceId="1" SourceUrl="http://localhost:8082/?disco" />
+    <MetadataFile FileName="item32.xsd" MetadataType="Schema" ID="5b410043-b637-41aa-a506-6ce779debfe2" SourceId="1" SourceUrl="http://localhost:8082/?xsd=xsd1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

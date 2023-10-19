@@ -10,9 +10,9 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://172.20.10.10:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://172.20.10.10:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://172.20.10.10:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService" />
+      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IUserManager_AddUser_InputMessage">
@@ -33,6 +33,12 @@
   <wsdl:message name="IUserManager_FindUserByNickname_OutputMessage">
     <wsdl:part name="parameters" element="tns:FindUserByNicknameResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserManager_GetUserByNickname_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserByNickname" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_GetUserByNickname_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserByNicknameResponse" />
+  </wsdl:message>
   <wsdl:portType name="IUserManager">
     <wsdl:operation name="AddUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
@@ -45,6 +51,10 @@
     <wsdl:operation name="FindUserByNickname">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/FindUserByNickname" message="tns:IUserManager_FindUserByNickname_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/FindUserByNicknameResponse" message="tns:IUserManager_FindUserByNickname_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserByNickname">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/GetUserByNickname" message="tns:IUserManager_GetUserByNickname_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/GetUserByNicknameResponse" message="tns:IUserManager_GetUserByNickname_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
@@ -77,12 +87,21 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetUserByNickname">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/GetUserByNickname" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="UserManager">
     <wsdl:port name="NetTcpBinding_IUserManager" binding="tns:NetTcpBinding_IUserManager">
-      <soap12:address location="net.tcp://172.20.10.10:8081/MessageService" />
+      <soap12:address location="net.tcp://localhost:8081/MessageService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://172.20.10.10:8081/MessageService</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

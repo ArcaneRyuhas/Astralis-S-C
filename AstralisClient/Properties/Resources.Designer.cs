@@ -115,6 +115,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expulsar.
+        /// </summary>
+        public static string btnKickout {
+            get {
+                return ResourceManager.GetString("btnKickout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TABLERO.
         /// </summary>
         public static string btnLeaderbord {

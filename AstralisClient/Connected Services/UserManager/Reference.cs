@@ -127,6 +127,12 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/FindUserByNickname", ReplyAction="http://tempuri.org/IUserManager/FindUserByNicknameResponse")]
         System.Threading.Tasks.Task<bool> FindUserByNicknameAsync(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/GetUserByNickname", ReplyAction="http://tempuri.org/IUserManager/GetUserByNicknameResponse")]
+        Astralis.UserManager.User GetUserByNickname(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/GetUserByNickname", ReplyAction="http://tempuri.org/IUserManager/GetUserByNicknameResponse")]
+        System.Threading.Tasks.Task<Astralis.UserManager.User> GetUserByNicknameAsync(string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -178,6 +184,14 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task<bool> FindUserByNicknameAsync(string nickname) {
             return base.Channel.FindUserByNicknameAsync(nickname);
+        }
+        
+        public Astralis.UserManager.User GetUserByNickname(string nickname) {
+            return base.Channel.GetUserByNickname(nickname);
+        }
+        
+        public System.Threading.Tasks.Task<Astralis.UserManager.User> GetUserByNicknameAsync(string nickname) {
+            return base.Channel.GetUserByNicknameAsync(nickname);
         }
     }
 }
