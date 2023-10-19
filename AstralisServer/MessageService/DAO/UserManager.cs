@@ -129,4 +129,40 @@ namespace MessageService
             throw new NotImplementedException();
         }
     }
+
+    public partial class UserManager: IOnlineUserManager
+    {
+        private static Dictionary<string, IOnlineUserManagerCallback> onlineUsers = new Dictionary<string, IOnlineUserManagerCallback>();
+        
+        public void ConectUser(string nickname)
+        {
+            if(!onlineUsers.ContainsKey(nickname))
+            {
+                IOnlineUserManagerCallback currentUserCallbackChannel = OpeationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
+                List<string> onlineNicknames = onlineUsers.Keys.ToList();
+                currentUserCallbackChannel.ShowUsersOnline(onlineNicknames);
+
+                foreach (var user in onlineUsers)
+                {
+                    user.Value.ShowUserConected(nickname);
+                }
+
+                onlineUsers.Add(nickname, currentUserCallbackChannel);
+                
+            }
+        }
+        public void DisconectUser(string nickname)
+        {
+            if (onlineUsers.ContainsKey(nickname))
+            {
+                onlineUsers.Remove(nickname);
+                foreach (var user in onlineNicknames)
+                {
+                    user.Value.ShowUserDisconected(nickname);
+                }
+            }
+            
+        }
+      
+    }
 }

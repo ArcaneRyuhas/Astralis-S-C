@@ -26,6 +26,28 @@ namespace MessageService
 
     }
 
+    [ServiceContract(CallbackContract = typeof(IOnlineUserManagerCallback))]
+    public interface IOnlineUserManager
+    {
+        [OperationContract(IsOneWay = true)]
+        void ConectUser(string nickname);
+
+        [OperationContract(IsOneWay = true)]
+        void DisconectUser(string nickname);
+    }
+
+    [ServiceContract]
+    public interface IOnlineUserManagerCallback
+    {
+        [OperationContract]
+        void ShowUserConected(string nickname);
+        [OperationContract]
+        void ShowUserDisonected(string nickname);
+        [OperationContract]
+        void ShowUsersOnline(string nickname);
+    }
+
+
     [DataContract]
     public class User
     {
