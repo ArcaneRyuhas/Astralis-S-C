@@ -16,18 +16,31 @@ using System.Windows.Shapes;
 namespace Astralis.Views
 {
     /// <summary>
-    /// Interaction logic for Lobby.xaml
+    /// Interaction logic for MainMenu.xaml
     /// </summary>
-    public partial class Lobby : Page
+    public partial class MainMenu : Page
     {
-        public Lobby()
+        public delegate void CloseWindowEventHandler(object sender, EventArgs e);
+        public event CloseWindowEventHandler CloseWindowEvent;
+
+        private Frame mainFrame;
+
+        public MainMenu(Frame mainFrame)
         {
             InitializeComponent();
+            this.mainFrame = mainFrame;
+        }
+
+        private void btnCreateGame_Click(object sender, RoutedEventArgs e)
+        {
+            Lobby lobby = new Lobby();
+            NavigationService.Navigate(lobby);
+
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.GoBack();
+            CloseWindowEvent?.Invoke(this, EventArgs.Empty);
         }
     }
 }

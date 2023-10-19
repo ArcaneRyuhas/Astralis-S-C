@@ -22,16 +22,14 @@ namespace Astralis.Views
         public GameWindow()
         {
             InitializeComponent();
+            MainMenu mainMenu = new MainMenu(mainFrame);
+            mainMenu.CloseWindowEvent += CloseWindowEventHandler;
+            mainFrame.Content = mainMenu;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CloseWindowEventHandler(object sender, EventArgs e)
         {
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            
+            Close();
         }
     }
 }
