@@ -20,6 +20,9 @@ namespace MessageService
         [OperationContract]
         bool FindUserByNickname(string nickname);
 
+        [OperationContract]
+        User GetUserByNickname(string nickname);
+
 
     }
 

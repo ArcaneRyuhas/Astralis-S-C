@@ -73,9 +73,9 @@ namespace MessageService
 
             using (var context = new AstralisDBEntities())
             {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
 
-                    var databaseUser = context.User.Find(nickname);
+                var databaseUser = context.User.Find(nickname);
 
                 if (databaseUser != null)
                 {
@@ -84,6 +84,30 @@ namespace MessageService
             }
 
             return isFound;
+        }
+
+        public User GetUserByNickname(string nickname)
+        {
+            User foundUser = new User();
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+                var databaseUser = context.User.Find(nickname);
+
+                if(databaseUser != null)
+                {
+                    foundUser.Nickname = databaseUser.nickName;
+                    foundUser.Mail = databaseUser.mail;
+                    foundUser.ImageId = databaseUser.imageId;
+                }
+                else
+                {
+                    foundUser.Nickname = "NotFound";
+                }
+                
+            }
+
+            return foundUser;
         }
     }
 
