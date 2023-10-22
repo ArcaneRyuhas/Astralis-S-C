@@ -23,7 +23,6 @@ namespace MessageService
                     context.Database.Log = Console.WriteLine;
 
                     var databaseUser = context.User.Find(nickname);
-
                     var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
 
                     if (databaseUsersession != null && databaseUsersession.password == password)
@@ -103,7 +102,7 @@ namespace MessageService
                 }
                 else
                 {
-                    foundUser.Nickname = "NotFound";
+                    foundUser.Nickname = "UserNotFound";
                 }
                 
             }
@@ -123,22 +122,31 @@ namespace MessageService
         {
             if (usersInLobby.ContainsValue(gameId))
             {
-                List<string> users = FindKeysByValue(usersInLobby, gameId);
+                List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+                List<Contracts.User> users = new List<Contracts.User>();
+
+                int listPosition = 0;
+
+                foreach (string nickname in usersNickname)
+                {
+                    users[listPosition] = GetUserByNickname(nickname);
+                    listPosition++;
+                }
 
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
                 usersContext.Add(user.Nickname, currentUserCallbackChannel);
                 currentUserCallbackChannel.ShowUsersInLobby(users);
                 usersInLobby.Add(user.Nickname, gameId);
 
-                foreach (string userInLobby in users)
+                foreach (string userInTheLobby in usersNickname)
                 {
-                    usersContext[userInLobby].ShowConnectionInLobby(user.Nickname);
+                    usersContext[userInTheLobby].ShowConnectionInLobby(user);
                 }
 
             }
         }
 
-        public int CreateLobby(Contracts.   User user)
+        public int CreateLobby(Contracts.User user)
         {
             int result = 0;
             string gameId = generateGameId();
@@ -147,6 +155,7 @@ namespace MessageService
             {
                 gameId = generateGameId();
             }
+
 
             using (var context = new AstralisDBEntities())
             {
@@ -162,6 +171,7 @@ namespace MessageService
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
                 usersContext.Add(user.Nickname, currentUserCallbackChannel);
                 usersInLobby.Add(user.Nickname, gameId);
+                currentUserCallbackChannel.GiveLobbyId(gameId);
             }
 
             return result;
@@ -191,7 +201,17 @@ namespace MessageService
         {
             bool isRepeated = false;
 
-            //TODO
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+
+                var databaseGameId = context.User.Find(gameId);
+
+                if (databaseGameId != null)
+                {
+                    isRepeated = true;
+                }
+            }
 
             return isRepeated;
         }

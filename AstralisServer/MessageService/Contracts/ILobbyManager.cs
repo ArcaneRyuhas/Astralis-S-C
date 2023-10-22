@@ -28,15 +28,18 @@ namespace MessageService.Contracts
     public interface ILobbyManagerCallback 
     {
         [OperationContract]
-        void ShowConnectionInLobby(string user);
+        void ShowConnectionInLobby(User user);
 
         [OperationContract]
-        void ShowUsersInLobby(List<string> userList);
+        void ShowUsersInLobby(List<User> userList);
 
         [OperationContract]
         void ShowDisconnectionInLobby(string nickname);
 
         [OperationContract]
         void UpdateLobbyUserTeam(User user, int team);
+
+        [OperationContract]
+        void GiveLobbyId(string gameId);
     }
 }
