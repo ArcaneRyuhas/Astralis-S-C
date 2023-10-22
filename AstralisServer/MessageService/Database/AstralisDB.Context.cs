@@ -25,7 +25,14 @@ namespace MessageService.Database
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Ban> Ban { get; set; }
+        public virtual DbSet<Deck> Deck { get; set; }
+        public virtual DbSet<FriendStatus> FriendStatus { get; set; }
+        public virtual DbSet<Game> Game { get; set; }
+        public virtual DbSet<Plays> Plays { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserDeck> UserDeck { get; set; }
+        public virtual DbSet<UserFriend> UserFriend { get; set; }
         public virtual DbSet<UserSession> UserSession { get; set; }
     }
 }

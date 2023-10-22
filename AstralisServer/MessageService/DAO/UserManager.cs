@@ -1,6 +1,7 @@
 ﻿using MessageService.Contracts;
 using MessageService.Database;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -39,7 +40,7 @@ namespace MessageService
             return result;
         }
 
-        public int AddUser(User user)
+        public int AddUser(Contracts.User user)
         {
 
             int result = 0;
@@ -86,9 +87,9 @@ namespace MessageService
             return isFound;
         }
 
-        public User GetUserByNickname(string nickname)
+        public Contracts.User GetUserByNickname(string nickname)
         {
-            User foundUser = new User();
+            Contracts.User foundUser = new Contracts.User();
             using (var context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
@@ -114,20 +115,95 @@ namespace MessageService
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public partial class UserManager : ILobbyManager
     {
-        public void CreateLobby(Contracts.User user)
+
+        private static Dictionary<string, string> usersInLobby = new Dictionary<string, string>();
+        private static Dictionary<string, ILobbyManagerCallback> usersContext = new Dictionary<string, ILobbyManagerCallback>();
+
+        public void ConnectLobby(Contracts.User user, string gameId)
         {
-            throw new NotImplementedException();
+            if (usersInLobby.ContainsValue(gameId))
+            {
+                List<string> users = FindKeysByValue(usersInLobby, gameId);
+
+                ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
+                usersContext.Add(user.Nickname, currentUserCallbackChannel);
+                currentUserCallbackChannel.ShowUsersInLobby(users);
+                usersInLobby.Add(user.Nickname, gameId);
+
+                foreach (string userInLobby in users)
+                {
+                    usersContext[userInLobby].ShowConnectionInLobby(user.Nickname);
+                }
+
+            }
         }
 
-        public void JoinLobby(Contracts.User user)
+        public int CreateLobby(Contracts.   User user)
         {
-            OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>().UpdateLobby(user);
+            int result = 0;
+            string gameId = generateGameId();
+
+            while (gameIdIsRepeated(gameId))
+            {
+                gameId = generateGameId();
+            }
+
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+
+                var newSession = context.Game.Add(new Game() { gameId = gameId });
+
+                result = context.SaveChanges();
+            };
+
+            if(result > 0)
+            {
+                ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
+                usersContext.Add(user.Nickname, currentUserCallbackChannel);
+                usersInLobby.Add(user.Nickname, gameId);
+            }
+
+            return result;
+        }
+
+        public void DisconnectLobby(Contracts.User user)
+        {
+            throw new NotImplementedException();
         }
 
         public void ChangeLobbyUserTeam(Contracts.User user, int team)
         {
             throw new NotImplementedException();
         }
+
+        private string generateGameId() 
+        {
+            Guid guid = Guid.NewGuid();
+
+            string base64Guid = Convert.ToBase64String(guid.ToByteArray());
+            string uniqueID = base64Guid.Replace("=", "").Substring(0, 6);
+
+            return uniqueID;
+        }
+
+        private bool gameIdIsRepeated (string gameId)
+        {
+            bool isRepeated = false;
+
+            //TODO
+
+            return isRepeated;
+        }
+
+        private List<string> FindKeysByValue(Dictionary<string, string> dictionary, string value)
+        {
+            return dictionary
+                .Where(pair => pair.Value == value)
+                .Select(pair => pair.Key)
+                .ToList();
+        }
+
     }
 
     public partial class UserManager: IOnlineUserManager
@@ -138,7 +214,7 @@ namespace MessageService
         {
             if(!onlineUsers.ContainsKey(nickname))
             {
-                IOnlineUserManagerCallback currentUserCallbackChannel = OpeationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
+                IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
                 List<string> onlineNicknames = onlineUsers.Keys.ToList();
                 currentUserCallbackChannel.ShowUsersOnline(onlineNicknames);
 
@@ -156,7 +232,7 @@ namespace MessageService
             if (onlineUsers.ContainsKey(nickname))
             {
                 onlineUsers.Remove(nickname);
-                foreach (var user in onlineNicknames)
+                foreach (var user in onlineUsers)
                 {
                     user.Value.ShowUserDisconected(nickname);
                 }

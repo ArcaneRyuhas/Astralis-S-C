@@ -11,11 +11,14 @@ namespace MessageService.Contracts
     [ServiceContract(CallbackContract =typeof(ILobbyManagerCallback))]
     public interface ILobbyManager
     {
-        [OperationContract(IsOneWay =true)]
-        void CreateLobby(User user);
+        [OperationContract]
+        int CreateLobby(User user);
 
         [OperationContract(IsOneWay = true)]
-        void JoinLobby(User user);
+        void ConnectLobby(User user, string gameId);
+
+        [OperationContract(IsOneWay = true)]
+        void DisconnectLobby(User user);
 
         [OperationContract(IsOneWay = true)]
         void ChangeLobbyUserTeam(User user, int team);
@@ -25,31 +28,15 @@ namespace MessageService.Contracts
     public interface ILobbyManagerCallback 
     {
         [OperationContract]
-        void UpdateLobby(User user);
+        void ShowConnectionInLobby(string user);
+
+        [OperationContract]
+        void ShowUsersInLobby(List<string> userList);
+
+        [OperationContract]
+        void ShowDisconnectionInLobby(string nickname);
 
         [OperationContract]
         void UpdateLobbyUserTeam(User user, int team);
-    }
-
-    [DataContract]
-    public class User
-    {
-        private string nickname;
-        private int imageId;
-        private string mail;
-        private string password;
-
-        [DataMember]
-        public string Nickname { get { return nickname; } set { nickname = value; } }
-
-        [DataMember]
-        public int ImageId { get { return imageId; } set { imageId = value; } }
-
-        [DataMember]
-        public string Mail { get { return mail; } set { mail = value; } }
-
-        [DataMember]
-        public string Password { get { return password; } set { password = value; } }
-
     }
 }

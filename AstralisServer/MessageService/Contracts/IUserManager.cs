@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageService
+namespace MessageService.Contracts
 {
     [ServiceContract]
     public interface IUserManager
@@ -42,9 +42,9 @@ namespace MessageService
         [OperationContract]
         void ShowUserConected(string nickname);
         [OperationContract]
-        void ShowUserDisonected(string nickname);
+        void ShowUserDisconected(string nickname);
         [OperationContract]
-        void ShowUsersOnline(string nickname);
+        void ShowUsersOnline(List<String> nicknames);
     }
 
 

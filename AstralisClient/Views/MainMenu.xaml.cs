@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Astralis.Logic;
+using Astralis.UserManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -33,14 +37,23 @@ namespace Astralis.Views
 
         private void btnCreateGame_Click(object sender, RoutedEventArgs e)
         {
-            Lobby lobby = new Lobby();
+            Lobby lobby = new Lobby("host");
             NavigationService.Navigate(lobby);
 
+           
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             CloseWindowEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void btnJoinGame_Click(object sender, RoutedEventArgs e)
+        {
+            string code = txtJoinCode.Text;
+
+            Lobby lobby = new Lobby(code);
+            NavigationService.Navigate(lobby);
         }
     }
 }

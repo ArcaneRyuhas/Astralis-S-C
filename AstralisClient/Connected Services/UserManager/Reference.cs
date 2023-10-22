@@ -15,7 +15,7 @@ namespace Astralis.UserManager {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/MessageService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts")]
     [System.SerializableAttribute()]
     public partial class User : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -192,6 +192,112 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task<Astralis.UserManager.User> GetUserByNicknameAsync(string nickname) {
             return base.Channel.GetUserByNicknameAsync(nickname);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.ILobbyManager", CallbackContract=typeof(Astralis.UserManager.ILobbyManagerCallback))]
+    public interface ILobbyManager {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CreateLobby", ReplyAction="http://tempuri.org/ILobbyManager/CreateLobbyResponse")]
+        int CreateLobby(Astralis.UserManager.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CreateLobby", ReplyAction="http://tempuri.org/ILobbyManager/CreateLobbyResponse")]
+        System.Threading.Tasks.Task<int> CreateLobbyAsync(Astralis.UserManager.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ConnectLobby")]
+        void ConnectLobby(Astralis.UserManager.User user, string gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ConnectLobby")]
+        System.Threading.Tasks.Task ConnectLobbyAsync(Astralis.UserManager.User user, string gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/DisconnectLobby")]
+        void DisconnectLobby(Astralis.UserManager.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/DisconnectLobby")]
+        System.Threading.Tasks.Task DisconnectLobbyAsync(Astralis.UserManager.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam")]
+        void ChangeLobbyUserTeam(Astralis.UserManager.User user, int team);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam")]
+        System.Threading.Tasks.Task ChangeLobbyUserTeamAsync(Astralis.UserManager.User user, int team);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ILobbyManagerCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowConnectionInLobbyResponse")]
+        void ShowConnectionInLobby(string user);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowUsersInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowUsersInLobbyResponse")]
+        void ShowUsersInLobby(string[] userList);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobbyResponse")]
+        void ShowDisconnectionInLobby(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam", ReplyAction="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeamResponse")]
+        void UpdateLobbyUserTeam(Astralis.UserManager.User user, int team);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ILobbyManagerChannel : Astralis.UserManager.ILobbyManager, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class LobbyManagerClient : System.ServiceModel.DuplexClientBase<Astralis.UserManager.ILobbyManager>, Astralis.UserManager.ILobbyManager {
+        
+        public LobbyManagerClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public LobbyManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public LobbyManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public LobbyManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public LobbyManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+
+        public int CreateLobby(Astralis.UserManager.User user) {
+            return base.Channel.CreateLobby(user);
+        }
+        
+        public System.Threading.Tasks.Task<int> CreateLobbyAsync(Astralis.UserManager.User user) {
+            return base.Channel.CreateLobbyAsync(user);
+        }
+        
+        public void ConnectLobby(Astralis.UserManager.User user, string gameId) {
+            base.Channel.ConnectLobby(user, gameId);
+        }
+        
+        public System.Threading.Tasks.Task ConnectLobbyAsync(Astralis.UserManager.User user, string gameId) {
+            return base.Channel.ConnectLobbyAsync(user, gameId);
+        }
+        
+        public void DisconnectLobby(Astralis.UserManager.User user) {
+            base.Channel.DisconnectLobby(user);
+        }
+        
+        public System.Threading.Tasks.Task DisconnectLobbyAsync(Astralis.UserManager.User user) {
+            return base.Channel.DisconnectLobbyAsync(user);
+        }
+        
+        public void ChangeLobbyUserTeam(Astralis.UserManager.User user, int team) {
+            base.Channel.ChangeLobbyUserTeam(user, team);
+        }
+        
+        public System.Threading.Tasks.Task ChangeLobbyUserTeamAsync(Astralis.UserManager.User user, int team) {
+            return base.Channel.ChangeLobbyUserTeamAsync(user, team);
         }
     }
 }

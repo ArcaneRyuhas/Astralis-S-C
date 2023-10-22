@@ -14,11 +14,31 @@ namespace MessageService.Database
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.Ban = new HashSet<Ban>();
+            this.Plays = new HashSet<Plays>();
+            this.UserDeck = new HashSet<UserDeck>();
+            this.UserFriend = new HashSet<UserFriend>();
+            this.UserFriend1 = new HashSet<UserFriend>();
+        }
+    
         public string nickName { get; set; }
         public string mail { get; set; }
         public int imageId { get; set; }
         public Nullable<int> userSessionFk { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ban> Ban { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Plays> Plays { get; set; }
         public virtual UserSession UserSession { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserDeck> UserDeck { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserFriend> UserFriend { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserFriend> UserFriend1 { get; set; }
     }
 }
