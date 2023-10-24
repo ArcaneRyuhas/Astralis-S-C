@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Astralis.UserManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Astralis.Properties;
 
 namespace Astralis.Views.Animations
 {
@@ -20,9 +22,19 @@ namespace Astralis.Views.Animations
     /// </summary>
     public partial class LobbyUserCard : UserControl
     {
+        public List<string> ItemsList { get; set; }
+
         public LobbyUserCard()
         {
             InitializeComponent();
+            ItemsList = new List<string> { Properties.Resources.cbxTeamOne, Properties.Resources.cbxTeamTwo};
+            cbxTeam.ItemsSource = ItemsList;
+        }
+
+        public void setCard(User user)
+        {
+            lblNickname.Content = user.Nickname;
+            //TODO IMAGE
         }
     }
 }

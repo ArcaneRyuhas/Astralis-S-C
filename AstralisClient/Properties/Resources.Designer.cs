@@ -178,6 +178,24 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Equipo 1.
+        /// </summary>
+        public static string cbxTeamOne {
+            get {
+                return ResourceManager.GetString("cbxTeamOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equipo 2.
+        /// </summary>
+        public static string cbxTeamTwo {
+            get {
+                return ResourceManager.GetString("cbxTeamTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmar contraseña.
         /// </summary>
         public static string lblConfirmPassword {

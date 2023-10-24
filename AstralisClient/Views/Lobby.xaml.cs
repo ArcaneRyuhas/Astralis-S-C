@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Astralis.Views.Animations;
 
 namespace Astralis.Views
 {
@@ -23,6 +24,8 @@ namespace Astralis.Views
     /// </summary>
     public partial class Lobby : Page, UserManager.ILobbyManagerCallback
     {
+        private int gridRow = 0;
+
         public Lobby(string code)
         {
             InitializeComponent();
@@ -31,17 +34,14 @@ namespace Astralis.Views
             {
                 User user = new User();
                 user.Nickname = UserSession.Instance().Nickname;
-                lblPlayer1.Content = user.Nickname;
+
+                AddCard(user);
 
                 InstanceContext context = new InstanceContext(this);
                 UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
-                if (client.CreateLobby(user) > 0)
+                if (!(client.CreateLobby(user) > 0))
                 {
-                    Console.WriteLine("Jalo");
-                }
-                else
-                {
-                    Console.WriteLine("Errorsaso");
+                    MessageBox.Show("msgErrorCreateLobby", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else
@@ -56,9 +56,22 @@ namespace Astralis.Views
             
         }
 
+        public void AddCard (User user)
+        {
+            LobbyUserCard lobbyUserCard = new LobbyUserCard();
+            lobbyUserCard.setCard(user);
+
+            gridUsers.Children.Add(lobbyUserCard);
+            Grid.SetRow(lobbyUserCard, gridRow);
+            gridRow++;
+        }
+
         public void ShowConnectionInLobby(string user)
         {
-            lblPlayer4.Content = user;
+            User newUser = new User();
+            newUser.Nickname = user;
+
+            AddCard(newUser);
         }
 
         public void ShowDisconnectionInLobby(string nickname)
@@ -70,10 +83,11 @@ namespace Astralis.Views
         {
             for (int i = 0; i < userList.Length; i++)
             {
-                lblPlayer1.Content = userList[i];
-            }
+                User newUser = new User();
+                newUser.Nickname = userList[i];
 
-            lblPlayer2.Content = UserSession.Instance().Nickname;
+                AddCard(newUser);
+            }
         }
 
         public void UpdateLobbyUserTeam(User user, int team)

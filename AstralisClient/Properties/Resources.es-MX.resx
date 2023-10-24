@@ -156,6 +156,12 @@
   <data name="btnStartGame" xml:space="preserve">
     <value>Iniciar</value>
   </data>
+  <data name="cbxTeamOne" xml:space="preserve">
+    <value>Equipo 1</value>
+  </data>
+  <data name="cbxTeamTwo" xml:space="preserve">
+    <value>Equipo 2</value>
+  </data>
   <data name="lblConfirmPassword" xml:space="preserve">
     <value>Confirmar contraseña</value>
   </data>

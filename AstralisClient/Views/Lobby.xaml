@@ -23,14 +23,7 @@
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1" Grid.Column="0" Margin="61,57,61,200">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30*"/>
-                    <ColumnDefinition Width="70*"/>
-                    <ColumnDefinition Width="57*"/>
-                    <ColumnDefinition Width="57*"/>
-                </Grid.ColumnDefinitions>
+            <Grid x:Name="gridUsers" Grid.Row="1" Grid.Column="0" Margin="61,57,61,137">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -38,10 +31,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Label x:Name="lblPlayer1" Grid.Column="1" Content="Label" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Label x:Name="lblPlayer2" Grid.Column="1" Content="Label" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
-                <Label x:Name="lblPlayer3" Grid.Column="1" Content="Label" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2"/>
-                <Label x:Name="lblPlayer4" Grid.Column="1" Content="Label" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="3" Margin="0,31,0,0"/>
+
             </Grid>
 
 

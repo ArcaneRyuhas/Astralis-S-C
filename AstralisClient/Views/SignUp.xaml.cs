@@ -64,7 +64,7 @@ namespace Astralis.Views
                 {
                     if (client.AddUser(user) > 0)
                     {
-                        MessageBox.Show("msgUserAddedSucceed", "titleUserAdded", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(Properties.Resources.msgUserAddedSucceed, Properties.Resources.titleUserAdded, MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else
