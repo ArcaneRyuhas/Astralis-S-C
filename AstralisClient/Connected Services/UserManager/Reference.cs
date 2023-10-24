@@ -228,16 +228,19 @@ namespace Astralis.UserManager {
     public interface ILobbyManagerCallback {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowConnectionInLobbyResponse")]
-        void ShowConnectionInLobby(string user);
+        void ShowConnectionInLobby(Astralis.UserManager.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowUsersInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowUsersInLobbyResponse")]
-        void ShowUsersInLobby(string[] userList);
+        void ShowUsersInLobby(Astralis.UserManager.User[] userList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobbyResponse")]
         void ShowDisconnectionInLobby(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam", ReplyAction="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeamResponse")]
         void UpdateLobbyUserTeam(Astralis.UserManager.User user, int team);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GiveLobbyId", ReplyAction="http://tempuri.org/ILobbyManager/GiveLobbyIdResponse")]
+        void GiveLobbyId(string gameId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -267,7 +270,7 @@ namespace Astralis.UserManager {
         public LobbyManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
-
+        
         public int CreateLobby(Astralis.UserManager.User user) {
             return base.Channel.CreateLobby(user);
         }

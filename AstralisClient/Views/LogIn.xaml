@@ -7,7 +7,7 @@
         xmlns:local ="clr-namespace:Astralis.Views"
         xmlns:p = "clr-namespace:Astralis.Properties"
         Title="LogIn" Height="650" Width="500" Foreground="Black" Background="Black"
-        ResizeMode="NoResize" WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResize" WindowStyle="SingleBorderWindow"
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="Black">

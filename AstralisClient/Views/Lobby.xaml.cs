@@ -39,7 +39,7 @@ namespace Astralis.Views
 
                 InstanceContext context = new InstanceContext(this);
                 UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
-                if (!(client.CreateLobby(user) > 0))
+                if (client.CreateLobby(user) == 0)
                 {
                     MessageBox.Show("msgErrorCreateLobby", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -53,7 +53,6 @@ namespace Astralis.Views
                 UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
                 client.ConnectLobby(user, code);
             }
-            
         }
 
         public void AddCard (User user)
@@ -66,12 +65,14 @@ namespace Astralis.Views
             gridRow++;
         }
 
-        public void ShowConnectionInLobby(string user)
+        public void GiveLobbyId(string gameId)
         {
-            User newUser = new User();
-            newUser.Nickname = user;
+            lblGameCode.Content = gameId;
+        }
 
-            AddCard(newUser);
+        public void ShowConnectionInLobby(User user)
+        {
+            AddCard(user);
         }
 
         public void ShowDisconnectionInLobby(string nickname)
@@ -79,15 +80,17 @@ namespace Astralis.Views
             throw new NotImplementedException();
         }
 
-        public void ShowUsersInLobby(string[] userList)
+        public void ShowUsersInLobby(User[] userList)
         {
             for (int i = 0; i < userList.Length; i++)
             {
-                User newUser = new User();
-                newUser.Nickname = userList[i];
-
-                AddCard(newUser);
+                AddCard(userList[i]);
             }
+
+            User user = new User();
+            user.Nickname = UserSession.Instance().Nickname;
+
+            AddCard(user);
         }
 
         public void UpdateLobbyUserTeam(User user, int team)

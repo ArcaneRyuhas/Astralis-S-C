@@ -21,7 +21,6 @@
       <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts" />
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IUserManager_AddUser_InputMessage">
@@ -87,6 +86,12 @@
   <wsdl:message name="ILobbyManager_UpdateLobbyUserTeam_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:UpdateLobbyUserTeamResponse" />
   </wsdl:message>
+  <wsdl:message name="ILobbyManager_GiveLobbyId_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GiveLobbyId" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GiveLobbyId_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GiveLobbyIdResponse" />
+  </wsdl:message>
   <wsdl:portType name="IUserManager">
     <wsdl:operation name="AddUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
@@ -134,6 +139,10 @@
     <wsdl:operation name="UpdateLobbyUserTeam">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam" message="tns:ILobbyManager_UpdateLobbyUserTeam_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeamResponse" message="tns:ILobbyManager_UpdateLobbyUserTeam_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GiveLobbyId">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GiveLobbyId" message="tns:ILobbyManager_GiveLobbyId_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GiveLobbyIdResponse" message="tns:ILobbyManager_GiveLobbyId_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
@@ -235,6 +244,15 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateLobbyUserTeam">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GiveLobbyId">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GiveLobbyId" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
