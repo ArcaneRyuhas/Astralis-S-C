@@ -62,6 +62,9 @@
   <wsdl:message name="ILobbyManager_ChangeLobbyUserTeam_InputMessage">
     <wsdl:part name="parameters" element="tns:ChangeLobbyUserTeam" />
   </wsdl:message>
+  <wsdl:message name="ILobbyManager_SendMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessage" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_ShowConnectionInLobby_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowConnectionInLobby" />
   </wsdl:message>
@@ -91,6 +94,12 @@
   </wsdl:message>
   <wsdl:message name="ILobbyManager_GiveLobbyId_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:GiveLobbyIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ReceiveMessage_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessage" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ReceiveMessage_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessageResponse" />
   </wsdl:message>
   <wsdl:portType name="IUserManager">
     <wsdl:operation name="AddUser">
@@ -124,6 +133,9 @@
     <wsdl:operation name="ChangeLobbyUserTeam">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam" message="tns:ILobbyManager_ChangeLobbyUserTeam_InputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/SendMessage" message="tns:ILobbyManager_SendMessage_InputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ShowConnectionInLobby">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobby" message="tns:ILobbyManager_ShowConnectionInLobby_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobbyResponse" message="tns:ILobbyManager_ShowConnectionInLobby_InputCallbackMessage" />
@@ -143,6 +155,10 @@
     <wsdl:operation name="GiveLobbyId">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GiveLobbyId" message="tns:ILobbyManager_GiveLobbyId_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GiveLobbyIdResponse" message="tns:ILobbyManager_GiveLobbyId_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessage">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessage" message="tns:ILobbyManager_ReceiveMessage_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessageResponse" message="tns:ILobbyManager_ReceiveMessage_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
@@ -215,6 +231,12 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/SendMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="ShowConnectionInLobby">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ShowConnectionInLobby" style="document" />
       <wsdl:input>
@@ -253,6 +275,15 @@
     </wsdl:operation>
     <wsdl:operation name="GiveLobbyId">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GiveLobbyId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessage">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ReceiveMessage" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

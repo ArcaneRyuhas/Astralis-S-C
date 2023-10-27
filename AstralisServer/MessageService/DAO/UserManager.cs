@@ -114,7 +114,7 @@ namespace MessageService
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public partial class UserManager : ILobbyManager
     {
-
+        private const string ERROR_CODE_LOBBY = "error";
         private static Dictionary<string, string> usersInLobby = new Dictionary<string, string>();
         private static Dictionary<string, ILobbyManagerCallback> usersContext = new Dictionary<string, ILobbyManagerCallback>();
 
@@ -125,12 +125,10 @@ namespace MessageService
                 List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
                 List<Contracts.User> users = new List<Contracts.User>();
 
-                int listPosition = 0;
 
                 foreach (string nickname in usersNickname)
                 {
-                    users[listPosition] = GetUserByNickname(nickname);
-                    listPosition++;
+                    users.Add(GetUserByNickname(nickname));
                 }
 
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
@@ -146,7 +144,7 @@ namespace MessageService
             }
         }
 
-        public int CreateLobby(Contracts.User user)
+        public string CreateLobby(Contracts.User user)
         {
             int result = 0;
             string gameId = generateGameId();
@@ -171,10 +169,13 @@ namespace MessageService
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
                 usersContext.Add(user.Nickname, currentUserCallbackChannel);
                 usersInLobby.Add(user.Nickname, gameId);
-                currentUserCallbackChannel.GiveLobbyId(gameId);
+            }
+            else
+            {   
+                gameId = ERROR_CODE_LOBBY;
             }
 
-            return result;
+            return gameId;
         }
 
         public void DisconnectLobby(Contracts.User user)
@@ -185,6 +186,19 @@ namespace MessageService
         public void ChangeLobbyUserTeam(Contracts.User user, int team)
         {
             throw new NotImplementedException();
+        }
+
+        public void SendMessage(string message, string gameId)
+        {
+            if (usersInLobby.ContainsValue(gameId))
+            {
+                List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+
+                foreach (string userInTheLobby in usersNickname)
+                {
+                    usersContext[userInTheLobby].ReceiveMessage(message);
+                }
+            }
         }
 
         private string generateGameId() 

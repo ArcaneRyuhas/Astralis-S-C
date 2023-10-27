@@ -24,13 +24,20 @@ namespace Astralis.Views
     /// </summary>
     public partial class Lobby : Page, UserManager.ILobbyManagerCallback
     {
+        private const string HOST_CODE = "host";
+        private const string ERROR_CODE_LOBBY = "error";
         private int gridRow = 0;
+        private string gameId;
 
         public Lobby(string code)
         {
             InitializeComponent();
-            
-            if(code == "host") 
+            SetLobby(code);
+        }
+
+        private void SetLobby(string code) 
+        {
+            if (code == HOST_CODE)
             {
                 User user = new User();
                 user.Nickname = UserSession.Instance().Nickname;
@@ -39,9 +46,15 @@ namespace Astralis.Views
 
                 InstanceContext context = new InstanceContext(this);
                 UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
-                if (client.CreateLobby(user) == 0)
+                gameId = client.CreateLobby(user);
+
+                if (gameId == ERROR_CODE_LOBBY)
                 {
                     MessageBox.Show("msgErrorCreateLobby", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    lblGameCode.Content = gameId;
                 }
             }
             else
@@ -51,7 +64,11 @@ namespace Astralis.Views
 
                 InstanceContext context = new InstanceContext(this);
                 UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+
                 client.ConnectLobby(user, code);
+
+                gameId = code;
+                lblGameCode.Content = gameId;
             }
         }
 
@@ -68,6 +85,11 @@ namespace Astralis.Views
         public void GiveLobbyId(string gameId)
         {
             lblGameCode.Content = gameId;
+        }
+
+        public void ReceiveMessage(string message)
+        {
+            tbChat.Text = tbChat.Text + "\n" + message;
         }
 
         public void ShowConnectionInLobby(User user)
@@ -101,6 +123,16 @@ namespace Astralis.Views
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
+        }
+
+        private void btnSendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            string message = UserSession.Instance().Nickname + ": " + txtChat.Text;
+
+            InstanceContext context = new InstanceContext(this);
+            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+            
+            client.SendMessage(message, gameId);
         }
 
     }

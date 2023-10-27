@@ -23,7 +23,6 @@ namespace MessageService.Contracts
         [OperationContract]
         User GetUserByNickname(string nickname);
 
-
     }
 
     [ServiceContract(CallbackContract = typeof(IOnlineUserManagerCallback))]

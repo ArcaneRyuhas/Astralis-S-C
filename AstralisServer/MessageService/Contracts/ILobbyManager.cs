@@ -11,8 +11,8 @@ namespace MessageService.Contracts
     [ServiceContract(CallbackContract =typeof(ILobbyManagerCallback))]
     public interface ILobbyManager
     {
-        [OperationContract]
-        int CreateLobby(User user);
+        [OperationContract()]
+        string CreateLobby(User user);
 
         [OperationContract(IsOneWay = true)]
         void ConnectLobby(User user, string gameId);
@@ -22,6 +22,10 @@ namespace MessageService.Contracts
 
         [OperationContract(IsOneWay = true)]
         void ChangeLobbyUserTeam(User user, int team);
+
+        [OperationContract(IsOneWay = true)]
+        void SendMessage(string message, string gameId);
+
     }
 
     [ServiceContract]
@@ -41,5 +45,8 @@ namespace MessageService.Contracts
 
         [OperationContract]
         void GiveLobbyId(string gameId);
+
+        [OperationContract]
+        void ReceiveMessage(string message);
     }
 }
