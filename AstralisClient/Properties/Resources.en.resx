@@ -120,11 +120,47 @@
   <data name="btnCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="btnCreateGame" xml:space="preserve">
+    <value>CREATE GAME</value>
+  </data>
+  <data name="btnDecks" xml:space="preserve">
+    <value>DECKS</value>
+  </data>
+  <data name="btnExit" xml:space="preserve">
+    <value>EXIT</value>
+  </data>
+  <data name="btnFriends" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="btnJoinGame" xml:space="preserve">
+    <value>JOIN GAME</value>
+  </data>
+  <data name="btnKickout" xml:space="preserve">
+    <value>Kickout</value>
+  </data>
+  <data name="btnLeaderbord" xml:space="preserve">
+    <value>LEADERBORD</value>
+  </data>
   <data name="btnLogIn" xml:space="preserve">
     <value>Log In</value>
   </data>
+  <data name="btnMyProfile" xml:space="preserve">
+    <value>My profile</value>
+  </data>
   <data name="btnRegister" xml:space="preserve">
     <value>Sign up</value>
+  </data>
+  <data name="btnSettings" xml:space="preserve">
+    <value>SETTINGS</value>
+  </data>
+  <data name="btnStartGame" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="cbxTeamOne" xml:space="preserve">
+    <value>Team 1</value>
+  </data>
+  <data name="cbxTeamTwo" xml:space="preserve">
+    <value>Team 2</value>
   </data>
   <data name="lblConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>
@@ -144,6 +180,15 @@
   <data name="lblErrorPasswordsNoMatch" xml:space="preserve">
     <value>Passwords do not match</value>
   </data>
+  <data name="lblInviteFriend" xml:space="preserve">
+    <value>Invite Friend</value>
+  </data>
+  <data name="lblInviteWithCode" xml:space="preserve">
+    <value>Invite with code</value>
+  </data>
+  <data name="lblLobby" xml:space="preserve">
+    <value>Lobby</value>
+  </data>
   <data name="lblMail" xml:space="preserve">
     <value>Mail</value>
   </data>
@@ -152,6 +197,9 @@
   </data>
   <data name="lblPassword" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="lblPlayersConecteds" xml:space="preserve">
+    <value>Players Conecteds</value>
   </data>
   <data name="lblRegistration" xml:space="preserve">
     <value>Registration</value>

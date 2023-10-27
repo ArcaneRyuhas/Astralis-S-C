@@ -12,8 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Astralis.Properties;
+using Astralis.Logic;
+using Astralis.UserManager;
 
-namespace Astralis.Windows
+namespace Astralis.Views
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
@@ -50,6 +52,9 @@ namespace Astralis.Windows
 
             if (noEmptyFields && client.ConfirmUser(nickname, password) == 1)
             {
+                User user = client.GetUserByNickname(nickname);
+                UserSession.Instance(user);
+
                 GameWindow gameWindow = new GameWindow();
                 this.Close();
                 gameWindow.Show();

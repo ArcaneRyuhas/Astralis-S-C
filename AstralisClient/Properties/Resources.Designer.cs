@@ -70,6 +70,69 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CREAR PARTIDA.
+        /// </summary>
+        public static string btnCreateGame {
+            get {
+                return ResourceManager.GetString("btnCreateGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAZOS.
+        /// </summary>
+        public static string btnDecks {
+            get {
+                return ResourceManager.GetString("btnDecks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SALIR.
+        /// </summary>
+        public static string btnExit {
+            get {
+                return ResourceManager.GetString("btnExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amigos.
+        /// </summary>
+        public static string btnFriends {
+            get {
+                return ResourceManager.GetString("btnFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UNIRSE A PARTIDA.
+        /// </summary>
+        public static string btnJoinGame {
+            get {
+                return ResourceManager.GetString("btnJoinGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expulsar.
+        /// </summary>
+        public static string btnKickout {
+            get {
+                return ResourceManager.GetString("btnKickout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TABLERO.
+        /// </summary>
+        public static string btnLeaderbord {
+            get {
+                return ResourceManager.GetString("btnLeaderbord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entrar.
         /// </summary>
         public static string btnLogIn {
@@ -79,11 +142,56 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mi perfil.
+        /// </summary>
+        public static string btnMyProfile {
+            get {
+                return ResourceManager.GetString("btnMyProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registro.
         /// </summary>
         public static string btnRegister {
             get {
                 return ResourceManager.GetString("btnRegister", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CONFIGURACIÓN.
+        /// </summary>
+        public static string btnSettings {
+            get {
+                return ResourceManager.GetString("btnSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Iniciar.
+        /// </summary>
+        public static string btnStartGame {
+            get {
+                return ResourceManager.GetString("btnStartGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equipo 1.
+        /// </summary>
+        public static string cbxTeamOne {
+            get {
+                return ResourceManager.GetString("cbxTeamOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equipo 2.
+        /// </summary>
+        public static string cbxTeamTwo {
+            get {
+                return ResourceManager.GetString("cbxTeamTwo", resourceCulture);
             }
         }
         
@@ -142,6 +250,33 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invitar amigo.
+        /// </summary>
+        public static string lblInviteFriend {
+            get {
+                return ResourceManager.GetString("lblInviteFriend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitar con codigo.
+        /// </summary>
+        public static string lblInviteWithCode {
+            get {
+                return ResourceManager.GetString("lblInviteWithCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sala.
+        /// </summary>
+        public static string lblLobby {
+            get {
+                return ResourceManager.GetString("lblLobby", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Correo.
         /// </summary>
         public static string lblMail {
@@ -165,6 +300,15 @@ namespace Astralis.Properties {
         public static string lblPassword {
             get {
                 return ResourceManager.GetString("lblPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jugadores Conectados.
+        /// </summary>
+        public static string lblPlayersConecteds {
+            get {
+                return ResourceManager.GetString("lblPlayersConecteds", resourceCulture);
             }
         }
         

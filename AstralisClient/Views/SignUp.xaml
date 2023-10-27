@@ -1,12 +1,13 @@
-﻿<Window x:Class="Astralis.SignUp"
+﻿<Window x:Class="Astralis.Views.SignUp"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:validation="clr-namespace:Astralis.Validations"
-        xmlns:local="clr-namespace:Astralis"
+        xmlns:local="clr-namespace:Astralis.Views"
         mc:Ignorable="d"
-        xmlns:p = "clr-namespace:Astralis.Properties"
+        xmlns:p = "clr-namespace:Astralis.Properties" 
+        xmlns:astralis="clr-namespace:Astralis"
         Title="{x:Static p:Resources.title}" Height="750" Width= "1040"
         ResizeMode="NoResize" WindowStyle="SingleBorderWindow">
 
@@ -43,11 +44,11 @@
                 </TextBox.Text>
             </TextBox>
             <TextBox x:Name="txtMail"  PreviewTextInput="TextLimiterForMail" HorizontalAlignment="Center" Grid.Column="1" Margin="0,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="332" Height="33" FontSize="20" Style="{DynamicResource TextBoxValidations}" Template="{DynamicResource TextBoxTemplateNormal}"/>
-            <PasswordBox x:Name="pbConfirmPassword" HorizontalAlignment="Center" Grid.Column="1" Margin="0,517,0,0" VerticalAlignment="Top" Width="332" Height="33" Template="{DynamicResource PasswordBoxTemplate}"/>
-            <PasswordBox x:Name="pbPassword" HorizontalAlignment="Center" Margin="0,393,0,0" VerticalAlignment="Top" Width="330" Height="31" Grid.Column="1" Template="{DynamicResource PasswordBoxTemplate}"/>
-            <Label x:Name="lblErrorNickname" Content="El usuario ya existe" Grid.Column="1" HorizontalAlignment="Left" Margin="60,200,0,0" VerticalAlignment="Top" Foreground="Red" Visibility="Hidden"/>
-            <Label x:Name="lblErrorPassword" Grid.Column="1" Visibility="Hidden" Margin="60,427,58,126" HorizontalAlignment="Left" VerticalAlignment="Top" Content="La contraseÃ±a es insegura"/>
-            <Label x:Name="lblErrorMail" Grid.Column="1" Visibility="Hidden" Margin="58,306,58,248" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Ingrese un correo valido" Foreground="Red"/>
+            <PasswordBox x:Name="pbConfirmPassword" PreviewTextInput="TextLimeterForPassword"  HorizontalAlignment="Center" Grid.Column="1" Margin="0,517,0,0" VerticalAlignment="Top" Width="332" Height="33" Template="{DynamicResource PasswordBoxTemplate}"/>
+            <PasswordBox x:Name="pbPassword" PreviewTextInput="TextLimeterForPassword" HorizontalAlignment="Center" Margin="0,393,0,0" VerticalAlignment="Top" Width="330" Height="31" Grid.Column="1" Template="{DynamicResource PasswordBoxTemplate}"/>
+            <Label x:Name="lblErrorNickname" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="60,200,0,0" VerticalAlignment="Top" Foreground="Red" Visibility="Hidden"/>
+            <Label x:Name="lblErrorPassword" Grid.Column="1" Visibility="Hidden" Margin="60,427,58,126" HorizontalAlignment="Left" VerticalAlignment="Top" Content=""/>
+            <Label x:Name="lblErrorMail" Grid.Column="1" Visibility="Hidden" Margin="58,306,58,248" HorizontalAlignment="Left" VerticalAlignment="Top" Content="" Foreground="Red"/>
         </Grid>
     </Grid>
 

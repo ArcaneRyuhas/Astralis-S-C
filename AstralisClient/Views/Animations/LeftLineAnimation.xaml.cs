@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Astralis
+namespace Astralis.Views.Animations
 {
     /// <summary>
-    /// Interaction logic for GameWindow.xaml
+    /// Interaction logic for LeftLineAnimation.xaml
     /// </summary>
-    public partial class GameWindow : Window
+    public partial class LeftLineAnimation : UserControl
     {
-        public GameWindow()
+        public LeftLineAnimation()
         {
             InitializeComponent();
         }

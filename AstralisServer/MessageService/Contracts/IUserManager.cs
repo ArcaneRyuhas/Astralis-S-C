@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageService
+namespace MessageService.Contracts
 {
     [ServiceContract]
     public interface IUserManager
@@ -20,8 +20,32 @@ namespace MessageService
         [OperationContract]
         bool FindUserByNickname(string nickname);
 
+        [OperationContract]
+        User GetUserByNickname(string nickname);
 
     }
+
+    [ServiceContract(CallbackContract = typeof(IOnlineUserManagerCallback))]
+    public interface IOnlineUserManager
+    {
+        [OperationContract(IsOneWay = true)]
+        void ConectUser(string nickname);
+
+        [OperationContract(IsOneWay = true)]
+        void DisconectUser(string nickname);
+    }
+
+    [ServiceContract]
+    public interface IOnlineUserManagerCallback
+    {
+        [OperationContract]
+        void ShowUserConected(string nickname);
+        [OperationContract]
+        void ShowUserDisconected(string nickname);
+        [OperationContract]
+        void ShowUsersOnline(List<String> nicknames);
+    }
+
 
     [DataContract]
     public class User
