@@ -115,6 +115,7 @@ namespace MessageService
     public partial class UserManager : ILobbyManager
     {
         private const string ERROR_CODE_LOBBY = "error";
+
         private static Dictionary<string, string> usersInLobby = new Dictionary<string, string>();
         private static Dictionary<string, ILobbyManagerCallback> usersContext = new Dictionary<string, ILobbyManagerCallback>();
 

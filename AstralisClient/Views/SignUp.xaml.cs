@@ -30,9 +30,9 @@ namespace Astralis.Views
         private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";
         private const string NICKNAME_REGEX = @"^[a-zA-Z0-9]{2,30}$";
         private const string MAIL_REGEX = @"^.+@[^\.].*\.[a-z]{2,}$";
-        private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9/S]{0,40}$";
-        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,40})\S$";
-        private const int MAX_FIELDS_LENGHT = 49;
+        private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9\S]{0,40}$";
+        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^&*_-]).{6,40})\S$";
+        private const int MAX_FIELDS_LENGHT = 39;
 
         public SignUp()
         {
@@ -65,6 +65,9 @@ namespace Astralis.Views
                     if (client.AddUser(user) > 0)
                     {
                         MessageBox.Show(Properties.Resources.msgUserAddedSucceed, Properties.Resources.titleUserAdded, MessageBoxButton.OK, MessageBoxImage.Information);
+                        LogIn logIn = new LogIn();
+                        this.Close();
+                        logIn.Show();
                     }
                 }
                 else
@@ -156,7 +159,7 @@ namespace Astralis.Views
         private User SetUserInformation(User user)
         {
             user.Nickname = txtNickname.Text;
-            user.Password = pbPassword.Password;
+            user.Password = CreateSha2(pbPassword.Password);
             user.ImageId = 1;
             user.Mail = txtMail.Text;
 

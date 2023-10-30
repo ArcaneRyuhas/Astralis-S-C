@@ -304,6 +304,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Si necesitas ayuda pon el cursor aqui.
+        /// </summary>
+        public static string lblPasswordHelp {
+            get {
+                return ResourceManager.GetString("lblPasswordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jugadores Conectados.
         /// </summary>
         public static string lblPlayersConecteds {
@@ -358,6 +367,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ingresa un correo valido.
+        /// </summary>
+        public static string tpMailHelp {
+            get {
+                return ResourceManager.GetString("tpMailHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El nombre de usuario debe incluir letras de la A a la Z, numeros y signos como: !@#$%&amp;.
         /// </summary>
         public static string tpNicknameHelp {
@@ -372,6 +390,27 @@ namespace Astralis.Properties {
         public static string tpNicknameLenghtHelp {
             get {
                 return ResourceManager.GetString("tpNicknameLenghtHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reglas de la contraseña.
+        /// </summary>
+        public static string tpPasswordHelp {
+            get {
+                return ResourceManager.GetString("tpPasswordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Al menos 8 caracteres
+        ///Al menos 1 número
+        ///Al menos 1 simbolo
+        ///Al menos 1 mayuscula.
+        /// </summary>
+        public static string tpPasswordRules {
+            get {
+                return ResourceManager.GetString("tpPasswordRules", resourceCulture);
             }
         }
         

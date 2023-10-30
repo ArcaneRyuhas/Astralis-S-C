@@ -198,6 +198,9 @@
   <data name="lblPassword" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="lblPasswordHelp" xml:space="preserve">
+    <value>If you need help hover the mouse here</value>
+  </data>
   <data name="lblPlayersConecteds" xml:space="preserve">
     <value>Players Conecteds</value>
   </data>
@@ -216,11 +219,23 @@
   <data name="titleUserAdded" xml:space="preserve">
     <value>Sign up</value>
   </data>
+  <data name="tpMailHelp" xml:space="preserve">
+    <value>Insert a valid mail</value>
+  </data>
   <data name="tpNicknameHelp" xml:space="preserve">
     <value>Username can include letters from A to Z, numbers and signs:  !@#$%&amp;</value>
   </data>
   <data name="tpNicknameLenghtHelp" xml:space="preserve">
     <value>Username must have more than 2 and less than 30 characters</value>
+  </data>
+  <data name="tpPasswordHelp" xml:space="preserve">
+    <value>Password rules</value>
+  </data>
+  <data name="tpPasswordRules" xml:space="preserve">
+    <value>At least 8 letters
+At least 1 number
+At least 1 simbol
+At least 1 capital letter</value>
   </data>
   <data name="txbEmptyFieldError" xml:space="preserve">
     <value>This field cannot be empty</value>

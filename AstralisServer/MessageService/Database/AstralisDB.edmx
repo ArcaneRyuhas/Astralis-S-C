@@ -78,7 +78,7 @@
             <PropertyRef Name="userSessionId" />
           </Key>
           <Property Name="userSessionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="char" MaxLength="100" />
         </EntityType>
         <Association Name="FK_Ban_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
@@ -332,7 +332,7 @@
             <PropertyRef Name="userSessionId" />
           </Key>
           <Property Name="userSessionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="User" Relationship="Self.FK_User_UserSession" FromRole="UserSession" ToRole="User" />
         </EntityType>
         <Association Name="FK_Ban_User">
