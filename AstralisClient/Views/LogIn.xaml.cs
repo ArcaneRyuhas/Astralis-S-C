@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Astralis.Properties;
 using Astralis.Logic;
 using Astralis.UserManager;
+using System.Security.Cryptography;
 
 namespace Astralis.Views
 {
@@ -32,7 +33,7 @@ namespace Astralis.Views
 
         private void Click_LogIn(object sender, RoutedEventArgs e)
         {
-            string password = pbPassword.Password;
+            string password = CreateSha2(pbPassword.Password);
             string nickname = tbNickname.Text;
             bool noEmptyFields = true;
 
@@ -66,7 +67,22 @@ namespace Astralis.Views
             }
         }
 
+        private string CreateSha2(string password)
+        {
+            string hash = string.Empty;
 
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashValue = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                foreach (byte b in hashValue)
+                {
+                    hash += $"{b:X2}";
+                }
+            }
+
+            return hash;
+        }
 
         private void Click_Register(object sender, RoutedEventArgs e)
         {

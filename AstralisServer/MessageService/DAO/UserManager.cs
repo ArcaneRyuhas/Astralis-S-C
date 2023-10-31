@@ -48,7 +48,9 @@ namespace MessageService
             {
                 context.Database.Log = Console.WriteLine;
 
-                var newSession = context.UserSession.Add(new UserSession() { password = user.Password });
+                string cleanedPassword = user.Password.Trim();
+
+                var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
 
                 Database.User databaseUser = new Database.User();
                 databaseUser.nickName = user.Nickname;
@@ -61,7 +63,6 @@ namespace MessageService
 
                 result = context.SaveChanges();
                 
-                Console.WriteLine(result);
             };
 
             return result;

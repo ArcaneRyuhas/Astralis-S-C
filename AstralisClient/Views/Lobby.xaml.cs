@@ -41,6 +41,7 @@ namespace Astralis.Views
             {
                 User user = new User();
                 user.Nickname = UserSession.Instance().Nickname;
+                user.ImageId = UserSession.Instance().ImageId;
 
                 AddCard(user);
 
@@ -61,6 +62,8 @@ namespace Astralis.Views
             {
                 User user = new User();
                 user.Nickname = UserSession.Instance().Nickname;
+                user.ImageId = UserSession.Instance().ImageId;
+
 
                 InstanceContext context = new InstanceContext(this);
                 UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
