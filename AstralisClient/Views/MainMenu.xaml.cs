@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Astralis.Views.Pages;
 
 namespace Astralis.Views
 {
@@ -39,8 +40,6 @@ namespace Astralis.Views
         {
             Lobby lobby = new Lobby("host");
             NavigationService.Navigate(lobby);
-
-           
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
@@ -54,6 +53,12 @@ namespace Astralis.Views
 
             Lobby lobby = new Lobby(code);
             NavigationService.Navigate(lobby);
+        }
+
+        private void btnMyProfile_Click(object sender, RoutedEventArgs e)
+        {
+            MyProfile myProfile = new MyProfile();
+            NavigationService.Navigate(myProfile);
         }
     }
 }
