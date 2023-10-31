@@ -23,6 +23,9 @@ namespace MessageService.Contracts
         [OperationContract]
         User GetUserByNickname(string nickname);
 
+        [OperationContract]
+        int UpdateUser(User user);
+
     }
 
     [ServiceContract(CallbackContract = typeof(IOnlineUserManagerCallback))]

@@ -16,7 +16,7 @@ namespace MessageService
         public int ConfirmUser(string nickname, string password)
         {
             int result = 0;
-            if(FindUserByNickname(nickname))
+            if (FindUserByNickname(nickname))
             {
                 using (var context = new AstralisDBEntities())
                 {
@@ -35,7 +35,7 @@ namespace MessageService
                     }
                 }
             }
-            
+
             return result;
         }
 
@@ -44,7 +44,7 @@ namespace MessageService
 
             int result = 0;
 
-            using (var context = new AstralisDBEntities()) 
+            using (var context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
 
@@ -62,7 +62,7 @@ namespace MessageService
                 var newUser = context.User.Add(databaseUser);
 
                 result = context.SaveChanges();
-                
+
             };
 
             return result;
@@ -95,7 +95,7 @@ namespace MessageService
                 context.Database.Log = Console.WriteLine;
                 var databaseUser = context.User.Find(nickname);
 
-                if(databaseUser != null)
+                if (databaseUser != null)
                 {
                     foundUser.Nickname = databaseUser.nickName;
                     foundUser.Mail = databaseUser.mail;
@@ -105,11 +105,44 @@ namespace MessageService
                 {
                     foundUser.Nickname = "UserNotFound";
                 }
-                
+
             }
 
             return foundUser;
         }
+
+        public int UpdateUser(Contracts.User user)
+        {
+            int result = 0;
+
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+                var databaseUser = context.User.Find(user.Nickname);
+
+                if (databaseUser != null)
+                {
+                    databaseUser.mail = user.Mail;
+                    databaseUser.imageId = (short)user.ImageId;
+
+                    var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
+
+                    if (databaseUserSession != null)
+                    {
+                        if (!string.IsNullOrEmpty(user.Password))
+                        {
+                            databaseUserSession.password = user.Password;
+                        }
+                    }
+
+                    result = context.SaveChanges();
+                }
+            }
+
+            return result;
+
+        }
+
     }
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
@@ -182,7 +215,22 @@ namespace MessageService
 
         public void DisconnectLobby(Contracts.User user)
         {
-            throw new NotImplementedException();
+            if (usersInLobby.ContainsKey(user.Nickname))
+            {
+                string gameId = usersInLobby[user.Nickname];
+
+                List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+
+                foreach (var userInTheLobby in usersNickname)
+                {
+                    if (userInTheLobby != user.Nickname)
+                    {
+                        usersContext[userInTheLobby].ShowDisconnectionInLobby(user);
+                    }
+                }
+                usersInLobby.Remove(user.Nickname);
+                usersContext.Remove(user.Nickname);
+            }
         }
 
         public void ChangeLobbyUserTeam(Contracts.User user, int team)

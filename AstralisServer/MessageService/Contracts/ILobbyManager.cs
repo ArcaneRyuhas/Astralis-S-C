@@ -38,7 +38,7 @@ namespace MessageService.Contracts
         void ShowUsersInLobby(List<User> userList);
 
         [OperationContract]
-        void ShowDisconnectionInLobby(string nickname);
+        void ShowDisconnectionInLobby(User user);
 
         [OperationContract]
         void UpdateLobbyUserTeam(User user, int team);
