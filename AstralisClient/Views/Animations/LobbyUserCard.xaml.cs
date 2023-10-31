@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Astralis.Properties;
+using Astralis.Logic;
 
 namespace Astralis.Views.Animations
 {
@@ -33,8 +34,10 @@ namespace Astralis.Views.Animations
 
         public void setCard(User user)
         {
+            ImageManager imageManager = new ImageManager();
+            
             lblNickname.Content = user.Nickname;
-            //TODO IMAGE
+            imgUser.Source = imageManager.GetImage(user.ImageId);
         }
     }
 }
