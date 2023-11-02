@@ -26,12 +26,20 @@ namespace Astralis.Views
     {
         private const string HOST_CODE = "host";
         private const string ERROR_CODE_LOBBY = "error";
-        private int gridRow = 0;
         private string gameId;
+        private Dictionary<int , bool> freeSpaces;
+        private Dictionary<int , LobbyUserCard> userCards = new Dictionary<int, LobbyUserCard>();
 
         public Lobby(string code)
         {
             InitializeComponent();
+            freeSpaces = new Dictionary<int, bool>()
+            {
+                {0, true },
+                {1, true },
+                {2, true },
+                {3, true },
+            };
             SetLobby(code);
         }
 
@@ -79,10 +87,37 @@ namespace Astralis.Views
         {
             LobbyUserCard lobbyUserCard = new LobbyUserCard();
             lobbyUserCard.setCard(user);
+            bool isAdded = false;
 
-            gridUsers.Children.Add(lobbyUserCard);
-            Grid.SetRow(lobbyUserCard, gridRow);
-            gridRow++;
+            for(int gridRow = 0; gridRow < 4; gridRow++)
+            {
+                if (freeSpaces[gridRow] == true && isAdded == false)
+                {
+                    gridUsers.Children.Add(lobbyUserCard);
+                    Grid.SetRow(lobbyUserCard, gridRow);
+                    freeSpaces[gridRow] = false;
+                    userCards.Add(gridRow, lobbyUserCard );
+                    isAdded = true;
+                }
+
+            }
+        }
+
+        private void RemoveCard(User user)
+        {
+            for (int gridRow = 0; gridRow < 4; gridRow++)
+            {
+                if (userCards.ContainsKey(gridRow))
+                {
+                    if (userCards[gridRow].UserNickname == user.Nickname)
+                    {
+                        gridUsers.Children.Remove(userCards[gridRow]);
+                        userCards.Remove(gridRow);
+                        freeSpaces[gridRow] = true;
+                    }
+                }  
+
+            }
         }
 
         public void GiveLobbyId(string gameId)
@@ -100,9 +135,9 @@ namespace Astralis.Views
             AddCard(user);
         }
 
-        public void ShowDisconnectionInLobby(string nickname)
+        public void ShowDisconnectionInLobby(User user)
         {
-            throw new NotImplementedException();
+            RemoveCard(user);
         }
 
         public void ShowUsersInLobby(User[] userList)
@@ -114,6 +149,7 @@ namespace Astralis.Views
 
             User user = new User();
             user.Nickname = UserSession.Instance().Nickname;
+            user.ImageId = UserSession.Instance().ImageId;
 
             AddCard(user);
         }
@@ -125,6 +161,14 @@ namespace Astralis.Views
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
+            InstanceContext context = new InstanceContext(this);
+            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+
+            User user = new User();
+            user.Nickname = UserSession.Instance().Nickname;
+
+            client.DisconnectLobby(user);
+
             NavigationService.GoBack();
         }
 

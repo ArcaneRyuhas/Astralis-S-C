@@ -160,6 +160,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enviar.
+        /// </summary>
+        public static string btnSendMessage {
+            get {
+                return ResourceManager.GetString("btnSendMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CONFIGURACIÓN.
         /// </summary>
         public static string btnSettings {
@@ -429,6 +438,15 @@ namespace Astralis.Properties {
         public static string txbInvalidFields {
             get {
                 return ResourceManager.GetString("txbInvalidFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Escribe algo....
+        /// </summary>
+        public static string txtChat {
+            get {
+                return ResourceManager.GetString("txtChat", resourceCulture);
             }
         }
     }

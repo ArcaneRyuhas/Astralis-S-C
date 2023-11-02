@@ -47,6 +47,12 @@
   <wsdl:message name="IUserManager_GetUserByNickname_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetUserByNicknameResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserManager_UpdateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_UpdateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_CreateLobby_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateLobby" />
   </wsdl:message>
@@ -117,6 +123,10 @@
     <wsdl:operation name="GetUserByNickname">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/GetUserByNickname" message="tns:IUserManager_GetUserByNickname_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/GetUserByNicknameResponse" message="tns:IUserManager_GetUserByNickname_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/UpdateUser" message="tns:IUserManager_UpdateUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/UpdateUserResponse" message="tns:IUserManager_UpdateUser_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="ILobbyManager">
@@ -193,6 +203,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetUserByNickname">
       <soap12:operation soapAction="http://tempuri.org/IUserManager/GetUserByNickname" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/UpdateUser" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

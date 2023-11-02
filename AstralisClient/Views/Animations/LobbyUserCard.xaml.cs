@@ -24,6 +24,7 @@ namespace Astralis.Views.Animations
     public partial class LobbyUserCard : UserControl
     {
         public List<string> ItemsList { get; set; }
+        private string userNickname;
 
         public LobbyUserCard()
         {
@@ -36,8 +37,12 @@ namespace Astralis.Views.Animations
         {
             ImageManager imageManager = new ImageManager();
             
-            lblNickname.Content = user.Nickname;
+            userNickname = user.Nickname;
+            lblNickname.Content = userNickname;
             imgUser.Source = imageManager.GetImage(user.ImageId);
         }
+
+
+       public string UserNickname {get { return userNickname;} set { ;} }
     }
 }

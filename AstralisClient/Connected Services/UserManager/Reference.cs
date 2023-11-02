@@ -133,6 +133,12 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/GetUserByNickname", ReplyAction="http://tempuri.org/IUserManager/GetUserByNicknameResponse")]
         System.Threading.Tasks.Task<Astralis.UserManager.User> GetUserByNicknameAsync(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UpdateUser", ReplyAction="http://tempuri.org/IUserManager/UpdateUserResponse")]
+        int UpdateUser(Astralis.UserManager.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UpdateUser", ReplyAction="http://tempuri.org/IUserManager/UpdateUserResponse")]
+        System.Threading.Tasks.Task<int> UpdateUserAsync(Astralis.UserManager.User user);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -193,6 +199,14 @@ namespace Astralis.UserManager {
         public System.Threading.Tasks.Task<Astralis.UserManager.User> GetUserByNicknameAsync(string nickname) {
             return base.Channel.GetUserByNicknameAsync(nickname);
         }
+        
+        public int UpdateUser(Astralis.UserManager.User user) {
+            return base.Channel.UpdateUser(user);
+        }
+        
+        public System.Threading.Tasks.Task<int> UpdateUserAsync(Astralis.UserManager.User user) {
+            return base.Channel.UpdateUserAsync(user);
+        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -240,7 +254,7 @@ namespace Astralis.UserManager {
         void ShowUsersInLobby(Astralis.UserManager.User[] userList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobbyResponse")]
-        void ShowDisconnectionInLobby(string nickname);
+        void ShowDisconnectionInLobby(Astralis.UserManager.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam", ReplyAction="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeamResponse")]
         void UpdateLobbyUserTeam(Astralis.UserManager.User user, int team);

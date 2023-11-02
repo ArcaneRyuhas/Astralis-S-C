@@ -35,7 +35,7 @@ namespace Astralis.Logic
         {
              return instance;
         }
-        
+
         public string Nickname { get { return nickname; } }
         public string Mail { get { return mail; } }
         public int ImageId { get {  return imageId; } }

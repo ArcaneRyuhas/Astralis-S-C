@@ -150,6 +150,9 @@
   <data name="btnRegister" xml:space="preserve">
     <value>Sign up</value>
   </data>
+  <data name="btnSendMessage" xml:space="preserve">
+    <value>Send</value>
+  </data>
   <data name="btnSettings" xml:space="preserve">
     <value>SETTINGS</value>
   </data>
@@ -242,5 +245,8 @@ At least 1 capital letter</value>
   </data>
   <data name="txbInvalidFields" xml:space="preserve">
     <value>Invalid credentials, please enter a valid user</value>
+  </data>
+  <data name="txtChat" xml:space="preserve">
+    <value>Write something...</value>
   </data>
 </root>

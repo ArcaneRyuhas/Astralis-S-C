@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
 
             <Label Content="My Profile" Width="260" FontSize="50" HorizontalContentAlignment="Center" Grid.Row="0"/>
-            <Button Content="Accept" Width="150" Grid.Row="2" HorizontalAlignment="Left" FontSize="40" Click="Button_Click"/>
+            <Button x:Name="btnAccept"  Content="Accept" Width="150" Grid.Row="2" HorizontalAlignment="Left" FontSize="40" Click="btnAccept_Click"/>
             <Button x:Name="btnCancel" Content="Cancel" Width="150" Height="40" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="40" Click="btnCancel_Click"/>
 
             <Grid Grid.Row="1" Background="Black" >
@@ -45,9 +45,9 @@
                     <Label Content="Mi apodo" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0"/>
                     <Label Content="Correo" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2" Margin="0,40,0,0"/>
                     <Label Content="Cambiar contraseña" Width="450" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0,40,0,0"/>
-                    <TextBox Width="280" Height="40" Grid.Row="1"/>
-                    <TextBox Width="280" Height="40" Grid.Row="3"/>
-                    <PasswordBox Width="280" Height="40" Grid.Row="6"/>
+                    <TextBox x:Name="txtNickname"  Width="280" Height="40" Grid.Row="1"/>
+                    <TextBox x:Name="txtMail" Width="280" Height="40" Grid.Row="3"/>
+                    <PasswordBox x:Name="pbPassword" Width="280" Height="40" Grid.Row="6"/>
 
                 </Grid>
             </Grid>

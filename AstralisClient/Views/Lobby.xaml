@@ -29,6 +29,7 @@
                     <RowDefinition Height="200"/>
                 </Grid.RowDefinitions>
 
+                <Rectangle Grid.Row="0" Margin="20,70,20,0" Stroke="Red"/>
                 <Grid x:Name="gridUsers" Grid.Row="0" Margin="20,70,20,0">
 
                     <Grid.RowDefinitions>
@@ -39,19 +40,20 @@
                     </Grid.RowDefinitions>
                 </Grid>
 
-                <ScrollViewer Grid.Row="1" Margin="20,20,20,70">
+                <Rectangle Grid.Row="1" Margin="20,20,20,70" Stroke="Red"/>
+                <ScrollViewer Style="{DynamicResource ScrollViewerTemplatNormal}" Grid.Row="1" Margin="20,20,20,70">
                     <TextBlock x:Name="tbChat" TextWrapping="Wrap" Foreground="#FFC32525"/>
                 </ScrollViewer>
-                <TextBox x:Name="txtChat"  HorizontalAlignment="Left" Margin="20,135,0,0" Grid.Row="1" TextWrapping="Wrap" Text="txtChat" VerticalAlignment="Top" Width="661" FontSize="20"/>
-                <Button x:Name="btnSendMessage" Content="Send" HorizontalAlignment="Left" Margin="696,136,0,0" Grid.Row="1" VerticalAlignment="Top" Click="btnSendMessage_Click" FontSize="20" Width="134"/>
+                <TextBox x:Name="txtChat"  HorizontalAlignment="Left" Margin="20,135,0,0" Grid.Row="1" TextWrapping="Wrap" Text="{x:Static p:Resources.txtChat}" VerticalAlignment="Top" Width="661" FontSize="20"/>
+                <Button x:Name="btnSendMessage" Content="{x:Static p:Resources.btnSendMessage}" HorizontalAlignment="Left" Margin="696,136,0,0" Grid.Row="1" VerticalAlignment="Top" Click="btnSendMessage_Click" FontSize="20" Width="134" Template="{DynamicResource ButtonTemplateNormal}"/>
             </Grid>
 
             <Label Content="{x:Static p:Resources.lblPlayersConecteds}" HorizontalAlignment="Left" Margin="42,10,0,0" VerticalAlignment="Top" Grid.Row="1" Width="285" FontSize="22" Height="33"/>
-            <Button Content="{x:Static p:Resources.btnStartGame}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" FontSize="36" Height="40" Width="126" Margin="10,0,0,0"/>
-            <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Left" Margin="99,0,0,0" Grid.Row="2" VerticalAlignment="Center" Grid.Column="1" FontSize="24" Height="26" Width="81" Click="btnExit_Click"/>
+            <Button Content="{x:Static p:Resources.btnStartGame}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" FontSize="36" Height="40" Width="126" Margin="10,0,0,0" Template="{DynamicResource ButtonTemplateNormal}"/>
+            <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Grid.Column="1" FontSize="36" Height="40" Width="150" Click="btnExit_Click" Template="{DynamicResource ButtonTemplateNormal}"/>
             <Label Content="{x:Static p:Resources.lblInviteWithCode}" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" FontSize="24" Height="38" Width="220"/>
-            <Label x:Name="lblGameCode" Content="Label" HorizontalAlignment="Center" Margin="0,48,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Height="34" Width="210" FontSize="24"/>
-            <Label Content="{x:Static p:Resources.lblInviteFriend}" HorizontalAlignment="Center" Margin="0,129,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" FontSize="24" Height="33" Width="172"/>
+            <Label x:Name="lblGameCode" Content="Label" HorizontalAlignment="Center" Margin="0,48,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Height="40" Width="210" FontSize="24"/>
+            <Label Content="{x:Static p:Resources.lblInviteFriend}" HorizontalAlignment="Center" Margin="0,129,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" FontSize="24" Height="40" Width="172"/>
         </Grid>
 
         <Label Content="{x:Static p:Resources.lblLobby}" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="40" Height="58" Width="98" Margin="0,10,0,0"/>
