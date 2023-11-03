@@ -35,11 +35,9 @@ namespace Astralis.Views.Animations
 
         public void setCard(User user)
         {
-            ImageManager imageManager = new ImageManager();
-            
             userNickname = user.Nickname;
             lblNickname.Content = userNickname;
-            imgUser.Source = imageManager.GetImage(user.ImageId);
+            imgUser.Source = ImageManager.Instance().GetImage(user.ImageId);
         }
 
 

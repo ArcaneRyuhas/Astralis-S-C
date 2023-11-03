@@ -17,23 +17,28 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Astralis.Views.Pages;
+using Astralis.Views.Animations;
 
 namespace Astralis.Views
 {
     /// <summary>
     /// Interaction logic for MainMenu.xaml
     /// </summary>
-    public partial class MainMenu : Page
+    public partial class MainMenu : Page, UserManager.IOnlineUserManagerCallback
     {
+        private Dictionary<string, bool> friendList;
         public delegate void CloseWindowEventHandler(object sender, EventArgs e);
         public event CloseWindowEventHandler CloseWindowEvent;
-
         private Frame mainFrame;
 
         public MainMenu(Frame mainFrame)
         {
             InitializeComponent();
             this.mainFrame = mainFrame;
+
+            InstanceContext context = new InstanceContext(this);
+            UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
+            friendList = client.GetFriendList(UserSession.Instance().Nickname);
         }
 
         private void btnCreateGame_Click(object sender, RoutedEventArgs e)
@@ -59,6 +64,44 @@ namespace Astralis.Views
         {
             MyProfile myProfile = new MyProfile();
             NavigationService.Navigate(myProfile);
+        }
+
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settings = new Settings();
+            NavigationService.Navigate(settings);
+        }
+
+        private void btnFriends_Click(object sender, RoutedEventArgs e)
+        {
+            var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+
+            if (existingFriendWindow != null)
+            {
+                gridFirendsWindow.Children.Remove(existingFriendWindow);
+            }
+            else
+            {
+                FriendWindow friendWindow = new FriendWindow();
+                friendWindow.SetFriendWindow(friendList);
+                gridFirendsWindow.Children.Add(friendWindow);
+            }
+        }
+
+        public void ShowUserConected(string nickname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowUserDisconected(string nickname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowUsersOnline(string[] nicknames)
+        {
+            throw new NotImplementedException();
         }
     }
 }

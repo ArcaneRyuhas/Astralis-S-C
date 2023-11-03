@@ -15,6 +15,19 @@ namespace Astralis
     /// </summary>
     public partial class App : Application
     {
+
+        public static void ChangeLenguage(string language)
+        {
+            switch (language){
+                case "en":
+                    System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en");
+                    break;
+                case "es-MX":
+                    System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("es-MX");
+                    break;
+            }
+        }
+
         public static void RestartApplication()
         {
             string executablePath = Assembly.GetEntryAssembly().Location;

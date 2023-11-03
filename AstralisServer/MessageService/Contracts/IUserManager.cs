@@ -36,7 +36,11 @@ namespace MessageService.Contracts
 
         [OperationContract(IsOneWay = true)]
         void DisconectUser(string nickname);
+
+        [OperationContract]
+        Dictionary<string, bool> GetFriendList(string nickname);
     }
+}
 
     [ServiceContract]
     public interface IOnlineUserManagerCallback

@@ -5,6 +5,7 @@
          xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
          xmlns:local="clr-namespace:Astralis.Views.Pages"
          xmlns:p = "clr-namespace:Astralis.Properties"
+         xmlns:validation="clr-namespace:Astralis.Validations"
          mc:Ignorable="d" 
          d:DesignHeight="700" d:DesignWidth="1080"
          Title="MyProfile"
@@ -16,22 +17,39 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Label Content="My Profile" Width="260" FontSize="50" HorizontalContentAlignment="Center" Grid.Row="0"/>
-            <Button x:Name="btnAccept"  Content="Accept" Width="150" Grid.Row="2" HorizontalAlignment="Left" FontSize="40" Click="btnAccept_Click"/>
-            <Button x:Name="btnCancel" Content="Cancel" Width="150" Height="40" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="40" Click="btnCancel_Click"/>
+            <Label Content="{x:Static p:Resources.lblMyProfile}" Width="260" FontSize="50" HorizontalContentAlignment="Center" Grid.Row="0"/>
+            <Button x:Name="btnAccept"  Content="{x:Static p:Resources.btnAccept}" Width="200" Grid.Row="2" HorizontalAlignment="Left" FontSize="40" VerticalAlignment="Bottom" Click="btnAccept_Click"/>
+            <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" Width="250" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="40" Click="btnCancel_Click"/>
 
             <Grid Grid.Row="1" Background="Black" >
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Content="Profile Image" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Top" />
-                <Rectangle Width="400" Height="400" Margin="80,60,80,100" Stroke="Red" HorizontalAlignment="Center"/>
+                <Label Content="{x:Static p:Resources.lblProfileImage}" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Top" />
+                <Rectangle Width="400" Height="400" Margin="0,60,0,100" Stroke="Red" HorizontalAlignment="Center"/>
+                <Grid x:Name="gdImages" Width="400" Height="400" Margin="80,60,80,100">
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                </Grid>
 
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
@@ -41,12 +59,17 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Label Content="Mi apodo" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0"/>
-                    <Label Content="Correo" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2" Margin="0,40,0,0"/>
-                    <Label Content="Cambiar contraseña" Width="450" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0,40,0,0"/>
-                    <TextBox x:Name="txtNickname"  Width="280" Height="40" Grid.Row="1"/>
-                    <TextBox x:Name="txtMail" Width="280" Height="40" Grid.Row="3"/>
+                    
+                    <Label Content="{x:Static p:Resources.lblNickname}" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0"/>
+                    <Label Content="{x:Static p:Resources.lblMail}" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2" Margin="0,40,0,0"/>
+                    <Label x:Name="lblErrorMail" Content="{x:Static p:Resources.lblErrorMail}" Width="250" FontSize="15" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0,0,0,0" Visibility="Hidden"/>
+                    <Label Content="{x:Static p:Resources.lblPassword}" Width="450" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0,40,0,0"/>
+                    <Label x:Name="lblErrorPassword" Content="{x:Static p:Resources.lblErrorPassword}" Width="250" FontSize="15" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="7" Margin="0,0,0,0" Visibility="Hidden"/>
+                    <TextBox x:Name="txtNickname"  Width="280" Height="40" Grid.Row="1" Template="{DynamicResource TextBoxTemplateNormal}" Style="{StaticResource TextBoxValidations}" FontSize="18" IsReadOnly="True"/>
+                    <TextBox x:Name="txtMail" Width="280" Height="40" Grid.Row="3" FontSize="18"/>
                     <PasswordBox x:Name="pbPassword" Width="280" Height="40" Grid.Row="6"/>
 
                 </Grid>

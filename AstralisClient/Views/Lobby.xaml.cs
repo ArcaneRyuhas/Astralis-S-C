@@ -72,7 +72,6 @@ namespace Astralis.Views
                 user.Nickname = UserSession.Instance().Nickname;
                 user.ImageId = UserSession.Instance().ImageId;
 
-
                 InstanceContext context = new InstanceContext(this);
                 UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
 

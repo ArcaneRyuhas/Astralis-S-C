@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="btnAccept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
   <data name="btnCancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
@@ -125,6 +128,9 @@
   </data>
   <data name="btnDecks" xml:space="preserve">
     <value>MAZOS</value>
+  </data>
+  <data name="btnEnglish" xml:space="preserve">
+    <value>Ingles</value>
   </data>
   <data name="btnExit" xml:space="preserve">
     <value>SALIR</value>
@@ -155,6 +161,9 @@
   </data>
   <data name="btnSettings" xml:space="preserve">
     <value>CONFIGURACIÓN</value>
+  </data>
+  <data name="btnSpanish" xml:space="preserve">
+    <value>Español</value>
   </data>
   <data name="btnStartGame" xml:space="preserve">
     <value>Iniciar</value>
@@ -189,11 +198,17 @@
   <data name="lblInviteWithCode" xml:space="preserve">
     <value>Invitar con codigo</value>
   </data>
+  <data name="lblLanguage" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
   <data name="lblLobby" xml:space="preserve">
     <value>Sala</value>
   </data>
   <data name="lblMail" xml:space="preserve">
     <value>Correo</value>
+  </data>
+  <data name="lblMyProfile" xml:space="preserve">
+    <value>Mi perfil</value>
   </data>
   <data name="lblNickname" xml:space="preserve">
     <value>Mi apodo</value>
@@ -207,11 +222,17 @@
   <data name="lblPlayersConecteds" xml:space="preserve">
     <value>Jugadores Conectados</value>
   </data>
+  <data name="lblProfileImage" xml:space="preserve">
+    <value>Imagen de perfil</value>
+  </data>
   <data name="lblRegistration" xml:space="preserve">
     <value>Registro</value>
   </data>
   <data name="lblTitle" xml:space="preserve">
     <value>ASTRALIS</value>
+  </data>
+  <data name="lblVolume" xml:space="preserve">
+    <value>Volumen</value>
   </data>
   <data name="msgUserAddedSucceed" xml:space="preserve">
     <value>¡Registro exitoso!</value>

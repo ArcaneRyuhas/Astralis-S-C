@@ -70,6 +70,12 @@
     </Compile>
     <Compile Include="Logic\ImageManager.cs" />
     <Compile Include="Logic\UserSession.cs" />
+    <Compile Include="Views\Animations\FriendCard.xaml.cs">
+      <DependentUpon>FriendCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Animations\FriendWindow.xaml.cs">
+      <DependentUpon>FriendWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Animations\LeftLineAnimation.xaml.cs">
       <DependentUpon>LeftLineAnimation.xaml</DependentUpon>
     </Compile>
@@ -89,6 +95,14 @@
     <Compile Include="Views\LogIn.xaml.cs">
       <DependentUpon>LogIn.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Animations\FriendCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Animations\FriendWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Animations\LeftLineAnimation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +131,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Pages\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SignUp.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -130,6 +148,9 @@
     </Compile>
     <Compile Include="Views\Pages\MyProfile.xaml.cs">
       <DependentUpon>MyProfile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
@@ -188,13 +209,16 @@
     <None Include="Connected Services\UserManager\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\item1.xsd">
+    <None Include="Connected Services\UserManager\item3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\item2.xsd">
+    <None Include="Connected Services\UserManager\item31.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\UserManager.wsdl" />
+    <None Include="Connected Services\UserManager\item32.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\UserManager\UserManager1.wsdl" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -206,12 +230,11 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\UserManager\" />
+    <None Include="Connected Services\UserManager\item1.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\UserManager\item.disco" />
+    <WCFMetadataStorage Include="Connected Services\UserManager\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\UserManager\configuration91.svcinfo" />

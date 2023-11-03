@@ -334,4 +334,93 @@ namespace Astralis.UserManager {
             return base.Channel.SendMessageAsync(message, gameId);
         }
     }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.IOnlineUserManager", CallbackContract=typeof(Astralis.UserManager.IOnlineUserManagerCallback))]
+    public interface IOnlineUserManager {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/ConectUser")]
+        void ConectUser(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/ConectUser")]
+        System.Threading.Tasks.Task ConectUserAsync(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/DisconectUser")]
+        void DisconectUser(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/DisconectUser")]
+        System.Threading.Tasks.Task DisconectUserAsync(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/GetFriendList", ReplyAction="http://tempuri.org/IOnlineUserManager/GetFriendListResponse")]
+        System.Collections.Generic.Dictionary<string, bool> GetFriendList(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/GetFriendList", ReplyAction="http://tempuri.org/IOnlineUserManager/GetFriendListResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<string, bool>> GetFriendListAsync(string nickname);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IOnlineUserManagerCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowUserConected", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowUserConectedResponse")]
+        void ShowUserConected(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowUserDisconected", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowUserDisconectedResponse")]
+        void ShowUserDisconected(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowUsersOnline", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowUsersOnlineResponse")]
+        void ShowUsersOnline(string[] nicknames);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IOnlineUserManagerChannel : Astralis.UserManager.IOnlineUserManager, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class OnlineUserManagerClient : System.ServiceModel.DuplexClientBase<Astralis.UserManager.IOnlineUserManager>, Astralis.UserManager.IOnlineUserManager {
+        
+        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void ConectUser(string nickname) {
+            base.Channel.ConectUser(nickname);
+        }
+        
+        public System.Threading.Tasks.Task ConectUserAsync(string nickname) {
+            return base.Channel.ConectUserAsync(nickname);
+        }
+        
+        public void DisconectUser(string nickname) {
+            base.Channel.DisconectUser(nickname);
+        }
+        
+        public System.Threading.Tasks.Task DisconectUserAsync(string nickname) {
+            return base.Channel.DisconectUserAsync(nickname);
+        }
+        
+        public System.Collections.Generic.Dictionary<string, bool> GetFriendList(string nickname) {
+            return base.Channel.GetFriendList(nickname);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<string, bool>> GetFriendListAsync(string nickname) {
+            return base.Channel.GetFriendListAsync(nickname);
+        }
+    }
 }

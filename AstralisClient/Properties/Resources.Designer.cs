@@ -61,6 +61,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aceptar.
+        /// </summary>
+        public static string btnAccept {
+            get {
+                return ResourceManager.GetString("btnAccept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancelar.
         /// </summary>
         public static string btnCancel {
@@ -84,6 +93,15 @@ namespace Astralis.Properties {
         public static string btnDecks {
             get {
                 return ResourceManager.GetString("btnDecks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ingles.
+        /// </summary>
+        public static string btnEnglish {
+            get {
+                return ResourceManager.GetString("btnEnglish", resourceCulture);
             }
         }
         
@@ -174,6 +192,15 @@ namespace Astralis.Properties {
         public static string btnSettings {
             get {
                 return ResourceManager.GetString("btnSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Español.
+        /// </summary>
+        public static string btnSpanish {
+            get {
+                return ResourceManager.GetString("btnSpanish", resourceCulture);
             }
         }
         
@@ -277,6 +304,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Idioma.
+        /// </summary>
+        public static string lblLanguage {
+            get {
+                return ResourceManager.GetString("lblLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sala.
         /// </summary>
         public static string lblLobby {
@@ -291,6 +327,15 @@ namespace Astralis.Properties {
         public static string lblMail {
             get {
                 return ResourceManager.GetString("lblMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mi perfil.
+        /// </summary>
+        public static string lblMyProfile {
+            get {
+                return ResourceManager.GetString("lblMyProfile", resourceCulture);
             }
         }
         
@@ -331,6 +376,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imagen de perfil.
+        /// </summary>
+        public static string lblProfileImage {
+            get {
+                return ResourceManager.GetString("lblProfileImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registro.
         /// </summary>
         public static string lblRegistration {
@@ -345,6 +399,15 @@ namespace Astralis.Properties {
         public static string lblTitle {
             get {
                 return ResourceManager.GetString("lblTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volumen.
+        /// </summary>
+        public static string lblVolume {
+            get {
+                return ResourceManager.GetString("lblVolume", resourceCulture);
             }
         }
         

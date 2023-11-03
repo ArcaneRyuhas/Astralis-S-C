@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -293,6 +294,8 @@ namespace MessageService
     public partial class UserManager: IOnlineUserManager
     {
         private static Dictionary<string, IOnlineUserManagerCallback> onlineUsers = new Dictionary<string, IOnlineUserManagerCallback>();
+        private const int IS_FRIEND = 1;
+        private const int IS_PENDING_FRIEND = 2;
         
         public void ConectUser(string nickname)
         {
@@ -323,6 +326,47 @@ namespace MessageService
             }
             
         }
-      
+
+        public Dictionary<string, bool> GetFriendList(string nickname)
+        {
+            Dictionary<string, bool> friendList = new Dictionary<string, bool>();
+
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+
+                var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
+
+                foreach (var friend in databaseFriends)
+                {
+                    if(friend.Nickname1 != nickname)
+                    {
+                        if(onlineUsers.ContainsKey(friend.Nickname1))
+                        {
+                            friendList.Add(friend.Nickname1, true);
+                        }
+                        else
+                        {
+                            friendList.Add(friend.Nickname1, false);
+                        }
+
+                    }
+                    else
+                    {
+                        if (onlineUsers.ContainsKey(friend.Nickname2))
+                        {
+                            friendList.Add(friend.Nickname2, true);
+                        }
+                        else
+                        {
+                            friendList.Add(friend.Nickname2, false);
+                        }
+                    }
+                }
+            }
+
+            return friendList;
+        }
+
     }
 }

@@ -23,8 +23,6 @@ namespace Astralis.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-
-
     public partial class SignUp : Window
     {
         private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";

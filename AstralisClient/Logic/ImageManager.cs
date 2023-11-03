@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Astralis.UserManager;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -12,9 +13,11 @@ namespace Astralis.Logic
 {
     internal class ImageManager
     {
+
+        private static ImageManager instance;
         private Dictionary<int, Bitmap> imageMap;
 
-        public ImageManager() 
+        private ImageManager() 
         {
             imageMap = new Dictionary<int, Bitmap>()
             {
@@ -22,6 +25,21 @@ namespace Astralis.Logic
                 {2, ImageResource.Piranhas},
                 {3, ImageResource.Pumpkin},
             };
+        }
+
+        public static ImageManager Instance()
+        {
+            if (instance == null)
+            {
+                instance = new ImageManager();
+            }
+
+            return instance;
+        }
+
+        public int GetImageCount()
+        {
+            return imageMap.Count;
         }
 
         public BitmapImage GetImage(int imageId)

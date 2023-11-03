@@ -16,11 +16,20 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IOnlineUserManager_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IUserManager_AddUser_InputMessage">
@@ -107,6 +116,36 @@
   <wsdl:message name="ILobbyManager_ReceiveMessage_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveMessageResponse" />
   </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ConectUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConectUser" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_DisconectUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisconectUser" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_GetFriendList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendList" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_GetFriendList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUserConected_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserConected" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUserConected_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserConectedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUserDisconected_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserDisconected" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUserDisconected_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserDisconectedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUsersOnline_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUsersOnline" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUsersOnline_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUsersOnlineResponse" />
+  </wsdl:message>
   <wsdl:portType name="IUserManager">
     <wsdl:operation name="AddUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
@@ -169,6 +208,30 @@
     <wsdl:operation name="ReceiveMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessage" message="tns:ILobbyManager_ReceiveMessage_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessageResponse" message="tns:ILobbyManager_ReceiveMessage_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IOnlineUserManager">
+    <wsdl:operation name="ConectUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ConectUser" message="tns:IOnlineUserManager_ConectUser_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisconectUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/DisconectUser" message="tns:IOnlineUserManager_DisconectUser_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/GetFriendList" message="tns:IOnlineUserManager_GetFriendList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/GetFriendListResponse" message="tns:IOnlineUserManager_GetFriendList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserConected">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserConected" message="tns:IOnlineUserManager_ShowUserConected_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserConectedResponse" message="tns:IOnlineUserManager_ShowUserConected_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserDisconected">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserDisconected" message="tns:IOnlineUserManager_ShowUserDisconected_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserDisconectedResponse" message="tns:IOnlineUserManager_ShowUserDisconected_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowUsersOnline">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUsersOnline" message="tns:IOnlineUserManager_ShowUsersOnline_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUsersOnlineResponse" message="tns:IOnlineUserManager_ShowUsersOnline_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
@@ -311,17 +374,75 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IOnlineUserManager" type="tns:IOnlineUserManager">
+    <wsp:PolicyReference URI="#NetTcpBinding_IOnlineUserManager_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="ConectUser">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ConectUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="DisconectUser">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/DisconectUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendList">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/GetFriendList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserConected">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowUserConected" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserDisconected">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowUserDisconected" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowUsersOnline">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowUsersOnline" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:service name="UserManager">
     <wsdl:port name="NetTcpBinding_IUserManager" binding="tns:NetTcpBinding_IUserManager">
-      <soap12:address location="net.tcp://localhost:8081/MessageService" />
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_ILobbyManager" binding="tns:NetTcpBinding_ILobbyManager">
-      <soap12:address location="net.tcp://localhost:8081/MessageService" />
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IOnlineUserManager" binding="tns:NetTcpBinding_IOnlineUserManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>
