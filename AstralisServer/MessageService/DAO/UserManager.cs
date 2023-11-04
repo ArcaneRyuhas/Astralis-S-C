@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -200,14 +199,14 @@ namespace MessageService
                 result = context.SaveChanges();
             };
 
-            if(result > 0)
+            if (result > 0)
             {
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
                 usersContext.Add(user.Nickname, currentUserCallbackChannel);
                 usersInLobby.Add(user.Nickname, gameId);
             }
             else
-            {   
+            {
                 gameId = ERROR_CODE_LOBBY;
             }
 
@@ -252,7 +251,7 @@ namespace MessageService
             }
         }
 
-        private string generateGameId() 
+        private string generateGameId()
         {
             Guid guid = Guid.NewGuid();
 
@@ -262,7 +261,7 @@ namespace MessageService
             return uniqueID;
         }
 
-        private bool gameIdIsRepeated (string gameId)
+        private bool gameIdIsRepeated(string gameId)
         {
             bool isRepeated = false;
 
@@ -291,27 +290,27 @@ namespace MessageService
 
     }
 
-    public partial class UserManager: IOnlineUserManager
+    public partial class UserManager : IOnlineUserManager
     {
         private static Dictionary<string, IOnlineUserManagerCallback> onlineUsers = new Dictionary<string, IOnlineUserManagerCallback>();
         private const int IS_FRIEND = 1;
         private const int IS_PENDING_FRIEND = 2;
-        
+
         public void ConectUser(string nickname)
         {
-            if(!onlineUsers.ContainsKey(nickname))
+            if (!onlineUsers.ContainsKey(nickname))
             {
                 IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
                 List<string> onlineNicknames = onlineUsers.Keys.ToList();
-                currentUserCallbackChannel.ShowUsersOnline(onlineNicknames);
+                //currentUserCallbackChannel.ShowUsersOnline(onlineNicknames);
 
                 foreach (var user in onlineUsers)
                 {
-                    user.Value.ShowUserConected(nickname);
+                    //user.Value.ShowUserConected(nickname);
                 }
 
                 onlineUsers.Add(nickname, currentUserCallbackChannel);
-                
+
             }
         }
         public void DisconectUser(string nickname)
@@ -324,7 +323,7 @@ namespace MessageService
                     user.Value.ShowUserDisconected(nickname);
                 }
             }
-            
+
         }
 
         public Dictionary<string, bool> GetFriendList(string nickname)
@@ -339,9 +338,9 @@ namespace MessageService
 
                 foreach (var friend in databaseFriends)
                 {
-                    if(friend.Nickname1 != nickname)
+                    if (friend.Nickname1 != nickname)
                     {
-                        if(onlineUsers.ContainsKey(friend.Nickname1))
+                        if (onlineUsers.ContainsKey(friend.Nickname1))
                         {
                             friendList.Add(friend.Nickname1, true);
                         }

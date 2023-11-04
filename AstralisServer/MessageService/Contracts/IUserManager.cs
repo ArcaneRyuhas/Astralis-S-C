@@ -40,7 +40,6 @@ namespace MessageService.Contracts
         [OperationContract]
         Dictionary<string, bool> GetFriendList(string nickname);
     }
-}
 
     [ServiceContract]
     public interface IOnlineUserManagerCallback
@@ -66,14 +65,14 @@ namespace MessageService.Contracts
         public string Nickname { get { return nickname; } set { nickname = value; } }
 
         [DataMember]
-        public int ImageId { get {  return imageId; } set {  imageId = value; } }
+        public int ImageId { get { return imageId; } set { imageId = value; } }
 
         [DataMember]
         public string Mail { get { return mail; } set { mail = value; } }
 
         [DataMember]
         public string Password { get { return password; } set { password = value; } }
-    
+
     }
-    
+
 }
