@@ -7,10 +7,13 @@
         xmlns:animation="clr-namespace:Astralis.Views.Animations"
         xmlns:p = "clr-namespace:Astralis.Properties"
         mc:Ignorable="d"
-        WindowState="Maximized"
-        WindowStyle="None"
-        Title="GameWindow" Height="700" Width="1080"
-        Background="Black">
+        WindowState="Normal"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen"
+        Title="GameWindow" Height="920" Width="1280"
+        Background="Black"
+        Icon="Game/InGameAssets/AstralisIcon.png">
+    
     <Grid>
         <Frame Name="mainFrame" NavigationUIVisibility="Hidden">
 

@@ -56,6 +56,11 @@ namespace Astralis.Views.Pages
                 RadioButton radioButton = new RadioButton();
                 radioButton.Content = imagesCreated.ToString();
 
+                if (imagesCreated == UserSession.Instance().ImageId)
+                {
+                    radioButton.IsChecked = true;
+                }
+
                 Image image = new Image();
                 image.Width = 100;
                 image.Height = 100;

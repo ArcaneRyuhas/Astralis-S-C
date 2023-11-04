@@ -19,45 +19,22 @@ namespace Astralis.Views
     /// <summary>
     /// Interaction logic for GameWindow.xaml
     /// </summary>
-    public partial class GameWindow : Window, UserManager.IOnlineUserManagerCallback
+    public partial class GameWindow : Window
     {
         public GameWindow()
         {
             InitializeComponent();
-            MainMenu mainMenu = new MainMenu(mainFrame);
+            MainMenu mainMenu = new MainMenu();
             mainMenu.CloseWindowEvent += CloseWindowEventHandler;
 
             mainFrame.Content = mainMenu;
-            Connect();
             ImageManager.Instance();
         }
 
-        private void Connect()
-        {
-            InstanceContext context = new InstanceContext(this);
-            UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
-
-            client.ConectUser(UserSession.Instance().Nickname);
-        }
 
         private void CloseWindowEventHandler(object sender, EventArgs e)
         {
             Close();
-        }
-
-        public void ShowUserConected(string nickname)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ShowUserDisconected(string nickname)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ShowUsersOnline(string[] nicknames)
-        {
-            throw new NotImplementedException();
         }
     }
 }

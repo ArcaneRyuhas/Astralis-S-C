@@ -14,15 +14,13 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Row="0" Width="250">
-                <Grid x:Name="gdFriends">
-
-                </Grid>
+            <ScrollViewer Grid.Row="0" Width="235" Height="280">
+                <Grid x:Name="gdFriends"/>
             </ScrollViewer>
-            <TextBox Text="Buscar Usuario" Height="25" TextAlignment="Center" Width="120" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Text="lblBuscarUsuario" Height="25" TextAlignment="Center" Width="120" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         </Grid>
-        <Border BorderBrush="#B52727" BorderThickness="4" CornerRadius="20">
-        </Border>
+        <Border BorderBrush="#B52727" BorderThickness="4" CornerRadius="20"/>
     </Grid>
-    </UserControl>
+    
+ </UserControl>

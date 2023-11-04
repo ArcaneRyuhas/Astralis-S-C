@@ -90,5 +90,13 @@ namespace Astralis.Views
             this.Close();
             signUp.Show();
         }
+
+        private void EnterKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Click_LogIn(sender, e);
+            }
+        }
     }
 }

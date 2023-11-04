@@ -25,34 +25,53 @@ namespace Astralis.Views.Animations
     {
         private const bool REQUEST_PENDING = false;
         private const bool IS_FRIEND = true;
-
+        private const bool IS_ONLINE = true;
+        private const bool IS_OFFLINE = false;
+        private int cardsAddedRow = 0;
 
         public FriendWindow()
         {
             InitializeComponent();
         }
 
-        internal void SetFriendWindow(Dictionary<string, bool> friendList)
+        public void SetFriendWindow(Dictionary<string, bool> friendList)
         {
-
-            int cardsAddedRow = 0;
+            cardsAddedRow = 0;
+            gdFriends.Children.Clear();
+            gdFriends.RowDefinitions.Clear();
 
             foreach (var friendEntry in friendList)
             {
-                FriendCard card = new FriendCard();
-                card.SetCard(friendEntry.Key, friendEntry.Value, IS_FRIEND); //A CAMBIAR NO SE VAYA A OLVIDAR
-                Grid.SetRow(card, cardsAddedRow);
-                gdFriends.Children.Add(card);
-                cardsAddedRow++;
-
-                RowDefinition rowDefinition = new RowDefinition();
-                rowDefinition.Height = GridLength.Auto;
-                gdFriends.RowDefinitions.Add(rowDefinition);
+                if(friendEntry.Value == IS_ONLINE)
+                {
+                    AddFriendRow(friendEntry.Key, friendEntry.Value);
+                }
             }
+
+            foreach (var friendEntry in friendList)
+            {
+                if (friendEntry.Value == IS_OFFLINE)
+                {
+                    AddFriendRow(friendEntry.Key, friendEntry.Value);
+                }
+            }
+
 
             RowDefinition lastRowDefinition =new RowDefinition();
             lastRowDefinition.Height = new GridLength(1, GridUnitType.Star);
             gdFriends.RowDefinitions.Add(lastRowDefinition);
+        }
+        private void AddFriendRow(string friendOnlineKey, bool friendOnlineValue)
+        {
+            FriendCard card = new FriendCard();
+            card.SetCard(friendOnlineKey, friendOnlineValue, IS_FRIEND); //A CAMBIAR NO SE VAYA A OLVIDAR
+            Grid.SetRow(card, cardsAddedRow);
+            gdFriends.Children.Add(card);
+            cardsAddedRow++;
+
+            RowDefinition rowDefinition = new RowDefinition();
+            rowDefinition.Height = GridLength.Auto;
+            gdFriends.RowDefinitions.Add(rowDefinition);
         }
     }
 }

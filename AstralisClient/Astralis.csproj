@@ -89,6 +89,9 @@
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Validations\UserValidationRule.cs" />
+    <Compile Include="Views\Game\GameBoard.xaml.cs">
+      <DependentUpon>GameBoard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Lobby.xaml.cs">
       <DependentUpon>Lobby.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Game\GameBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,6 +263,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Pumpkin.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\AstralisBoard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\AstralisIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

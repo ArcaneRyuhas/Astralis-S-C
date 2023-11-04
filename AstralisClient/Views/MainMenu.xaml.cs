@@ -29,12 +29,11 @@ namespace Astralis.Views
         private Dictionary<string, bool> friendList;
         public delegate void CloseWindowEventHandler(object sender, EventArgs e);
         public event CloseWindowEventHandler CloseWindowEvent;
-        private Frame mainFrame;
 
-        public MainMenu(Frame mainFrame)
+        public MainMenu()
         {
             InitializeComponent();
-            this.mainFrame = mainFrame;
+            Connect();
 
             InstanceContext context = new InstanceContext(this);
             UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
@@ -77,16 +76,35 @@ namespace Astralis.Views
         {
             var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
 
-            if (existingFriendWindow != null)
-            {
-                gridFirendsWindow.Children.Remove(existingFriendWindow);
-            }
-            else
+            if (existingFriendWindow == null)
             {
                 FriendWindow friendWindow = new FriendWindow();
                 friendWindow.SetFriendWindow(friendList);
                 gridFirendsWindow.Children.Add(friendWindow);
+                
             }
+            else
+            {
+                if(existingFriendWindow.IsVisible == true)
+                {
+                    existingFriendWindow.Visibility = Visibility.Hidden;
+                }
+
+                else
+                {
+                    existingFriendWindow.SetFriendWindow(friendList);
+                    existingFriendWindow.Visibility = Visibility.Visible;
+                }
+
+            }
+        }
+
+        private void Connect()
+        {
+            InstanceContext context = new InstanceContext(this);
+            UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
+
+            client.ConectUser(UserSession.Instance().Nickname);
         }
 
         public void ShowUserConected(string nickname)
