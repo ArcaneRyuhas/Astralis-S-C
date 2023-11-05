@@ -302,11 +302,11 @@ namespace MessageService
             {
                 IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
                 List<string> onlineNicknames = onlineUsers.Keys.ToList();
-                //currentUserCallbackChannel.ShowUsersOnline(onlineNicknames);
+                currentUserCallbackChannel.ShowOnlineFriends(GetFriendList(nickname));
 
                 foreach (var user in onlineUsers)
                 {
-                    //user.Value.ShowUserConected(nickname);
+                    user.Value.ShowUserConected(nickname);
                 }
 
                 onlineUsers.Add(nickname, currentUserCallbackChannel);
@@ -326,7 +326,7 @@ namespace MessageService
 
         }
 
-        public Dictionary<string, bool> GetFriendList(string nickname)
+        private Dictionary<string, bool> GetFriendList(string nickname)
         {
             Dictionary<string, bool> friendList = new Dictionary<string, bool>();
 

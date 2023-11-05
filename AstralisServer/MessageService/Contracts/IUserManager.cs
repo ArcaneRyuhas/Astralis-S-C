@@ -36,9 +36,6 @@ namespace MessageService.Contracts
 
         [OperationContract(IsOneWay = true)]
         void DisconectUser(string nickname);
-
-        [OperationContract]
-        Dictionary<string, bool> GetFriendList(string nickname);
     }
 
     [ServiceContract]
@@ -49,7 +46,7 @@ namespace MessageService.Contracts
         [OperationContract]
         void ShowUserDisconected(string nickname);
         [OperationContract]
-        void ShowUsersOnline(List<String> nicknames);
+        void ShowOnlineFriends(Dictionary<string, bool> onlineFriends);
     }
 
 
