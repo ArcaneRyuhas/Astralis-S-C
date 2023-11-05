@@ -350,12 +350,6 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/DisconectUser")]
         System.Threading.Tasks.Task DisconectUserAsync(string nickname);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/GetFriendList", ReplyAction="http://tempuri.org/IOnlineUserManager/GetFriendListResponse")]
-        System.Collections.Generic.Dictionary<string, bool> GetFriendList(string nickname);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/GetFriendList", ReplyAction="http://tempuri.org/IOnlineUserManager/GetFriendListResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<string, bool>> GetFriendListAsync(string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -367,8 +361,8 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowUserDisconected", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowUserDisconectedResponse")]
         void ShowUserDisconected(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowUsersOnline", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowUsersOnlineResponse")]
-        void ShowUsersOnline(string[] nicknames);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowOnlineFriends", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowOnlineFriendsResponse")]
+        void ShowOnlineFriends(System.Collections.Generic.Dictionary<string, bool> onlineFriends);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -413,14 +407,6 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task DisconectUserAsync(string nickname) {
             return base.Channel.DisconectUserAsync(nickname);
-        }
-        
-        public System.Collections.Generic.Dictionary<string, bool> GetFriendList(string nickname) {
-            return base.Channel.GetFriendList(nickname);
-        }
-        
-        public System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<string, bool>> GetFriendListAsync(string nickname) {
-            return base.Channel.GetFriendListAsync(nickname);
         }
     }
 }

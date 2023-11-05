@@ -21,10 +21,12 @@ namespace Astralis.Views
     /// </summary>
     public partial class GameWindow : Window
     {
+        MainMenu mainMenu;
+
         public GameWindow()
         {
             InitializeComponent();
-            MainMenu mainMenu = new MainMenu();
+            mainMenu = new MainMenu();
             mainMenu.CloseWindowEvent += CloseWindowEventHandler;
 
             mainFrame.Content = mainMenu;
@@ -34,6 +36,8 @@ namespace Astralis.Views
 
         private void CloseWindowEventHandler(object sender, EventArgs e)
         {
+            mainMenu.Disconnect();
+
             Close();
         }
     }

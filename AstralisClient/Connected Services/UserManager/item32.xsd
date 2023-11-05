@@ -205,20 +205,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFriendList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetFriendListResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetFriendListResult" nillable="true" type="q12:ArrayOfKeyValueOfstringboolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="ShowUserConected">
     <xs:complexType>
       <xs:sequence>
@@ -243,14 +229,14 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowUsersOnline">
+  <xs:element name="ShowOnlineFriends">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="nicknames" nillable="true" type="q13:ArrayOfstring" />
+        <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="onlineFriends" nillable="true" type="q12:ArrayOfKeyValueOfstringboolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowUsersOnlineResponse">
+  <xs:element name="ShowOnlineFriendsResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

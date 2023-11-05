@@ -26,18 +26,16 @@ namespace Astralis.Views
     /// </summary>
     public partial class MainMenu : Page, UserManager.IOnlineUserManagerCallback
     {
-        private Dictionary<string, bool> friendList;
+        private Dictionary<string, bool> friendList = new Dictionary<string, bool>();
         public delegate void CloseWindowEventHandler(object sender, EventArgs e);
         public event CloseWindowEventHandler CloseWindowEvent;
+        private const bool IS_ONLINE = true;
+        private const bool IS_OFFLINE = false;
 
         public MainMenu()
         {
             InitializeComponent();
             Connect();
-
-            InstanceContext context = new InstanceContext(this);
-            UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
-            friendList = client.GetFriendList(UserSession.Instance().Nickname);
         }
 
         private void btnCreateGame_Click(object sender, RoutedEventArgs e)
@@ -48,7 +46,16 @@ namespace Astralis.Views
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
+            Disconnect();
             CloseWindowEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Disconnect()
+        {
+            InstanceContext context = new InstanceContext(this);
+            UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
+
+            client.DisconectUser(UserSession.Instance().Nickname);
         }
 
         private void btnJoinGame_Click(object sender, RoutedEventArgs e)
@@ -79,7 +86,10 @@ namespace Astralis.Views
             if (existingFriendWindow == null)
             {
                 FriendWindow friendWindow = new FriendWindow();
-                friendWindow.SetFriendWindow(friendList);
+                if(friendList.Count > 0)
+                {
+                    friendWindow.SetFriendWindow(friendList);
+                }
                 gridFirendsWindow.Children.Add(friendWindow);
                 
             }
@@ -109,17 +119,23 @@ namespace Astralis.Views
 
         public void ShowUserConected(string nickname)
         {
-            throw new NotImplementedException();
+            if (friendList.ContainsKey(nickname))
+            {
+                friendList[nickname] = IS_ONLINE;
+            }
         }
 
         public void ShowUserDisconected(string nickname)
         {
-            throw new NotImplementedException();
+            if (friendList.ContainsKey(nickname))
+            {
+                friendList[nickname] = IS_OFFLINE;
+            }
         }
 
-        public void ShowUsersOnline(string[] nicknames)
+        public void ShowOnlineFriends(Dictionary<string, bool> onlineFriends)
         {
-            throw new NotImplementedException();
+            friendList = onlineFriends;
         }
     }
 }

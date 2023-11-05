@@ -8,7 +8,7 @@
         xmlns:p = "clr-namespace:Astralis.Properties"
         mc:Ignorable="d"
         WindowState="Normal"
-        WindowStyle="SingleBorderWindow"
+        WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         Title="GameWindow" Height="920" Width="1280"
         Background="Black"
@@ -16,7 +16,7 @@
     
     <Grid>
         <Frame Name="mainFrame" NavigationUIVisibility="Hidden">
-
+            
         </Frame>
 
     </Grid>
