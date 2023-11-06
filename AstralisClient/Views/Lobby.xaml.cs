@@ -26,6 +26,7 @@ namespace Astralis.Views
     {
         private const string HOST_CODE = "host";
         private const string ERROR_CODE_LOBBY = "error";
+        private bool isHost = false;
         private string gameId;
         private Dictionary<int , bool> freeSpaces;
         private Dictionary<int , LobbyUserCard> userCards = new Dictionary<int, LobbyUserCard>();
@@ -41,12 +42,15 @@ namespace Astralis.Views
                 {3, true },
             };
             SetLobby(code);
+            btnStartGame.IsEnabled = false;
         }
 
         private void SetLobby(string code) 
         {
             if (code == HOST_CODE)
             {
+                isHost = true;
+
                 User user = new User();
                 user.Nickname = UserSession.Instance().Nickname;
                 user.ImageId = UserSession.Instance().ImageId;
@@ -85,7 +89,7 @@ namespace Astralis.Views
         public void AddCard (User user)
         {
             LobbyUserCard lobbyUserCard = new LobbyUserCard();
-            lobbyUserCard.setCard(user);
+            lobbyUserCard.setCard(user, isHost);
             bool isAdded = false;
 
             for(int gridRow = 0; gridRow < 4; gridRow++)

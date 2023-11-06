@@ -33,11 +33,17 @@ namespace Astralis.Views.Animations
             cbxTeam.ItemsSource = ItemsList;
         }
 
-        public void setCard(User user)
+        public void setCard(User user, bool isHost)
         {
+            
             userNickname = user.Nickname;
             lblNickname.Content = userNickname;
             imgUser.Source = ImageManager.Instance().GetImage(user.ImageId);
+
+            if (!isHost)
+            {
+                btnKickout.IsEnabled = false;
+            }
         }
 
 

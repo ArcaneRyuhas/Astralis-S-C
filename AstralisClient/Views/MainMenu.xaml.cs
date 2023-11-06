@@ -122,6 +122,12 @@ namespace Astralis.Views
             if (friendList.ContainsKey(nickname))
             {
                 friendList[nickname] = IS_ONLINE;
+                var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+                
+                if(existingFriendWindow != null)
+                {
+                    existingFriendWindow.SetFriendWindow(friendList);
+                }
             }
         }
 
@@ -130,6 +136,12 @@ namespace Astralis.Views
             if (friendList.ContainsKey(nickname))
             {
                 friendList[nickname] = IS_OFFLINE;
+                var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+
+                if (existingFriendWindow != null)
+                {
+                    existingFriendWindow.SetFriendWindow(friendList);
+                }
             }
         }
 
