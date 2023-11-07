@@ -207,6 +207,7 @@ namespace Astralis.UserManager {
         public System.Threading.Tasks.Task<int> UpdateUserAsync(Astralis.UserManager.User user) {
             return base.Channel.UpdateUserAsync(user);
         }
+
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

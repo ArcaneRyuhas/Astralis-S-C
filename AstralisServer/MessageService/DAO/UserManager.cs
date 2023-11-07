@@ -13,6 +13,10 @@ namespace MessageService
     public partial class UserManager : IUserManager
 
     {
+
+       
+
+
         public int ConfirmUser(string nickname, string password)
         {
             int result = 0;
@@ -143,6 +147,82 @@ namespace MessageService
 
         }
 
+        public bool SendFriendRequest(string nickname, string nicknameFriend)
+        {
+            if (FindUserByNickname(nickname) && FindUserByNickname(nicknameFriend))
+            {
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
+
+                    var existingRequest = context.UserFriend
+                        .FirstOrDefault(f =>
+                            (f.Nickname1 == nickname && f.Nickname2 == nicknameFriend) ||
+                            (f.Nickname1 == nicknameFriend && f.Nickname2 == nickname) &&
+                            f.FriendStatusId == IS_PENDING_FRIEND);
+
+                    if (existingRequest == null)
+                    {
+                        var newFriendRequest = new UserFriend
+                        {
+                            Nickname1 = nickname,
+                            Nickname2 = nicknameFriend,
+                            FriendStatusId = IS_PENDING_FRIEND
+                        };
+
+                        context.UserFriend.Add(newFriendRequest);
+                        context.SaveChanges();
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool ReplyFriendRequest(string nickname, string nicknameRquest, bool answer)
+        {
+            if (FindUserByNickname(nickname) && FindUserByNickname(nicknameRquest))
+            {
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
+
+                    var existingRequest = context.UserFriend
+                        .FirstOrDefault(f =>
+                            (f.Nickname1 == nickname && f.Nickname2 == nicknameRquest) ||
+                            (f.Nickname1 == nicknameRquest && f.Nickname2 == nickname) &&
+                            f.FriendStatusId == IS_PENDING_FRIEND);
+
+                    if (existingRequest != null)
+                    {
+                        if (answer)
+                        {
+                            existingRequest.FriendStatusId = IS_FRIEND;
+                        }
+                        else
+                        {
+                            context.UserFriend.Remove(existingRequest);
+                        }
+
+                        context.SaveChanges();
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
@@ -367,5 +447,6 @@ namespace MessageService
             return friendList;
         }
 
+      
     }
 }

@@ -25,6 +25,10 @@ namespace MessageService.Contracts
 
         [OperationContract]
         int UpdateUser(User user);
+        [OperationContract]
+        bool SendFriendRequest(string nickname, string nicknameFriend);
+        [OperationContract]
+        bool ReplyFriendRequest(string nickname, string nicknameRquest, bool answer);
 
     }
 
@@ -36,6 +40,7 @@ namespace MessageService.Contracts
 
         [OperationContract(IsOneWay = true)]
         void DisconectUser(string nickname);
+
     }
 
     [ServiceContract]

@@ -1,4 +1,5 @@
 ﻿using Astralis.Logic;
+using Astralis.UserManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,5 +74,32 @@ namespace Astralis.Views.Animations
             rowDefinition.Height = GridLength.Auto;
             gdFriends.RowDefinitions.Add(rowDefinition);
         }
+
+        private void btnSentFriendRequest_Click(object sender, RoutedEventArgs e)
+        {
+            string friendUsername = txtSearchUser.Text.Trim(); 
+
+            if (!string.IsNullOrEmpty(friendUsername))
+            {
+                    using (UserManagerClient client = new UserManagerClient())
+                    {
+                        bool requestSent = client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
+
+                        if (requestSent)
+                        {
+                            MessageBox.Show("Solicitud de amistad enviada con éxito.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+            else
+            {
+                MessageBox.Show("Por favor, ingresa un nombre de usuario.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
     }
 }
