@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -29,6 +30,8 @@ namespace MessageService.Contracts
         bool SendFriendRequest(string nickname, string nicknameFriend);
         [OperationContract]
         bool ReplyFriendRequest(string nickname, string nicknameRquest, bool answer);
+
+        bool RemoveFriend(string nickname, string nickname2);
 
     }
 

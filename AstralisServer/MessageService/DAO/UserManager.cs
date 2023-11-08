@@ -223,6 +223,31 @@ namespace MessageService
 
             return false;
         }
+
+        public bool RemoveFriend(string nickname, string nickname2)
+        {
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+
+                var friendRelationship = context.UserFriend
+                    .FirstOrDefault(f =>
+                        (f.Nickname1 == nickname && f.Nickname2 == nickname2) ||
+                        (f.Nickname1 == nickname2 && f.Nickname2 == nickname) &&
+                        f.FriendStatusId == IS_FRIEND);
+
+                if (friendRelationship != null)
+                {
+                    context.UserFriend.Remove(friendRelationship);
+                    context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
@@ -439,6 +464,17 @@ namespace MessageService
                         else
                         {
                             friendList.Add(friend.Nickname2, false);
+                        }
+                    }
+                     var pendingRequests = context.UserFriend
+                    .Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND)
+                    .ToList();
+
+                    foreach (var request in pendingRequests)
+                    {
+                        if (!friendList.ContainsKey(request.Nickname1))
+                        {
+                            friendList.Add(request.Nickname1, false);
                         }
                     }
                 }

@@ -16,7 +16,7 @@
 
             <Ellipse x:Name="ellipseOnlineStatus" Width="20" Height="20" Fill="Red" Grid.Column="0"/>
             <Label x:Name="lblNickname" Content="lblNickname" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button x:Name="btnEraseFriend" Width="20" Height="20" Grid.Column="2">
+            <Button x:Name="btnActionFriend" Width="20" Height="20" Grid.Column="2" Click="btnActionFriend_Click">
                 <Rectangle Width="10" Height="10" Fill="Red"/>
             </Button>
 

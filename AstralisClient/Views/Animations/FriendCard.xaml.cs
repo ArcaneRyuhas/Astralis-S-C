@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Astralis.Logic;
+using Astralis.UserManager;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -35,6 +37,26 @@ namespace Astralis.Views.Animations
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }   
 
+        }
+
+
+        private void btnActionFriend_Click(object sender, RoutedEventArgs e)
+        {
+            string friendUsername = lblNickname.Content.ToString();
+
+            using (UserManagerClient client = new UserManagerClient())
+            {
+                bool requestAccepted = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, true);
+
+                if (requestAccepted)
+                {
+                    MessageBox.Show($"Has aceptado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"No se pudo aceptar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }
