@@ -216,6 +216,9 @@
     <None Include="Connected Services\UserManager\item.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\UserManager\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\UserManager\item3.xsd">
       <SubType>Designer</SubType>
     </None>

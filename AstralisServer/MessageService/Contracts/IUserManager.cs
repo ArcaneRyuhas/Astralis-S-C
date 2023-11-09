@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -36,6 +37,16 @@ namespace MessageService.Contracts
 
         [OperationContract(IsOneWay = true)]
         void DisconectUser(string nickname);
+
+        [OperationContract]
+        bool SendFriendRequest(string nickname, string nicknameFriend);
+
+        [OperationContract]
+        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
+
+        [OperationContract]
+        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
+
     }
 
     [ServiceContract]
@@ -43,10 +54,18 @@ namespace MessageService.Contracts
     {
         [OperationContract]
         void ShowUserConected(string nickname);
+        
         [OperationContract]
         void ShowUserDisconected(string nickname);
+
         [OperationContract]
-        void ShowOnlineFriends(Dictionary<string, bool> onlineFriends);
+        void ShowOnlineFriends(Dictionary<string, Tuple<bool, int>> onlineFriends);
+
+        [OperationContract]
+        void ShowFriendRequest(string nickname);
+
+        [OperationContract]
+        void ShowFriendAccepted(string nickname);
     }
 
 

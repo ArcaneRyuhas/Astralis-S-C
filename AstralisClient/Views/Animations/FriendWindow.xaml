@@ -17,10 +17,24 @@
             <ScrollViewer Grid.Row="0" Width="235" Height="280">
                 <Grid x:Name="gdFriends"/>
             </ScrollViewer>
-            <TextBox Text="lblBuscarUsuario" Height="25" TextAlignment="Center" Width="120" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            
+            <Grid Grid.Row="1" Margin="10,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBox x:Name="txtSearchUser" Grid.Column="1" Text="txtBuscarUsuario" Height="26" TextAlignment="Center" Width="190" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button x:Name="btnSendFriendRequest" Grid.Column="0" Height="20" Width="20" HorizontalAlignment="Left" Click="btnSendFriendRequest_Click">
+                    <Rectangle Width="10" Height="10" Fill="Red"/>
+                </Button>
+            </Grid>
+            
+
+
 
         </Grid>
         <Border BorderBrush="#B52727" BorderThickness="4" CornerRadius="20"/>
     </Grid>
-    
- </UserControl>
+
+</UserControl>

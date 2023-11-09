@@ -30,6 +30,7 @@
       <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts" />
       <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IUserManager_AddUser_InputMessage">
@@ -122,6 +123,24 @@
   <wsdl:message name="IOnlineUserManager_DisconectUser_InputMessage">
     <wsdl:part name="parameters" element="tns:DisconectUser" />
   </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_SendFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_SendFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ReplyFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReplyFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ReplyFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReplyFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_RemoveFriend_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriend" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_RemoveFriend_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
+  </wsdl:message>
   <wsdl:message name="IOnlineUserManager_ShowUserConected_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowUserConected" />
   </wsdl:message>
@@ -139,6 +158,18 @@
   </wsdl:message>
   <wsdl:message name="IOnlineUserManager_ShowOnlineFriends_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowOnlineFriendsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowFriendRequest_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowFriendRequest_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowFriendAccepted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowFriendAccepted" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowFriendAcceptedResponse" />
   </wsdl:message>
   <wsdl:portType name="IUserManager">
     <wsdl:operation name="AddUser">
@@ -211,6 +242,18 @@
     <wsdl:operation name="DisconectUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/DisconectUser" message="tns:IOnlineUserManager_DisconectUser_InputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/SendFriendRequest" message="tns:IOnlineUserManager_SendFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/SendFriendRequestResponse" message="tns:IOnlineUserManager_SendFriendRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplyFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest" message="tns:IOnlineUserManager_ReplyFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequestResponse" message="tns:IOnlineUserManager_ReplyFriendRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/RemoveFriend" message="tns:IOnlineUserManager_RemoveFriend_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/RemoveFriendResponse" message="tns:IOnlineUserManager_RemoveFriend_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ShowUserConected">
       <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserConected" message="tns:IOnlineUserManager_ShowUserConected_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserConectedResponse" message="tns:IOnlineUserManager_ShowUserConected_InputCallbackMessage" />
@@ -222,6 +265,14 @@
     <wsdl:operation name="ShowOnlineFriends">
       <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowOnlineFriends" message="tns:IOnlineUserManager_ShowOnlineFriends_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowOnlineFriendsResponse" message="tns:IOnlineUserManager_ShowOnlineFriends_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowFriendRequest">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendRequest" message="tns:IOnlineUserManager_ShowFriendRequest_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendRequestResponse" message="tns:IOnlineUserManager_ShowFriendRequest_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowFriendAccepted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted" message="tns:IOnlineUserManager_ShowFriendAccepted_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendAcceptedResponse" message="tns:IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
@@ -379,6 +430,33 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/SendFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplyFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/RemoveFriend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ShowUserConected">
       <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowUserConected" style="document" />
       <wsdl:input>
@@ -399,6 +477,24 @@
     </wsdl:operation>
     <wsdl:operation name="ShowOnlineFriends">
       <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowOnlineFriends" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowFriendAccepted">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

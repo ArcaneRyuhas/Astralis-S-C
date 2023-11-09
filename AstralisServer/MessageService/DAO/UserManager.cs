@@ -142,7 +142,6 @@ namespace MessageService
             return result;
 
         }
-
     }
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
@@ -295,6 +294,8 @@ namespace MessageService
         private static Dictionary<string, IOnlineUserManagerCallback> onlineUsers = new Dictionary<string, IOnlineUserManagerCallback>();
         private const int IS_FRIEND = 1;
         private const int IS_PENDING_FRIEND = 2;
+        private const bool ONLINE = true;
+        private const bool OFFLINE = false;
 
         public void ConectUser(string nickname)
         {
@@ -313,6 +314,7 @@ namespace MessageService
 
             }
         }
+
         public void DisconectUser(string nickname)
         {
             if (onlineUsers.ContainsKey(nickname))
@@ -323,17 +325,129 @@ namespace MessageService
                     user.Value.ShowUserDisconected(nickname);
                 }
             }
-
         }
 
-        private Dictionary<string, bool> GetFriendList(string nickname)
+        public bool SendFriendRequest(string nicknameSender, string nicknameReciever) //Se puede cambiar el retorno a un int para saber 0.- NO EXISITE EL USUARIO 1.- Exitoso 2.-Ya existe la solicitud o son amigos
         {
-            Dictionary<string, bool> friendList = new Dictionary<string, bool>();
+            bool IsSucceded = false;
+
+            if (FindUserByNickname(nicknameSender) && FindUserByNickname(nicknameReciever))
+            {
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
+
+                    var existingRequest = context.UserFriend
+                        .FirstOrDefault(f =>
+                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) ||
+                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) &&
+                            f.FriendStatusId == IS_PENDING_FRIEND);
+
+                    if (existingRequest == null)
+                    {
+                        var newFriendRequest = new UserFriend
+                        {
+                            Nickname1 = nicknameSender,
+                            Nickname2 = nicknameReciever,
+                            FriendStatusId = IS_PENDING_FRIEND
+                        };
+
+                        context.UserFriend.Add(newFriendRequest);
+                        context.SaveChanges();
+
+                        if (onlineUsers.ContainsKey(nicknameReciever))
+                        {
+                            onlineUsers[nicknameReciever].ShowFriendRequest(nicknameSender);
+                        }
+
+                        IsSucceded = true;
+                    }
+                }
+            }
+
+            return IsSucceded;
+        }
+
+        public bool ReplyFriendRequest(string nicknameReciever, string nicknameSender, bool answer)
+        {
+            bool IsSucceded = false;
+
+            if (FindUserByNickname(nicknameReciever) && FindUserByNickname(nicknameSender))
+            {
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
+
+                    var existingRequest = context.UserFriend
+                        .FirstOrDefault(f =>
+                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) ||
+                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) &&
+                            f.FriendStatusId == IS_PENDING_FRIEND);
+
+                    if (existingRequest != null)
+                    {
+                        if (answer)
+                        {
+                            existingRequest.FriendStatusId = IS_FRIEND;
+                        }
+                        else
+                        {
+                            context.UserFriend.Remove(existingRequest);
+                        }
+
+                        int result = context.SaveChanges();
+                        
+                        if(result > 0)
+                        {
+                            IsSucceded = true;
+
+                            if (answer)
+                            {
+                                if (onlineUsers.ContainsKey(nicknameSender))
+                                {
+                                    onlineUsers[nicknameSender].ShowFriendAccepted(nicknameReciever);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return IsSucceded;
+        }
+
+        public bool RemoveFriend(string nickname, string nicknamefriendToRemove)
+        {
+            bool IsSucceded = false;
 
             using (var context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
 
+                var friendRelationship = context.UserFriend
+                    .FirstOrDefault(f =>
+                        (f.Nickname1 == nickname && f.Nickname2 == nicknamefriendToRemove) ||
+                        (f.Nickname1 == nicknamefriendToRemove && f.Nickname2 == nickname) &&
+                        f.FriendStatusId == IS_FRIEND);
+
+                if (friendRelationship != null)
+                {
+                    context.UserFriend.Remove(friendRelationship);
+                    context.SaveChanges();
+                    IsSucceded = true;
+                }
+            }
+
+            return IsSucceded;
+        }
+
+        private Dictionary<string, Tuple<bool, int>> GetFriendList(string nickname)
+        {
+            Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
+            Tuple<bool, int> friendTuple;
+
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
                 var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
 
                 foreach (var friend in databaseFriends)
@@ -342,11 +456,13 @@ namespace MessageService
                     {
                         if (onlineUsers.ContainsKey(friend.Nickname1))
                         {
-                            friendList.Add(friend.Nickname1, true);
+                            friendTuple = new Tuple<bool, int> (ONLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname1, friendTuple);
                         }
                         else
                         {
-                            friendList.Add(friend.Nickname1, false);
+                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname1, friendTuple);
                         }
 
                     }
@@ -354,18 +470,29 @@ namespace MessageService
                     {
                         if (onlineUsers.ContainsKey(friend.Nickname2))
                         {
-                            friendList.Add(friend.Nickname2, true);
+                            friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname2, friendTuple);
                         }
                         else
                         {
-                            friendList.Add(friend.Nickname2, false);
+                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname2, friendTuple);
+                        }
+                    }
+
+                     var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
+
+                    foreach (var request in pendingRequests)
+                    {
+                        if (!friendList.ContainsKey(request.Nickname1))
+                        {
+                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
+                            friendList.Add(request.Nickname1, friendTuple);
                         }
                     }
                 }
             }
-
             return friendList;
         }
-
     }
 }

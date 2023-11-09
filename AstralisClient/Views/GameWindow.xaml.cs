@@ -26,11 +26,11 @@ namespace Astralis.Views
         public GameWindow()
         {
             InitializeComponent();
+            ImageManager.Instance();
+
             mainMenu = new MainMenu();
             mainMenu.CloseWindowEvent += CloseWindowEventHandler;
-
             mainFrame.Content = mainMenu;
-            ImageManager.Instance();
         }
 
 
