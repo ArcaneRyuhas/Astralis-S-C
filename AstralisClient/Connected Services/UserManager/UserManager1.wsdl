@@ -62,6 +62,24 @@
   <wsdl:message name="IUserManager_UpdateUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserManager_SendFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_SendFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_ReplyFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReplyFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_ReplyFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReplyFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_RemoveFriend_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriend" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_RemoveFriend_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_CreateLobby_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateLobby" />
   </wsdl:message>
@@ -160,6 +178,18 @@
     <wsdl:operation name="UpdateUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/UpdateUser" message="tns:IUserManager_UpdateUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/UpdateUserResponse" message="tns:IUserManager_UpdateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/SendFriendRequest" message="tns:IUserManager_SendFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/SendFriendRequestResponse" message="tns:IUserManager_SendFriendRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplyFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/ReplyFriendRequest" message="tns:IUserManager_ReplyFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/ReplyFriendRequestResponse" message="tns:IUserManager_ReplyFriendRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/RemoveFriend" message="tns:IUserManager_RemoveFriend_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/RemoveFriendResponse" message="tns:IUserManager_RemoveFriend_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="ILobbyManager">
@@ -265,6 +295,33 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateUser">
       <soap12:operation soapAction="http://tempuri.org/IUserManager/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/SendFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplyFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/ReplyFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/RemoveFriend" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

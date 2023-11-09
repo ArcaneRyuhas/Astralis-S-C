@@ -27,15 +27,6 @@ namespace MessageService.Contracts
         [OperationContract]
         int UpdateUser(User user);
 
-        [OperationContract]
-        bool SendFriendRequest(string nickname, string nicknameFriend);
-
-        [OperationContract]
-        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
-
-        [OperationContract]
-        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
-
     }
 
     [ServiceContract(CallbackContract = typeof(IOnlineUserManagerCallback))]
@@ -46,6 +37,15 @@ namespace MessageService.Contracts
 
         [OperationContract(IsOneWay = true)]
         void DisconectUser(string nickname);
+
+        [OperationContract]
+        bool SendFriendRequest(string nickname, string nicknameFriend);
+
+        [OperationContract]
+        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
+
+        [OperationContract]
+        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
 
     }
 
@@ -60,6 +60,12 @@ namespace MessageService.Contracts
 
         [OperationContract]
         void ShowOnlineFriends(Dictionary<string, bool> onlineFriends);
+
+        [OperationContract]
+        void ShowFriendRequest(string nickname);
+
+        [OperationContract]
+        void ShowFriendAccepted(string nickname);
     }
 
 

@@ -149,5 +149,29 @@ namespace Astralis.Views
         {
             friendList = onlineFriends;
         }
+
+        public void ShowFriendRequest (string nickname)
+        {
+            friendList.Add(nickname, IS_OFFLINE);
+
+            var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+
+            if (existingFriendWindow != null)
+            {
+                existingFriendWindow.SetFriendWindow(friendList);
+            }
+        }
+
+        public void ShowFriendAccepted (string nickname)
+        {
+            friendList.Add(nickname, IS_ONLINE);
+
+            var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+
+            if (existingFriendWindow != null)
+            {
+                existingFriendWindow.SetFriendWindow(friendList);
+            }
+        }
     }
 }

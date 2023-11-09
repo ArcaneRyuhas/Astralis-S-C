@@ -75,7 +75,7 @@ namespace Astralis.Views.Animations
             gdFriends.RowDefinitions.Add(rowDefinition);
         }
 
-        private void btnSentFriendRequest_Click(object sender, RoutedEventArgs e)
+        private void btnSendFriendRequest_Click(object sender, RoutedEventArgs e)
         {
             string friendUsername = txtSearchUser.Text.Trim(); 
 

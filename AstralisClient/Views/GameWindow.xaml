@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:Astralis.Views"
         xmlns:animation="clr-namespace:Astralis.Views.Animations"
         xmlns:p = "clr-namespace:Astralis.Properties"
-        Closing="CloseWindowEventHandler"
         mc:Ignorable="d"
         WindowState="Normal"
         WindowStyle="None"

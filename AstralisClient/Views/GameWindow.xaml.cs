@@ -29,7 +29,8 @@ namespace Astralis.Views
             ImageManager.Instance();
 
             mainMenu = new MainMenu();
-            mainFrame.Content = mainMenu;            
+            mainMenu.CloseWindowEvent += CloseWindowEventHandler;
+            mainFrame.Content = mainMenu;
         }
 
 

@@ -142,107 +142,6 @@ namespace MessageService
             return result;
 
         }
-        public bool SendFriendRequest(string nicknameSender, string nicknameReciever) //Se puede cambiar el retorno a un int para saber 0.- NO EXISITE EL USUARIO 1.- Exitoso 2.-Ya existe la solicitud o son amigos
-        {
-            if (FindUserByNickname(nicknameSender) && FindUserByNickname(nicknameReciever))
-            {
-                using (var context = new AstralisDBEntities())
-                {
-                    context.Database.Log = Console.WriteLine;
-
-                    var existingRequest = context.UserFriend
-                        .FirstOrDefault(f =>
-                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) ||
-                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) &&
-                            f.FriendStatusId == IS_PENDING_FRIEND);
-
-                    if (existingRequest == null)
-                    {
-                        var newFriendRequest = new UserFriend
-                        {
-                            Nickname1 = nicknameSender,
-                            Nickname2 = nicknameReciever,
-                            FriendStatusId = IS_PENDING_FRIEND
-                        };
-
-                        context.UserFriend.Add(newFriendRequest);
-                        context.SaveChanges();
-
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public bool ReplyFriendRequest(string nicknameReciever, string nicknameSender, bool answer)
-        {
-            if (FindUserByNickname(nicknameReciever) && FindUserByNickname(nicknameSender))
-            {
-                using (var context = new AstralisDBEntities())
-                {
-                    context.Database.Log = Console.WriteLine;
-
-                    var existingRequest = context.UserFriend
-                        .FirstOrDefault(f =>
-                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) ||
-                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) &&
-                            f.FriendStatusId == IS_PENDING_FRIEND);
-
-                    if (existingRequest != null)
-                    {
-                        if (answer)
-                        {
-                            existingRequest.FriendStatusId = IS_FRIEND;
-                        }
-                        else
-                        {
-                            context.UserFriend.Remove(existingRequest);
-                        }
-
-                        context.SaveChanges();
-
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public bool RemoveFriend(string nickname, string nicknamefriendToRemove)
-        {
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
-
-                var friendRelationship = context.UserFriend
-                    .FirstOrDefault(f =>
-                        (f.Nickname1 == nickname && f.Nickname2 == nicknamefriendToRemove) ||
-                        (f.Nickname1 == nicknamefriendToRemove && f.Nickname2 == nickname) &&
-                        f.FriendStatusId == IS_FRIEND);
-
-                if (friendRelationship != null)
-                {
-                    context.UserFriend.Remove(friendRelationship);
-                    context.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
     }
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
@@ -424,7 +323,119 @@ namespace MessageService
                     user.Value.ShowUserDisconected(nickname);
                 }
             }
+        }
 
+        public bool SendFriendRequest(string nicknameSender, string nicknameReciever) //Se puede cambiar el retorno a un int para saber 0.- NO EXISITE EL USUARIO 1.- Exitoso 2.-Ya existe la solicitud o son amigos
+        {
+            bool IsSucceded = false;
+
+            if (FindUserByNickname(nicknameSender) && FindUserByNickname(nicknameReciever))
+            {
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
+
+                    var existingRequest = context.UserFriend
+                        .FirstOrDefault(f =>
+                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) ||
+                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) &&
+                            f.FriendStatusId == IS_PENDING_FRIEND);
+
+                    if (existingRequest == null)
+                    {
+                        var newFriendRequest = new UserFriend
+                        {
+                            Nickname1 = nicknameSender,
+                            Nickname2 = nicknameReciever,
+                            FriendStatusId = IS_PENDING_FRIEND
+                        };
+
+                        context.UserFriend.Add(newFriendRequest);
+                        context.SaveChanges();
+
+                        if (onlineUsers.ContainsKey(nicknameReciever))
+                        {
+                            onlineUsers[nicknameReciever].ShowFriendRequest(nicknameSender);
+                        }
+
+                        IsSucceded = true;
+                    }
+                }
+            }
+
+            return IsSucceded;
+        }
+
+        public bool ReplyFriendRequest(string nicknameReciever, string nicknameSender, bool answer)
+        {
+            bool IsSucceded = false;
+
+            if (FindUserByNickname(nicknameReciever) && FindUserByNickname(nicknameSender))
+            {
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
+
+                    var existingRequest = context.UserFriend
+                        .FirstOrDefault(f =>
+                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) ||
+                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) &&
+                            f.FriendStatusId == IS_PENDING_FRIEND);
+
+                    if (existingRequest != null)
+                    {
+                        if (answer)
+                        {
+                            existingRequest.FriendStatusId = IS_FRIEND;
+                        }
+                        else
+                        {
+                            context.UserFriend.Remove(existingRequest);
+                        }
+
+                        int result = context.SaveChanges();
+                        
+                        if(result > 0)
+                        {
+                            IsSucceded = true;
+
+                            if (answer)
+                            {
+                                if (onlineUsers.ContainsKey(nicknameReciever))
+                                {
+                                    onlineUsers[nicknameReciever].ShowFriendAccepted(nicknameSender);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return IsSucceded;
+        }
+
+        public bool RemoveFriend(string nickname, string nicknamefriendToRemove)
+        {
+            bool IsSucceded = false;
+
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+
+                var friendRelationship = context.UserFriend
+                    .FirstOrDefault(f =>
+                        (f.Nickname1 == nickname && f.Nickname2 == nicknamefriendToRemove) ||
+                        (f.Nickname1 == nicknamefriendToRemove && f.Nickname2 == nickname) &&
+                        f.FriendStatusId == IS_FRIEND);
+
+                if (friendRelationship != null)
+                {
+                    context.UserFriend.Remove(friendRelationship);
+                    context.SaveChanges();
+                    IsSucceded = true;
+                }
+            }
+
+            return IsSucceded;
         }
 
         private Dictionary<string, bool> GetFriendList(string nickname)
