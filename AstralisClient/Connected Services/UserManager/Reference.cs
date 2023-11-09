@@ -139,24 +139,6 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UpdateUser", ReplyAction="http://tempuri.org/IUserManager/UpdateUserResponse")]
         System.Threading.Tasks.Task<int> UpdateUserAsync(Astralis.UserManager.User user);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/SendFriendRequest", ReplyAction="http://tempuri.org/IUserManager/SendFriendRequestResponse")]
-        bool SendFriendRequest(string nickname, string nicknameFriend);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/SendFriendRequest", ReplyAction="http://tempuri.org/IUserManager/SendFriendRequestResponse")]
-        System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string nickname, string nicknameFriend);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IUserManager/ReplyFriendRequestResponse")]
-        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IUserManager/ReplyFriendRequestResponse")]
-        System.Threading.Tasks.Task<bool> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/RemoveFriend", ReplyAction="http://tempuri.org/IUserManager/RemoveFriendResponse")]
-        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/RemoveFriend", ReplyAction="http://tempuri.org/IUserManager/RemoveFriendResponse")]
-        System.Threading.Tasks.Task<bool> RemoveFriendAsync(string nickname, string nicknamefriendToRemove);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -224,30 +206,6 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task<int> UpdateUserAsync(Astralis.UserManager.User user) {
             return base.Channel.UpdateUserAsync(user);
-        }
-        
-        public bool SendFriendRequest(string nickname, string nicknameFriend) {
-            return base.Channel.SendFriendRequest(nickname, nicknameFriend);
-        }
-        
-        public System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string nickname, string nicknameFriend) {
-            return base.Channel.SendFriendRequestAsync(nickname, nicknameFriend);
-        }
-        
-        public bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer) {
-            return base.Channel.ReplyFriendRequest(nickname, nicknameRequest, answer);
-        }
-        
-        public System.Threading.Tasks.Task<bool> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer) {
-            return base.Channel.ReplyFriendRequestAsync(nickname, nicknameRequest, answer);
-        }
-        
-        public bool RemoveFriend(string nickname, string nicknamefriendToRemove) {
-            return base.Channel.RemoveFriend(nickname, nicknamefriendToRemove);
-        }
-        
-        public System.Threading.Tasks.Task<bool> RemoveFriendAsync(string nickname, string nicknamefriendToRemove) {
-            return base.Channel.RemoveFriendAsync(nickname, nicknamefriendToRemove);
         }
     }
     
@@ -392,6 +350,24 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/DisconectUser")]
         System.Threading.Tasks.Task DisconectUserAsync(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/SendFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/SendFriendRequestResponse")]
+        bool SendFriendRequest(string nickname, string nicknameFriend);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/SendFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/SendFriendRequestResponse")]
+        System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string nickname, string nicknameFriend);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ReplyFriendRequestResponse")]
+        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ReplyFriendRequestResponse")]
+        System.Threading.Tasks.Task<bool> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/RemoveFriend", ReplyAction="http://tempuri.org/IOnlineUserManager/RemoveFriendResponse")]
+        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/RemoveFriend", ReplyAction="http://tempuri.org/IOnlineUserManager/RemoveFriendResponse")]
+        System.Threading.Tasks.Task<bool> RemoveFriendAsync(string nickname, string nicknamefriendToRemove);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -405,6 +381,12 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowOnlineFriends", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowOnlineFriendsResponse")]
         void ShowOnlineFriends(System.Collections.Generic.Dictionary<string, bool> onlineFriends);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowFriendRequestResponse")]
+        void ShowFriendRequest(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowFriendAcceptedResponse")]
+        void ShowFriendAccepted(string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -449,6 +431,30 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task DisconectUserAsync(string nickname) {
             return base.Channel.DisconectUserAsync(nickname);
+        }
+        
+        public bool SendFriendRequest(string nickname, string nicknameFriend) {
+            return base.Channel.SendFriendRequest(nickname, nicknameFriend);
+        }
+        
+        public System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string nickname, string nicknameFriend) {
+            return base.Channel.SendFriendRequestAsync(nickname, nicknameFriend);
+        }
+        
+        public bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer) {
+            return base.Channel.ReplyFriendRequest(nickname, nicknameRequest, answer);
+        }
+        
+        public System.Threading.Tasks.Task<bool> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer) {
+            return base.Channel.ReplyFriendRequestAsync(nickname, nicknameRequest, answer);
+        }
+        
+        public bool RemoveFriend(string nickname, string nicknamefriendToRemove) {
+            return base.Channel.RemoveFriend(nickname, nicknamefriendToRemove);
+        }
+        
+        public System.Threading.Tasks.Task<bool> RemoveFriendAsync(string nickname, string nicknamefriendToRemove) {
+            return base.Channel.RemoveFriendAsync(nickname, nicknamefriendToRemove);
         }
     }
 }

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +25,8 @@ namespace Astralis.Views.Animations
     /// </summary>
     public partial class FriendCard : UserControl
     {
+        public event EventHandler<string> ReplyToFriendRequestEvent;
+
         public FriendCard()
         {
             InitializeComponent();
@@ -44,19 +48,7 @@ namespace Astralis.Views.Animations
         {
             string friendUsername = lblNickname.Content.ToString();
 
-            using (UserManagerClient client = new UserManagerClient())
-            {
-                bool requestAccepted = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, true);
-
-                if (requestAccepted)
-                {
-                    MessageBox.Show($"Has aceptado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show($"No se pudo aceptar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+            ReplyToFriendRequestEvent?.Invoke(this, friendUsername);
         }
     }
 }

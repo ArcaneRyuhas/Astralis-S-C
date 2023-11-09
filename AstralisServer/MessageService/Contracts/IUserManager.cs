@@ -59,7 +59,7 @@ namespace MessageService.Contracts
         void ShowUserDisconected(string nickname);
 
         [OperationContract]
-        void ShowOnlineFriends(Dictionary<string, bool> onlineFriends);
+        void ShowOnlineFriends(Dictionary<string, Tuple<bool, int>> onlineFriends);
 
         [OperationContract]
         void ShowFriendRequest(string nickname);

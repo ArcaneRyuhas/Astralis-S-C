@@ -26,11 +26,13 @@ namespace Astralis.Views
     /// </summary>
     public partial class MainMenu : Page, UserManager.IOnlineUserManagerCallback
     {
-        private Dictionary<string, bool> friendList = new Dictionary<string, bool>();
+        private Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
         public delegate void CloseWindowEventHandler(object sender, EventArgs e);
         public event CloseWindowEventHandler CloseWindowEvent;
-        private const bool IS_ONLINE = true;
-        private const bool IS_OFFLINE = false;
+        private const bool ONLINE = true;
+        private const bool OFFLINE = false;
+        private const int IS_PENDING_FRIEND = 2;
+        private const int IS_FRIEND = 1;
 
         public MainMenu()
         {
@@ -81,16 +83,20 @@ namespace Astralis.Views
 
         private void btnFriends_Click(object sender, RoutedEventArgs e)
         {
-            var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+            var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
 
             if (existingFriendWindow == null)
             {
                 FriendWindow friendWindow = new FriendWindow();
-                if(friendList.Count > 0)
+                friendWindow.SendFriendRequestEvent += SendFriendRequest;
+                friendWindow.ReplyFriendRequestEvent += ReplyToFriendRequest;
+
+
+                if (friendList.Count > 0)
                 {
                     friendWindow.SetFriendWindow(friendList);
                 }
-                gridFirendsWindow.Children.Add(friendWindow);
+                gridFriendsWindow.Children.Add(friendWindow);
                 
             }
             else
@@ -121,8 +127,10 @@ namespace Astralis.Views
         {
             if (friendList.ContainsKey(nickname))
             {
-                friendList[nickname] = IS_ONLINE;
-                var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+                Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+
+                friendList[nickname] = friendTuple;
+                var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
                 
                 if(existingFriendWindow != null)
                 {
@@ -135,8 +143,10 @@ namespace Astralis.Views
         {
             if (friendList.ContainsKey(nickname))
             {
-                friendList[nickname] = IS_OFFLINE;
-                var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+                Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+
+                friendList[nickname] = friendTuple;
+                var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
 
                 if (existingFriendWindow != null)
                 {
@@ -145,16 +155,18 @@ namespace Astralis.Views
             }
         }
 
-        public void ShowOnlineFriends(Dictionary<string, bool> onlineFriends)
+        public void ShowOnlineFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
         {
             friendList = onlineFriends;
         }
 
         public void ShowFriendRequest (string nickname)
         {
-            friendList.Add(nickname, IS_OFFLINE);
+            Tuple <bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
 
-            var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+            friendList.Add(nickname, friendTuple);
+
+            var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
 
             if (existingFriendWindow != null)
             {
@@ -164,13 +176,60 @@ namespace Astralis.Views
 
         public void ShowFriendAccepted (string nickname)
         {
-            friendList.Add(nickname, IS_ONLINE);
+            Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
 
-            var existingFriendWindow = gridFirendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+            friendList.Add(nickname, friendTuple);
+
+            var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
 
             if (existingFriendWindow != null)
             {
                 existingFriendWindow.SetFriendWindow(friendList);
+            }
+        }
+
+        private void SendFriendRequest(object sender, string friendUsername)
+        {
+            if (!string.IsNullOrEmpty(friendUsername))
+            {
+                InstanceContext context = new InstanceContext(this);
+
+                using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
+                {
+                    bool requestSent = client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
+
+                    if (requestSent)
+                    {
+                        MessageBox.Show("Solicitud de amistad enviada con éxito.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, ingresa un nombre de usuario.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void ReplyToFriendRequest(object sender, string friendUsername)
+        {
+            InstanceContext context = new InstanceContext(this);
+
+            using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
+            {
+                bool requestAccepted = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, true);
+
+                if (requestAccepted)
+                {
+                    MessageBox.Show($"Has aceptado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"No se pudo aceptar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }

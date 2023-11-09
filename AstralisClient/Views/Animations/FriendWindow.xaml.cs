@@ -29,13 +29,15 @@ namespace Astralis.Views.Animations
         private const bool IS_ONLINE = true;
         private const bool IS_OFFLINE = false;
         private int cardsAddedRow = 0;
+        public event EventHandler<string> SendFriendRequestEvent;
+        public event EventHandler<string> ReplyFriendRequestEvent;
 
         public FriendWindow()
         {
             InitializeComponent();
         }
 
-        public void SetFriendWindow(Dictionary<string, bool> friendList)
+        public void SetFriendWindow(Dictionary<string, Tuple<bool, int>> friendList)
         {
             cardsAddedRow = 0;
             gdFriends.Children.Clear();
@@ -43,17 +45,17 @@ namespace Astralis.Views.Animations
 
             foreach (var friendEntry in friendList)
             {
-                if(friendEntry.Value == IS_ONLINE)
+                if(friendEntry.Value.Item1 == IS_ONLINE)
                 {
-                    AddFriendRow(friendEntry.Key, friendEntry.Value);
+                    AddFriendRow(friendEntry.Key, friendEntry.Value.Item1);
                 }
             }
 
             foreach (var friendEntry in friendList)
             {
-                if (friendEntry.Value == IS_OFFLINE)
+                if (friendEntry.Value.Item1 == IS_OFFLINE)
                 {
-                    AddFriendRow(friendEntry.Key, friendEntry.Value);
+                    AddFriendRow(friendEntry.Key, friendEntry.Value.Item1);
                 }
             }
 
@@ -62,9 +64,11 @@ namespace Astralis.Views.Animations
             lastRowDefinition.Height = new GridLength(1, GridUnitType.Star);
             gdFriends.RowDefinitions.Add(lastRowDefinition);
         }
+
         private void AddFriendRow(string friendOnlineKey, bool friendOnlineValue)
         {
             FriendCard card = new FriendCard();
+            card.ReplyToFriendRequestEvent += ReplyToFriendRequestEvent;
             card.SetCard(friendOnlineKey, friendOnlineValue, IS_FRIEND); //A CAMBIAR NO SE VAYA A OLVIDAR
             Grid.SetRow(card, cardsAddedRow);
             gdFriends.Children.Add(card);
@@ -77,28 +81,14 @@ namespace Astralis.Views.Animations
 
         private void btnSendFriendRequest_Click(object sender, RoutedEventArgs e)
         {
-            string friendUsername = txtSearchUser.Text.Trim(); 
+            string friendUsername = txtSearchUser.Text.Trim();
 
-            if (!string.IsNullOrEmpty(friendUsername))
-            {
-                    using (UserManagerClient client = new UserManagerClient())
-                    {
-                        bool requestSent = client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
+            SendFriendRequestEvent?.Invoke(this, friendUsername);
+        }
 
-                        if (requestSent)
-                        {
-                            MessageBox.Show("Solicitud de amistad enviada con éxito.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                }
-            else
-            {
-                MessageBox.Show("Por favor, ingresa un nombre de usuario.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+        private void ReplyToFriendRequestEvent(object sender, string friendUsername)
+        {
+            ReplyFriendRequestEvent?.Invoke(this, friendUsername);
         }
     }
 }

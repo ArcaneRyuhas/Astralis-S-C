@@ -294,6 +294,8 @@ namespace MessageService
         private static Dictionary<string, IOnlineUserManagerCallback> onlineUsers = new Dictionary<string, IOnlineUserManagerCallback>();
         private const int IS_FRIEND = 1;
         private const int IS_PENDING_FRIEND = 2;
+        private const bool ONLINE = true;
+        private const bool OFFLINE = false;
 
         public void ConectUser(string nickname)
         {
@@ -401,9 +403,9 @@ namespace MessageService
 
                             if (answer)
                             {
-                                if (onlineUsers.ContainsKey(nicknameReciever))
+                                if (onlineUsers.ContainsKey(nicknameSender))
                                 {
-                                    onlineUsers[nicknameReciever].ShowFriendAccepted(nicknameSender);
+                                    onlineUsers[nicknameSender].ShowFriendAccepted(nicknameReciever);
                                 }
                             }
                         }
@@ -438,9 +440,10 @@ namespace MessageService
             return IsSucceded;
         }
 
-        private Dictionary<string, bool> GetFriendList(string nickname)
+        private Dictionary<string, Tuple<bool, int>> GetFriendList(string nickname)
         {
-            Dictionary<string, bool> friendList = new Dictionary<string, bool>();
+            Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
+            Tuple<bool, int> friendTuple;
 
             using (var context = new AstralisDBEntities())
             {
@@ -453,11 +456,13 @@ namespace MessageService
                     {
                         if (onlineUsers.ContainsKey(friend.Nickname1))
                         {
-                            friendList.Add(friend.Nickname1, true);
+                            friendTuple = new Tuple<bool, int> (ONLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname1, friendTuple);
                         }
                         else
                         {
-                            friendList.Add(friend.Nickname1, false);
+                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname1, friendTuple);
                         }
 
                     }
@@ -465,11 +470,13 @@ namespace MessageService
                     {
                         if (onlineUsers.ContainsKey(friend.Nickname2))
                         {
-                            friendList.Add(friend.Nickname2, true);
+                            friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname2, friendTuple);
                         }
                         else
                         {
-                            friendList.Add(friend.Nickname2, false);
+                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname2, friendTuple);
                         }
                     }
 
@@ -479,7 +486,8 @@ namespace MessageService
                     {
                         if (!friendList.ContainsKey(request.Nickname1))
                         {
-                            friendList.Add(request.Nickname1, false);
+                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
+                            friendList.Add(request.Nickname1, friendTuple);
                         }
                     }
                 }
