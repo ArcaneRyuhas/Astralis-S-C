@@ -26,12 +26,15 @@ namespace MessageService.Contracts
 
         [OperationContract]
         int UpdateUser(User user);
+
         [OperationContract]
         bool SendFriendRequest(string nickname, string nicknameFriend);
-        [OperationContract]
-        bool ReplyFriendRequest(string nickname, string nicknameRquest, bool answer);
 
-        bool RemoveFriend(string nickname, string nickname2);
+        [OperationContract]
+        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
+
+        [OperationContract]
+        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
 
     }
 
@@ -51,8 +54,10 @@ namespace MessageService.Contracts
     {
         [OperationContract]
         void ShowUserConected(string nickname);
+        
         [OperationContract]
         void ShowUserDisconected(string nickname);
+
         [OperationContract]
         void ShowOnlineFriends(Dictionary<string, bool> onlineFriends);
     }

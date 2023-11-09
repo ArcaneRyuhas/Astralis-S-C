@@ -100,6 +100,5 @@ namespace Astralis.Views.Animations
                 MessageBox.Show("Por favor, ingresa un nombre de usuario.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
     }
 }
