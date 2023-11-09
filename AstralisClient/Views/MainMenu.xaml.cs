@@ -127,14 +127,30 @@ namespace Astralis.Views
         {
             if (friendList.ContainsKey(nickname))
             {
-                Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
 
-                friendList[nickname] = friendTuple;
-                var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
-                
-                if(existingFriendWindow != null)
+                if (friendList[nickname].Item2 == IS_FRIEND)
                 {
-                    existingFriendWindow.SetFriendWindow(friendList);
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+
+                    friendList[nickname] = friendTuple;
+                    var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+
+                    if (existingFriendWindow != null)
+                    {
+                        existingFriendWindow.SetFriendWindow(friendList);
+                    }
+                }
+                else
+                {
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
+
+                    friendList[nickname] = friendTuple;
+                    var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+
+                    if (existingFriendWindow != null)
+                    {
+                        existingFriendWindow.SetFriendWindow(friendList);
+                    }
                 }
             }
         }
@@ -224,10 +240,15 @@ namespace Astralis.Views
 
                 if (requestAccepted)
                 {
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(friendList[friendUsername].Item1, IS_FRIEND);
+                    friendList[friendUsername] = friendTuple;
+
                     MessageBox.Show($"Has aceptado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
+                    friendList.Remove(friendUsername);
+
                     MessageBox.Show($"No se pudo aceptar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }

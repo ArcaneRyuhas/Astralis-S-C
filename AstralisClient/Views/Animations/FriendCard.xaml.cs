@@ -26,27 +26,54 @@ namespace Astralis.Views.Animations
     public partial class FriendCard : UserControl
     {
         public event EventHandler<string> ReplyToFriendRequestEvent;
+        private const int IS_PENDING_FRIEND = 2;
+        private const int IS_FRIEND = 1;
+        private int friendStatus = 0;
+        private bool onlineStatus = false; 
 
         public FriendCard()
         {
             InitializeComponent();
         }
 
-        public void SetCard(string nickname, bool onlineStatus, bool friendStatus)
+        public void SetCard(string nickname, bool onlineStatus, int friendStatus)
         {
             lblNickname.Content = nickname;
 
-            if (onlineStatus == true)
-            {
-                ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
-            }   
+            this.friendStatus = friendStatus;
+            this.onlineStatus = onlineStatus;
 
+            if (friendStatus == IS_FRIEND)
+            {
+                if (onlineStatus == true)
+                {
+                    ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
+                }
+
+                btnActionFriend.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Yellow;
+            }
+            
         }
 
 
         private void btnActionFriend_Click(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
+
+            if (onlineStatus == true)
+            {
+                ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
+            }
+            else
+            {
+                ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Red;
+            }
+
+            btnActionFriend.Visibility = Visibility.Hidden;
 
             ReplyToFriendRequestEvent?.Invoke(this, friendUsername);
         }

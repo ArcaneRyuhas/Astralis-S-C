@@ -278,7 +278,7 @@
   <xs:element name="ShowOnlineFriends">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="onlineFriends" nillable="true" type="q12:ArrayOfKeyValueOfstringboolean" />
+        <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="onlineFriends" nillable="true" type="q12:ArrayOfKeyValueOfstringTupleOfbooleanintU6ho3Bhd" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

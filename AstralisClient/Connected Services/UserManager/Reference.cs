@@ -380,7 +380,7 @@ namespace Astralis.UserManager {
         void ShowUserDisconected(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowOnlineFriends", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowOnlineFriendsResponse")]
-        void ShowOnlineFriends(System.Collections.Generic.Dictionary<string, bool> onlineFriends);
+        void ShowOnlineFriends(System.Collections.Generic.Dictionary<string, System.Tuple<bool, int>> onlineFriends);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowFriendRequestResponse")]
         void ShowFriendRequest(string nickname);
