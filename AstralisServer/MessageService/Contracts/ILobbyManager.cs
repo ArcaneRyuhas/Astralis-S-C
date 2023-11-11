@@ -14,6 +14,12 @@ namespace MessageService.Contracts
         [OperationContract()]
         string CreateLobby(User user);
 
+        [OperationContract()]
+        bool GameExist(string gameId);
+
+        [OperationContract()]
+        bool GameIsNotFull(string gameId);
+
         [OperationContract(IsOneWay = true)]
         void ConnectLobby(User user, string gameId);
 
@@ -21,7 +27,7 @@ namespace MessageService.Contracts
         void DisconnectLobby(User user);
 
         [OperationContract(IsOneWay = true)]
-        void ChangeLobbyUserTeam(User user, int team);
+        void ChangeLobbyUserTeam(string userNickname, int team);
 
         [OperationContract(IsOneWay = true)]
         void SendMessage(string message, string gameId);
@@ -35,13 +41,13 @@ namespace MessageService.Contracts
         void ShowConnectionInLobby(User user);
 
         [OperationContract]
-        void ShowUsersInLobby(List<User> userList);
+        void ShowUsersInLobby(List <Tuple<User, int>> users);
 
         [OperationContract]
         void ShowDisconnectionInLobby(User user);
 
         [OperationContract]
-        void UpdateLobbyUserTeam(User user, int team);
+        void UpdateLobbyUserTeam(string userNickname, int team);
 
         [OperationContract]
         void GiveLobbyId(string gameId);

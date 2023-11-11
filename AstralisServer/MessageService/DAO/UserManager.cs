@@ -148,33 +148,60 @@ namespace MessageService
     public partial class UserManager : ILobbyManager
     {
         private const string ERROR_CODE_LOBBY = "error";
+        private const int NO_TEAM = 0;
 
         private static Dictionary<string, string> usersInLobby = new Dictionary<string, string>();
         private static Dictionary<string, ILobbyManagerCallback> usersContext = new Dictionary<string, ILobbyManagerCallback>();
+        private static Dictionary<string, int> usersTeam = new Dictionary<string, int>();
+
+        public bool GameExist(string gameId)
+        {
+            return usersInLobby.ContainsValue(gameId);
+        }
+
+        public bool GameIsNotFull(string gameId)
+        {
+            int usersInGame = 0;
+            bool gameIsNotFull = true;
+
+            var groupedKeys = usersInLobby.Where(pair => pair.Value == gameId).Select(pair => pair.Key);
+            usersInGame = groupedKeys.Count();
+            
+            if(usersInGame > 3)
+            {
+                gameIsNotFull = false;
+            }
+
+            return gameIsNotFull;
+        }
 
         public void ConnectLobby(Contracts.User user, string gameId)
         {
             if (usersInLobby.ContainsValue(gameId))
             {
-                List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
-                List<Contracts.User> users = new List<Contracts.User>();
 
+                List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+                List<Tuple<Contracts.User, int>> users = new List<Tuple<Contracts.User, int>>();
 
                 foreach (string nickname in usersNickname)
                 {
-                    users.Add(GetUserByNickname(nickname));
+                    users.Add(new Tuple <Contracts.User, int> (GetUserByNickname(nickname), usersTeam[nickname]));
                 }
 
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
-                usersContext.Add(user.Nickname, currentUserCallbackChannel);
                 currentUserCallbackChannel.ShowUsersInLobby(users);
-                usersInLobby.Add(user.Nickname, gameId);
+
+                if (!usersContext.ContainsKey(user.Nickname))
+                {
+                    usersContext.Add(user.Nickname, currentUserCallbackChannel);
+                    usersInLobby.Add(user.Nickname, gameId);
+                    usersTeam.Add(user.Nickname, NO_TEAM);
+                }
 
                 foreach (string userInTheLobby in usersNickname)
                 {
                     usersContext[userInTheLobby].ShowConnectionInLobby(user);
                 }
-
             }
         }
 
@@ -192,9 +219,7 @@ namespace MessageService
             using (var context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-
                 var newSession = context.Game.Add(new Game() { gameId = gameId });
-
                 result = context.SaveChanges();
             };
 
@@ -203,6 +228,7 @@ namespace MessageService
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
                 usersContext.Add(user.Nickname, currentUserCallbackChannel);
                 usersInLobby.Add(user.Nickname, gameId);
+                usersTeam.Add(user.Nickname, NO_TEAM);
             }
             else
             {
@@ -227,14 +253,29 @@ namespace MessageService
                         usersContext[userInTheLobby].ShowDisconnectionInLobby(user);
                     }
                 }
+                
                 usersInLobby.Remove(user.Nickname);
                 usersContext.Remove(user.Nickname);
+                usersTeam.Remove(user.Nickname);
             }
         }
 
-        public void ChangeLobbyUserTeam(Contracts.User user, int team)
+        public void ChangeLobbyUserTeam(string userNickname, int team)
         {
-            throw new NotImplementedException();
+            if (usersTeam.ContainsKey(userNickname))
+            {
+                string gameId = usersInLobby[userNickname];
+                usersTeam[userNickname] = team;
+                List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+
+                foreach (var userInTheLobby in usersNickname)
+                {
+                    if (userInTheLobby != userNickname)
+                    {
+                        usersContext[userInTheLobby].UpdateLobbyUserTeam(userNickname, team);
+                    }
+                }
+            }
         }
 
         public void SendMessage(string message, string gameId)
