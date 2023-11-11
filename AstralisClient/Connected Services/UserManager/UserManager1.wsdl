@@ -29,8 +29,8 @@
       <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts" />
-      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IUserManager_AddUser_InputMessage">
@@ -68,6 +68,18 @@
   </wsdl:message>
   <wsdl:message name="ILobbyManager_CreateLobby_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateLobbyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GameExist_InputMessage">
+    <wsdl:part name="parameters" element="tns:GameExist" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GameExist_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GameExistResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GameIsNotFull_InputMessage">
+    <wsdl:part name="parameters" element="tns:GameIsNotFull" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GameIsNotFull_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GameIsNotFullResponse" />
   </wsdl:message>
   <wsdl:message name="ILobbyManager_ConnectLobby_InputMessage">
     <wsdl:part name="parameters" element="tns:ConnectLobby" />
@@ -197,6 +209,14 @@
     <wsdl:operation name="CreateLobby">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/CreateLobby" message="tns:ILobbyManager_CreateLobby_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/CreateLobbyResponse" message="tns:ILobbyManager_CreateLobby_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GameExist">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GameExist" message="tns:ILobbyManager_GameExist_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GameExistResponse" message="tns:ILobbyManager_GameExist_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GameIsNotFull">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFull" message="tns:ILobbyManager_GameIsNotFull_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFullResponse" message="tns:ILobbyManager_GameIsNotFull_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ConnectLobby">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ConnectLobby" message="tns:ILobbyManager_ConnectLobby_InputMessage" />
@@ -329,6 +349,24 @@
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="CreateLobby">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/CreateLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GameExist">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GameExist" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GameIsNotFull">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GameIsNotFull" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

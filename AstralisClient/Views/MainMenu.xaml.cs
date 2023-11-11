@@ -30,6 +30,7 @@ namespace Astralis.Views
         public delegate void CloseWindowEventHandler(object sender, EventArgs e);
         public event CloseWindowEventHandler CloseWindowEvent;
         private const bool ONLINE = true;
+        private const string IS_HOST = "host";
         private const bool OFFLINE = false;
         private const int IS_PENDING_FRIEND = 2;
         private const int IS_FRIEND = 1;
@@ -42,8 +43,13 @@ namespace Astralis.Views
 
         private void btnCreateGame_Click(object sender, RoutedEventArgs e)
         {
-            Lobby lobby = new Lobby("host");
-            NavigationService.Navigate(lobby);
+            Lobby lobby = new Lobby();
+
+
+            if (lobby.SetLobby(IS_HOST))
+            {
+                NavigationService.Navigate(lobby);
+            }
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
@@ -64,8 +70,15 @@ namespace Astralis.Views
         {
             string code = txtJoinCode.Text;
 
-            Lobby lobby = new Lobby(code);
-            NavigationService.Navigate(lobby);
+            Lobby lobby = new Lobby();
+            if (lobby.GameIsNotFull(code)  && lobby.SetLobby(code))
+            {
+                NavigationService.Navigate(lobby);
+            }
+            else
+            {
+                MessageBox.Show("msgGameIsFullOrLobbyDoesntExist" + textToCopy, "Clipboard Copy", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void btnMyProfile_Click(object sender, RoutedEventArgs e)
@@ -128,12 +141,12 @@ namespace Astralis.Views
             if (friendList.ContainsKey(nickname))
             {
 
+                var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
+
                 if (friendList[nickname].Item2 == IS_FRIEND)
                 {
                     Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
-
                     friendList[nickname] = friendTuple;
-                    var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
 
                     if (existingFriendWindow != null)
                     {
@@ -143,9 +156,7 @@ namespace Astralis.Views
                 else
                 {
                     Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
-
                     friendList[nickname] = friendTuple;
-                    var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
 
                     if (existingFriendWindow != null)
                     {
@@ -159,14 +170,27 @@ namespace Astralis.Views
         {
             if (friendList.ContainsKey(nickname))
             {
-                Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
-
-                friendList[nickname] = friendTuple;
                 var existingFriendWindow = gridFriendsWindow.Children.OfType<FriendWindow>().FirstOrDefault();
 
-                if (existingFriendWindow != null)
+                if (friendList[nickname].Item2 == IS_FRIEND)
                 {
-                    existingFriendWindow.SetFriendWindow(friendList);
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+                    friendList[nickname] = friendTuple;
+
+                    if (existingFriendWindow != null)
+                    {
+                        existingFriendWindow.SetFriendWindow(friendList);
+                    }
+                }
+                else
+                {
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
+                    friendList[nickname] = friendTuple;
+
+                    if (existingFriendWindow != null)
+                    {
+                        existingFriendWindow.SetFriendWindow(friendList);
+                    }
                 }
             }
         }

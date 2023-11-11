@@ -219,6 +219,18 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CreateLobby", ReplyAction="http://tempuri.org/ILobbyManager/CreateLobbyResponse")]
         System.Threading.Tasks.Task<string> CreateLobbyAsync(Astralis.UserManager.User user);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameExist", ReplyAction="http://tempuri.org/ILobbyManager/GameExistResponse")]
+        bool GameExist(string gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameExist", ReplyAction="http://tempuri.org/ILobbyManager/GameExistResponse")]
+        System.Threading.Tasks.Task<bool> GameExistAsync(string gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameIsNotFull", ReplyAction="http://tempuri.org/ILobbyManager/GameIsNotFullResponse")]
+        bool GameIsNotFull(string gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameIsNotFull", ReplyAction="http://tempuri.org/ILobbyManager/GameIsNotFullResponse")]
+        System.Threading.Tasks.Task<bool> GameIsNotFullAsync(string gameId);
+        
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ConnectLobby")]
         void ConnectLobby(Astralis.UserManager.User user, string gameId);
         
@@ -232,10 +244,10 @@ namespace Astralis.UserManager {
         System.Threading.Tasks.Task DisconnectLobbyAsync(Astralis.UserManager.User user);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam")]
-        void ChangeLobbyUserTeam(Astralis.UserManager.User user, int team);
+        void ChangeLobbyUserTeam(string userNickname, int team);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam")]
-        System.Threading.Tasks.Task ChangeLobbyUserTeamAsync(Astralis.UserManager.User user, int team);
+        System.Threading.Tasks.Task ChangeLobbyUserTeamAsync(string userNickname, int team);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/SendMessage")]
         void SendMessage(string message, string gameId);
@@ -251,13 +263,13 @@ namespace Astralis.UserManager {
         void ShowConnectionInLobby(Astralis.UserManager.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowUsersInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowUsersInLobbyResponse")]
-        void ShowUsersInLobby(Astralis.UserManager.User[] userList);
+        void ShowUsersInLobby(System.Tuple<Astralis.UserManager.User, int>[] users);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobbyResponse")]
         void ShowDisconnectionInLobby(Astralis.UserManager.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam", ReplyAction="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeamResponse")]
-        void UpdateLobbyUserTeam(Astralis.UserManager.User user, int team);
+        void UpdateLobbyUserTeam(string userNickname, int team);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GiveLobbyId", ReplyAction="http://tempuri.org/ILobbyManager/GiveLobbyIdResponse")]
         void GiveLobbyId(string gameId);
@@ -302,6 +314,22 @@ namespace Astralis.UserManager {
             return base.Channel.CreateLobbyAsync(user);
         }
         
+        public bool GameExist(string gameId) {
+            return base.Channel.GameExist(gameId);
+        }
+        
+        public System.Threading.Tasks.Task<bool> GameExistAsync(string gameId) {
+            return base.Channel.GameExistAsync(gameId);
+        }
+        
+        public bool GameIsNotFull(string gameId) {
+            return base.Channel.GameIsNotFull(gameId);
+        }
+        
+        public System.Threading.Tasks.Task<bool> GameIsNotFullAsync(string gameId) {
+            return base.Channel.GameIsNotFullAsync(gameId);
+        }
+        
         public void ConnectLobby(Astralis.UserManager.User user, string gameId) {
             base.Channel.ConnectLobby(user, gameId);
         }
@@ -318,12 +346,12 @@ namespace Astralis.UserManager {
             return base.Channel.DisconnectLobbyAsync(user);
         }
         
-        public void ChangeLobbyUserTeam(Astralis.UserManager.User user, int team) {
-            base.Channel.ChangeLobbyUserTeam(user, team);
+        public void ChangeLobbyUserTeam(string userNickname, int team) {
+            base.Channel.ChangeLobbyUserTeam(userNickname, team);
         }
         
-        public System.Threading.Tasks.Task ChangeLobbyUserTeamAsync(Astralis.UserManager.User user, int team) {
-            return base.Channel.ChangeLobbyUserTeamAsync(user, team);
+        public System.Threading.Tasks.Task ChangeLobbyUserTeamAsync(string userNickname, int team) {
+            return base.Channel.ChangeLobbyUserTeamAsync(userNickname, team);
         }
         
         public void SendMessage(string message, string gameId) {

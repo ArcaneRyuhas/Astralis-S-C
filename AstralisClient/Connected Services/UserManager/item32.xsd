@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts" />
-  <xs:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:element name="AddUser">
     <xs:complexType>
       <xs:sequence>
@@ -87,6 +88,34 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GameExist">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GameExistResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GameExistResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GameIsNotFull">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GameIsNotFullResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GameIsNotFullResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ConnectLobby">
     <xs:complexType>
       <xs:sequence>
@@ -105,7 +134,7 @@
   <xs:element name="ChangeLobbyUserTeam">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/MessageService.Contracts" minOccurs="0" name="user" nillable="true" type="q7:User" />
+        <xs:element minOccurs="0" name="userNickname" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="team" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -121,7 +150,7 @@
   <xs:element name="ShowConnectionInLobby">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/MessageService.Contracts" minOccurs="0" name="user" nillable="true" type="q8:User" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/MessageService.Contracts" minOccurs="0" name="user" nillable="true" type="q7:User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -133,7 +162,7 @@
   <xs:element name="ShowUsersInLobby">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/MessageService.Contracts" minOccurs="0" name="userList" nillable="true" type="q9:ArrayOfUser" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="users" nillable="true" type="q8:ArrayOfTupleOfUserinttklivCij" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -145,7 +174,7 @@
   <xs:element name="ShowDisconnectionInLobby">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/MessageService.Contracts" minOccurs="0" name="user" nillable="true" type="q10:User" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/MessageService.Contracts" minOccurs="0" name="user" nillable="true" type="q9:User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -157,7 +186,7 @@
   <xs:element name="UpdateLobbyUserTeam">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/MessageService.Contracts" minOccurs="0" name="user" nillable="true" type="q11:User" />
+        <xs:element minOccurs="0" name="userNickname" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="team" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -278,7 +307,7 @@
   <xs:element name="ShowOnlineFriends">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="onlineFriends" nillable="true" type="q12:ArrayOfKeyValueOfstringTupleOfbooleanintU6ho3Bhd" />
+        <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="onlineFriends" nillable="true" type="q10:ArrayOfKeyValueOfstringTupleOfbooleanintU6ho3Bhd" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
