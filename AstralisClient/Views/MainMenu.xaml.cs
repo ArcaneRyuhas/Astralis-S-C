@@ -77,7 +77,7 @@ namespace Astralis.Views
             }
             else
             {
-                MessageBox.Show("msgGameIsFullOrLobbyDoesntExist" + textToCopy, "Clipboard Copy", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("msgGameIsFullOrLobbyDoesntExist", "titleLobbyDoesntExist", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

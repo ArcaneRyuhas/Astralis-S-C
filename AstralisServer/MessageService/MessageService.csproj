@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IGameManager.cs" />
     <Compile Include="Contracts\ILobbyManager.cs" />
     <Compile Include="Contracts\IUserManager.cs" />
     <Compile Include="Database\AstralisDB.Context.cs">
