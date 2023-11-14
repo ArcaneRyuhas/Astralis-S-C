@@ -50,7 +50,7 @@ namespace MessageService.Contracts
     }
 
     [ServiceContract]
-    public interface IOnlineUserManagerCallback
+    public interface IOnlineUserManagerCallback 
     {
         [OperationContract]
         void ShowUserConected(string nickname);
