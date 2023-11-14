@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.ServiceModel;
 
 namespace Host
@@ -7,6 +8,8 @@ namespace Host
     {
         static void Main(string[] args)
         {
+            log4net.Config.XmlConfigurator.Configure(new FileInfo("Log4Net.config"));
+
             using (ServiceHost host = new ServiceHost(typeof(MessageService.UserManager)))
             {
 

@@ -42,10 +42,10 @@
           <Key>
             <PropertyRef Name="playId" />
           </Key>
-          <Property Name="playId" Type="int" Nullable="false" />
           <Property Name="nickName" Type="nvarchar" MaxLength="50" />
           <Property Name="gameId" Type="nvarchar" MaxLength="20" />
-          <Property Name="Team" Type="nvarchar" MaxLength="20" />
+          <Property Name="team" Type="int" />
+          <Property Name="playId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -283,10 +283,10 @@
           <Key>
             <PropertyRef Name="playId" />
           </Key>
-          <Property Name="playId" Type="Int32" Nullable="false" />
           <Property Name="nickName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="gameId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Team" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="team" Type="Int32" />
+          <Property Name="playId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Game" Relationship="Self.FK_Plays_Game" FromRole="Plays" ToRole="Game" />
           <NavigationProperty Name="User" Relationship="Self.FK_Plays_User" FromRole="Plays" ToRole="User" />
         </EntityType>
@@ -538,10 +538,10 @@
           <EntitySetMapping Name="Plays">
             <EntityTypeMapping TypeName="AstralisDBModel.Plays">
               <MappingFragment StoreEntitySet="Plays">
-                <ScalarProperty Name="playId" ColumnName="playId" />
                 <ScalarProperty Name="nickName" ColumnName="nickName" />
                 <ScalarProperty Name="gameId" ColumnName="gameId" />
-                <ScalarProperty Name="Team" ColumnName="Team" />
+                <ScalarProperty Name="team" ColumnName="team" />
+                <ScalarProperty Name="playId" ColumnName="playId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

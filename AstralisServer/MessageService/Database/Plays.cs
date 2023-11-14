@@ -14,10 +14,10 @@ namespace MessageService.Database
     
     public partial class Plays
     {
-        public int playId { get; set; }
         public string nickName { get; set; }
         public string gameId { get; set; }
-        public string Team { get; set; }
+        public Nullable<int> team { get; set; }
+        public int playId { get; set; }
     
         public virtual Game Game { get; set; }
         public virtual User User { get; set; }

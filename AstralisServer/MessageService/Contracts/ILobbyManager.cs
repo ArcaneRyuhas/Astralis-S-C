@@ -33,7 +33,7 @@ namespace MessageService.Contracts
         void SendMessage(string message, string gameId);
 
         [OperationContract(IsOneWay = true)]
-        void StartGame(string gameId); //Se guardan los usuarios en la tabla de Plays
+        void StartGame(string gameId);
 
     }
 
@@ -59,6 +59,6 @@ namespace MessageService.Contracts
         void ReceiveMessage(string message);
 
         [OperationContract]
-        void StartClientGame(); //Se inicia su partida para cada cliente
+        void StartClientGame();
     }
 }

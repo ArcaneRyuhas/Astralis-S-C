@@ -1,18 +1,25 @@
-﻿using MessageService.Contracts;
+﻿using log4net;
+using log4net.Appender;
+using log4net.Core;
+using MessageService.Contracts;
 using MessageService.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MessageService
 {
-    public partial class UserManager : IUserManager
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
 
+    public partial class UserManager : IUserManager
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(UserManager));
+
         public int ConfirmUser(string nickname, string password)
         {
             int result = 0;
@@ -41,7 +48,6 @@ namespace MessageService
 
         public int AddUser(Contracts.User user)
         {
-
             int result = 0;
 
             using (var context = new AstralisDBEntities())
@@ -144,7 +150,6 @@ namespace MessageService
         }
     }
 
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public partial class UserManager : ILobbyManager
     {
         private const string ERROR_CODE_LOBBY = "error";
@@ -278,6 +283,38 @@ namespace MessageService
             }
         }
 
+        public void StartGame(string gameId)
+        {
+            List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+
+            if (usersInLobby.ContainsValue(gameId))
+            {
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
+
+                    foreach (var user in usersNickname)
+                    {
+                        var newSession = context.Plays.Add(new Plays() 
+                        {nickName = user,
+                        gameId = gameId,
+                        team = usersTeam[user]
+                        });
+
+                    }
+
+                    int ender = context.SaveChanges();
+
+                    Console.WriteLine (ender);
+                };
+
+                foreach (string userInTheLobby in usersNickname)
+                {
+                    usersContext[userInTheLobby].StartClientGame();
+                }    
+            }
+        }
+
         public void SendMessage(string message, string gameId)
         {
             if (usersInLobby.ContainsValue(gameId))
@@ -346,9 +383,16 @@ namespace MessageService
                 List<string> onlineNicknames = onlineUsers.Keys.ToList();
                 currentUserCallbackChannel.ShowOnlineFriends(GetFriendList(nickname));
 
-                foreach (var user in onlineUsers)
+                try
                 {
-                    user.Value.ShowUserConected(nickname);
+                    foreach (var user in onlineUsers)
+                    {
+                        user.Value.ShowUserConected(nickname);
+                    }
+                }
+                catch (CommunicationObjectAbortedException exception)
+                {
+                    log.Error(exception);
                 }
 
                 onlineUsers.Add(nickname, currentUserCallbackChannel);
@@ -361,9 +405,17 @@ namespace MessageService
             if (onlineUsers.ContainsKey(nickname))
             {
                 onlineUsers.Remove(nickname);
-                foreach (var user in onlineUsers)
+
+                try
                 {
-                    user.Value.ShowUserDisconected(nickname);
+                    foreach (var user in onlineUsers)
+                    {
+                        user.Value.ShowUserDisconected(nickname);
+                    }
+                }
+                catch(CommunicationObjectAbortedException exception) 
+                {
+                    log.Error("Error in DisconnectUser method ", exception);
                 }
             }
         }
@@ -536,4 +588,33 @@ namespace MessageService
             return friendList;
         }
     }
+
+    public partial class UserManager : IGameManager
+    {
+        public void DispenseCards(string nickname, int deckId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DrawCard(string nickname, int cardId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndGame(int winnerTeam)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndGameTurn(Dictionary<int, int> boardAfterTurn)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartNewPhase(Dictionary<int, int> boardAfterPhase)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }
