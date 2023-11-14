@@ -24,6 +24,14 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IGameManager_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
@@ -93,6 +101,9 @@
   <wsdl:message name="ILobbyManager_SendMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:SendMessage" />
   </wsdl:message>
+  <wsdl:message name="ILobbyManager_StartGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartGame" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_ShowConnectionInLobby_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowConnectionInLobby" />
   </wsdl:message>
@@ -128,6 +139,12 @@
   </wsdl:message>
   <wsdl:message name="ILobbyManager_ReceiveMessage_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_StartClientGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartClientGame" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_StartClientGame_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartClientGameResponse" />
   </wsdl:message>
   <wsdl:message name="IOnlineUserManager_ConectUser_InputMessage">
     <wsdl:part name="parameters" element="tns:ConectUser" />
@@ -183,6 +200,57 @@
   <wsdl:message name="IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowFriendAcceptedResponse" />
   </wsdl:message>
+  <wsdl:message name="IGameManager_DispenseCards_InputMessage">
+    <wsdl:part name="parameters" element="tns:DispenseCards" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DrawCard_InputMessage">
+    <wsdl:part name="parameters" element="tns:DrawCard" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:EndGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndGameTurn_InputMessage">
+    <wsdl:part name="parameters" element="tns:EndGameTurn" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_StartNewPhase_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartNewPhase" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_RecieveCards_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RecieveCards" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_RecieveCards_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RecieveCardsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DrawCardClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:DrawCardClient" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DrawCardClient_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:DrawCardClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_PlayerEndedTurn_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerEndedTurn" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_PlayerEndedTurn_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerEndedTurnResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndPhase_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:EndPhase" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndPhase_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:EndPhaseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_StartNewPhaseClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartNewPhaseClient" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_StartNewPhaseClient_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartNewPhaseClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndGameClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:EndGameClient" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndGameClient_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:EndGameClientResponse" />
+  </wsdl:message>
   <wsdl:portType name="IUserManager">
     <wsdl:operation name="AddUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
@@ -230,6 +298,9 @@
     <wsdl:operation name="SendMessage">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/SendMessage" message="tns:ILobbyManager_SendMessage_InputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="StartGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/StartGame" message="tns:ILobbyManager_StartGame_InputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ShowConnectionInLobby">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobby" message="tns:ILobbyManager_ShowConnectionInLobby_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobbyResponse" message="tns:ILobbyManager_ShowConnectionInLobby_InputCallbackMessage" />
@@ -253,6 +324,10 @@
     <wsdl:operation name="ReceiveMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessage" message="tns:ILobbyManager_ReceiveMessage_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessageResponse" message="tns:ILobbyManager_ReceiveMessage_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartClientGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/StartClientGame" message="tns:ILobbyManager_StartClientGame_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/StartClientGameResponse" message="tns:ILobbyManager_StartClientGame_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IOnlineUserManager">
@@ -293,6 +368,47 @@
     <wsdl:operation name="ShowFriendAccepted">
       <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted" message="tns:IOnlineUserManager_ShowFriendAccepted_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendAcceptedResponse" message="tns:IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IGameManager">
+    <wsdl:operation name="DispenseCards">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/DispenseCards" message="tns:IGameManager_DispenseCards_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DrawCard">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/DrawCard" message="tns:IGameManager_DrawCard_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGame" message="tns:IGameManager_EndGame_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndGameTurn">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGameTurn" message="tns:IGameManager_EndGameTurn_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartNewPhase">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartNewPhase" message="tns:IGameManager_StartNewPhase_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RecieveCards">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/RecieveCards" message="tns:IGameManager_RecieveCards_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/RecieveCardsResponse" message="tns:IGameManager_RecieveCards_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DrawCardClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/DrawCardClient" message="tns:IGameManager_DrawCardClient_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/DrawCardClientResponse" message="tns:IGameManager_DrawCardClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PlayerEndedTurn">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/PlayerEndedTurn" message="tns:IGameManager_PlayerEndedTurn_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/PlayerEndedTurnResponse" message="tns:IGameManager_PlayerEndedTurn_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndPhase">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/EndPhase" message="tns:IGameManager_EndPhase_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndPhaseResponse" message="tns:IGameManager_EndPhase_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartNewPhaseClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/StartNewPhaseClient" message="tns:IGameManager_StartNewPhaseClient_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartNewPhaseClientResponse" message="tns:IGameManager_StartNewPhaseClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndGameClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/EndGameClient" message="tns:IGameManager_EndGameClient_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGameClientResponse" message="tns:IGameManager_EndGameClient_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
@@ -398,6 +514,12 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="StartGame">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/StartGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="ShowConnectionInLobby">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ShowConnectionInLobby" style="document" />
       <wsdl:input>
@@ -445,6 +567,15 @@
     </wsdl:operation>
     <wsdl:operation name="ReceiveMessage">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ReceiveMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartClientGame">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/StartClientGame" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -541,6 +672,94 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IGameManager" type="tns:IGameManager">
+    <wsp:PolicyReference URI="#NetTcpBinding_IGameManager_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="DispenseCards">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/DispenseCards" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="DrawCard">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/DrawCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="EndGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/EndGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="EndGameTurn">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/EndGameTurn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="StartNewPhase">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/StartNewPhase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="RecieveCards">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/RecieveCards" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DrawCardClient">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/DrawCardClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerEndedTurn">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/PlayerEndedTurn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EndPhase">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/EndPhase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartNewPhaseClient">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/StartNewPhaseClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EndGameClient">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/EndGameClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:service name="UserManager">
     <wsdl:port name="NetTcpBinding_IUserManager" binding="tns:NetTcpBinding_IUserManager">
       <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
@@ -555,6 +774,12 @@
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IOnlineUserManager" binding="tns:NetTcpBinding_IOnlineUserManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IGameManager" binding="tns:NetTcpBinding_IGameManager">
       <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>

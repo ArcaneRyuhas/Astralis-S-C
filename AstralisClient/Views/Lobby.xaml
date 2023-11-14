@@ -49,7 +49,7 @@
             </Grid>
 
             <Label Content="{x:Static p:Resources.lblPlayersConecteds}" HorizontalAlignment="Left" Margin="42,10,0,0" VerticalAlignment="Top" Grid.Row="1" Width="285" FontSize="22" Height="33"/>
-            <Button x:Name="btnStartGame" Content="{x:Static p:Resources.btnStartGame}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" FontSize="36" Height="40" Width="126" Margin="10,0,0,0" Template="{DynamicResource ButtonTemplateNormal}"/>
+            <Button x:Name="btnStartGame" Content="{x:Static p:Resources.btnStartGame}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" FontSize="36" Height="40" Width="126" Margin="10,0,0,0" Template="{DynamicResource ButtonTemplateNormal}" Click="btnStartGame_Click"/>
             <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Grid.Column="1" FontSize="36" Height="40" Width="150" Click="btnExit_Click" Template="{DynamicResource ButtonTemplateNormal}"/>
             <Grid Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>

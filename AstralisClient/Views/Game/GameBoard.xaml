@@ -35,10 +35,10 @@
             </Border.RenderTransform>
         </Border>
 
-        <Label x:Name="lblEnemyMana" Content="0" HorizontalAlignment="Left" Margin="118,303,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
-        <Label x:Name="lblPlayerMana" Content="0" HorizontalAlignment="Left" Margin="118,526,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
-        <Label x:Name="lblEnemyHealth" Content="20" HorizontalAlignment="Left" Margin="43,51,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
-        <Label x:Name="lblPlayerHealth" Content="20" HorizontalAlignment="Left" Margin="1199,813,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
+        <Label x:Name="lblEnemyMana" Content="0" HorizontalAlignment="Left" Margin="116,300,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
+        <Label x:Name="lblPlayerMana" Content="0" HorizontalAlignment="Left" Margin="116,520,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
+        <Label x:Name="lblEnemyHealth" Content="20" HorizontalAlignment="Left" Margin="42,45,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
+        <Label x:Name="lblPlayerHealth" Content="20" HorizontalAlignment="Left" Margin="1185,800,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
 
 
         <Button Width="50" Height="50" HorizontalAlignment="Right" FontSize="60">
@@ -94,15 +94,15 @@
             </Grid.ColumnDefinitions>
         </Grid>
 
-        <ProgressBar HorizontalAlignment="Left" Height="21" Margin="45,242,0,0" VerticalAlignment="Top" Width="363" Background="Black" Foreground="#FF12E2FD" BorderBrush="White">
+        <ProgressBar HorizontalAlignment="Left" Height="21" Margin="45,230,0,0" VerticalAlignment="Top" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White">
             <ProgressBar.RenderTransform>
                 <RotateTransform Angle="90"/>
             </ProgressBar.RenderTransform>
         </ProgressBar>
 
-        <ProgressBar HorizontalAlignment="Left" Height="13" Margin="1003,896,0,0" VerticalAlignment="Top" Width="270" Background="Black" Foreground="#FF9A0B0B"/>
+        <ProgressBar HorizontalAlignment="Left" Height="13" Margin="990,885,0,0" VerticalAlignment="Top" Width="270" Background="Black" Foreground="#FF9A0B0B"/>
 
-        <ProgressBar HorizontalAlignment="Left" Height="13" Margin="28,16,0,0" VerticalAlignment="Top" Width="270" Background="Black" Foreground="#FF9A0B0B"/>
+        <ProgressBar HorizontalAlignment="Left" Height="13" Margin="30,15,0,0" VerticalAlignment="Top" Width="270" Background="Black" Foreground="#FF9A0B0B"/>
 
 
     </Grid>

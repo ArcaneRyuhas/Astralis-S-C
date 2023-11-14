@@ -254,6 +254,12 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/SendMessage")]
         System.Threading.Tasks.Task SendMessageAsync(string message, string gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/StartGame")]
+        void StartGame(string gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/StartGame")]
+        System.Threading.Tasks.Task StartGameAsync(string gameId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -276,6 +282,9 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ReceiveMessage", ReplyAction="http://tempuri.org/ILobbyManager/ReceiveMessageResponse")]
         void ReceiveMessage(string message);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/StartClientGame", ReplyAction="http://tempuri.org/ILobbyManager/StartClientGameResponse")]
+        void StartClientGame();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -360,6 +369,14 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task SendMessageAsync(string message, string gameId) {
             return base.Channel.SendMessageAsync(message, gameId);
+        }
+        
+        public void StartGame(string gameId) {
+            base.Channel.StartGame(gameId);
+        }
+        
+        public System.Threading.Tasks.Task StartGameAsync(string gameId) {
+            return base.Channel.StartGameAsync(gameId);
         }
     }
     
@@ -483,6 +500,132 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task<bool> RemoveFriendAsync(string nickname, string nicknamefriendToRemove) {
             return base.Channel.RemoveFriendAsync(nickname, nicknamefriendToRemove);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.IGameManager", CallbackContract=typeof(Astralis.UserManager.IGameManagerCallback))]
+    public interface IGameManager {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DispenseCards")]
+        void DispenseCards(string nickname, int deckId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DispenseCards")]
+        System.Threading.Tasks.Task DispenseCardsAsync(string nickname, int deckId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawCard")]
+        void DrawCard(string nickname, int cardId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawCard")]
+        System.Threading.Tasks.Task DrawCardAsync(string nickname, int cardId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/EndGame")]
+        void EndGame(int winnerTeam);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/EndGame")]
+        System.Threading.Tasks.Task EndGameAsync(int winnerTeam);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/EndGameTurn")]
+        void EndGameTurn(System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/EndGameTurn")]
+        System.Threading.Tasks.Task EndGameTurnAsync(System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartNewPhase")]
+        void StartNewPhase(System.Collections.Generic.Dictionary<int, int> boardAfterPhase);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartNewPhase")]
+        System.Threading.Tasks.Task StartNewPhaseAsync(System.Collections.Generic.Dictionary<int, int> boardAfterPhase);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IGameManagerCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/RecieveCards", ReplyAction="http://tempuri.org/IGameManager/RecieveCardsResponse")]
+        void RecieveCards(int[] userDeck);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DrawCardClient", ReplyAction="http://tempuri.org/IGameManager/DrawCardClientResponse")]
+        void DrawCardClient(string nickname, int cardId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/PlayerEndedTurn", ReplyAction="http://tempuri.org/IGameManager/PlayerEndedTurnResponse")]
+        void PlayerEndedTurn(string player, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/EndPhase", ReplyAction="http://tempuri.org/IGameManager/EndPhaseResponse")]
+        void EndPhase();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/StartNewPhaseClient", ReplyAction="http://tempuri.org/IGameManager/StartNewPhaseClientResponse")]
+        void StartNewPhaseClient(System.Collections.Generic.Dictionary<int, int> boardAfterPhase);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/EndGameClient", ReplyAction="http://tempuri.org/IGameManager/EndGameClientResponse")]
+        void EndGameClient(int winnerTeam);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IGameManagerChannel : Astralis.UserManager.IGameManager, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class GameManagerClient : System.ServiceModel.DuplexClientBase<Astralis.UserManager.IGameManager>, Astralis.UserManager.IGameManager {
+        
+        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public GameManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void DispenseCards(string nickname, int deckId) {
+            base.Channel.DispenseCards(nickname, deckId);
+        }
+        
+        public System.Threading.Tasks.Task DispenseCardsAsync(string nickname, int deckId) {
+            return base.Channel.DispenseCardsAsync(nickname, deckId);
+        }
+        
+        public void DrawCard(string nickname, int cardId) {
+            base.Channel.DrawCard(nickname, cardId);
+        }
+        
+        public System.Threading.Tasks.Task DrawCardAsync(string nickname, int cardId) {
+            return base.Channel.DrawCardAsync(nickname, cardId);
+        }
+        
+        public void EndGame(int winnerTeam) {
+            base.Channel.EndGame(winnerTeam);
+        }
+        
+        public System.Threading.Tasks.Task EndGameAsync(int winnerTeam) {
+            return base.Channel.EndGameAsync(winnerTeam);
+        }
+        
+        public void EndGameTurn(System.Collections.Generic.Dictionary<int, int> boardAfterTurn) {
+            base.Channel.EndGameTurn(boardAfterTurn);
+        }
+        
+        public System.Threading.Tasks.Task EndGameTurnAsync(System.Collections.Generic.Dictionary<int, int> boardAfterTurn) {
+            return base.Channel.EndGameTurnAsync(boardAfterTurn);
+        }
+        
+        public void StartNewPhase(System.Collections.Generic.Dictionary<int, int> boardAfterPhase) {
+            base.Channel.StartNewPhase(boardAfterPhase);
+        }
+        
+        public System.Threading.Tasks.Task StartNewPhaseAsync(System.Collections.Generic.Dictionary<int, int> boardAfterPhase) {
+            return base.Channel.StartNewPhaseAsync(boardAfterPhase);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Astralis.Views
                 {2, true },
                 {3, true },
             };
-            btnStartGame.IsEnabled = false;
+            btnStartGame.IsEnabled = true; //CAMBIAR A FALSE DESPUES DE PROBAR
         }
 
         public bool SetLobby(string code) 
@@ -214,6 +214,13 @@ namespace Astralis.Views
             EnableStartButton();
         }
 
+        public void StartClientGame()
+        {
+            Game.GameBoard gameBoard = new Game.GameBoard();
+
+            NavigationService.Navigate(gameBoard);
+        }
+
         private void EnableStartButton()
         {
             if (NoFreeSpaces() && TeamsAreComplete() && isHost)
@@ -297,6 +304,14 @@ namespace Astralis.Views
             Clipboard.SetText(textToCopy);
 
             MessageBox.Show("Text has been copied to clipboard: " + textToCopy, "Clipboard Copy", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void btnStartGame_Click(object sender, RoutedEventArgs e)
+        {
+            InstanceContext context = new InstanceContext(this);
+            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+
+            client.StartGame(gameId);
         }
     }
 }
