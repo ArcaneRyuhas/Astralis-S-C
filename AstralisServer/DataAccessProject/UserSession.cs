@@ -7,25 +7,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MessageService.Database
+namespace DataAccessProject
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Game
+    public partial class UserSession
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Game()
+        public UserSession()
         {
-            this.Plays = new HashSet<Plays>();
+            this.User = new HashSet<User>();
         }
     
-        public string winnerTeam { get; set; }
-        public string gameMode { get; set; }
-        public Nullable<System.TimeSpan> gameTime { get; set; }
-        public string gameId { get; set; }
+        public int userSessionId { get; set; }
+        public string password { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Plays> Plays { get; set; }
+        public virtual ICollection<User> User { get; set; }
     }
 }

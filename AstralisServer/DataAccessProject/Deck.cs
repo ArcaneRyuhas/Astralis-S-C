@@ -7,23 +7,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MessageService.Database
+namespace DataAccessProject
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class UserSession
+    public partial class Deck
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UserSession()
+        public Deck()
         {
-            this.User = new HashSet<User>();
+            this.UserDeck = new HashSet<UserDeck>();
         }
     
-        public int userSessionId { get; set; }
-        public string password { get; set; }
+        public int DeckId { get; set; }
+        public string Card { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> User { get; set; }
+        public virtual ICollection<UserDeck> UserDeck { get; set; }
     }
 }

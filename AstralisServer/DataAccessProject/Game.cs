@@ -7,24 +7,25 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MessageService.Database
+namespace DataAccessProject
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class FriendStatus
+    public partial class Game
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FriendStatus()
+        public Game()
         {
-            this.UserFriend = new HashSet<UserFriend>();
+            this.Plays = new HashSet<Plays>();
         }
     
-        public int FriendStatusId { get; set; }
-        public string FriendStatusType { get; set; }
-        public string FriendStatusDescription { get; set; }
+        public string winnerTeam { get; set; }
+        public string gameMode { get; set; }
+        public Nullable<System.TimeSpan> gameTime { get; set; }
+        public string gameId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserFriend> UserFriend { get; set; }
+        public virtual ICollection<Plays> Plays { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿
+﻿using DataAccessProject;
+
 
 namespace TestProject
 {
@@ -6,7 +7,7 @@ namespace TestProject
     {
         public UserManagerUnitTest() 
         {
-            using (var context = new MessageService.Database.AstralisDBEntities())
+            using (var context = new AstralisDBEntities())
             {
 
             };

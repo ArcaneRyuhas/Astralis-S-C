@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MessageService.Database
+namespace DataAccessProject
 {
     using System;
     using System.Data.Entity;

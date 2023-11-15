@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageService.Contracts
+namespace DataAccessProject.Contracts
 {
     [ServiceContract(CallbackContract = typeof(IGameManagerCallback))]
     public interface IGameManager

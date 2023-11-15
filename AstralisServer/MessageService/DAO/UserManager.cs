@@ -1,8 +1,6 @@
 ﻿using log4net;
 using log4net.Appender;
 using log4net.Core;
-using MessageService.Contracts;
-using MessageService.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +9,10 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccessProject.Contracts;
+using DataAccessProject.DataAccess;
+using DataAccessProject;
+using User = DataAccessProject.Contracts.User;
 
 namespace MessageService
 {
@@ -23,127 +25,52 @@ namespace MessageService
         public int ConfirmUser(string nickname, string password)
         {
             int result = 0;
+
             if (FindUserByNickname(nickname))
             {
-                using (var context = new AstralisDBEntities())
-                {
-                    context.Database.Log = Console.WriteLine;
-
-                    var databaseUser = context.User.Find(nickname);
-                    var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
-
-                    if (databaseUsersession != null && databaseUsersession.password == password)
-                    {
-                        result = 1;
-                    }
-                    else
-                    {
-                        result = 0;
-                    }
-                }
+                UserAccess userAccess = new UserAccess();
+                result = userAccess.ConfirmUser(nickname, password);
             }
 
             return result;
         }
 
-        public int AddUser(Contracts.User user)
+        public int AddUser(User user)
         {
             int result = 0;
 
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
-
-                string cleanedPassword = user.Password.Trim();
-
-                var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
-
-                Database.User databaseUser = new Database.User();
-                databaseUser.nickName = user.Nickname;
-                databaseUser.mail = user.Mail;
-                databaseUser.imageId = (short)user.ImageId;
-                databaseUser.userSessionFk = newSession.userSessionId;
-                databaseUser.UserSession = newSession;
-
-                var newUser = context.User.Add(databaseUser);
-
-                result = context.SaveChanges();
-
-            };
+            UserAccess userAccess = new UserAccess();
+            result = userAccess.CreateUser(user);
 
             return result;
         }
 
-        public bool FindUserByNickname(String nickname)
+        public bool FindUserByNickname(string nickname)
         {
             bool isFound = false;
 
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
-
-                var databaseUser = context.User.Find(nickname);
-
-                if (databaseUser != null)
-                {
-                    isFound = true;
-                }
-            }
+            UserAccess userAccess = new UserAccess();
+            isFound = userAccess.FindUserByNickname(nickname);
 
             return isFound;
         }
 
-        public Contracts.User GetUserByNickname(string nickname)
+        public User GetUserByNickname(string nickname)
         {
-            Contracts.User foundUser = new Contracts.User();
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
-                var databaseUser = context.User.Find(nickname);
-
-                if (databaseUser != null)
-                {
-                    foundUser.Nickname = databaseUser.nickName;
-                    foundUser.Mail = databaseUser.mail;
-                    foundUser.ImageId = databaseUser.imageId;
-                }
-                else
-                {
-                    foundUser.Nickname = "UserNotFound";
-                }
-
-            }
+            User foundUser = new User();
+            
+            UserAccess userAccess = new UserAccess();
+            foundUser = userAccess.GetUserByNickname(nickname);
 
             return foundUser;
         }
 
-        public int UpdateUser(Contracts.User user)
+        public int UpdateUser(User user)
         {
             int result = 0;
 
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
-                var databaseUser = context.User.Find(user.Nickname);
-
-                if (databaseUser != null)
-                {
-                    databaseUser.mail = user.Mail;
-                    databaseUser.imageId = (short)user.ImageId;
-
-                    var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
-
-                    if (databaseUserSession != null)
-                    {
-                        if (!string.IsNullOrEmpty(user.Password))
-                        {
-                            databaseUserSession.password = user.Password;
-                        }
-                    }
-
-                    result = context.SaveChanges();
-                }
-            }
+            UserAccess userAccess = new UserAccess();
+            result = userAccess.UpdateUser(user);
 
             return result;
 
@@ -152,6 +79,7 @@ namespace MessageService
 
     public partial class UserManager : ILobbyManager
     {
+        private const bool IS_SUCCESFULL = true;
         private const string ERROR_CODE_LOBBY = "error";
         private const int NO_TEAM = 0;
 
@@ -180,17 +108,17 @@ namespace MessageService
             return gameIsNotFull;
         }
 
-        public void ConnectLobby(Contracts.User user, string gameId)
+        public void ConnectLobby(User user, string gameId)
         {
             if (usersInLobby.ContainsValue(gameId))
             {
 
                 List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
-                List<Tuple<Contracts.User, int>> users = new List<Tuple<Contracts.User, int>>();
+                List<Tuple<User, int>> users = new List<Tuple<User, int>>();
 
                 foreach (string nickname in usersNickname)
                 {
-                    users.Add(new Tuple <Contracts.User, int> (GetUserByNickname(nickname), usersTeam[nickname]));
+                    users.Add(new Tuple <User, int> (GetUserByNickname(nickname), usersTeam[nickname]));
                 }
 
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
@@ -210,25 +138,17 @@ namespace MessageService
             }
         }
 
-        public string CreateLobby(Contracts.User user)
+        public string CreateLobby(User user)
         {
-            int result = 0;
-            string gameId = generateGameId();
+            string gameId = GenerateGameId();
+            GameAccess gameAccess = new GameAccess();
 
-            while (gameIdIsRepeated(gameId))
+            while (gameAccess.GameIdIsRepeated(gameId))
             {
-                gameId = generateGameId();
+                gameId = GenerateGameId();
             }
 
-
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
-                var newSession = context.Game.Add(new Game() { gameId = gameId });
-                result = context.SaveChanges();
-            };
-
-            if (result > 0)
+            if (gameAccess.CreateGame(gameId) == IS_SUCCESFULL)
             {
                 ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
                 usersContext.Add(user.Nickname, currentUserCallbackChannel);
@@ -243,7 +163,7 @@ namespace MessageService
             return gameId;
         }
 
-        public void DisconnectLobby(Contracts.User user)
+        public void DisconnectLobby(User user)
         {
             if (usersInLobby.ContainsKey(user.Nickname))
             {
@@ -286,32 +206,25 @@ namespace MessageService
         public void StartGame(string gameId)
         {
             List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+            int result = 0;
 
             if (usersInLobby.ContainsValue(gameId))
             {
-                using (var context = new AstralisDBEntities())
-                {
-                    context.Database.Log = Console.WriteLine;
+                GameAccess gameAccess = new GameAccess();
 
-                    foreach (var user in usersNickname)
+                foreach (var user in usersNickname)
+                {
+                    result =+ gameAccess.CreatePlaysRelation(user, gameId, usersTeam[user]);
+
+                }
+
+                if (result > 0)
+                {
+                    foreach (string userInTheLobby in usersNickname)
                     {
-                        var newSession = context.Plays.Add(new Plays() 
-                        {nickName = user,
-                        gameId = gameId,
-                        team = usersTeam[user]
-                        });
-
+                        usersContext[userInTheLobby].StartClientGame();
                     }
-
-                    int ender = context.SaveChanges();
-
-                    Console.WriteLine (ender);
-                };
-
-                foreach (string userInTheLobby in usersNickname)
-                {
-                    usersContext[userInTheLobby].StartClientGame();
-                }    
+                }
             }
         }
 
@@ -328,7 +241,7 @@ namespace MessageService
             }
         }
 
-        private string generateGameId()
+        private string GenerateGameId()
         {
             Guid guid = Guid.NewGuid();
 
@@ -336,25 +249,6 @@ namespace MessageService
             string uniqueID = base64Guid.Replace("=", "").Substring(0, 6);
 
             return uniqueID;
-        }
-
-        private bool gameIdIsRepeated(string gameId)
-        {
-            bool isRepeated = false;
-
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
-
-                var databaseGameId = context.User.Find(gameId);
-
-                if (databaseGameId != null)
-                {
-                    isRepeated = true;
-                }
-            }
-
-            return isRepeated;
         }
 
         private List<string> FindKeysByValue(Dictionary<string, string> dictionary, string value)
@@ -374,6 +268,8 @@ namespace MessageService
         private const int IS_PENDING_FRIEND = 2;
         private const bool ONLINE = true;
         private const bool OFFLINE = false;
+        private const int IS_SUCCEDED = 1;
+        private const bool ACCEPTED_FRIEND = true;
 
         public void ConectUser(string nickname)
         {
@@ -381,7 +277,9 @@ namespace MessageService
             {
                 IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
                 List<string> onlineNicknames = onlineUsers.Keys.ToList();
-                currentUserCallbackChannel.ShowOnlineFriends(GetFriendList(nickname));
+                FriendAccess friendAccess = new FriendAccess();
+
+                currentUserCallbackChannel.ShowOnlineFriends(friendAccess.GetFriendList(nickname, onlineUsers.Keys.ToList()));
 
                 try
                 {
@@ -422,43 +320,21 @@ namespace MessageService
 
         public bool SendFriendRequest(string nicknameSender, string nicknameReciever) //Se puede cambiar el retorno a un int para saber 0.- NO EXISITE EL USUARIO 1.- Exitoso 2.-Ya existe la solicitud o son amigos
         {
-            bool IsSucceded = false;
+            bool isSucceded = false;
 
             if (FindUserByNickname(nicknameSender) && FindUserByNickname(nicknameReciever))
             {
-                using (var context = new AstralisDBEntities())
+                FriendAccess friendAccess = new FriendAccess();
+                if (friendAccess.SendFriendRequest(nicknameSender, nicknameReciever))
                 {
-                    context.Database.Log = Console.WriteLine;
-
-                    var existingRequest = context.UserFriend
-                        .FirstOrDefault(f =>
-                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) ||
-                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) &&
-                            f.FriendStatusId == IS_PENDING_FRIEND);
-
-                    if (existingRequest == null)
+                    isSucceded = true;
+                    if (onlineUsers.ContainsKey(nicknameReciever))
                     {
-                        var newFriendRequest = new UserFriend
-                        {
-                            Nickname1 = nicknameSender,
-                            Nickname2 = nicknameReciever,
-                            FriendStatusId = IS_PENDING_FRIEND
-                        };
-
-                        context.UserFriend.Add(newFriendRequest);
-                        context.SaveChanges();
-
-                        if (onlineUsers.ContainsKey(nicknameReciever))
-                        {
-                            onlineUsers[nicknameReciever].ShowFriendRequest(nicknameSender);
-                        }
-
-                        IsSucceded = true;
+                        onlineUsers[nicknameReciever].ShowFriendRequest(nicknameSender);
                     }
                 }
             }
-
-            return IsSucceded;
+            return isSucceded;
         }
 
         public bool ReplyFriendRequest(string nicknameReciever, string nicknameSender, bool answer)
@@ -467,126 +343,35 @@ namespace MessageService
 
             if (FindUserByNickname(nicknameReciever) && FindUserByNickname(nicknameSender))
             {
-                using (var context = new AstralisDBEntities())
+                FriendAccess friendAccess = new FriendAccess();
+
+                if (friendAccess.ReplyFriendRequest(nicknameReciever, nicknameSender, answer) > IS_SUCCEDED)
                 {
-                    context.Database.Log = Console.WriteLine;
+                    IsSucceded = true;
 
-                    var existingRequest = context.UserFriend
-                        .FirstOrDefault(f =>
-                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) ||
-                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) &&
-                            f.FriendStatusId == IS_PENDING_FRIEND);
-
-                    if (existingRequest != null)
+                    if (answer == ACCEPTED_FRIEND)
                     {
-                        if (answer)
+                        if (onlineUsers.ContainsKey(nicknameSender))
                         {
-                            existingRequest.FriendStatusId = IS_FRIEND;
-                        }
-                        else
-                        {
-                            context.UserFriend.Remove(existingRequest);
-                        }
-
-                        int result = context.SaveChanges();
-                        
-                        if(result > 0)
-                        {
-                            IsSucceded = true;
-
-                            if (answer)
-                            {
-                                if (onlineUsers.ContainsKey(nicknameSender))
-                                {
-                                    onlineUsers[nicknameSender].ShowFriendAccepted(nicknameReciever);
-                                }
-                            }
+                            onlineUsers[nicknameSender].ShowFriendAccepted(nicknameReciever);
                         }
                     }
                 }
             }
+            
             return IsSucceded;
         }
 
         public bool RemoveFriend(string nickname, string nicknamefriendToRemove)
         {
-            bool IsSucceded = false;
+            bool isSucceded = false;
 
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
+            FriendAccess friendAccess = new FriendAccess();
+            isSucceded = friendAccess.RemoveFriend(nickname, nicknamefriendToRemove);
 
-                var friendRelationship = context.UserFriend
-                    .FirstOrDefault(f =>
-                        (f.Nickname1 == nickname && f.Nickname2 == nicknamefriendToRemove) ||
-                        (f.Nickname1 == nicknamefriendToRemove && f.Nickname2 == nickname) &&
-                        f.FriendStatusId == IS_FRIEND);
-
-                if (friendRelationship != null)
-                {
-                    context.UserFriend.Remove(friendRelationship);
-                    context.SaveChanges();
-                    IsSucceded = true;
-                }
-            }
-
-            return IsSucceded;
+            return isSucceded;
         }
 
-        private Dictionary<string, Tuple<bool, int>> GetFriendList(string nickname)
-        {
-            Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
-            Tuple<bool, int> friendTuple;
-
-            using (var context = new AstralisDBEntities())
-            {
-                context.Database.Log = Console.WriteLine;
-                var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
-
-                foreach (var friend in databaseFriends)
-                {
-                    if (friend.Nickname1 != nickname)
-                    {
-                        if (onlineUsers.ContainsKey(friend.Nickname1))
-                        {
-                            friendTuple = new Tuple<bool, int> (ONLINE, IS_FRIEND);
-                            friendList.Add(friend.Nickname1, friendTuple);
-                        }
-                        else
-                        {
-                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
-                            friendList.Add(friend.Nickname1, friendTuple);
-                        }
-
-                    }
-                    else
-                    {
-                        if (onlineUsers.ContainsKey(friend.Nickname2))
-                        {
-                            friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
-                            friendList.Add(friend.Nickname2, friendTuple);
-                        }
-                        else
-                        {
-                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
-                            friendList.Add(friend.Nickname2, friendTuple);
-                        }
-                    }
-
-                     var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
-
-                    foreach (var request in pendingRequests)
-                    {
-                        if (!friendList.ContainsKey(request.Nickname1))
-                        {
-                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
-                            friendList.Add(request.Nickname1, friendTuple);
-                        }
-                    }
-                }
-            }
-            return friendList;
-        }
     }
 
     public partial class UserManager : IGameManager

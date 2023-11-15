@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C86159EF-CF95-4596-8BF9-B0123627E93B}</ProjectGuid>
+    <ProjectGuid>{41A341BA-98F4-4196-90F3-78900102A6CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MessageService</RootNamespace>
-    <AssemblyName>MessageService</AssemblyName>
+    <RootNamespace>DataAccessProject</RootNamespace>
+    <AssemblyName>DataAccessProject</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -59,21 +59,81 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AstralisDB.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AstralisDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AstralisDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AstralisDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AstralisDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Ban.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Contracts\IGameManager.cs" />
+    <Compile Include="Contracts\ILobbyManager.cs" />
+    <Compile Include="Contracts\IUserManager.cs" />
+    <Compile Include="DataAccess\FriendAccess.cs" />
+    <Compile Include="DataAccess\GameAccess.cs" />
+    <Compile Include="DataAccess\UserAccess.cs" />
+    <Compile Include="Deck.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FriendStatus.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Game.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Plays.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DAO\UserManager.cs" />
+    <Compile Include="User.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserDeck.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserFriend.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserSession.cs">
+      <DependentUpon>AstralisDB.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EntityDeploy Include="AstralisDB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AstralisDB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="AstralisDB.edmx.diagram">
+      <DependentUpon>AstralisDB.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Content Include="AstralisDB.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AstralisDB.edmx</DependentUpon>
+      <LastGenOutput>AstralisDB.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="AstralisDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AstralisDB.edmx</DependentUpon>
+      <LastGenOutput>AstralisDB.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessProject\DataAccessProject.csproj">
-      <Project>{41a341ba-98f4-4196-90f3-78900102a6cf}</Project>
-      <Name>DataAccessProject</Name>
-    </ProjectReference>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

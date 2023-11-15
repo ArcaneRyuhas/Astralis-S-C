@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageService.Contracts
+namespace DataAccessProject.Contracts
 {
     [ServiceContract(CallbackContract =typeof(ILobbyManagerCallback))]
     public interface ILobbyManager
