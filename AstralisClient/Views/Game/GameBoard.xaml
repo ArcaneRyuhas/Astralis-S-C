@@ -13,25 +13,48 @@
             <ImageBrush ImageSource="InGameAssets/AstralisBoard.png"/>
         </Grid.Background>
 
-        <Grid x:Name="gdPlayer"  Width="700" Height="200" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-
+        <Grid x:Name="gdPlayer"  Width="804" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,720,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
         </Grid>
 
         <Grid x:Name="gdEnemy" Width="700" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top">
-
-
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
         </Grid>
 
-        <Border x:Name="bdPlayerDeck" Width="165" Height="230" Margin="83,692,1032,-2">
+        <Border Width="165" Height="230" Margin="83,692,1032,-2">
             <Border.RenderTransform>
                 <RotateTransform Angle="30"/>
             </Border.RenderTransform>
         </Border>
 
-        <Border x:Name="bdEnemyDeck" Width="165" Height="230" Margin="1136,-91,-21,781">
+        <Border x:Name="bdPlayerDeck" Width="Auto" Height="Auto" Margin="73,692,1042,-2">
+            <Border.Background>
+                <ImageBrush ImageSource="InGameAssets/Deck.png"/>
+            </Border.Background>
             <Border.RenderTransform>
                 <RotateTransform Angle="30"/>
+            </Border.RenderTransform>
+        </Border>
+
+        <Border Width="165" Height="230" Margin="1136,-91,-21,781">
+            <Border.RenderTransform>
+                <RotateTransform Angle="30"/>
+            </Border.RenderTransform>
+        </Border>
+        
+        <Border x:Name="bdEnemyDeck" Width="Auto" Height="Auto" Margin="1130,-100,-15,790">
+            <Border.Background>
+                <ImageBrush ImageSource="InGameAssets/Deck.png"/>
+            </Border.Background>
+            <Border.RenderTransform>
+                <RotateTransform Angle="-330"/>
             </Border.RenderTransform>
         </Border>
 

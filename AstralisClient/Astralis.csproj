@@ -92,6 +92,16 @@
     <Compile Include="Views\Game\GameBoard.xaml.cs">
       <DependentUpon>GameBoard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Game\GameLogic\Card.cs" />
+    <Compile Include="Views\Game\GameLogic\CardImageResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CardImageResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Game\GameLogic\CardManager.cs" />
+    <Compile Include="Views\Game\GraphicCard.xaml.cs">
+      <DependentUpon>GraphicCard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Lobby.xaml.cs">
       <DependentUpon>Lobby.xaml</DependentUpon>
     </Compile>
@@ -123,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Game\GameBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Game\GraphicCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -209,6 +223,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\Game\GameLogic\CardImageResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CardImageResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Resource Include="Fonts\PixelFont.ttf" />
     <None Include="Connected Services\UserManager\Astralis.UserManager.User.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -272,6 +290,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Game\InGameAssets\AstralisIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\Deck.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

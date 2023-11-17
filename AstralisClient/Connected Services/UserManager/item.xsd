@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts" />
-  <xs:complexType name="ArrayOfTupleOfUserinttklivCij">
+  <xs:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" />
+  <xs:complexType name="ArrayOfTupleOfUserintr8Y84bsT">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="TupleOfUserinttklivCij" nillable="true" type="tns:TupleOfUserinttklivCij" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TupleOfUserintr8Y84bsT" nillable="true" type="tns:TupleOfUserintr8Y84bsT" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfTupleOfUserinttklivCij" nillable="true" type="tns:ArrayOfTupleOfUserinttklivCij" />
-  <xs:complexType name="TupleOfUserinttklivCij">
+  <xs:element name="ArrayOfTupleOfUserintr8Y84bsT" nillable="true" type="tns:ArrayOfTupleOfUserintr8Y84bsT" />
+  <xs:complexType name="TupleOfUserintr8Y84bsT">
     <xs:annotation>
       <xs:appinfo>
         <GenericType Name="TupleOf{0}{1}{#}" Namespace="http://schemas.datacontract.org/2004/07/System" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
-          <GenericParameter Name="User" Namespace="http://schemas.datacontract.org/2004/07/MessageService.Contracts" />
+          <GenericParameter Name="User" Namespace="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" />
           <GenericParameter Name="int" Namespace="http://www.w3.org/2001/XMLSchema" />
         </GenericType>
       </xs:appinfo>
     </xs:annotation>
     <xs:sequence>
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/MessageService.Contracts" name="m_Item1" nillable="true" type="q1:User" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" name="m_Item1" nillable="true" type="q1:User" />
       <xs:element name="m_Item2" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="TupleOfUserinttklivCij" nillable="true" type="tns:TupleOfUserinttklivCij" />
+  <xs:element name="TupleOfUserintr8Y84bsT" nillable="true" type="tns:TupleOfUserintr8Y84bsT" />
   <xs:complexType name="TupleOfbooleanint">
     <xs:annotation>
       <xs:appinfo>
