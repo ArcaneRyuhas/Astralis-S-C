@@ -9,8 +9,9 @@ namespace Astralis.Views.Game.GameLogic
         private const string MAGE = "Mage";
         private const string ERROR = "error";
         private const int ERROR_CARD_ID = 0;
+
         private static CardManager instance;
-        private Dictionary<int, ICardPrototype> cardLibrary;
+        private readonly Dictionary<int, ICardPrototype> cardLibrary;
         
 
         public static CardManager Instance()

@@ -22,8 +22,6 @@ namespace Astralis.Views.Game.GameLogic
         public int Health { get; set; }
         public string Type { get; set; }
 
-
-
         public Card() { }
 
         public Card(int mana, int attack, int health, string type)
@@ -53,12 +51,20 @@ namespace Astralis.Views.Game.GameLogic
             Health = Math.Max(0, Health);
         }
 
-        public void DealDamage(int mageCount)
+        public int DealDamage(int mageCount)
         {
+            int dealtDamage;
+
             if (!this.Type.Equals(MAGE))
             {
-
+                dealtDamage = Attack + mageCount;
             }
+            else
+            {
+                dealtDamage = Attack;
+            }
+
+            return dealtDamage;
         }
     }
 }
