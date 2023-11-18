@@ -25,23 +25,35 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
+                using (var transactionContext = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        context.Database.Log = Console.WriteLine;
 
-                string cleanedPassword = user.Password.Trim();
+                        string cleanedPassword = user.Password.Trim();
 
-                var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
+                        var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
 
-                User databaseUser = new User();
-                databaseUser.nickName = user.Nickname;
-                databaseUser.mail = user.Mail;
-                databaseUser.imageId = (short)user.ImageId;
-                databaseUser.userSessionFk = newSession.userSessionId;
-                databaseUser.UserSession = newSession;
+                        User databaseUser = new User();
+                        databaseUser.nickName = user.Nickname;
+                        databaseUser.mail = user.Mail;
+                        databaseUser.imageId = (short)user.ImageId;
+                        databaseUser.userSessionFk = newSession.userSessionId;
+                        databaseUser.UserSession = newSession;
 
-                var newUser = context.User.Add(databaseUser);
+                        var newUser = context.User.Add(databaseUser);
 
-                result = context.SaveChanges();
+                        result = context.SaveChanges();
 
+                        DeckAccess deckAccess = new DeckAccess();
+                        deckAccess.CreateDefaultDeck(context, user.Nickname);
+                    }
+                    catch (Exception SqlException)
+                    {
+                        transactionContext.Rollback();
+                    }
+                }
             };
 
             return result;

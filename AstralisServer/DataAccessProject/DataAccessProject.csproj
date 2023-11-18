@@ -80,6 +80,7 @@
     <Compile Include="Contracts\IGameManager.cs" />
     <Compile Include="Contracts\ILobbyManager.cs" />
     <Compile Include="Contracts\IUserManager.cs" />
+    <Compile Include="DataAccess\DeckAccess.cs" />
     <Compile Include="DataAccess\FriendAccess.cs" />
     <Compile Include="DataAccess\GameAccess.cs" />
     <Compile Include="DataAccess\UserAccess.cs" />

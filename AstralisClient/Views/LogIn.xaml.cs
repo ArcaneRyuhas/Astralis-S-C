@@ -1,28 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Astralis.Properties;
 using Astralis.Logic;
 using Astralis.UserManager;
 using System.Security.Cryptography;
 
 namespace Astralis.Views
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
-    /// 
-
     public partial class LogIn : Window
     {
         public LogIn()
@@ -30,8 +14,7 @@ namespace Astralis.Views
             InitializeComponent();
         }
 
-
-        private void Click_LogIn(object sender, RoutedEventArgs e)
+        private void btnLogIn_Click(object sender, RoutedEventArgs e)
         {
             string password = CreateSha2(pbPassword.Password);
             string nickname = tbNickname.Text;
@@ -41,13 +24,11 @@ namespace Astralis.Views
 
             if(string.IsNullOrEmpty(password))
             {
-                //AgregarToolTip
                 noEmptyFields = false;
             }
 
             if (string.IsNullOrEmpty(nickname))
             {
-                //Agregar ToolTip
                 noEmptyFields = false;
             }
 
@@ -84,7 +65,7 @@ namespace Astralis.Views
             return hash;
         }
 
-        private void Click_Register(object sender, RoutedEventArgs e)
+        private void btnRegister_Click(object sender, RoutedEventArgs e)
         {
             SignUp signUp = new SignUp();
             this.Close();
@@ -95,7 +76,7 @@ namespace Astralis.Views
         {
             if (e.Key == Key.Enter)
             {
-                Click_LogIn(sender, e);
+                btnLogIn_Click(sender, e);
             }
         }
     }

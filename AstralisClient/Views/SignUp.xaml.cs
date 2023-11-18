@@ -1,28 +1,14 @@
 ﻿using Astralis.UserManager;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using Astralis.Properties;
 
 namespace Astralis.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
     public partial class SignUp : Window
     {
         private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";
@@ -39,14 +25,14 @@ namespace Astralis.Views
             DataContext = viewModel;
         }
 
-        private void Button_Cancel(object sender, RoutedEventArgs e)
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             LogIn logIn = new LogIn();
             this.Close();
             logIn.Show();
         }
 
-        private void Button_Register(object sender, RoutedEventArgs e)
+        private void btnRegiter_Click(object sender, RoutedEventArgs e)
         {
             UserManager.User user = new UserManager.User();
 

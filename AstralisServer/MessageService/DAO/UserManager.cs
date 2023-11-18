@@ -1,22 +1,15 @@
 ﻿using log4net;
-using log4net.Appender;
-using log4net.Core;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.Text;
-using System.Threading.Tasks;
 using DataAccessProject.Contracts;
 using DataAccessProject.DataAccess;
-using DataAccessProject;
 using User = DataAccessProject.Contracts.User;
 
 namespace MessageService
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
 
     public partial class UserManager : IUserManager
     {

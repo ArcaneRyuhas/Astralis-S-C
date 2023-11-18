@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Astralis.Views.Game.GameLogic
 {
@@ -17,10 +13,15 @@ namespace Astralis.Views.Game.GameLogic
         private const string TANK = "Tank";
         private const string MAGE = "Mage";
 
-        public int Mana { get; set; }
-        public int Attack { get; set; }
-        public int Health { get; set; }
-        public string Type { get; set; }
+        private int mana;
+        private int attack;
+        private int health;
+        private string type;
+
+        public int Mana { get { return mana; } set { mana = value;} }
+        public int Attack { get { return attack;} set { attack = value;} }
+        public int Health { get { return health;} set { health = value;} }
+        public string Type { get { return type; } set { type = value; } }
 
         public Card() { }
 
