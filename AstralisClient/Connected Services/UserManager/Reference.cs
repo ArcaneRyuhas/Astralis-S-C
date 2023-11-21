@@ -507,11 +507,17 @@ namespace Astralis.UserManager {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.IGameManager", CallbackContract=typeof(Astralis.UserManager.IGameManagerCallback))]
     public interface IGameManager {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DispenseCards")]
-        void DispenseCards(string nickname, int deckId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ConnectGame", ReplyAction="http://tempuri.org/IGameManager/ConnectGameResponse")]
+        void ConnectGame(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DispenseCards")]
-        System.Threading.Tasks.Task DispenseCardsAsync(string nickname, int deckId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ConnectGame", ReplyAction="http://tempuri.org/IGameManager/ConnectGameResponse")]
+        System.Threading.Tasks.Task ConnectGameAsync(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DispenseCards", ReplyAction="http://tempuri.org/IGameManager/DispenseCardsResponse")]
+        int[] DispenseCards(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DispenseCards", ReplyAction="http://tempuri.org/IGameManager/DispenseCardsResponse")]
+        System.Threading.Tasks.Task<int[]> DispenseCardsAsync(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawCard")]
         void DrawCard(string nickname, int cardId);
@@ -540,9 +546,6 @@ namespace Astralis.UserManager {
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IGameManagerCallback {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/RecieveCards", ReplyAction="http://tempuri.org/IGameManager/RecieveCardsResponse")]
-        void RecieveCards(int[] userDeck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DrawCardClient", ReplyAction="http://tempuri.org/IGameManager/DrawCardClientResponse")]
         void DrawCardClient(string nickname, int cardId);
@@ -588,12 +591,20 @@ namespace Astralis.UserManager {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void DispenseCards(string nickname, int deckId) {
-            base.Channel.DispenseCards(nickname, deckId);
+        public void ConnectGame(string nickname) {
+            base.Channel.ConnectGame(nickname);
         }
         
-        public System.Threading.Tasks.Task DispenseCardsAsync(string nickname, int deckId) {
-            return base.Channel.DispenseCardsAsync(nickname, deckId);
+        public System.Threading.Tasks.Task ConnectGameAsync(string nickname) {
+            return base.Channel.ConnectGameAsync(nickname);
+        }
+        
+        public int[] DispenseCards(string nickname) {
+            return base.Channel.DispenseCards(nickname);
+        }
+        
+        public System.Threading.Tasks.Task<int[]> DispenseCardsAsync(string nickname) {
+            return base.Channel.DispenseCardsAsync(nickname);
         }
         
         public void DrawCard(string nickname, int cardId) {

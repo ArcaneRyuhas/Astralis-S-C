@@ -67,8 +67,6 @@ namespace Astralis.Views.Animations
                 }
             }
 
-
-
             RowDefinition lastRowDefinition =new RowDefinition();
             lastRowDefinition.Height = new GridLength(1, GridUnitType.Star);
             gdFriends.RowDefinitions.Add(lastRowDefinition);

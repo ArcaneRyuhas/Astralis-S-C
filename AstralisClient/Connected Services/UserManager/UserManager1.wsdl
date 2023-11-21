@@ -200,8 +200,17 @@
   <wsdl:message name="IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowFriendAcceptedResponse" />
   </wsdl:message>
+  <wsdl:message name="IGameManager_ConnectGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ConnectGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectGameResponse" />
+  </wsdl:message>
   <wsdl:message name="IGameManager_DispenseCards_InputMessage">
     <wsdl:part name="parameters" element="tns:DispenseCards" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DispenseCards_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DispenseCardsResponse" />
   </wsdl:message>
   <wsdl:message name="IGameManager_DrawCard_InputMessage">
     <wsdl:part name="parameters" element="tns:DrawCard" />
@@ -214,12 +223,6 @@
   </wsdl:message>
   <wsdl:message name="IGameManager_StartNewPhase_InputMessage">
     <wsdl:part name="parameters" element="tns:StartNewPhase" />
-  </wsdl:message>
-  <wsdl:message name="IGameManager_RecieveCards_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:RecieveCards" />
-  </wsdl:message>
-  <wsdl:message name="IGameManager_RecieveCards_InputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:RecieveCardsResponse" />
   </wsdl:message>
   <wsdl:message name="IGameManager_DrawCardClient_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:DrawCardClient" />
@@ -371,8 +374,13 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IGameManager">
+    <wsdl:operation name="ConnectGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ConnectGame" message="tns:IGameManager_ConnectGame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ConnectGameResponse" message="tns:IGameManager_ConnectGame_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="DispenseCards">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/DispenseCards" message="tns:IGameManager_DispenseCards_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/DispenseCardsResponse" message="tns:IGameManager_DispenseCards_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="DrawCard">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/DrawCard" message="tns:IGameManager_DrawCard_InputMessage" />
@@ -385,10 +393,6 @@
     </wsdl:operation>
     <wsdl:operation name="StartNewPhase">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartNewPhase" message="tns:IGameManager_StartNewPhase_InputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="RecieveCards">
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/RecieveCards" message="tns:IGameManager_RecieveCards_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/RecieveCardsResponse" message="tns:IGameManager_RecieveCards_InputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="DrawCardClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/DrawCardClient" message="tns:IGameManager_DrawCardClient_OutputCallbackMessage" />
@@ -675,11 +679,23 @@
   <wsdl:binding name="NetTcpBinding_IGameManager" type="tns:IGameManager">
     <wsp:PolicyReference URI="#NetTcpBinding_IGameManager_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="ConnectGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/ConnectGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="DispenseCards">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/DispenseCards" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DrawCard">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/DrawCard" style="document" />
@@ -704,15 +720,6 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="RecieveCards">
-      <soap12:operation soapAction="http://tempuri.org/IGameManager/RecieveCards" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DrawCardClient">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/DrawCardClient" style="document" />

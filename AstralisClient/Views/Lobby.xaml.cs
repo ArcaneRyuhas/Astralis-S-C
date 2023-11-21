@@ -204,8 +204,7 @@ namespace Astralis.Views
         public void StartClientGame()
         {
             Game.GameBoard gameBoard = new Game.GameBoard();
-
-            NavigationService.Navigate(gameBoard);
+            gameBoard.Show();
         }
 
         private void EnableStartButton()

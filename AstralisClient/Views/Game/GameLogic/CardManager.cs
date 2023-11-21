@@ -73,14 +73,18 @@ namespace Astralis.Views.Game.GameLogic
 
         public Card GetCard(int cardId)
         {
+            Card card; 
+
             if (cardLibrary.ContainsKey(cardId))
             {
-                return cardLibrary[cardId].Clone();
+                card = cardLibrary[cardId].Clone();
             }
             else
             {
-                return cardLibrary[ERROR_CARD_ID].Clone();
+                card = cardLibrary[ERROR_CARD_ID].Clone();
             }
+
+            return card;
         }
     }
 }
