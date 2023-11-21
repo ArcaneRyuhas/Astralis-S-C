@@ -144,16 +144,16 @@ namespace DataAccessProject.DataAccess
                             friendList.Add(friend.Nickname2, friendTuple);
                         }
                     }
+                }
 
-                    var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
+                var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
 
-                    foreach (var request in pendingRequests)
+                foreach (var request in pendingRequests)
+                {
+                    if (!friendList.ContainsKey(request.Nickname1))
                     {
-                        if (!friendList.ContainsKey(request.Nickname1))
-                        {
-                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
-                            friendList.Add(request.Nickname1, friendTuple);
-                        }
+                        friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
+                        friendList.Add(request.Nickname1, friendTuple);
                     }
                 }
             }

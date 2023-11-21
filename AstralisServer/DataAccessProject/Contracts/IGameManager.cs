@@ -10,8 +10,11 @@ namespace DataAccessProject.Contracts
     [ServiceContract(CallbackContract = typeof(IGameManagerCallback))]
     public interface IGameManager
     {
-        [OperationContract(IsOneWay = true)]
-        void DispenseCards(string nickname, int deckId);// Retornar un dicionario con el nickname y una lista de id's
+        [OperationContract]
+        void ConnectGame(string nickname);
+
+        [OperationContract]
+        List<int> DispenseCards(string nickname);
 
         [OperationContract(IsOneWay = true)]
         void DrawCard(string nickname, int cardId); // Este metodo se llama cuando un jugador roba una carta, este se encarga de decirle al aliado que carta agarro.
@@ -29,9 +32,6 @@ namespace DataAccessProject.Contracts
 
     public interface IGameManagerCallback
     {
-        [OperationContract]
-        void RecieveCards(int[] userDeck);
-
         [OperationContract]
         void DrawCardClient (string nickname, int cardId);
 

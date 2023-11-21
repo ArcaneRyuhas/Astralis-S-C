@@ -18,8 +18,10 @@ namespace DataAccessProject.DataAccess
         {
             int result = 0;
 
-            Deck deck = new Deck();
-            deck.Card = DEFAULT_DECK;
+            Deck deck = new Deck
+            {
+                Card = DEFAULT_DECK
+            };
 
             try
             {
@@ -31,12 +33,12 @@ namespace DataAccessProject.DataAccess
             catch (EntityException entityException)
             {
                 throw entityException;
-            }        
+            }
 
             return result;
         }
 
-        private int CreateRelationUserDeck(AstralisDBEntities context, int deckId, string nickname) 
+        private int CreateRelationUserDeck(AstralisDBEntities context, int deckId, string nickname)
         {
             int result = 0;
 
@@ -45,6 +47,8 @@ namespace DataAccessProject.DataAccess
                 UserDeck userDeck = new UserDeck();
                 userDeck.Nickname = nickname;
                 userDeck.DeckId = deckId;
+
+                context.UserDeck.Add(userDeck);
 
                 context.SaveChanges();
             }
@@ -56,13 +60,24 @@ namespace DataAccessProject.DataAccess
             return result;
         }
 
-        /*
-        public List<int> GetDeckByNicknameAndDeckId(int deckId, string nickname)
+        
+        public List<int> GetDeckByNickname(string nickname)
         {
+            List<int> cardList = new List<int>();
 
-            List<int> numbers = input.Split(',')
-                                     .Select(int.Parse)
-                                     .ToList();
+            using (var context = new AstralisDBEntities())
+            {
+                UserDeck userDeck = new UserDeck();
+                userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
+
+                Deck deck = context.Deck.Find(userDeck.DeckId);
+                cardList = deck.Card.Split(',').Select(int.Parse).ToList();
+
+            }
+
+            return cardList;
+            
         }
-        */
+        
     }
+}

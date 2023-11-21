@@ -105,7 +105,6 @@ namespace MessageService
         {
             if (usersInLobby.ContainsValue(gameId))
             {
-
                 List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
                 List<Tuple<User, int>> users = new List<Tuple<User, int>>();
 
@@ -261,7 +260,7 @@ namespace MessageService
         private const int IS_PENDING_FRIEND = 2;
         private const bool ONLINE = true;
         private const bool OFFLINE = false;
-        private const int IS_SUCCEDED = 1;
+        private const int IS_SUCCEDED = 0;
         private const bool ACCEPTED_FRIEND = true;
 
         public void ConectUser(string nickname)
@@ -369,14 +368,58 @@ namespace MessageService
 
     public partial class UserManager : IGameManager
     {
-        public void DispenseCards(string nickname, int deckId)
+
+        private static Dictionary<string, IGameManagerCallback> usersInGameContext = new Dictionary<string, IGameManagerCallback>();
+
+        public void ConnectGame(string nickname)
         {
-            throw new NotImplementedException();
+            if (usersInGameContext.ContainsKey(nickname))
+            {
+                List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[nickname]);
+                List<Tuple<User, int>> users = new List<Tuple<User, int>>();
+
+                foreach (string userNickname in usersNickname)
+                {
+                    users.Add(new Tuple<User, int>(GetUserByNickname(userNickname), usersTeam[userNickname]));
+                }
+
+                IGameManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IGameManagerCallback>();
+                // currentUserCallbackChannel.ShowUser(users); AQUI DEBERIAMOS DECIRLE AL USUARIO CUALES ESTAN CONECTADOS Y SU EQUIPO
+
+                if (!usersContext.ContainsKey(nickname))
+                {
+                    usersInGameContext.Add(nickname, currentUserCallbackChannel);
+                }
+
+                foreach (string userInTheLobby in usersNickname)
+                {
+                    //usersInGameContext[userInTheLobby].ShowConnectionInLobby(user); AQUI DEBEMOS DE USAR UN MÉTODO QUE ASIGNA AL USUARIO A UN EQUIPO
+                }
+            }
+        }
+
+        public List <int> DispenseCards(string nickname)
+        {
+            DeckAccess deckAccess = new DeckAccess();
+            List <int> userDeck = deckAccess.GetDeckByNickname(nickname);
+            Random random = new Random();
+
+            List<int> shuffledDeck = userDeck.OrderBy(x => random.Next()).ToList();
+
+            return shuffledDeck;
         }
 
         public void DrawCard(string nickname, int cardId)
         {
-            throw new NotImplementedException();
+            List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[nickname]);
+
+            foreach (string userNickname in usersNickname)
+            {
+                if(userNickname != nickname)
+                {
+                    usersInGameContext[userNickname].DrawCardClient(nickname, cardId);
+                }
+            }
         }
 
         public void EndGame(int winnerTeam)

@@ -48,6 +48,8 @@ namespace DataAccessProject.DataAccess
 
                         DeckAccess deckAccess = new DeckAccess();
                         deckAccess.CreateDefaultDeck(context, user.Nickname);
+
+                        transactionContext.Commit();
                     }
                     catch (Exception SqlException)
                     {
