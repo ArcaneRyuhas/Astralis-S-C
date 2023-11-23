@@ -128,6 +128,7 @@ namespace Astralis.Views
             UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
 
             client.ChangeLobbyUserTeam(userTeam.Item1, userTeam.Item2);
+
         }
 
         private void RemoveCard(User user)
@@ -197,7 +198,6 @@ namespace Astralis.Views
                 }
 
             }
-
             EnableStartButton();
         }
 

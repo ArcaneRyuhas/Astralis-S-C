@@ -100,6 +100,7 @@
       <DependentUpon>CardImageResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Game\GameLogic\CardManager.cs" />
+    <Compile Include="Views\Game\GameLogic\Team.cs" />
     <Compile Include="Views\Game\GraphicCard.xaml.cs">
       <DependentUpon>GraphicCard.xaml</DependentUpon>
     </Compile>

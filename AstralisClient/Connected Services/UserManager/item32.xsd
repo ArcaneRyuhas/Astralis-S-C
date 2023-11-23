@@ -364,11 +364,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ConnectGameResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="DispenseCards">
     <xs:complexType>
       <xs:sequence>
@@ -408,8 +403,34 @@
   <xs:element name="StartNewPhase">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="hostNickname" nillable="true" type="xs:string" />
         <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="boardAfterPhase" nillable="true" type="q13:ArrayOfKeyValueOfintint" />
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ShowUserConnectedGame">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="team" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ShowUserConnectedGameResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ShowUsersInGame">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="users" nillable="true" type="q14:ArrayOfKeyValueOfstringint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ShowUsersInGameResponse">
+    <xs:complexType>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
   <xs:element name="DrawCardClient">
@@ -428,8 +449,8 @@
   <xs:element name="PlayerEndedTurn">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="player" nillable="true" type="xs:string" />
-        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="boardAfterTurn" nillable="true" type="q14:ArrayOfKeyValueOfintint" />
+        <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
+        <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="boardAfterTurn" nillable="true" type="q15:ArrayOfKeyValueOfintint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -451,7 +472,7 @@
   <xs:element name="StartNewPhaseClient">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="boardAfterPhase" nillable="true" type="q15:ArrayOfKeyValueOfintint" />
+        <xs:element xmlns:q16="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="boardAfterPhase" nillable="true" type="q16:ArrayOfKeyValueOfintint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

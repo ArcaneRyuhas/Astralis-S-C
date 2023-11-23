@@ -12,7 +12,7 @@
             <ImageBrush ImageSource="InGameAssets/AstralisBoard.png"/>
         </Grid.Background>
 
-        <Grid   Width="804" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,720,0,0">
+        <Grid  Width="804" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,720,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -20,9 +20,10 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="1" x:Name="gdPlayerHand"/>
+            <Grid Grid.Column="1" x:Name="gdAllyHand" Visibility="Hidden"/>
         </Grid>
 
-        
+
 
         <Grid x:Name="gdEnemyHand" Width="700" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
@@ -67,7 +68,7 @@
         <Label x:Name="lblPlayerHealth" Content="20" HorizontalAlignment="Left" Margin="1185,800,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
 
 
-        <Button Width="50" Height="50" HorizontalAlignment="Right" FontSize="60">
+        <Button x:Name="btnMenu" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Click="btnMenu_Click">
             <Grid>
                 <Ellipse HorizontalAlignment="Left" Height="48" Stroke="White" VerticalAlignment="Center" Width="86" Fill="#FF1D0505"/>
 
@@ -79,7 +80,7 @@
             </Grid>
         </Button>
 
-        <Button Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,400,0,0">
+        <Button x:Name="btnChangeView" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,400,0,0" Click="btnChangeView_Click">
             <Grid>
                 <Ellipse HorizontalAlignment="Left" Height="48" Stroke="White" VerticalAlignment="Center" Width="86" Fill="#FF1D0505">
                 </Ellipse>
@@ -105,13 +106,11 @@
                 <ColumnDefinition Width="143"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0" Width="140" Height="200" Background="#FF676767" MouseDown="PlaceCardInSlot"/>
-            <Grid Grid.Column="2" Width="142" Height="200" Background="#FF676767" MouseDown="PlaceCardInSlot"/>
-            <Grid Grid.Column="4" Width="142" Height="200" Background="#FF676767" MouseDown="PlaceCardInSlot"/>
-            <Grid Grid.Column="6" Width="142" Height="200" Background="#FF676767" MouseDown="PlaceCardInSlot"/>
-            <Grid Grid.Column="8" Width="142" Height="200" Background="#FF676767" MouseDown="PlaceCardInSlot"/>
-
-
+            <Grid Grid.Column="0" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
+            <Grid Grid.Column="2" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
+            <Grid Grid.Column="4" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
+            <Grid Grid.Column="6" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
+            <Grid Grid.Column="8" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
         </Grid>
 
         <Grid x:Name="gdEnemySlots" Margin="283,224,233,490">
@@ -128,9 +127,9 @@
             </Grid.ColumnDefinitions>
         </Grid>
 
-        <ProgressBar HorizontalAlignment="Left" Height="21" Margin="45,230,0,0" VerticalAlignment="Top" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White">
+        <ProgressBar x:Name="progressBarCounter" HorizontalAlignment="Left" Height="21" Margin="24,595,0,0" VerticalAlignment="Top" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White">
             <ProgressBar.RenderTransform>
-                <RotateTransform Angle="90"/>
+                <RotateTransform Angle="270"/>
             </ProgressBar.RenderTransform>
         </ProgressBar>
 

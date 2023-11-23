@@ -7,14 +7,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="142
              ">
-    <Grid MouseLeftButtonDown="GraphicCardOnLeftClick" MouseRightButtonDown="GraphicCardOnRightClick">
-        <Grid.Background>
-            <ImageBrush ImageSource="InGameAssets/Card.png"/>
-        </Grid.Background>
-        <Label x:Name="lblAttack" Content="1" HorizontalAlignment="Left" Margin="8,158,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblHealth" Content="1" HorizontalAlignment="Left" Margin="90,158,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lblMana" Content="1" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Label x:Name="lblType" HorizontalContentAlignment="Center" Content="Mago" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,160,0,0" Width="63" FontSize="12"/>
-        <Image x:Name="imgCard" HorizontalAlignment="Left" Height="100" Margin="21,38,0,0" VerticalAlignment="Top" Width="100"/>
+    <Grid>
+
+        <Grid MouseLeftButtonDown="GraphicCardOnLeftClick" MouseRightButtonDown="GraphicCardOnRightClick">
+            <Grid.Background>
+                <ImageBrush ImageSource="InGameAssets/Card.png"/>
+            </Grid.Background>
+            <Label x:Name="lblAttack" Content="1" HorizontalAlignment="Left" Margin="8,158,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="lblHealth" Content="1" Margin="0,158,-90,0" Width="30"/>
+            <Label x:Name="lblMana" Content="1" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Label x:Name="lblType" HorizontalContentAlignment="Center" Content="Mago" Margin="30,160,30,15" Width="63" FontSize="12"/>
+            <Image x:Name="imgCard" HorizontalAlignment="Left" Height="100" Margin="21,38,0,0" VerticalAlignment="Top" Width="100"/>
+        </Grid>
+
+        <Rectangle x:Name="rectangleCard" Stroke="Black"/>
     </Grid>
 </UserControl>

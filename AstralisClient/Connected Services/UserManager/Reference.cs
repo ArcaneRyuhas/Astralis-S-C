@@ -507,10 +507,10 @@ namespace Astralis.UserManager {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.IGameManager", CallbackContract=typeof(Astralis.UserManager.IGameManagerCallback))]
     public interface IGameManager {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ConnectGame", ReplyAction="http://tempuri.org/IGameManager/ConnectGameResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/ConnectGame")]
         void ConnectGame(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ConnectGame", ReplyAction="http://tempuri.org/IGameManager/ConnectGameResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/ConnectGame")]
         System.Threading.Tasks.Task ConnectGameAsync(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DispenseCards", ReplyAction="http://tempuri.org/IGameManager/DispenseCardsResponse")]
@@ -538,20 +538,26 @@ namespace Astralis.UserManager {
         System.Threading.Tasks.Task EndGameTurnAsync(System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartNewPhase")]
-        void StartNewPhase(System.Collections.Generic.Dictionary<int, int> boardAfterPhase);
+        void StartNewPhase(string hostNickname, System.Collections.Generic.Dictionary<int, int> boardAfterPhase);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartNewPhase")]
-        System.Threading.Tasks.Task StartNewPhaseAsync(System.Collections.Generic.Dictionary<int, int> boardAfterPhase);
+        System.Threading.Tasks.Task StartNewPhaseAsync(string hostNickname, System.Collections.Generic.Dictionary<int, int> boardAfterPhase);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IGameManagerCallback {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowUserConnectedGame", ReplyAction="http://tempuri.org/IGameManager/ShowUserConnectedGameResponse")]
+        void ShowUserConnectedGame(string nickname, int team);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowUsersInGame", ReplyAction="http://tempuri.org/IGameManager/ShowUsersInGameResponse")]
+        void ShowUsersInGame(System.Collections.Generic.Dictionary<string, int> users);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DrawCardClient", ReplyAction="http://tempuri.org/IGameManager/DrawCardClientResponse")]
         void DrawCardClient(string nickname, int cardId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/PlayerEndedTurn", ReplyAction="http://tempuri.org/IGameManager/PlayerEndedTurnResponse")]
-        void PlayerEndedTurn(string player, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
+        void PlayerEndedTurn(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/EndPhase", ReplyAction="http://tempuri.org/IGameManager/EndPhaseResponse")]
         void EndPhase();
@@ -631,12 +637,12 @@ namespace Astralis.UserManager {
             return base.Channel.EndGameTurnAsync(boardAfterTurn);
         }
         
-        public void StartNewPhase(System.Collections.Generic.Dictionary<int, int> boardAfterPhase) {
-            base.Channel.StartNewPhase(boardAfterPhase);
+        public void StartNewPhase(string hostNickname, System.Collections.Generic.Dictionary<int, int> boardAfterPhase) {
+            base.Channel.StartNewPhase(hostNickname, boardAfterPhase);
         }
         
-        public System.Threading.Tasks.Task StartNewPhaseAsync(System.Collections.Generic.Dictionary<int, int> boardAfterPhase) {
-            return base.Channel.StartNewPhaseAsync(boardAfterPhase);
+        public System.Threading.Tasks.Task StartNewPhaseAsync(string hostNickname, System.Collections.Generic.Dictionary<int, int> boardAfterPhase) {
+            return base.Channel.StartNewPhaseAsync(hostNickname, boardAfterPhase);
         }
     }
 }

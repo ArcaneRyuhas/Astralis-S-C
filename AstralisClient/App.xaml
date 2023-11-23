@@ -107,7 +107,7 @@
                     <ControlTemplate TargetType="ProgressBar">
                         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="10">
                             <Grid x:Name="PART_Track">
-                                <Rectangle x:Name="PART_Indicator" HorizontalAlignment="Left" Fill="{TemplateBinding Foreground}" />
+                                <Border x:Name="PART_Indicator" HorizontalAlignment="Left" Background="{TemplateBinding Foreground}" CornerRadius="10"/>
                             </Grid>
                         </Border>
                     </ControlTemplate>

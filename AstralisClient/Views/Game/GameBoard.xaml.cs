@@ -1,39 +1,53 @@
 ﻿using Astralis.Logic;
+using Astralis.UserManager;
 using Astralis.Views.Game.GameLogic;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace Astralis.Views.Game
 {
     public partial class GameBoard : Window, UserManager.IGameManagerCallback
     {
-        private Queue<int> userDeckQueue = new Queue<int>();
-        private List <Card> userHand = new List<Card>();
+        private const int GAME_MODE_STARTING_HEALT = 20;
+        private const int GAME_MODE_STARTING_MANA = 10;
+        private const int COUNTDOWN_STARTING_VALUE = 20;
+        private const string TEAM_HEALTH = "Health";
+        private const string TEAM_MANA = "Mana";
+
         private Dictionary<string, int> users;
-        private int columnCards = 0;
+        private Queue<int> userDeckQueue = new Queue<int>();
         private GraphicCard selectedCard;
+        private int userColumnCards = 0;
+        private int allyColumnCards = 0;
+        private DispatcherTimer timer;
+        private int countdownValue = COUNTDOWN_STARTING_VALUE;
+
+        private List<Card> userHand = new List<Card>();
+        private Team userTeam;
+        private Team enemyTeam;
+
 
         public GameBoard()
         {
             InitializeComponent();
+            InitializeGame();
+        }
+
+        private void InitializeGame()
+        {
             Connect();
             GetUserDeck();
-            DrawFourCards();
+            SetTeams();
+            SetCounter();
         }
 
         private void Connect()
@@ -66,6 +80,75 @@ namespace Astralis.Views.Game
             }
         }
 
+        private void SetTeams()
+        {
+            userTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
+            userTeam.PropertyChanged += UserTeam_PropertyChanged;
+
+            enemyTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
+            enemyTeam.PropertyChanged += EnemyTeam_PropertyChange;
+        }
+
+        private void SetCounter()
+        {
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += TimerTick;
+
+            progressBarCounter.Maximum = countdownValue;
+            progressBarCounter.Value = countdownValue;
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+
+            countdownValue --;
+            progressBarCounter.Value = countdownValue;
+
+            if(countdownValue == 0) 
+            {
+                timer.Stop();
+            }
+
+            DoubleAnimation animation = new DoubleAnimation(countdownValue, TimeSpan.FromSeconds(1));
+            progressBarCounter.BeginAnimation(ProgressBar.ValueProperty, animation);
+        }
+
+        private void StartCountdown()
+        {
+            countdownValue = COUNTDOWN_STARTING_VALUE;
+
+            timer.Start();
+        }
+
+        private void UserTeam_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            string changedProperty = e.PropertyName;
+
+            if (changedProperty == TEAM_HEALTH)
+            {
+                lblPlayerHealth.Content = userTeam.Health;
+            }
+            else if (changedProperty == TEAM_MANA)
+            {
+                lblPlayerMana.Content = userTeam.Mana;
+            }
+        }
+
+        private void EnemyTeam_PropertyChange(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            string changedProperty = e.PropertyName;
+
+            if (changedProperty == TEAM_HEALTH)
+            {
+                lblEnemyHealth.Content = userTeam.Health;
+            }
+            else if (changedProperty == TEAM_MANA)
+            {
+                lblEnemyMana.Content = userTeam.Mana;
+            }
+        }
+
         private void AddCardToHand(Card card)
         {
             GraphicCard graphicCard = new GraphicCard();
@@ -77,9 +160,9 @@ namespace Astralis.Views.Game
 
         private void AddGraphicCardToHand(GraphicCard graphicCard)
         {
-            Grid.SetColumn(graphicCard, columnCards);
+            Grid.SetColumn(graphicCard, userColumnCards);
             gdPlayerHand.Children.Add(graphicCard);
-            columnCards++;
+            userColumnCards++;
 
             ColumnDefinition columnDefinition = new ColumnDefinition();
             columnDefinition.Width = GridLength.Auto;
@@ -109,9 +192,10 @@ namespace Astralis.Views.Game
                     currentCardParent.Children.Remove(clickedCard);
 
                     AddGraphicCardToHand(clickedCard);
+
+                    userTeam.Mana += clickedCard.Card.Mana;
                 }
             }
-            
         }
 
         private void PlaceCardInSlot(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -119,23 +203,39 @@ namespace Astralis.Views.Game
             if (selectedCard != null)
             {
                 Grid grid = sender as Grid;
+                Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
 
-                if (grid.Children.Count == 0)
+                if(currentCardParent != null)
                 {
-                    Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
-                    if (currentCardParent != null)
+                    if (currentCardParent != grid && currentCardParent != gdPlayerHand)
                     {
                         selectedCard.IsSelected = false;
-                        int columnIndex = Grid.GetColumn(selectedCard);
+
                         currentCardParent.Children.Remove(selectedCard);
-                        RemoveColumn(currentCardParent, columnIndex);
+                        grid.Children.Add(selectedCard);
+
+                        selectedCard.IsSelected = false;
+                        selectedCard = null;
                     }
 
-                    grid.Children.Add(selectedCard);
+                    if (currentCardParent == gdPlayerHand && userTeam.UseMana(selectedCard.Card.Mana))
+                    {
+                        if (grid.Children.Count == 0)
+                        {
+                            selectedCard.IsSelected = false;
 
-                    selectedCard.IsSelected = false;
-                    selectedCard = null;
+                            int columnIndex = Grid.GetColumn(selectedCard);
+                            currentCardParent.Children.Remove(selectedCard);
+                            RemoveColumn(currentCardParent, columnIndex);
+
+                            grid.Children.Add(selectedCard);
+
+                            selectedCard.IsSelected = false;
+                            selectedCard = null;
+                        }
+                    }
                 }
+
             }
         }
 
@@ -152,7 +252,7 @@ namespace Astralis.Views.Game
                         Grid.SetColumn(child, currentColumn - 1);
                     }
                 }
-                columnCards--;
+                userColumnCards--;
             }
 
         }
@@ -167,7 +267,31 @@ namespace Astralis.Views.Game
 
         public void DrawCardClient(string nickname, int cardId)
         {
-            throw new NotImplementedException();
+            if (users[nickname] == users[UserSession.Instance().Nickname])
+            {
+                Card card = CardManager.Instance().GetCard(cardId);
+
+                AddCardToAllyHand(card);
+            }
+        }
+
+        private void AddCardToAllyHand(Card card)
+        {
+            GraphicCard graphicCard = new GraphicCard();
+            graphicCard.SetGraphicCard(card);
+
+            AddGraphicCardToAllyHand(graphicCard);
+        }
+
+        private void AddGraphicCardToAllyHand(GraphicCard graphicCard)
+        {
+            Grid.SetColumn(graphicCard, allyColumnCards);
+            gdAllyHand.Children.Add(graphicCard);
+            allyColumnCards++;
+
+            ColumnDefinition columnDefinition = new ColumnDefinition();
+            columnDefinition.Width = GridLength.Auto;
+            gdAllyHand.ColumnDefinitions.Add(columnDefinition);
         }
 
         public void EndGameClient(int winnerTeam)
@@ -190,6 +314,49 @@ namespace Astralis.Views.Game
             throw new NotImplementedException();
         }
 
-        
+        public void ShowUserConnectedGame(string nickname, int team)
+        {
+            users.Add(nickname, team);
+
+            _ = StartGameAsync();
+        }
+
+        public void ShowUsersInGame(Dictionary<string, int> users)
+        {
+            this.users = users;
+
+            _ = StartGameAsync();
+        }
+
+        private async Task StartGameAsync()
+        {
+
+            lblEnemyHealth.Content = users.Count.ToString();
+
+            if(users.Count == 4 ) 
+            {
+                await Task.Delay(10000);
+                DrawFourCards();
+            }
+        }
+
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        {
+            StartCountdown();
+        }
+
+        private void btnChangeView_Click(object sender, RoutedEventArgs e)
+        {
+            if(gdPlayerHand.IsVisible)
+            {
+                gdPlayerHand.Visibility = Visibility.Collapsed;
+                gdAllyHand.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                gdPlayerHand.Visibility = Visibility.Visible;
+                gdAllyHand.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

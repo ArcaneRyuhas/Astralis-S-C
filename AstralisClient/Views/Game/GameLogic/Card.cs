@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Astralis.Views.Game.GameLogic
 {
@@ -8,20 +10,14 @@ namespace Astralis.Views.Game.GameLogic
         Card Clone();
     }
 
-    public class Card: ICardPrototype
+    public class Card: ICardPrototype, INotifyPropertyChanged
     {
-        private const string TANK = "Tank";
-        private const string MAGE = "Mage";
-
         private int mana;
         private int attack;
         private int health;
         private string type;
 
-        public int Mana { get { return mana; } set { mana = value;} }
-        public int Attack { get { return attack;} set { attack = value;} }
-        public int Health { get { return health;} set { health = value;} }
-        public string Type { get { return type; } set { type = value; } }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Card() { }
 
@@ -30,7 +26,7 @@ namespace Astralis.Views.Game.GameLogic
             Mana = mana;
             Attack = attack;
             Health = health;
-            Type = type;
+            this.type = type;
         }
 
         public Card Clone()
@@ -38,15 +34,56 @@ namespace Astralis.Views.Game.GameLogic
             return new Card(Mana, Attack, Health, Type);
         }
 
+        public int Mana 
+        { 
+            get { return mana; } 
+            set 
+            { 
+                if (mana != value) 
+                {
+                    mana = value;
+                    OnPropertyChanged(nameof(Mana));
+                } 
+            } 
+        }
+
+        public int Attack 
+        { 
+            get { return attack; } 
+            set 
+            { 
+                attack = value; 
+                OnPropertyChanged(nameof(Attack));
+            } 
+        }
+
+        public int Health 
+        { 
+            get { return health; } 
+
+            set 
+            { 
+                health = value;
+                OnPropertyChanged(nameof(Health));
+            } 
+        }
+
+        public string Type { get { return type; }}
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public void TakeDamage(int damage)
         {
-            if (this.Type.Equals(TANK))
+            if (Type.Equals(Constants.TANK))
             {
-                Health -= (damage - 1);
+                health -= (damage - 1);
             }
             else 
             {
-                Health -= damage;
+                health -= damage;
             }
 
             Health = Math.Max(0, Health);
@@ -56,7 +93,7 @@ namespace Astralis.Views.Game.GameLogic
         {
             int dealtDamage;
 
-            if (!this.Type.Equals(MAGE))
+            if (Type.Equals(Constants.MAGE))
             {
                 dealtDamage = Attack + mageCount;
             }
