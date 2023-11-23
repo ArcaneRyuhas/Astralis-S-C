@@ -6,6 +6,7 @@ using System.ServiceModel;
 using DataAccessProject.Contracts;
 using DataAccessProject.DataAccess;
 using User = DataAccessProject.Contracts.User;
+using DataAccessProject;
 
 namespace MessageService
 {
@@ -197,6 +198,7 @@ namespace MessageService
 
         public void StartGame(string gameId)
         {
+
             List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
             int result = 0;
 
@@ -263,6 +265,7 @@ namespace MessageService
         private const int IS_SUCCEDED = 0;
         private const bool ACCEPTED_FRIEND = true;
 
+        [OperationBehavior]
         public void ConectUser(string nickname)
         {
             if (!onlineUsers.ContainsKey(nickname))
@@ -373,27 +376,33 @@ namespace MessageService
 
         public void ConnectGame(string nickname)
         {
-            if (usersInGameContext.ContainsKey(nickname))
+            if (usersInLobby.ContainsValue(usersInLobby[nickname]))
             {
                 List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[nickname]);
-                List<Tuple<User, int>> users = new List<Tuple<User, int>>();
-
-                foreach (string userNickname in usersNickname)
-                {
-                    users.Add(new Tuple<User, int>(GetUserByNickname(userNickname), usersTeam[userNickname]));
-                }
-
+                Dictionary<string, int> usersInGame = new Dictionary<string, int>();
                 IGameManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IGameManagerCallback>();
-                // currentUserCallbackChannel.ShowUser(users); AQUI DEBERIAMOS DECIRLE AL USUARIO CUALES ESTAN CONECTADOS Y SU EQUIPO
 
-                if (!usersContext.ContainsKey(nickname))
+                if (!usersInGameContext.ContainsKey(nickname))
                 {
                     usersInGameContext.Add(nickname, currentUserCallbackChannel);
                 }
 
-                foreach (string userInTheLobby in usersNickname)
+                foreach (string userNickname in usersNickname)
                 {
-                    //usersInGameContext[userInTheLobby].ShowConnectionInLobby(user); AQUI DEBEMOS DE USAR UN MÉTODO QUE ASIGNA AL USUARIO A UN EQUIPO
+                    if (usersInGameContext.ContainsKey(userNickname))
+                    {
+                        usersInGame.Add(userNickname, usersTeam[userNickname]);
+                    }  
+                }
+
+                currentUserCallbackChannel.ShowUsersInGame(usersInGame);
+
+                foreach (string userInGame in usersInGame.Keys)
+                {
+                    if (userInGame != nickname)
+                    {
+                        usersInGameContext[userInGame].ShowUserConnectedGame(nickname, usersTeam[nickname]);
+                    }
                 }
             }
         }
@@ -427,15 +436,58 @@ namespace MessageService
             throw new NotImplementedException();
         }
 
-        public void EndGameTurn(Dictionary<int, int> boardAfterTurn)
+        public void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn)
         {
             throw new NotImplementedException();
         }
 
-        public void StartNewPhase(Dictionary<int, int> boardAfterPhase)
+        public void StartFirstPhase(string hostNickname)
         {
-            throw new NotImplementedException();
+            List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[hostNickname]);
+            Dictionary<string, int> usersInGame = new Dictionary<string, int>();
+            Tuple<string, string> firstPlayers = new Tuple<string, string>("","");
+
+            foreach (string userNickname in usersNickname)
+            {
+                if (usersInGameContext.ContainsKey(userNickname))
+                {
+                    usersInGame.Add(userNickname, usersTeam[userNickname]);
+                }
+            }
+
+            foreach(string userInGame in usersInGame.Keys)
+            {
+                if (usersInGame[userInGame] != usersInGame[hostNickname])
+                {
+                    firstPlayers = new Tuple<string, string>(userInGame, hostNickname);
+                    break;
+                }
+            }
+
+            foreach (string userInGame in usersInGame.Keys)
+            {
+                usersInGameContext[userInGame].StartFirstPhaseClien(firstPlayers);
+            }
+
+        }
+
+        public void StartNewPhase(string hostNickname)
+        {
+            List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[hostNickname]);
+            List<string> usersInGame = new List<string>();
+
+            foreach (string userNickname in usersNickname)
+            {
+                if (usersInGameContext.ContainsKey(userNickname))
+                {
+                    usersInGame.Add(userNickname);
+                }
+            }
+
+            foreach (string userInGame in usersInGame)
+            {
+                usersInGameContext[userInGame].StartNewPhaseClient();
+            }
         }
     }
-
 }

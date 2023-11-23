@@ -10,7 +10,7 @@ namespace DataAccessProject.Contracts
     [ServiceContract(CallbackContract = typeof(IGameManagerCallback))]
     public interface IGameManager
     {
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void ConnectGame(string nickname);
 
         [OperationContract]
@@ -23,26 +23,39 @@ namespace DataAccessProject.Contracts
         void EndGame(int winnerTeam); //Solo el host manda esto
 
         [OperationContract(IsOneWay = true)]
-        void EndGameTurn(Dictionary<int, int> boardAfterTurn); //Es un diccionario del board completo
+        void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn);//Es un diccionario del board completo
 
         [OperationContract(IsOneWay = true)]
-        void StartNewPhase(Dictionary<int, int> boardAfterPhase);//Solo el host manda esto
+        void StartNewPhase(string hostNickname); //Solo el host manda esto
+
+        [OperationContract(IsOneWay = true)]
+        void StartFirstPhase(string hostNickname);
 
     }
 
     public interface IGameManagerCallback
     {
+
+        [OperationContract]
+        void ShowUserConnectedGame(string nickname, int team);
+
+        [OperationContract]
+        void ShowUsersInGame(Dictionary<string, int> users);
+
         [OperationContract]
         void DrawCardClient (string nickname, int cardId);
 
         [OperationContract]
-        void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn); //Es un diccionario del board completo
+        void PlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn); //Es un diccionario del board completo
 
         [OperationContract]
         void EndPhase();
 
         [OperationContract]
-        void StartNewPhaseClient(Dictionary<int, int> boardAfterPhase);
+        void StartNewPhaseClient();
+
+        [OperationContract]
+        void StartFirstPhaseClien(Tuple<string, string> firstPlayers);
 
         [OperationContract]
         void EndGameClient(int winnerTeam);
