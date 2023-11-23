@@ -33,6 +33,7 @@ namespace DataAccessProject.Contracts
 
     }
 
+    [ServiceContract]
     public interface IGameManagerCallback
     {
 
@@ -55,7 +56,7 @@ namespace DataAccessProject.Contracts
         void StartNewPhaseClient();
 
         [OperationContract]
-        void StartFirstPhaseClien(Tuple<string, string> firstPlayers);
+        void StartFirstPhaseClient(Tuple<string, string> firstPlayers);
 
         [OperationContract]
         void EndGameClient(int winnerTeam);

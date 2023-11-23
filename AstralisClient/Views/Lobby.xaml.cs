@@ -204,6 +204,7 @@ namespace Astralis.Views
         public void StartClientGame()
         {
             Game.GameBoard gameBoard = new Game.GameBoard();
+            gameBoard.IsHost = isHost;
             gameBoard.Show();
         }
 

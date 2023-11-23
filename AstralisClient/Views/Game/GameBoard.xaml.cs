@@ -18,7 +18,7 @@ namespace Astralis.Views.Game
     public partial class GameBoard : Window, UserManager.IGameManagerCallback
     {
         private const int GAME_MODE_STARTING_HEALT = 20;
-        private const int GAME_MODE_STARTING_MANA = 10;
+        private const int GAME_MODE_STARTING_MANA = 2;
         private const int COUNTDOWN_STARTING_VALUE = 20;
         private const string TEAM_HEALTH = "Health";
         private const string TEAM_MANA = "Mana";
@@ -28,13 +28,18 @@ namespace Astralis.Views.Game
         private GraphicCard selectedCard;
         private int userColumnCards = 0;
         private int allyColumnCards = 0;
+        private bool isHost = false;
+        private bool isMyTurn = false;
         private DispatcherTimer timer;
         private int countdownValue = COUNTDOWN_STARTING_VALUE;
+        private Tuple<string, string> firstPlayers = new Tuple<string, string>("","");
+        private int endTurnCounter = 0;
 
         private List<Card> userHand = new List<Card>();
         private Team userTeam;
         private Team enemyTeam;
 
+        public bool IsHost { get { return isHost; } set { isHost = value; } }
 
         public GameBoard()
         {
@@ -171,72 +176,79 @@ namespace Astralis.Views.Game
 
         private void GraphicCardClickedHandler(object sender, bool leftClick)
         {
-            GraphicCard clickedCard = sender as GraphicCard;
-
-            if (leftClick)
+            if (isMyTurn)
             {
-                if (selectedCard != null)
+                GraphicCard clickedCard = sender as GraphicCard;
+
+                if (leftClick)
                 {
-                    selectedCard.IsSelected = false;
-                }
+                    if (selectedCard != null)
+                    {
+                        selectedCard.IsSelected = false;
+                    }
 
-                selectedCard = clickedCard;
-                selectedCard.IsSelected = true;
-            }
-            else
-            {
-                Grid currentCardParent = VisualTreeHelper.GetParent(clickedCard) as Grid;
-                
-                if(currentCardParent != null && currentCardParent != gdPlayerHand)
+                    selectedCard = clickedCard;
+                    selectedCard.IsSelected = true;
+                }
+                else
                 {
-                    currentCardParent.Children.Remove(clickedCard);
+                    Grid currentCardParent = VisualTreeHelper.GetParent(clickedCard) as Grid;
 
-                    AddGraphicCardToHand(clickedCard);
+                    if (currentCardParent != null && currentCardParent != gdPlayerHand)
+                    {
+                        currentCardParent.Children.Remove(clickedCard);
 
-                    userTeam.Mana += clickedCard.Card.Mana;
+                        AddGraphicCardToHand(clickedCard);
+
+                        userTeam.Mana += clickedCard.Card.Mana;
+                    }
                 }
-            }
+            } 
         }
 
         private void PlaceCardInSlot(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (selectedCard != null)
+
+            if (isMyTurn)
             {
-                Grid grid = sender as Grid;
-                Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
-
-                if(currentCardParent != null)
+                if (selectedCard != null)
                 {
-                    if (currentCardParent != grid && currentCardParent != gdPlayerHand)
+                    Grid grid = sender as Grid;
+                    Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
+
+                    if (currentCardParent != null)
                     {
-                        selectedCard.IsSelected = false;
-
-                        currentCardParent.Children.Remove(selectedCard);
-                        grid.Children.Add(selectedCard);
-
-                        selectedCard.IsSelected = false;
-                        selectedCard = null;
-                    }
-
-                    if (currentCardParent == gdPlayerHand && userTeam.UseMana(selectedCard.Card.Mana))
-                    {
-                        if (grid.Children.Count == 0)
+                        if (currentCardParent != grid && currentCardParent != gdPlayerHand)
                         {
                             selectedCard.IsSelected = false;
 
-                            int columnIndex = Grid.GetColumn(selectedCard);
                             currentCardParent.Children.Remove(selectedCard);
-                            RemoveColumn(currentCardParent, columnIndex);
-
                             grid.Children.Add(selectedCard);
 
                             selectedCard.IsSelected = false;
                             selectedCard = null;
                         }
-                    }
-                }
 
-            }
+                        if (currentCardParent == gdPlayerHand && userTeam.UseMana(selectedCard.Card.Mana))
+                        {
+                            if (grid.Children.Count == 0)
+                            {
+                                selectedCard.IsSelected = false;
+
+                                int columnIndex = Grid.GetColumn(selectedCard);
+                                currentCardParent.Children.Remove(selectedCard);
+                                RemoveColumn(currentCardParent, columnIndex);
+
+                                grid.Children.Add(selectedCard);
+
+                                selectedCard.IsSelected = false;
+                                selectedCard = null;
+                            }
+                        }
+                    }
+
+                }
+            }            
         }
 
         private void RemoveColumn(Grid grid, int columnIndex)
@@ -309,11 +321,6 @@ namespace Astralis.Views.Game
             throw new NotImplementedException();
         }
 
-        public void StartNewPhaseClient(Dictionary<int, int> boardAfterPhase)
-        {
-            throw new NotImplementedException();
-        }
-
         public void ShowUserConnectedGame(string nickname, int team)
         {
             users.Add(nickname, team);
@@ -328,6 +335,24 @@ namespace Astralis.Views.Game
             _ = StartGameAsync();
         }
 
+        public void StartNewPhaseClient()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
+        {
+            this.firstPlayers = firstPlayers;
+
+            if(firstPlayers.Item1 == UserSession.Instance().Nickname || firstPlayers.Item2 == UserSession.Instance().Nickname)
+            {
+                isMyTurn = true;
+            }
+
+            StartCountdown();
+        }
+
+
         private async Task StartGameAsync()
         {
 
@@ -335,14 +360,21 @@ namespace Astralis.Views.Game
 
             if(users.Count == 4 ) 
             {
-                await Task.Delay(10000);
+                await Task.Delay(5000);
                 DrawFourCards();
+                await Task.Delay(2000);
+                
+                if (isHost)
+                {
+                    UserManager.GameManagerClient client = SetGameContext();
+                    client.StartFirstPhase(UserSession.Instance().Nickname);
+                } 
             }
         }
 
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
-            StartCountdown();
+            
         }
 
         private void btnChangeView_Click(object sender, RoutedEventArgs e)
@@ -358,5 +390,7 @@ namespace Astralis.Views.Game
                 gdAllyHand.Visibility = Visibility.Collapsed;
             }
         }
+
+
     }
 }

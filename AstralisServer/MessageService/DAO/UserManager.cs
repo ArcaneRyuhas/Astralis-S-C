@@ -378,21 +378,12 @@ namespace MessageService
         {
             if (usersInLobby.ContainsValue(usersInLobby[nickname]))
             {
-                List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[nickname]);
-                Dictionary<string, int> usersInGame = new Dictionary<string, int>();
+                Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
                 IGameManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IGameManagerCallback>();
 
                 if (!usersInGameContext.ContainsKey(nickname))
                 {
                     usersInGameContext.Add(nickname, currentUserCallbackChannel);
-                }
-
-                foreach (string userNickname in usersNickname)
-                {
-                    if (usersInGameContext.ContainsKey(userNickname))
-                    {
-                        usersInGame.Add(userNickname, usersTeam[userNickname]);
-                    }  
                 }
 
                 currentUserCallbackChannel.ShowUsersInGame(usersInGame);
@@ -438,14 +429,39 @@ namespace MessageService
 
         public void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn)
         {
-            throw new NotImplementedException();
+            Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
+
+            foreach (string userInGame in usersInGame.Keys)
+            {
+                if(usersInGame[userInGame] == usersInGame[nickname])
+                {
+                    usersInGameContext[userInGame].PlayerEndedTurn(nickname, boardAfterTurn);
+                }
+                else
+                {
+                    boardAfterTurn = ReverseBoard(boardAfterTurn);
+                    usersInGameContext[userInGame].PlayerEndedTurn(nickname, boardAfterTurn);
+                }
+            }
         }
 
-        public void StartFirstPhase(string hostNickname)
+        private Dictionary<int, int> ReverseBoard(Dictionary<int, int> originalBoard)
         {
-            List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[hostNickname]);
+            Dictionary<int, int> reversedBoard = new Dictionary<int, int>();
+
+            for (int i = 0; i < originalBoard.Count; i++)
+            {
+                reversedBoard.Add(originalBoard.Count - i, originalBoard[originalBoard.Count - i]);
+            }
+
+            return reversedBoard;
+        }
+
+
+        private Dictionary<string, int> GetUsersPerTeam(string nickname)
+        {
+            List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[nickname]);
             Dictionary<string, int> usersInGame = new Dictionary<string, int>();
-            Tuple<string, string> firstPlayers = new Tuple<string, string>("","");
 
             foreach (string userNickname in usersNickname)
             {
@@ -454,6 +470,14 @@ namespace MessageService
                     usersInGame.Add(userNickname, usersTeam[userNickname]);
                 }
             }
+
+            return usersInGame;
+        }
+
+        public void StartFirstPhase(string hostNickname)
+        {
+            Dictionary<string, int> usersInGame = GetUsersPerTeam(hostNickname);
+            Tuple<string, string> firstPlayers = new Tuple<string, string>("","");
 
             foreach(string userInGame in usersInGame.Keys)
             {
@@ -466,7 +490,7 @@ namespace MessageService
 
             foreach (string userInGame in usersInGame.Keys)
             {
-                usersInGameContext[userInGame].StartFirstPhaseClien(firstPlayers);
+                usersInGameContext[userInGame].StartFirstPhaseClient(firstPlayers);
             }
 
         }
