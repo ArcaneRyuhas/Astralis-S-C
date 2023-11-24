@@ -22,6 +22,7 @@ namespace Astralis.Views.Game
         private const int COUNTDOWN_STARTING_VALUE = 20;
         private const string TEAM_HEALTH = "Health";
         private const string TEAM_MANA = "Mana";
+        private const int ERROR_CARD_ID = 0;
 
         private Dictionary<string, int> users;
         private Queue<int> userDeckQueue = new Queue<int>();
@@ -34,6 +35,7 @@ namespace Astralis.Views.Game
         private int countdownValue = COUNTDOWN_STARTING_VALUE;
         private Tuple<string, string> firstPlayers = new Tuple<string, string>("","");
         private int endTurnCounter = 0;
+        private bool roundEnded = false;
 
         private List<Card> userHand = new List<Card>();
         private Team userTeam;
@@ -113,10 +115,50 @@ namespace Astralis.Views.Game
             if(countdownValue == 0) 
             {
                 timer.Stop();
+
+                EndRound();
             }
 
             DoubleAnimation animation = new DoubleAnimation(countdownValue, TimeSpan.FromSeconds(1));
             progressBarCounter.BeginAnimation(ProgressBar.ValueProperty, animation);
+        }
+
+        private void EndRound()
+        {
+            if (!roundEnded && isMyTurn)
+            {
+                roundEnded = true;
+
+                UserManager.GameManagerClient client = SetGameContext();
+                client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
+            }
+        }
+
+        private Dictionary<int, int> GetBoardDictionary()
+        {
+            Dictionary <int, int> boardDictionary = new Dictionary<int, int>();
+            int counter = 0; 
+
+            foreach (UIElement child in gdPlayerSlots.Children)
+            {
+                if (child is Grid)
+                {
+                    counter++;
+
+                    Grid innerGrid = (Grid)child;
+                    int cardId = ERROR_CARD_ID;
+
+                    if (innerGrid.Children.Count == 1 && innerGrid.Children[0] is GraphicCard)
+                    {
+                        GraphicCard graphicCard = innerGrid.Children[0] as GraphicCard;
+                        cardId = CardManager.Instance().GetCardId(graphicCard.Card.Clone());
+                    }
+
+                    boardDictionary.Add(counter, cardId);
+                }
+            }
+
+            return boardDictionary;
         }
 
         private void StartCountdown()
@@ -347,11 +389,13 @@ namespace Astralis.Views.Game
             if(firstPlayers.Item1 == UserSession.Instance().Nickname || firstPlayers.Item2 == UserSession.Instance().Nickname)
             {
                 isMyTurn = true;
+                lblPlayerMana.Foreground = Brushes.Yellow;
             }
+
+            roundEnded = false;
 
             StartCountdown();
         }
-
 
         private async Task StartGameAsync()
         {
@@ -374,7 +418,7 @@ namespace Astralis.Views.Game
 
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
-            
+            EndRound();
         }
 
         private void btnChangeView_Click(object sender, RoutedEventArgs e)

@@ -37,4 +37,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TupleOfbooleanint" nillable="true" type="tns:TupleOfbooleanint" />
+  <xs:complexType name="TupleOfstringstring">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TupleOf{0}{1}{#}" Namespace="http://schemas.datacontract.org/2004/07/System" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="string" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="m_Item1" nillable="true" type="xs:string" />
+      <xs:element name="m_Item2" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TupleOfstringstring" nillable="true" type="tns:TupleOfstringstring" />
 </xs:schema>

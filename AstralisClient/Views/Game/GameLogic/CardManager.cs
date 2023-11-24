@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Astralis.Views.Game.GameLogic
 {
@@ -70,6 +71,34 @@ namespace Astralis.Views.Game.GameLogic
             cardLibrary.Add(30, new Card(10, 12, 12, MAGE));
         }
 
+
+        public int GetCardId(Card card)
+        {
+            int cardId;
+
+            cardId = FindKeyByValue(card);
+
+            return cardId;
+        }
+
+        private int FindKeyByValue(Card value)
+        {
+            int cardId;
+
+            if (cardLibrary.ContainsValue(value))
+            {
+                cardId = cardLibrary
+                        .Where(pair => pair.Value == value)
+                        .Select(pair => pair.Key)
+                        .FirstOrDefault();
+            }
+            else
+            {
+                cardId = ERROR_CARD_ID;
+            }
+            
+            return cardId;
+        }
 
         public Card GetCard(int cardId)
         {

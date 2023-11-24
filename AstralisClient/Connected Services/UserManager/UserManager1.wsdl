@@ -221,6 +221,9 @@
   <wsdl:message name="IGameManager_StartNewPhase_InputMessage">
     <wsdl:part name="parameters" element="tns:StartNewPhase" />
   </wsdl:message>
+  <wsdl:message name="IGameManager_StartFirstPhase_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartFirstPhase" />
+  </wsdl:message>
   <wsdl:message name="IGameManager_ShowUserConnectedGame_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowUserConnectedGame" />
   </wsdl:message>
@@ -256,6 +259,12 @@
   </wsdl:message>
   <wsdl:message name="IGameManager_StartNewPhaseClient_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:StartNewPhaseClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_StartFirstPhaseClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartFirstPhaseClient" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_StartFirstPhaseClient_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartFirstPhaseClientResponse" />
   </wsdl:message>
   <wsdl:message name="IGameManager_EndGameClient_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:EndGameClient" />
@@ -402,6 +411,9 @@
     <wsdl:operation name="StartNewPhase">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartNewPhase" message="tns:IGameManager_StartNewPhase_InputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="StartFirstPhase">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhase" message="tns:IGameManager_StartFirstPhase_InputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ShowUserConnectedGame">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ShowUserConnectedGame" message="tns:IGameManager_ShowUserConnectedGame_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ShowUserConnectedGameResponse" message="tns:IGameManager_ShowUserConnectedGame_InputCallbackMessage" />
@@ -425,6 +437,10 @@
     <wsdl:operation name="StartNewPhaseClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/StartNewPhaseClient" message="tns:IGameManager_StartNewPhaseClient_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartNewPhaseClientResponse" message="tns:IGameManager_StartNewPhaseClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartFirstPhaseClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhaseClient" message="tns:IGameManager_StartFirstPhaseClient_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhaseClientResponse" message="tns:IGameManager_StartFirstPhaseClient_InputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="EndGameClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/EndGameClient" message="tns:IGameManager_EndGameClient_OutputCallbackMessage" />
@@ -734,6 +750,12 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="StartFirstPhase">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/StartFirstPhase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="ShowUserConnectedGame">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/ShowUserConnectedGame" style="document" />
       <wsdl:input>
@@ -781,6 +803,15 @@
     </wsdl:operation>
     <wsdl:operation name="StartNewPhaseClient">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/StartNewPhaseClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartFirstPhaseClient">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/StartFirstPhaseClient" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
