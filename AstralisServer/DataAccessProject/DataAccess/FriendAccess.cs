@@ -105,7 +105,7 @@ namespace DataAccessProject.DataAccess
             return result;
         }
 
-        public Dictionary<string, Tuple<bool, int>> GetFriendList(string nickname, List<string> onlineUsers)
+        public Dictionary<string, Tuple<bool, int>> GetFriendList(string nickname, List<string> onlineUsers) //REFACTORIZAR
         {
             Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
             Tuple<bool, int> friendTuple;
@@ -146,7 +146,7 @@ namespace DataAccessProject.DataAccess
                     }
                 }
 
-                var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
+                var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname || f.Nickname1 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
 
                 foreach (var request in pendingRequests)
                 {

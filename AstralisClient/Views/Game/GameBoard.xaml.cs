@@ -137,7 +137,26 @@ namespace Astralis.Views.Game
         private Dictionary<int, int> GetBoardDictionary()
         {
             Dictionary <int, int> boardDictionary = new Dictionary<int, int>();
-            int counter = 0; 
+            int counter = 0;
+
+            foreach (UIElement child in gdEnemySlots.Children)
+            {
+                if (child is Grid)
+                {
+                    counter++;
+
+                    Grid innerGrid = (Grid)child;
+                    int cardId = ERROR_CARD_ID;
+
+                    if (innerGrid.Children.Count == 1 && innerGrid.Children[0] is GraphicCard)
+                    {
+                        GraphicCard graphicCard = innerGrid.Children[0] as GraphicCard;
+                        cardId = CardManager.Instance().GetCardId(graphicCard.Card.Clone());
+                    }
+
+                    boardDictionary.Add(counter, cardId);
+                }
+            }
 
             foreach (UIElement child in gdPlayerSlots.Children)
             {

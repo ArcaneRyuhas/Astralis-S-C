@@ -172,7 +172,7 @@ namespace Astralis.Views.Animations
 
         public void ShowFriendRequest(string nickname)
         {
-            Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
+            Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
 
             friendList.Add(nickname, friendTuple);
 
@@ -231,8 +231,6 @@ namespace Astralis.Views.Animations
                 }
                 else
                 {
-                    friendList.Remove(friendUsername);
-
                     MessageBox.Show($"No se pudo aceptar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
