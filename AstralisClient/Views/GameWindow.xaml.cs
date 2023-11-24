@@ -21,8 +21,6 @@ namespace Astralis.Views
 
         private void CloseWindowEventHandler(object sender, EventArgs e)
         {
-            mainMenu.Disconnect();
-
             Close();
         }
     }
