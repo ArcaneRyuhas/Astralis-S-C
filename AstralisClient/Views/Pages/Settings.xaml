@@ -1,0 +1,53 @@
+﻿<Page x:Class="Astralis.Views.Pages.Settings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Astralis.Views.Pages"
+      xmlns:p="clr-namespace:Astralis.Properties"
+    mc:Ignorable="d" 
+      d:DesignHeight="650" d:DesignWidth="1000"
+      Title="Settings"
+      Background="Black">
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Content="Astralis" HorizontalAlignment="Center" Grid.Row="0" FontSize="48"/>
+            <Label x:Name="lblLanguage" Content="{x:Static p:Resources.lblLanguage}" Grid.Row="1" HorizontalAlignment="Center" FontSize="48"/>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="btnSpanish" Content="{x:Static p:Resources.btnSpanish}" Grid.Column="0" HorizontalAlignment="Center" FontSize="36" Click="btnSpanish_Click"/>
+                <Button x:Name="btnEnglish" Content="{x:Static p:Resources.btnEnglish}" Grid.Column="1" HorizontalAlignment="Center" FontSize="36" Height="45" VerticalAlignment="Top" Click="btnEnglish_Click"/>
+            </Grid>
+
+            <Label x:Name="lblVolume" Content="{x:Static p:Resources.lblVolume}" Grid.Row="3" HorizontalAlignment="Center" FontSize="48"/>
+            <ProgressBar x:Name="progessBarVolume" Height="50" Width="400" Grid.Row="4" Foreground="#FFAB0707" Background="Black" BorderBrush="#FF790101"/>
+            
+            <Grid Grid.Row="5" VerticalAlignment="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="btnAccept" Content="{x:Static p:Resources.btnAccept}" Grid.Column="0" HorizontalAlignment="Center" FontSize="36"/>
+                <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" Grid.Column="1" HorizontalAlignment="Center" FontSize="36" Click="btnCancel_Click"/>
+            </Grid>
+            
+
+        </Grid>
+    </Grid>
+</Page>

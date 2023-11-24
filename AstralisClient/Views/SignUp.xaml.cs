@@ -1,38 +1,22 @@
 ﻿using Astralis.UserManager;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using Astralis.Properties;
 
 namespace Astralis.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
-
-
     public partial class SignUp : Window
     {
         private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";
         private const string NICKNAME_REGEX = @"^[a-zA-Z0-9]{2,30}$";
         private const string MAIL_REGEX = @"^.+@[^\.].*\.[a-z]{2,}$";
-        private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9/S]{0,40}$";
-        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,40})\S$";
-        private const int MAX_FIELDS_LENGHT = 49;
+        private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9\S]{0,40}$";
+        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^&*_-]).{6,40})\S$";
+        private const int MAX_FIELDS_LENGHT = 39;
 
         public SignUp()
         {
@@ -41,14 +25,14 @@ namespace Astralis.Views
             DataContext = viewModel;
         }
 
-        private void Button_Cancel(object sender, RoutedEventArgs e)
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             LogIn logIn = new LogIn();
             this.Close();
             logIn.Show();
         }
 
-        private void Button_Register(object sender, RoutedEventArgs e)
+        private void btnRegiter_Click(object sender, RoutedEventArgs e)
         {
             UserManager.User user = new UserManager.User();
 
@@ -65,6 +49,9 @@ namespace Astralis.Views
                     if (client.AddUser(user) > 0)
                     {
                         MessageBox.Show(Properties.Resources.msgUserAddedSucceed, Properties.Resources.titleUserAdded, MessageBoxButton.OK, MessageBoxImage.Information);
+                        LogIn logIn = new LogIn();
+                        this.Close();
+                        logIn.Show();
                     }
                 }
                 else
@@ -156,7 +143,7 @@ namespace Astralis.Views
         private User SetUserInformation(User user)
         {
             user.Nickname = txtNickname.Text;
-            user.Password = pbPassword.Password;
+            user.Password = CreateSha2(pbPassword.Password);
             user.ImageId = 1;
             user.Mail = txtMail.Text;
 

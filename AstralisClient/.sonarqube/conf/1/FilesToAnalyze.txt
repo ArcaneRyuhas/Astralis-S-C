@@ -1,0 +1,63 @@
+﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\App.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Constants.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Logic\ImageManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Logic\UserSession.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\FriendCard.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\FriendWindow.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\LeftLineAnimation.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\LobbyUserCard.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\AstralisAnimation.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\GameWindow.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Validations\UserValidationRule.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameBoard.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameLogic\Card.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameLogic\CardManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GraphicCard.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Lobby.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\LogIn.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\App.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\MainMenu.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Pages\MyProfile.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Pages\Settings.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\SignUp.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Properties\AssemblyInfo.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\ImageResource.resx
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Properties\Resources.resx
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameLogic\CardImageResource.resx
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Properties\Resources.en.resx
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Properties\Resources.es-MX.resx
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\Astralis.UserManager.User.datasource
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\item.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\item1.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\item3.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\item31.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\item32.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\UserManager1.wsdl
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Properties\Settings.settings
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\App.config
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\item1.disco
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\configuration91.svcinfo
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\configuration.svcinfo
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected Services\UserManager\Reference.svcmap
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Window.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Piranhas.jpg
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Pumpkin.jpg
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\FriendCard.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\FriendWindow.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\LeftLineAnimation.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\LobbyUserCard.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\AstralisAnimation.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\GameWindow.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameBoard.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GraphicCard.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Lobby.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\MainMenu.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Pages\MyProfile.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Pages\Settings.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\SignUp.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\LogIn.xaml
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Fonts\PixelFont.ttf
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\InGameAssets\AstralisBoard.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\InGameAssets\AstralisIcon.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\InGameAssets\Deck.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\InGameAssets\Card.png

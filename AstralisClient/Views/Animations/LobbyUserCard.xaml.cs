@@ -14,15 +14,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Astralis.Properties;
+using Astralis.Logic;
 
 namespace Astralis.Views.Animations
 {
-    /// <summary>
-    /// Interaction logic for LobbyUserCard.xaml
-    /// </summary>
+
     public partial class LobbyUserCard : UserControl
     {
-        public List<string> ItemsList { get; set; }
+        
+        private List<string> ItemsList { get; set; }
+        private const int TEAM_ONE = 1;
+        private const int TEAM_TWO = 2;
+        private string userNickname;
+        private int team;
+        public event EventHandler<Tuple<string, int>> TeamSelectionChanged;
+
+        public string UserNickname { get { return userNickname; }}
+        public int Team {get { return team; }}
 
         public LobbyUserCard()
         {
@@ -31,10 +39,70 @@ namespace Astralis.Views.Animations
             cbxTeam.ItemsSource = ItemsList;
         }
 
-        public void setCard(User user)
+        public void setCard(User user, bool isHost)
         {
-            lblNickname.Content = user.Nickname;
-            //TODO IMAGE
+            
+            userNickname = user.Nickname;
+            lblNickname.Content = userNickname;
+            imgUser.Source = ImageManager.Instance().GetImage(user.ImageId);
+
+            if (!IsTheClientCard())
+            {
+                cbxTeam.IsEnabled = false;
+            }
+
+            if (!isHost)
+            {
+                btnKickout.Visibility = Visibility.Collapsed;
+
+                
+            }
+            else
+            {
+                if (IsTheClientCard())
+                {
+                    btnKickout.Visibility = Visibility.Collapsed;
+                }
+
+            }
+        }
+
+        public void ChangeTeam(int team)
+        {
+            if (team == TEAM_ONE)
+            {
+                this.team = TEAM_ONE;
+                cbxTeam.SelectedItem = Properties.Resources.cbxTeamOne;
+            }
+            else if (team == TEAM_TWO)
+            {
+                this.team = TEAM_TWO;
+                cbxTeam.SelectedItem = Properties.Resources.cbxTeamTwo;
+            }
+        }
+
+        private bool IsTheClientCard()
+        {
+            return userNickname == UserSession.Instance().Nickname;
+        }
+
+        private void cbxTeam_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbxTeam.SelectedValue != null && (IsTheClientCard()))
+            {
+
+                if(cbxTeam.SelectedValue.ToString() == Properties.Resources.cbxTeamOne)
+                {
+                    team = TEAM_ONE;
+                    TeamSelectionChanged?.Invoke(this, new Tuple<string, int>(userNickname, TEAM_ONE));
+                }
+                else
+                {
+                    team = TEAM_ONE;
+                    TeamSelectionChanged?.Invoke(this, new Tuple<string, int>(userNickname, TEAM_TWO));
+                }
+                
+            }
         }
     }
 }

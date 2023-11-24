@@ -61,6 +61,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aceptar.
+        /// </summary>
+        public static string btnAccept {
+            get {
+                return ResourceManager.GetString("btnAccept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancelar.
         /// </summary>
         public static string btnCancel {
@@ -84,6 +93,15 @@ namespace Astralis.Properties {
         public static string btnDecks {
             get {
                 return ResourceManager.GetString("btnDecks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ingles.
+        /// </summary>
+        public static string btnEnglish {
+            get {
+                return ResourceManager.GetString("btnEnglish", resourceCulture);
             }
         }
         
@@ -160,11 +178,29 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enviar.
+        /// </summary>
+        public static string btnSendMessage {
+            get {
+                return ResourceManager.GetString("btnSendMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CONFIGURACIÓN.
         /// </summary>
         public static string btnSettings {
             get {
                 return ResourceManager.GetString("btnSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Español.
+        /// </summary>
+        public static string btnSpanish {
+            get {
+                return ResourceManager.GetString("btnSpanish", resourceCulture);
             }
         }
         
@@ -268,6 +304,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Idioma.
+        /// </summary>
+        public static string lblLanguage {
+            get {
+                return ResourceManager.GetString("lblLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sala.
         /// </summary>
         public static string lblLobby {
@@ -282,6 +327,15 @@ namespace Astralis.Properties {
         public static string lblMail {
             get {
                 return ResourceManager.GetString("lblMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mi perfil.
+        /// </summary>
+        public static string lblMyProfile {
+            get {
+                return ResourceManager.GetString("lblMyProfile", resourceCulture);
             }
         }
         
@@ -304,11 +358,29 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Si necesitas ayuda pon el cursor aqui.
+        /// </summary>
+        public static string lblPasswordHelp {
+            get {
+                return ResourceManager.GetString("lblPasswordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jugadores Conectados.
         /// </summary>
         public static string lblPlayersConecteds {
             get {
                 return ResourceManager.GetString("lblPlayersConecteds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imagen de perfil.
+        /// </summary>
+        public static string lblProfileImage {
+            get {
+                return ResourceManager.GetString("lblProfileImage", resourceCulture);
             }
         }
         
@@ -327,6 +399,15 @@ namespace Astralis.Properties {
         public static string lblTitle {
             get {
                 return ResourceManager.GetString("lblTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volumen.
+        /// </summary>
+        public static string lblVolume {
+            get {
+                return ResourceManager.GetString("lblVolume", resourceCulture);
             }
         }
         
@@ -358,6 +439,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ingresa un correo valido.
+        /// </summary>
+        public static string tpMailHelp {
+            get {
+                return ResourceManager.GetString("tpMailHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El nombre de usuario debe incluir letras de la A a la Z, numeros y signos como: !@#$%&amp;.
         /// </summary>
         public static string tpNicknameHelp {
@@ -376,6 +466,27 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reglas de la contraseña.
+        /// </summary>
+        public static string tpPasswordHelp {
+            get {
+                return ResourceManager.GetString("tpPasswordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Al menos 8 caracteres
+        ///Al menos 1 número
+        ///Al menos 1 simbolo
+        ///Al menos 1 mayuscula.
+        /// </summary>
+        public static string tpPasswordRules {
+            get {
+                return ResourceManager.GetString("tpPasswordRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Este campo no puede estar vacío.
         /// </summary>
         public static string txbEmptyFieldError {
@@ -390,6 +501,15 @@ namespace Astralis.Properties {
         public static string txbInvalidFields {
             get {
                 return ResourceManager.GetString("txbInvalidFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Escribe algo....
+        /// </summary>
+        public static string txtChat {
+            get {
+                return ResourceManager.GetString("txtChat", resourceCulture);
             }
         }
     }

@@ -1,9 +1,4 @@
 ﻿using Astralis.UserManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Astralis.Logic
 {
@@ -35,7 +30,7 @@ namespace Astralis.Logic
         {
              return instance;
         }
-        
+
         public string Nickname { get { return nickname; } }
         public string Mail { get { return mail; } }
         public int ImageId { get {  return imageId; } }

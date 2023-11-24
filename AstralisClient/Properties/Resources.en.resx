@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="btnAccept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
   <data name="btnCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -125,6 +128,9 @@
   </data>
   <data name="btnDecks" xml:space="preserve">
     <value>DECKS</value>
+  </data>
+  <data name="btnEnglish" xml:space="preserve">
+    <value>English</value>
   </data>
   <data name="btnExit" xml:space="preserve">
     <value>EXIT</value>
@@ -150,8 +156,14 @@
   <data name="btnRegister" xml:space="preserve">
     <value>Sign up</value>
   </data>
+  <data name="btnSendMessage" xml:space="preserve">
+    <value>Send</value>
+  </data>
   <data name="btnSettings" xml:space="preserve">
     <value>SETTINGS</value>
+  </data>
+  <data name="btnSpanish" xml:space="preserve">
+    <value>Spanish</value>
   </data>
   <data name="btnStartGame" xml:space="preserve">
     <value>Start</value>
@@ -186,11 +198,17 @@
   <data name="lblInviteWithCode" xml:space="preserve">
     <value>Invite with code</value>
   </data>
+  <data name="lblLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
   <data name="lblLobby" xml:space="preserve">
     <value>Lobby</value>
   </data>
   <data name="lblMail" xml:space="preserve">
     <value>Mail</value>
+  </data>
+  <data name="lblMyProfile" xml:space="preserve">
+    <value>My profile</value>
   </data>
   <data name="lblNickname" xml:space="preserve">
     <value>Nickname</value>
@@ -198,14 +216,23 @@
   <data name="lblPassword" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="lblPasswordHelp" xml:space="preserve">
+    <value>If you need help hover the mouse here</value>
+  </data>
   <data name="lblPlayersConecteds" xml:space="preserve">
     <value>Players Conecteds</value>
+  </data>
+  <data name="lblProfileImage" xml:space="preserve">
+    <value>Profile Image</value>
   </data>
   <data name="lblRegistration" xml:space="preserve">
     <value>Registration</value>
   </data>
   <data name="lblTitle" xml:space="preserve">
     <value>ASTRALIS</value>
+  </data>
+  <data name="lblVolume" xml:space="preserve">
+    <value>Volume</value>
   </data>
   <data name="msgUserAddedSucceed" xml:space="preserve">
     <value>Sign up successful!</value>
@@ -216,16 +243,31 @@
   <data name="titleUserAdded" xml:space="preserve">
     <value>Sign up</value>
   </data>
+  <data name="tpMailHelp" xml:space="preserve">
+    <value>Insert a valid mail</value>
+  </data>
   <data name="tpNicknameHelp" xml:space="preserve">
     <value>Username can include letters from A to Z, numbers and signs:  !@#$%&amp;</value>
   </data>
   <data name="tpNicknameLenghtHelp" xml:space="preserve">
     <value>Username must have more than 2 and less than 30 characters</value>
   </data>
+  <data name="tpPasswordHelp" xml:space="preserve">
+    <value>Password rules</value>
+  </data>
+  <data name="tpPasswordRules" xml:space="preserve">
+    <value>At least 8 letters
+At least 1 number
+At least 1 simbol
+At least 1 capital letter</value>
+  </data>
   <data name="txbEmptyFieldError" xml:space="preserve">
     <value>This field cannot be empty</value>
   </data>
   <data name="txbInvalidFields" xml:space="preserve">
     <value>Invalid credentials, please enter a valid user</value>
+  </data>
+  <data name="txtChat" xml:space="preserve">
+    <value>Write something...</value>
   </data>
 </root>

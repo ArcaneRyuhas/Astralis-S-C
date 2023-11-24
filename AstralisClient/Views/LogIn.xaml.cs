@@ -1,27 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Astralis.Properties;
 using Astralis.Logic;
 using Astralis.UserManager;
+using System.Security.Cryptography;
 
 namespace Astralis.Views
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
-    /// 
-
     public partial class LogIn : Window
     {
         public LogIn()
@@ -29,10 +14,9 @@ namespace Astralis.Views
             InitializeComponent();
         }
 
-
-        private void Click_LogIn(object sender, RoutedEventArgs e)
+        private void btnLogIn_Click(object sender, RoutedEventArgs e)
         {
-            string password = pbPassword.Password;
+            string password = CreateSha2(pbPassword.Password);
             string nickname = tbNickname.Text;
             bool noEmptyFields = true;
 
@@ -40,13 +24,11 @@ namespace Astralis.Views
 
             if(string.IsNullOrEmpty(password))
             {
-                //AgregarToolTip
                 noEmptyFields = false;
             }
 
             if (string.IsNullOrEmpty(nickname))
             {
-                //Agregar ToolTip
                 noEmptyFields = false;
             }
 
@@ -66,13 +48,36 @@ namespace Astralis.Views
             }
         }
 
+        private string CreateSha2(string password)
+        {
+            string hash = string.Empty;
 
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashValue = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-        private void Click_Register(object sender, RoutedEventArgs e)
+                foreach (byte b in hashValue)
+                {
+                    hash += $"{b:X2}";
+                }
+            }
+
+            return hash;
+        }
+
+        private void btnRegister_Click(object sender, RoutedEventArgs e)
         {
             SignUp signUp = new SignUp();
             this.Close();
             signUp.Show();
+        }
+
+        private void EnterKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnLogIn_Click(sender, e);
+            }
         }
     }
 }
