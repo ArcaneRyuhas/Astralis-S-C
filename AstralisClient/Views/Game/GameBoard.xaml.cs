@@ -24,6 +24,7 @@ namespace Astralis.Views.Game
         private const string TEAM_MANA = "Mana";
         private const int ERROR_CARD_ID = 0;
 
+        UserManager.GameManagerClient client;
         private Dictionary<string, int> users;
         private Queue<int> userDeckQueue = new Queue<int>();
         private GraphicCard selectedCard;
@@ -59,21 +60,18 @@ namespace Astralis.Views.Game
 
         private void Connect()
         {
-            UserManager.GameManagerClient client = SetGameContext();
+            client = SetGameContext();
             client.ConnectGame(UserSession.Instance().Nickname);
         }
 
         private void GetUserDeck()
         {
-            UserManager.GameManagerClient client = SetGameContext();
             int[] userDeck = client.DispenseCards(UserSession.Instance().Nickname);
             userDeckQueue = new Queue<int>(userDeck);
         }
 
         private void DrawFourCards()
         {
-            UserManager.GameManagerClient client = SetGameContext();
-
             for (int cardsToDraw = 4; cardsToDraw > 0; cardsToDraw--)
             {
                 int cardToDraw = userDeckQueue.Dequeue();
@@ -108,7 +106,6 @@ namespace Astralis.Views.Game
 
         private void TimerTick(object sender, EventArgs e)
         {
-
             countdownValue --;
             progressBarCounter.Value = countdownValue;
 
@@ -129,7 +126,6 @@ namespace Astralis.Views.Game
             {
                 roundEnded = true;
 
-                UserManager.GameManagerClient client = SetGameContext();
                 client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
             }
         }
@@ -215,6 +211,8 @@ namespace Astralis.Views.Game
             }
         }
 
+        //DE AQUI PARA ARRIBA YA REVISAMOS
+
         private void AddCardToHand(Card card)
         {
             GraphicCard graphicCard = new GraphicCard();
@@ -258,7 +256,6 @@ namespace Astralis.Views.Game
                     if (currentCardParent != null && currentCardParent != gdPlayerHand)
                     {
                         currentCardParent.Children.Remove(clickedCard);
-
                         AddGraphicCardToHand(clickedCard);
 
                         userTeam.Mana += clickedCard.Card.Mana;
@@ -270,46 +267,40 @@ namespace Astralis.Views.Game
         private void PlaceCardInSlot(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 
-            if (isMyTurn)
+            if (isMyTurn && selectedCard != null)
             {
-                if (selectedCard != null)
+                Grid grid = sender as Grid;
+                Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
+
+                if (currentCardParent != grid && currentCardParent != gdPlayerHand)
                 {
-                    Grid grid = sender as Grid;
-                    Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
+                    selectedCard.IsSelected = false;
 
-                    if (currentCardParent != null)
-                    {
-                        if (currentCardParent != grid && currentCardParent != gdPlayerHand)
-                        {
-                            selectedCard.IsSelected = false;
+                    currentCardParent.Children.Remove(selectedCard);
+                    grid.Children.Add(selectedCard);
 
-                            currentCardParent.Children.Remove(selectedCard);
-                            grid.Children.Add(selectedCard);
-
-                            selectedCard.IsSelected = false;
-                            selectedCard = null;
-                        }
-
-                        if (currentCardParent == gdPlayerHand && userTeam.UseMana(selectedCard.Card.Mana))
-                        {
-                            if (grid.Children.Count == 0)
-                            {
-                                selectedCard.IsSelected = false;
-
-                                int columnIndex = Grid.GetColumn(selectedCard);
-                                currentCardParent.Children.Remove(selectedCard);
-                                RemoveColumn(currentCardParent, columnIndex);
-
-                                grid.Children.Add(selectedCard);
-
-                                selectedCard.IsSelected = false;
-                                selectedCard = null;
-                            }
-                        }
-                    }
-
+                    selectedCard.IsSelected = false;
+                    selectedCard = null;
                 }
-            }            
+
+                if (currentCardParent == gdPlayerHand && userTeam.UseMana(selectedCard.Card.Mana))
+                {
+                    if (grid.Children.Count == 0)
+                    {
+                        selectedCard.IsSelected = false;
+
+                        int columnIndex = Grid.GetColumn(selectedCard);
+                        currentCardParent.Children.Remove(selectedCard);
+                        RemoveColumn(currentCardParent, columnIndex);
+
+                        grid.Children.Add(selectedCard);
+
+                        selectedCard.IsSelected = false;
+                        selectedCard = null;
+                    }
+                }
+
+            }
         }
 
         private void RemoveColumn(Grid grid, int columnIndex)
@@ -343,7 +334,7 @@ namespace Astralis.Views.Game
             if (users[nickname] == users[UserSession.Instance().Nickname])
             {
                 Card card = CardManager.Instance().GetCard(cardId);
-
+                {}
                 AddCardToAllyHand(card);
             }
         }
