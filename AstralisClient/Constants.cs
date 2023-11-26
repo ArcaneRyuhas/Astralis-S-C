@@ -12,6 +12,7 @@ namespace Astralis
         public const string TANK = "Tank";
         public const string MAGE = "Mage";
         public const string WARRIOR = "Warrior";
+        public const int ENEMY_CARD = -1;
 
     }
 

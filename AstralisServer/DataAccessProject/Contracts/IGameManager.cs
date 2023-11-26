@@ -50,12 +50,6 @@ namespace DataAccessProject.Contracts
         void PlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn); //Es un diccionario del board completo
 
         [OperationContract]
-        void EndPhase();
-
-        [OperationContract]
-        void StartNewPhaseClient();
-
-        [OperationContract]
         void StartFirstPhaseClient(Tuple<string, string> firstPlayers);
 
         [OperationContract]

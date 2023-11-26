@@ -435,7 +435,10 @@ namespace MessageService
             {
                 if(usersInGame[userInGame] == usersInGame[nickname])
                 {
-                    usersInGameContext[userInGame].PlayerEndedTurn(nickname, boardAfterTurn);
+                    if(userInGame!= nickname)
+                    {
+                        usersInGameContext[userInGame].PlayerEndedTurn(nickname, boardAfterTurn);
+                    }
                 }
                 else
                 {
@@ -491,26 +494,6 @@ namespace MessageService
             foreach (string userInGame in usersInGame.Keys)
             {
                 usersInGameContext[userInGame].StartFirstPhaseClient(firstPlayers);
-            }
-
-        }
-
-        public void StartNewPhase(string hostNickname)
-        {
-            List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[hostNickname]);
-            List<string> usersInGame = new List<string>();
-
-            foreach (string userNickname in usersNickname)
-            {
-                if (usersInGameContext.ContainsKey(userNickname))
-                {
-                    usersInGame.Add(userNickname);
-                }
-            }
-
-            foreach (string userInGame in usersInGame)
-            {
-                usersInGameContext[userInGame].StartNewPhaseClient();
             }
         }
     }

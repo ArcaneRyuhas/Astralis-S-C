@@ -44,13 +44,20 @@ namespace Astralis.Views.Game
 
         public void SetGraphicCard(Card card)
         {
-            this.card = card;
-            this.card.PropertyChanged += Card_PropertyChanged;
+            if (CardManager.Instance().GetCard(Constants.ENEMY_CARD) == card)
+            {
+                gdCard.Background = Brushes.Black;
+            }
+            else
+            {
+                this.card = card;
+                this.card.PropertyChanged += Card_PropertyChanged;
 
-            lblHealth.Content = card.Health.ToString();
-            lblAttack.Content = card.Attack.ToString();
-            lblMana.Content = card.Mana.ToString();
-            lblType.Content = card.Type.ToString();
+                lblHealth.Content = card.Health.ToString();
+                lblAttack.Content = card.Attack.ToString();
+                lblMana.Content = card.Mana.ToString();
+                lblType.Content = card.Type.ToString();
+            }
         }
 
         private void Card_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

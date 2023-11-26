@@ -9,6 +9,7 @@ namespace Astralis.Views.Game.GameLogic
         private const string WARRIOR = "Warrior";
         private const string MAGE = "Mage";
         private const string ERROR = "error";
+        private const string NO_CLASS = "empty";
         private const int ERROR_CARD_ID = 0;
 
         private static CardManager instance;
@@ -39,6 +40,7 @@ namespace Astralis.Views.Game.GameLogic
         }
         private void PopulateLibrary()
         {
+            cardLibrary.Add(-1, new Card(0, 0, 0, NO_CLASS));
             cardLibrary.Add(1, new Card(1, 2, 2, TANK));
             cardLibrary.Add(2, new Card(1, 1, 3, TANK));
             cardLibrary.Add(3, new Card(1, 3, 1, WARRIOR));

@@ -9,7 +9,7 @@
              ">
     <Grid>
 
-        <Grid MouseLeftButtonDown="GraphicCardOnLeftClick" MouseRightButtonDown="GraphicCardOnRightClick">
+        <Grid x:Name="gdCard" MouseLeftButtonDown="GraphicCardOnLeftClick" MouseRightButtonDown="GraphicCardOnRightClick">
             <Grid.Background>
                 <ImageBrush ImageSource="InGameAssets/Card.png"/>
             </Grid.Background>

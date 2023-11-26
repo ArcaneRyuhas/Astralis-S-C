@@ -12,7 +12,31 @@
             <ImageBrush ImageSource="InGameAssets/AstralisBoard.png"/>
         </Grid.Background>
 
-        <Grid  Width="804" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,720,0,0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <ProgressBar x:Name="progressBarCounter" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Height="21" VerticalAlignment="Center" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White" >
+                <ProgressBar.RenderTransform>
+                    <RotateTransform Angle="270"/>
+                </ProgressBar.RenderTransform>
+                <ProgressBar.RenderTransformOrigin>
+                    <Point X=".5" Y=".5"/>
+                </ProgressBar.RenderTransformOrigin>
+            </ProgressBar>
+
+        </Grid>
+
+        <Grid  Width="800" Height="200" HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -23,47 +47,46 @@
             <Grid Grid.Column="1" x:Name="gdAllyHand" Visibility="Hidden"/>
         </Grid>
 
-
-
-        <Grid x:Name="gdEnemyHand" Width="700" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <Grid  Width="800" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1" x:Name="gdEnemyHand"/>
+            <Grid Grid.Column="1" x:Name="gdEnemyAllyHand" Visibility="Hidden"/>
         </Grid>
 
-        <Border Width="165" Height="230" Margin="83,692,1032,-2">
-            <Border.RenderTransform>
-                <RotateTransform Angle="30"/>
-            </Border.RenderTransform>
-        </Border>
+        <Grid Width="240" Height="290" HorizontalAlignment="Left" VerticalAlignment="Bottom">
 
-        <Border x:Name="bdPlayerDeck" Width="160" Height="220" Margin="73,692,1042,-2">
-            <Border.Background>
-                <ImageBrush ImageSource="InGameAssets/Deck.png"/>
-            </Border.Background>
-            <Border.RenderTransform>
-                <RotateTransform Angle="30"/>
-            </Border.RenderTransform>
-        </Border>
+            <Border x:Name="bdPlayerDeck" Width="160" Height="220" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Border.Background>
+                    <ImageBrush ImageSource="InGameAssets/Deck.png"/>
+                </Border.Background>
+                <Border.RenderTransform>
+                    <RotateTransform Angle="30"/>
+                </Border.RenderTransform>
+            </Border>
 
-        <Border Width="165" Height="230" Margin="1136,-91,-21,781">
-            <Border.RenderTransform>
-                <RotateTransform Angle="30"/>
-            </Border.RenderTransform>
-        </Border>
+        </Grid>
 
-        <Border x:Name="bdEnemyDeck" Width="160" Height="220" Margin="1130,-100,-15,790">
-            <Border.Background>
-                <ImageBrush ImageSource="InGameAssets/Deck.png"/>
-            </Border.Background>
-            <Border.RenderTransform>
-                <RotateTransform Angle="-330"/>
-            </Border.RenderTransform>
-        </Border>
+        <Grid Width="240" Height="290" HorizontalAlignment="Right" VerticalAlignment="Top">
 
-        <Label x:Name="lblEnemyMana" Content="0" HorizontalAlignment="Left" Margin="116,300,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
-        <Label x:Name="lblPlayerMana" Content="0" HorizontalAlignment="Left" Margin="116,520,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
+            <Border x:Name="bdEnemyDeck" Width="160" Height="220" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Border.Background>
+                    <ImageBrush ImageSource="InGameAssets/Deck.png"/>
+                </Border.Background>
+                <Border.RenderTransform>
+                    <RotateTransform Angle="30"/>
+                </Border.RenderTransform>
+                <Border.RenderTransformOrigin>
+                    <Point X="1" Y="0"/>
+                </Border.RenderTransformOrigin>
+            </Border>
+
+        </Grid>
+        <Label x:Name="lblTurnMana" Content="0" HorizontalAlignment="Left" Margin="116,520,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
         <Label x:Name="lblEnemyHealth" Content="20" HorizontalAlignment="Left" Margin="42,45,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
         <Label x:Name="lblPlayerHealth" Content="20" HorizontalAlignment="Left" Margin="1185,800,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
 
@@ -87,7 +110,7 @@
             </Grid>
         </Button>
 
-        <Button Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,0,0,150">
+        <Button x:Name="btnOpenChat" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,0,0,150">
             <Grid>
                 <Ellipse HorizontalAlignment="Left" Height="48" Stroke="White" VerticalAlignment="Center" Width="86" Fill="#FF1D0505"/>
             </Grid>
@@ -124,22 +147,6 @@
                 <ColumnDefinition Width="143"/>
                 <ColumnDefinition Width="12"/>
                 <ColumnDefinition Width="143"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
-
-        <ProgressBar x:Name="progressBarCounter" HorizontalAlignment="Left" Height="21" Margin="24,595,0,0" VerticalAlignment="Top" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White">
-            <ProgressBar.RenderTransform>
-                <RotateTransform Angle="270"/>
-            </ProgressBar.RenderTransform>
-        </ProgressBar>
-
-        <ProgressBar HorizontalAlignment="Left" Height="13" Margin="990,885,0,0" VerticalAlignment="Top" Width="270" Background="Black" Foreground="#FF9A0B0B"/>
-
-        <ProgressBar HorizontalAlignment="Left" Height="13" Margin="30,15,0,0" VerticalAlignment="Top" Width="270" Background="Black" Foreground="#FF9A0B0B"/>
-        <Grid x:Name="gdEnemyHand_Copy" Width="700" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-200,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
         </Grid>
 
