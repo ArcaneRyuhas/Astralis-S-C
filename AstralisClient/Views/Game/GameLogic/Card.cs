@@ -104,5 +104,33 @@ namespace Astralis.Views.Game.GameLogic
 
             return dealtDamage;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            Card otherCard = (Card)obj;
+
+            return mana == otherCard.mana
+                && attack == otherCard.attack
+                && health == otherCard.health
+                && type == otherCard.type;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + mana.GetHashCode();
+                hash = hash * 23 + attack.GetHashCode();
+                hash = hash * 23 + health.GetHashCode();
+                hash = hash * 23 + (type != null ? type.GetHashCode() : 0);
+                return hash;
+            }
+        }
     }
 }

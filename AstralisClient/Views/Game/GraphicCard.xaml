@@ -11,7 +11,7 @@
 
         <Grid x:Name="gdCard" MouseLeftButtonDown="GraphicCardOnLeftClick" MouseRightButtonDown="GraphicCardOnRightClick">
             <Grid.Background>
-                <ImageBrush ImageSource="InGameAssets/Card.png"/>
+                <ImageBrush x:Name="imageBrushCard" ImageSource="InGameAssets/Card.png"/>
             </Grid.Background>
             <Label x:Name="lblAttack" Content="1" HorizontalAlignment="Left" Margin="8,158,0,0" VerticalAlignment="Top"/>
             <Label x:Name="lblHealth" Content="1" Margin="0,158,-90,0" Width="30"/>

@@ -46,10 +46,11 @@ namespace Astralis.Views.Game
         {
             if (CardManager.Instance().GetCard(Constants.ENEMY_CARD) == card)
             {
-                gdCard.Background = Brushes.Black;
+                HideCard();
             }
             else
             {
+
                 this.card = card;
                 this.card.PropertyChanged += Card_PropertyChanged;
 
@@ -58,6 +59,17 @@ namespace Astralis.Views.Game
                 lblMana.Content = card.Mana.ToString();
                 lblType.Content = card.Type.ToString();
             }
+        }
+
+        private void HideCard()
+        {
+            gdCard.Background = null;
+            gdCard.Background = Brushes.Beige;
+
+            lblHealth.Visibility = Visibility.Collapsed;
+            lblAttack.Visibility = Visibility.Collapsed;
+            lblMana.Visibility = Visibility.Collapsed;
+            lblType.Visibility = Visibility.Collapsed;
         }
 
         private void Card_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

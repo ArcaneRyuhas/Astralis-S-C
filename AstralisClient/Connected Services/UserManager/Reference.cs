@@ -537,12 +537,6 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/EndGameTurn")]
         System.Threading.Tasks.Task EndGameTurnAsync(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartNewPhase")]
-        void StartNewPhase(string hostNickname);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartNewPhase")]
-        System.Threading.Tasks.Task StartNewPhaseAsync(string hostNickname);
-        
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartFirstPhase")]
         void StartFirstPhase(string hostNickname);
         
@@ -564,12 +558,6 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/PlayerEndedTurn", ReplyAction="http://tempuri.org/IGameManager/PlayerEndedTurnResponse")]
         void PlayerEndedTurn(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/EndPhase", ReplyAction="http://tempuri.org/IGameManager/EndPhaseResponse")]
-        void EndPhase();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/StartNewPhaseClient", ReplyAction="http://tempuri.org/IGameManager/StartNewPhaseClientResponse")]
-        void StartNewPhaseClient();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/StartFirstPhaseClient", ReplyAction="http://tempuri.org/IGameManager/StartFirstPhaseClientResponse")]
         void StartFirstPhaseClient(System.Tuple<string, string> firstPlayers);
@@ -644,14 +632,6 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task EndGameTurnAsync(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn) {
             return base.Channel.EndGameTurnAsync(nickname, boardAfterTurn);
-        }
-        
-        public void StartNewPhase(string hostNickname) {
-            base.Channel.StartNewPhase(hostNickname);
-        }
-        
-        public System.Threading.Tasks.Task StartNewPhaseAsync(string hostNickname) {
-            return base.Channel.StartNewPhaseAsync(hostNickname);
         }
         
         public void StartFirstPhase(string hostNickname) {

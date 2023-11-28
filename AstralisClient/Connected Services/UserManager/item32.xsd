@@ -401,13 +401,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartNewPhase">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="hostNickname" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="StartFirstPhase">
     <xs:complexType>
       <xs:sequence>
@@ -462,26 +455,6 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="PlayerEndedTurnResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="EndPhase">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="EndPhaseResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="StartNewPhaseClient">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="StartNewPhaseClientResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

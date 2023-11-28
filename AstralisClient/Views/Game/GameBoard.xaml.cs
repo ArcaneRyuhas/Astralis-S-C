@@ -1,15 +1,12 @@
 ﻿using Astralis.Logic;
-using Astralis.UserManager;
 using Astralis.Views.Game.GameLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
@@ -19,32 +16,26 @@ namespace Astralis.Views.Game
     public partial class GameBoard : Window, UserManager.IGameManagerCallback
     {
         private const int GAME_MODE_STARTING_HEALT = 20;
-        private const int GAME_MODE_STARTING_MANA = 2;
-        private const int COUNTDOWN_STARTING_VALUE = 50; //RECORDAR REGRESARLO A 20
+        private const int GAME_MODE_STARTING_MANA = 10; // CAMBIAR DESPUES DE PROBAR A 2
         private const string TEAM_HEALTH = "Health";
         private const string TEAM_MANA = "Mana";
         private const int ERROR_CARD_ID = 0;
         private const int ENEMY_CARD = -1;
+        private const int ALL_USERS_CONNECTED = 4;
 
+        private GameManager gameManager;
         UserManager.GameManagerClient client;
-        private Dictionary<string, int> usersTeam;
-        private Queue<int> userDeckQueue = new Queue<int>();
         private GraphicCard selectedCard;
         private bool isHost = false;
-        private bool isMyTurn = false;
-        private DispatcherTimer timer;
-        private int countdownValue = COUNTDOWN_STARTING_VALUE;
-        private Tuple<string, string> firstPlayers = new Tuple<string, string>("", "");
-        private int endTurnCounter = 0;
-        private bool roundEnded = false;
         private List<Card> playedCards = new List<Card>();
-        private string myEnemy;
-
-        private List<Card> userHand = new List<Card>();
         private Team userTeam;
         private Team enemyTeam;
 
         public bool IsHost { get { return isHost; } set { isHost = value; } }
+
+        public List<Card> PlayedCards { get { return playedCards; } }
+
+        public Label LblTurnMana { get { return lblTurnMana; } }
 
         public GameBoard()
         {
@@ -55,9 +46,12 @@ namespace Astralis.Views.Game
         private void InitializeGame()
         {
             Connect();
-            GetUserDeck();
             SetTeams();
-            SetCounter();
+            gameManager = new GameManager();
+
+            gameManager.SetGameBoard(this);
+            gameManager.SetCounter(progressBarCounter);
+            gameManager.UserTeam = userTeam;
         }
 
         private void Connect()
@@ -77,32 +71,25 @@ namespace Astralis.Views.Game
         private void GetUserDeck()
         {
             int[] userDeck = client.DispenseCards(UserSession.Instance().Nickname);
-            userDeckQueue = new Queue<int>(userDeck);
+            gameManager.UserDeckQueue = new Queue<int>(userDeck);
         }
 
-        private void DrawFourCards()
+
+        //We preferred to leave the DrawFourCards in this class because we need the Await and here was found to be more easy to implement and to understand.
+        private async Task DrawFourCards()
         {
+            string myNickname = UserSession.Instance().Nickname;
+
             for (int cardsToDraw = 4; cardsToDraw > 0; cardsToDraw--)
             {
-                DrawCard();
+                int drawnCard = gameManager.DrawCard();
+
+                client.DrawCard(myNickname, drawnCard);
+                await Task.Delay(1000);
             }
         }
 
-        private void DrawCard()
-        {
-            if (userHand.Count < 7)
-            {
-                int cardToDraw = userDeckQueue.Dequeue();
-                Card card = CardManager.Instance().GetCard(cardToDraw);
-
-                userHand.Add(card);
-                int indexOfDrawnCard = userHand.IndexOf(card);
-
-                AddCardToHand(userHand[indexOfDrawnCard]);
-                client.DrawCard(UserSession.Instance().Nickname, cardToDraw);
-            }
-        }
-
+        //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges.
         private void SetTeams()
         {
             userTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
@@ -112,71 +99,15 @@ namespace Astralis.Views.Game
             enemyTeam.PropertyChanged += EnemyTeam_PropertyChange;
         }
 
-        private void SetCounter()
+        public void EndGameTurn()
         {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += TimerTick;
-
-            progressBarCounter.Maximum = countdownValue;
-            progressBarCounter.Value = countdownValue;
-        }
-
-        private void TimerTick(object sender, EventArgs e)
-        {
-            countdownValue--;
-            progressBarCounter.Value = countdownValue;
-
-            if (countdownValue == 0)
-            {
-                timer.Stop();
-
-                EndTurn();
-            }
-
-            DoubleAnimation animation = new DoubleAnimation(countdownValue, TimeSpan.FromSeconds(1));
-            progressBarCounter.BeginAnimation(ProgressBar.ValueProperty, animation);
-        }
-
-        private void EndTurn()
-        {
-            if (!roundEnded && isMyTurn)
-            {
-                roundEnded = true;
-
-                foreach (Card playedCard in playedCards)
-                {
-                    userHand.Remove(playedCard);
-                    playedCards.Remove(playedCard);
-                }
-
-                client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
-            }
+            client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
         }
 
         private Dictionary<int, int> GetBoardDictionary()
         {
             Dictionary<int, int> boardDictionary = new Dictionary<int, int>();
             int counter = 0;
-
-            foreach (UIElement child in gdEnemySlots.Children)
-            {
-                if (child is Grid)
-                {
-                    counter++;
-
-                    Grid innerGrid = (Grid)child;
-                    int cardId = ERROR_CARD_ID;
-
-                    if (innerGrid.Children.Count == 1 && innerGrid.Children[0] is GraphicCard)
-                    {
-                        GraphicCard graphicCard = innerGrid.Children[0] as GraphicCard;
-                        cardId = CardManager.Instance().GetCardId(graphicCard.Card.Clone());
-                    }
-
-                    boardDictionary.Add(counter, cardId);
-                }
-            }
 
             foreach (UIElement child in gdPlayerSlots.Children)
             {
@@ -198,13 +129,6 @@ namespace Astralis.Views.Game
             }
 
             return boardDictionary;
-        }
-
-        private void StartCountdown()
-        {
-            countdownValue = COUNTDOWN_STARTING_VALUE;
-
-            timer.Start();
         }
 
         private void UserTeam_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -231,9 +155,7 @@ namespace Astralis.Views.Game
             }
         }
 
-        //DE AQUI PARA ARRIBA YA REVISAMOS
-
-        private void AddCardToHand(Card card)
+        public void AddCardToHand(Card card)
         {
             GraphicCard graphicCard = new GraphicCard();
             graphicCard.SetGraphicCard(card);
@@ -256,7 +178,7 @@ namespace Astralis.Views.Game
 
         private void GraphicCardClickedHandler(object sender, bool leftClick)
         {
-            if (isMyTurn)
+            if (gameManager.IsMyTurn)
             {
                 GraphicCard clickedCard = sender as GraphicCard;
 
@@ -288,8 +210,7 @@ namespace Astralis.Views.Game
 
         private void PlaceCardInSlot(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
-            if (isMyTurn && selectedCard != null)
+            if (gameManager.IsMyTurn && selectedCard != null)
             {
                 Grid boardCardSlot = sender as Grid;
                 Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
@@ -344,85 +265,33 @@ namespace Astralis.Views.Game
 
         public void DrawCardClient(string nickname, int cardId)
         {
-            Card card = CardManager.Instance().GetCard(ENEMY_CARD);
             GraphicCard graphicCard = new GraphicCard();
+            Card card = CardManager.Instance().GetCard(cardId);
+
             graphicCard.SetGraphicCard(card);
-
-            if (usersTeam[nickname] == usersTeam[UserSession.Instance().Nickname])
-            {
-                card = CardManager.Instance().GetCard(cardId);
-
-                graphicCard.SetGraphicCard(card);
-                AddGraphicCardToGrid(graphicCard, gdAllyHand);
-            }
-            else if (nickname == myEnemy)
-            {
-                AddGraphicCardToGrid(graphicCard, gdEnemyHand);
-            }
-            else
-            {
-                AddGraphicCardToGrid(graphicCard, gdEnemyAllyHand);
-            }
+            AddGraphicCardToGrid(graphicCard, gdAllyHand);
         }
 
         public void EndGameClient(int winnerTeam)
         {
-            throw new NotImplementedException();
+            //MOSTRAR EN PANTALLA GANADOR
+
+            //ABRIR VENTANA DE PARTIDA ACABADA
+            this.Close();
         }
 
         public void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn)
         {
-            endTurnCounter++;
-            int counter = 0;
-
-            foreach (UIElement child in gdEnemySlots.Children)
-            {
-                if (child is Grid)
-                {
-                    counter++;
-
-                    if (boardAfterTurn[counter] != ERROR_CARD_ID)
-                    {
-                        Card card = CardManager.Instance().GetCard(boardAfterTurn[counter]);
-                        GraphicCard graphicCard = new GraphicCard();
-                        Grid innerGrid = (Grid)child;
-
-                        graphicCard.SetGraphicCard(card);
-                        innerGrid.Children.Add(graphicCard);
-                        TakeCardOutOfHand(player, graphicCard);
-                    }
-                }
-            }
-
-            foreach (UIElement child in gdPlayerSlots.Children)
-            {
-                if (child is Grid)
-                {
-                    counter++;
-
-                    if (boardAfterTurn[counter] != ERROR_CARD_ID)
-                    {
-                        Card card = CardManager.Instance().GetCard(boardAfterTurn[counter]);
-                        GraphicCard graphicCard = new GraphicCard();
-                        Grid innerGrid = (Grid)child;
-
-                        graphicCard.SetGraphicCard(card);
-                        innerGrid.Children.Add(graphicCard);
-                        TakeCardOutOfHand(player, graphicCard);
-                    }
-                }
-            }
-
-            TurnCounter();
+            gameManager.PlayerEndedTurn(player, boardAfterTurn, gdEnemySlots, gdPlayerSlots);
         }
 
-        private void TakeCardOutOfHand(string nickname, GraphicCard graphicCardToRemove)
+        public void TakeCardOutOfHand(string nickname, GraphicCard graphicCardToRemove, Dictionary<string, int> usersTeam)
         {
             if(usersTeam[nickname] == usersTeam[UserSession.Instance().Nickname])
             {
                 foreach(GraphicCard graphicCard in gdAllyHand.Children)
                 {
-                    if(graphicCard.Card == graphicCardToRemove.Card)
+                    if(graphicCard.Card.Equals(graphicCardToRemove.Card))
                     {
                         int columnIndex = Grid.GetColumn(graphicCard);
                         gdAllyHand.Children.Remove(graphicCard);
@@ -431,104 +300,87 @@ namespace Astralis.Views.Game
                     }
                 }
             }
-            else if(nickname == myEnemy)
+            else if(nickname == gameManager.MyEnemy)
             {
-                int lastChildren = gdEnemyHand.Children.Count - 1;
-                gdEnemyHand.Children.Remove(gdEnemyHand.Children[lastChildren]);
+                foreach(GraphicCard graphicCard in gdEnemyHand.Children)
+                {
+                    int columnIndex = Grid.GetColumn(graphicCard);
+                    gdEnemyHand.Children.Remove(graphicCard);
+                    RemoveColumn(gdEnemyHand, columnIndex);
+                    break;
+                }
+
             }
             else
             {
-                int lastChildren = gdEnemyAllyHand.Children.Count - 1;
-                gdEnemyAllyHand.Children.Remove(gdEnemyAllyHand.Children[lastChildren]);
-            }
-        }
-
-        private void TurnCounter()
-        {
-            string myNickname = UserSession.Instance().Nickname;
-
-            switch (endTurnCounter)
-            {
-                case 2:
-                    if (myNickname != firstPlayers.Item1 && myNickname != firstPlayers.Item2)
-                    {
-                        isMyTurn = true;
-                    }
+                foreach (GraphicCard graphicCard in gdEnemyAllyHand.Children)
+                {
+                    int columnIndex = Grid.GetColumn(graphicCard);
+                    gdEnemyAllyHand.Children.Remove(graphicCard);
+                    RemoveColumn(gdEnemyAllyHand, columnIndex);
                     break;
-
-                case 4:
-                    string[] secondPlayers = usersTeam.Keys.Where(name => name != firstPlayers.Item2 && name != firstPlayers.Item1).ToArray();
-
-                    firstPlayers = Tuple.Create(secondPlayers[0], secondPlayers[1]);
-                    break;
+                }
             }
         }
 
         public void ShowUserConnectedGame(string nickname, int team)
         {
-            usersTeam.Add(nickname, team);
+            gameManager.UsersTeam.Add(nickname, team);
 
             _ = StartGameAsync();
         }
 
         public void ShowUsersInGame(Dictionary<string, int> users)
         {
-            this.usersTeam = users;
+            gameManager.UsersTeam = users;
+
+            lblEnemyHealth.Content = gameManager.UsersTeam[UserSession.Instance().Nickname].ToString(); //CAMBIAR DESPUES DE PROBAR
 
             _ = StartGameAsync();
         }
 
         public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
         {
-            this.firstPlayers = firstPlayers;
-
-            if (firstPlayers.Item1 == UserSession.Instance().Nickname)
+            gameManager.StartFirstPhaseClient(firstPlayers);
+            _ = DrawFourCards();
+            gameManager.StartCountdown();
+        }
+        
+        public void InitializeEnemyCards()
+        {
+            for (int cardsToDraw = 4; cardsToDraw > 0; cardsToDraw--)
             {
-                isMyTurn = true;
-                lblTurnMana.Foreground = Brushes.Yellow;
-                myEnemy = firstPlayers.Item2;
-            }
-            else if (firstPlayers.Item2 == UserSession.Instance().Nickname)
-            {
-                isMyTurn = true;
-                lblTurnMana.Foreground = Brushes.Yellow;
-                myEnemy = firstPlayers.Item1;
-            }
-            else
-            {
-                foreach (string nickname in usersTeam.Keys)
-                {
-                    if (firstPlayers.Item1 != nickname && firstPlayers.Item2 != nickname && nickname != UserSession.Instance().Nickname)
-                    {
-                        myEnemy = nickname;
-                    }
-                }
-            }
+                Card card = CardManager.Instance().GetCard(ENEMY_CARD);
+                GraphicCard graphicCardOne = new GraphicCard();
+                graphicCardOne.SetGraphicCard(card);
 
-            roundEnded = false;
+                GraphicCard graphicCardTwo = new GraphicCard();
+                graphicCardTwo.SetGraphicCard(card);
 
-            DrawFourCards();
-            StartCountdown();
+                AddGraphicCardToGrid(graphicCardOne, gdEnemyHand);
+                AddGraphicCardToGrid(graphicCardTwo, gdEnemyAllyHand);
+            }
         }
 
         private async Task StartGameAsync()
         {
-            if(usersTeam.Count == 4 ) 
+            if(gameManager.UsersTeam.Count == ALL_USERS_CONNECTED ) 
             {
                 await Task.Delay(2000);
+                GetUserDeck();
+                await Task.Delay(5000);
                 
                 if (isHost)
                 {
                     client.StartFirstPhase(UserSession.Instance().Nickname);
                 }
 
-                await Task.Delay(2000);
             }
         }
 
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
-            EndTurn();
+            gameManager.EndTurn();
         }
 
         private void btnChangeView_Click(object sender, RoutedEventArgs e)
@@ -537,11 +389,15 @@ namespace Astralis.Views.Game
             {
                 gdPlayerHand.Visibility = Visibility.Collapsed;
                 gdAllyHand.Visibility = Visibility.Visible;
+                gdEnemyHand.Visibility = Visibility.Collapsed;
+                gdEnemyAllyHand.Visibility = Visibility.Visible;
             }
             else
             {
                 gdPlayerHand.Visibility = Visibility.Visible;
                 gdAllyHand.Visibility = Visibility.Collapsed;
+                gdEnemyHand.Visibility = Visibility.Visible;
+                gdEnemyAllyHand.Visibility = Visibility.Collapsed;
             }
         }
 

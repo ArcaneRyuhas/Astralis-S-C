@@ -38,6 +38,7 @@ namespace Astralis.Views.Game.GameLogic
         {
             cardLibrary.Add(ERROR_CARD_ID, new Card(1, 1, 1, ERROR));
         }
+
         private void PopulateLibrary()
         {
             cardLibrary.Add(-1, new Card(0, 0, 0, NO_CLASS));
@@ -85,20 +86,13 @@ namespace Astralis.Views.Game.GameLogic
 
         private int FindKeyByValue(Card value)
         {
-            int cardId;
+            int cardId = ERROR_CARD_ID;
 
             if (cardLibrary.ContainsValue(value))
             {
-                cardId = cardLibrary
-                        .Where(pair => pair.Value == value)
-                        .Select(pair => pair.Key)
-                        .FirstOrDefault();
+                cardId = cardLibrary.FirstOrDefault(x => x.Value.Equals(value)).Key;
             }
-            else
-            {
-                cardId = ERROR_CARD_ID;
-            }
-            
+
             return cardId;
         }
 

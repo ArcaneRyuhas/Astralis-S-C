@@ -9,6 +9,7 @@ namespace Astralis.Views.Game.GameLogic
 {
     public class Team : INotifyPropertyChanged
     {
+        private int roundMana;
         private int mana;
         private int health;
 
@@ -19,6 +20,8 @@ namespace Astralis.Views.Game.GameLogic
             Mana = mana;
             Health = health;
         }
+
+        public int RoundMana { get { return roundMana; } set { roundMana = value; } }
 
         public int Mana
         {

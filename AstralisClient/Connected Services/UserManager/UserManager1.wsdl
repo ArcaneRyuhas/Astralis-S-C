@@ -218,9 +218,6 @@
   <wsdl:message name="IGameManager_EndGameTurn_InputMessage">
     <wsdl:part name="parameters" element="tns:EndGameTurn" />
   </wsdl:message>
-  <wsdl:message name="IGameManager_StartNewPhase_InputMessage">
-    <wsdl:part name="parameters" element="tns:StartNewPhase" />
-  </wsdl:message>
   <wsdl:message name="IGameManager_StartFirstPhase_InputMessage">
     <wsdl:part name="parameters" element="tns:StartFirstPhase" />
   </wsdl:message>
@@ -247,18 +244,6 @@
   </wsdl:message>
   <wsdl:message name="IGameManager_PlayerEndedTurn_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PlayerEndedTurnResponse" />
-  </wsdl:message>
-  <wsdl:message name="IGameManager_EndPhase_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:EndPhase" />
-  </wsdl:message>
-  <wsdl:message name="IGameManager_EndPhase_InputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:EndPhaseResponse" />
-  </wsdl:message>
-  <wsdl:message name="IGameManager_StartNewPhaseClient_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:StartNewPhaseClient" />
-  </wsdl:message>
-  <wsdl:message name="IGameManager_StartNewPhaseClient_InputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:StartNewPhaseClientResponse" />
   </wsdl:message>
   <wsdl:message name="IGameManager_StartFirstPhaseClient_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:StartFirstPhaseClient" />
@@ -408,9 +393,6 @@
     <wsdl:operation name="EndGameTurn">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGameTurn" message="tns:IGameManager_EndGameTurn_InputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="StartNewPhase">
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartNewPhase" message="tns:IGameManager_StartNewPhase_InputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="StartFirstPhase">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhase" message="tns:IGameManager_StartFirstPhase_InputMessage" />
     </wsdl:operation>
@@ -429,14 +411,6 @@
     <wsdl:operation name="PlayerEndedTurn">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/PlayerEndedTurn" message="tns:IGameManager_PlayerEndedTurn_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/PlayerEndedTurnResponse" message="tns:IGameManager_PlayerEndedTurn_InputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="EndPhase">
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/EndPhase" message="tns:IGameManager_EndPhase_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndPhaseResponse" message="tns:IGameManager_EndPhase_InputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="StartNewPhaseClient">
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/StartNewPhaseClient" message="tns:IGameManager_StartNewPhaseClient_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartNewPhaseClientResponse" message="tns:IGameManager_StartNewPhaseClient_InputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="StartFirstPhaseClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhaseClient" message="tns:IGameManager_StartFirstPhaseClient_OutputCallbackMessage" />
@@ -744,12 +718,6 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
-    <wsdl:operation name="StartNewPhase">
-      <soap12:operation soapAction="http://tempuri.org/IGameManager/StartNewPhase" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-    </wsdl:operation>
     <wsdl:operation name="StartFirstPhase">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/StartFirstPhase" style="document" />
       <wsdl:input>
@@ -785,24 +753,6 @@
     </wsdl:operation>
     <wsdl:operation name="PlayerEndedTurn">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/PlayerEndedTurn" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EndPhase">
-      <soap12:operation soapAction="http://tempuri.org/IGameManager/EndPhase" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="StartNewPhaseClient">
-      <soap12:operation soapAction="http://tempuri.org/IGameManager/StartNewPhaseClient" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
