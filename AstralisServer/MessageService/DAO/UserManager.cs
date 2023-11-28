@@ -378,7 +378,6 @@ namespace MessageService
         {
             if (usersInLobby.ContainsValue(usersInLobby[nickname]))
             {
-                Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
                 IGameManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IGameManagerCallback>();
 
                 if (!usersInGameContext.ContainsKey(nickname))
@@ -386,6 +385,7 @@ namespace MessageService
                     usersInGameContext.Add(nickname, currentUserCallbackChannel);
                 }
 
+                Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
                 currentUserCallbackChannel.ShowUsersInGame(usersInGame);
 
                 foreach (string userInGame in usersInGame.Keys)
@@ -411,13 +411,13 @@ namespace MessageService
 
         public void DrawCard(string nickname, int cardId)
         {
-            List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[nickname]);
+            Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
 
-            foreach (string userNickname in usersNickname)
+            foreach (string userInGame in usersInGame.Keys)
             {
-                if(userNickname != nickname)
+                if(userInGame != nickname && usersInGame[nickname] == usersInGame[userInGame])
                 {
-                    usersInGameContext[userNickname].DrawCardClient(nickname, cardId);
+                  usersInGameContext[userInGame].DrawCardClient(nickname, cardId);
                 }
             }
         }
@@ -429,20 +429,20 @@ namespace MessageService
 
         public void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn)
         {
-            Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
+            Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);         
 
             foreach (string userInGame in usersInGame.Keys)
             {
                 if(usersInGame[userInGame] == usersInGame[nickname])
                 {
-                    if(userInGame!= nickname)
+                    if(userInGame != nickname)
                     {
                         usersInGameContext[userInGame].PlayerEndedTurn(nickname, boardAfterTurn);
                     }
                 }
                 else
                 {
-                    boardAfterTurn = ReverseBoard(boardAfterTurn);
+                    boardAfterTurn = ReverseBoard(boardAfterTurn);//REGRESAR AL ELSE
                     usersInGameContext[userInGame].PlayerEndedTurn(nickname, boardAfterTurn);
                 }
             }
@@ -454,11 +454,12 @@ namespace MessageService
 
             for (int i = 0; i < originalBoard.Count; i++)
             {
-                reversedBoard.Add(originalBoard.Count - i, originalBoard[originalBoard.Count - i]);
+                reversedBoard.Add(originalBoard.Count - i, originalBoard[i + 1]);
             }
 
             return reversedBoard;
         }
+
 
 
         private Dictionary<string, int> GetUsersPerTeam(string nickname)

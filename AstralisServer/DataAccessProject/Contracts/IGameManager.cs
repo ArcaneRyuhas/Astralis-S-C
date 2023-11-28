@@ -26,9 +26,6 @@ namespace DataAccessProject.Contracts
         void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn);//Es un diccionario del board completo
 
         [OperationContract(IsOneWay = true)]
-        void StartNewPhase(string hostNickname); //Solo el host manda esto
-
-        [OperationContract(IsOneWay = true)]
         void StartFirstPhase(string hostNickname);
 
     }
