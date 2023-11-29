@@ -411,15 +411,22 @@ namespace MessageService
 
         public void DrawCard(string nickname, int cardId)
         {
+            ChangeSingle();
+
             Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
 
-            foreach (string userInGame in usersInGame.Keys)
+            lock (usersInGame)
             {
-                if(userInGame != nickname && usersInGame[nickname] == usersInGame[userInGame])
+                foreach (string userInGame in usersInGame.Keys)
                 {
-                  usersInGameContext[userInGame].DrawCardClient(nickname, cardId);
+                    if (userInGame != nickname && usersInGame[nickname] == usersInGame[userInGame])
+                    {
+                        usersInGameContext[userInGame].DrawCardClient(nickname, cardId);
+                    }
                 }
-            }
+            }       
+
+            ChangeMultiple();
         }
 
         public void EndGame(int winnerTeam)
@@ -496,6 +503,20 @@ namespace MessageService
             {
                 usersInGameContext[userInGame].StartFirstPhaseClient(firstPlayers);
             }
+        }
+
+        private void ChangeSingle()
+        {
+            var hostService = (ServiceHost) OperationContext.Current.Host;
+            var behaviour = hostService.Description.Behaviors.Find<ServiceBehaviorAttribute>();
+            behaviour.ConcurrencyMode = ConcurrencyMode.Single;
+        }
+
+        private void ChangeMultiple()
+        {
+            var hostService = (ServiceHost)OperationContext.Current.Host;
+            var behaviour = hostService.Description.Behaviors.Find<ServiceBehaviorAttribute>();
+            behaviour.ConcurrencyMode = ConcurrencyMode.Multiple;
         }
     }
 }

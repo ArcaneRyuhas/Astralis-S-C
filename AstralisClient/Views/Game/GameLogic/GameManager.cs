@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
 using Astralis.UserManager;
+using System.Reflection;
 
 namespace Astralis.Views.Game.GameLogic
 {
@@ -21,7 +22,7 @@ namespace Astralis.Views.Game.GameLogic
         private GameBoard gameBoard;
         private Dictionary<string, int> usersTeam;
         private int endTurnCounter = 0;
-        private bool isMyTurn = true; //CAMBIAR A FALSO
+        private bool isMyTurn = false; //CAMBIAR A FALSO
         private Queue<int> userDeckQueue = new Queue<int>();
         private Tuple<string, string> firstPlayers = Tuple.Create<string, string>("", "");
         private string myEnemy;
@@ -75,7 +76,7 @@ namespace Astralis.Views.Game.GameLogic
                 gameBoard.AddCardToHand(userHand[indexOfDrawnCard]);
             }
 
-            //AQUI DEBEMOS TAMBIEN DE AÑADIR UNA CARTA A LOS ENEMIGOS
+            gameBoard.EnemyDrawCard();
 
             return cardToDraw;
         }
@@ -124,52 +125,41 @@ namespace Astralis.Views.Game.GameLogic
         {
             endTurnCounter++;
             string myNickname = UserSession.Instance().Nickname;
-            int counter = 0;
 
             if (usersTeam[player] != usersTeam[myNickname])
             {
-                foreach (UIElement child in gdEnemySlots.Children)
-                {
-                    if (child is Grid)
-                    {
-                        counter++;
-
-                        if (boardAfterTurn[counter] != ERROR_CARD_ID)
-                        {
-                            Card card = CardManager.Instance().GetCard(boardAfterTurn[counter]);
-                            GraphicCard graphicCard = new GraphicCard();
-                            Grid innerGrid = (Grid)child;
-
-                            graphicCard.SetGraphicCard(card);
-                            innerGrid.Children.Add(graphicCard);
-                            gameBoard.TakeCardOutOfHand(player, graphicCard, usersTeam);
-                        }
-                    }
-                }
+                AddCardsToBoard(player, gdEnemySlots, boardAfterTurn);
             }
             else
             {
-                foreach (UIElement child in gdPlayerSlots.Children)
-                {
-                    if (child is Grid)
-                    {
-                        counter++;
-
-                        if (boardAfterTurn[counter] != ERROR_CARD_ID)
-                        {
-                            Card card = CardManager.Instance().GetCard(boardAfterTurn[counter]);
-                            GraphicCard graphicCard = new GraphicCard();
-                            Grid innerGrid = (Grid)child;
-
-                            graphicCard.SetGraphicCard(card);
-                            innerGrid.Children.Add(graphicCard);
-                            gameBoard.TakeCardOutOfHand(player, graphicCard, usersTeam);
-                        }
-                    }
-                }
+                AddCardsToBoard(player, gdPlayerSlots, boardAfterTurn);
             }
 
             TurnCounter();
+        }
+
+        public void AddCardsToBoard(string player, Grid gdSlots, Dictionary<int,int> boardAfterTurn)
+        {
+            int counter = 0;
+
+            foreach (UIElement child in gdSlots.Children)
+            {
+                if (child is Grid)
+                {
+                    counter++;
+
+                    if (boardAfterTurn[counter] != ERROR_CARD_ID)
+                    {
+                        Card card = CardManager.Instance().GetCard(boardAfterTurn[counter]);
+                        GraphicCard graphicCard = new GraphicCard();
+                        Grid innerGrid = (Grid)child;
+
+                        graphicCard.SetGraphicCard(card);
+                        innerGrid.Children.Add(graphicCard);
+                        gameBoard.TakeCardOutOfHand(player, graphicCard, usersTeam);
+                    }
+                }
+            }
         }
 
         private void TurnCounter()
@@ -193,6 +183,7 @@ namespace Astralis.Views.Game.GameLogic
                     StartCountdown();
                     endTurnCounter = 0;
                     userTeam.RoundMana++;
+                    gameBoard.DrawCard();
 
                     break;
             }
@@ -208,8 +199,6 @@ namespace Astralis.Views.Game.GameLogic
         public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
         {
             this.firstPlayers = firstPlayers;
-
-            gameBoard.InitializeEnemyCards();
 
             if (firstPlayers.Item1 == UserSession.Instance().Nickname)
             {

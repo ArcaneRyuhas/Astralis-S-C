@@ -76,17 +76,26 @@ namespace Astralis.Views.Game
 
 
         //We preferred to leave the DrawFourCards in this class because we need the Await and here was found to be more easy to implement and to understand.
-        private async Task DrawFourCards()
+        private void DrawFourCards()
         {
             string myNickname = UserSession.Instance().Nickname;
 
-            for (int cardsToDraw = 4; cardsToDraw > 0; cardsToDraw--)
-            {
-                int drawnCard = gameManager.DrawCard();
+            int[] drawnCard = new int[4];
 
-                client.DrawCard(myNickname, drawnCard);
-                await Task.Delay(1000);
+            for (int cardsToDraw = 0; cardsToDraw < 4; cardsToDraw++)
+            {
+                drawnCard[cardsToDraw] = gameManager.DrawCard();
             }
+
+            client.DrawCard(myNickname, drawnCard);
+        }
+
+        public void DrawCard()
+        {
+            string myNickname = UserSession.Instance().Nickname;
+            int[] drawnCard = new int[1] { gameManager.DrawCard()};
+
+            client.DrawCard(myNickname, drawnCard);
         }
 
         //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges.
@@ -263,13 +272,16 @@ namespace Astralis.Views.Game
             }
         }
 
-        public void DrawCardClient(string nickname, int cardId)
+        public void DrawCardClient(string nickname, int [] cardsId)
         {
-            GraphicCard graphicCard = new GraphicCard();
-            Card card = CardManager.Instance().GetCard(cardId);
+            foreach(int cardId in cardsId) 
+            {
+                GraphicCard graphicCard = new GraphicCard();
+                Card card = CardManager.Instance().GetCard(cardId);
 
-            graphicCard.SetGraphicCard(card);
-            AddGraphicCardToGrid(graphicCard, gdAllyHand);
+                graphicCard.SetGraphicCard(card);
+                AddGraphicCardToGrid(graphicCard, gdAllyHand);
+            }
         }
 
         public void EndGameClient(int winnerTeam)
@@ -287,11 +299,11 @@ namespace Astralis.Views.Game
 
         public void TakeCardOutOfHand(string nickname, GraphicCard graphicCardToRemove, Dictionary<string, int> usersTeam)
         {
-            if(usersTeam[nickname] == usersTeam[UserSession.Instance().Nickname])
+            if (usersTeam[nickname] == usersTeam[UserSession.Instance().Nickname])
             {
-                foreach(GraphicCard graphicCard in gdAllyHand.Children)
+                foreach (GraphicCard graphicCard in gdAllyHand.Children)
                 {
-                    if(graphicCard.Card.Equals(graphicCardToRemove.Card))
+                    if (graphicCard.Card.Equals(graphicCardToRemove.Card))
                     {
                         int columnIndex = Grid.GetColumn(graphicCard);
                         gdAllyHand.Children.Remove(graphicCard);
@@ -300,16 +312,15 @@ namespace Astralis.Views.Game
                     }
                 }
             }
-            else if(nickname == gameManager.MyEnemy)
+            else if (nickname == gameManager.MyEnemy)
             {
-                foreach(GraphicCard graphicCard in gdEnemyHand.Children)
+                foreach (GraphicCard graphicCard in gdEnemyHand.Children)
                 {
                     int columnIndex = Grid.GetColumn(graphicCard);
                     gdEnemyHand.Children.Remove(graphicCard);
                     RemoveColumn(gdEnemyHand, columnIndex);
                     break;
                 }
-
             }
             else
             {
@@ -342,24 +353,23 @@ namespace Astralis.Views.Game
         public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
         {
             gameManager.StartFirstPhaseClient(firstPlayers);
-            _ = DrawFourCards();
+            DrawFourCards();
             gameManager.StartCountdown();
         }
-        
-        public void InitializeEnemyCards()
+
+        public void EnemyDrawCard ()
         {
-            for (int cardsToDraw = 4; cardsToDraw > 0; cardsToDraw--)
-            {
-                Card card = CardManager.Instance().GetCard(ENEMY_CARD);
-                GraphicCard graphicCardOne = new GraphicCard();
-                graphicCardOne.SetGraphicCard(card);
+            Card card = CardManager.Instance().GetCard(ENEMY_CARD);
+            GraphicCard graphicCardOne = new GraphicCard();
 
-                GraphicCard graphicCardTwo = new GraphicCard();
-                graphicCardTwo.SetGraphicCard(card);
+            graphicCardOne.SetGraphicCard(card);
 
-                AddGraphicCardToGrid(graphicCardOne, gdEnemyHand);
-                AddGraphicCardToGrid(graphicCardTwo, gdEnemyAllyHand);
-            }
+            GraphicCard graphicCardTwo = new GraphicCard();
+
+            graphicCardTwo.SetGraphicCard(card);
+
+            AddGraphicCardToGrid(graphicCardOne, gdEnemyHand);
+            AddGraphicCardToGrid(graphicCardTwo, gdEnemyAllyHand);
         }
 
         private async Task StartGameAsync()
@@ -378,12 +388,12 @@ namespace Astralis.Views.Game
             }
         }
 
-        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        private void BtnMenuClick(object sender, RoutedEventArgs e)
         {
             gameManager.EndTurn();
         }
 
-        private void btnChangeView_Click(object sender, RoutedEventArgs e)
+        private void BtnChangeViewClick(object sender, RoutedEventArgs e)
         {
             if(gdPlayerHand.IsVisible)
             {
