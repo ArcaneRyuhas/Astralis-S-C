@@ -17,6 +17,7 @@ namespace Astralis.Views.Game.GameLogic
 
         public Team(int mana, int health)
         {
+            roundMana = mana;
             Mana = mana;
             Health = health;
         }

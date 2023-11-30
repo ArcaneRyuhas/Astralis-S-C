@@ -16,7 +16,7 @@ namespace Astralis.Views.Game
     public partial class GameBoard : Window, UserManager.IGameManagerCallback
     {
         private const int GAME_MODE_STARTING_HEALT = 20;
-        private const int GAME_MODE_STARTING_MANA = 10; // CAMBIAR DESPUES DE PROBAR A 2
+        private const int GAME_MODE_STARTING_MANA = 2; // CAMBIAR DESPUES DE PROBAR A 2
         private const string TEAM_HEALTH = "Health";
         private const string TEAM_MANA = "Mana";
         private const int ERROR_CARD_ID = 0;
@@ -48,10 +48,12 @@ namespace Astralis.Views.Game
             Connect();
             SetTeams();
             gameManager = new GameManager();
+            lblMyNickname.Content = UserSession.Instance().Nickname;
 
             gameManager.SetGameBoard(this);
             gameManager.SetCounter(progressBarCounter);
             gameManager.UserTeam = userTeam;
+            gameManager.EnemyTeam = enemyTeam;
         }
 
         private void Connect()
@@ -127,10 +129,11 @@ namespace Astralis.Views.Game
                     Grid innerGrid = (Grid)child;
                     int cardId = ERROR_CARD_ID;
 
-                    if (innerGrid.Children.Count == 1 && innerGrid.Children[0] is GraphicCard)
+                    foreach (GraphicCard innerCard in innerGrid.Children)
                     {
-                        GraphicCard graphicCard = innerGrid.Children[0] as GraphicCard;
-                        cardId = CardManager.Instance().GetCardId(graphicCard.Card.Clone());
+                        innerCard.OnCardClicked -= GraphicCardClickedHandler;
+                        cardId = CardManager.Instance().GetCardId(innerCard.Card.Clone());
+                        break;
                     }
 
                     boardDictionary.Add(counter, cardId);
@@ -138,6 +141,33 @@ namespace Astralis.Views.Game
             }
 
             return boardDictionary;
+        }
+
+        public GraphicCard[] GetAttackBoard(Grid gdBoard)
+        {
+            GraphicCard[] attackBoard = new GraphicCard[5];
+            int counter = 0;
+
+            foreach (UIElement child in gdBoard.Children)
+            {
+                if (child is Grid)
+                {
+                    Grid innerGrid = (Grid)child;
+                    GraphicCard graphicCard = new GraphicCard();
+                    graphicCard.SetGraphicCard(CardManager.Instance().GetCard(ERROR_CARD_ID));
+
+                    foreach (GraphicCard innerCard in innerGrid.Children)
+                    {
+                        graphicCard = innerCard;
+                        break;
+                    }
+
+                    attackBoard[counter] = graphicCard;
+                    counter++;
+                }
+            }
+
+            return attackBoard;
         }
 
         private void UserTeam_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -160,7 +190,7 @@ namespace Astralis.Views.Game
 
             if (changedProperty == TEAM_HEALTH)
             {
-                lblEnemyHealth.Content = userTeam.Health;
+                lblEnemyHealth.Content = enemyTeam.Health;
             }
         }
 
@@ -217,6 +247,19 @@ namespace Astralis.Views.Game
             }
         }
 
+        public void DeleteGraphicCard(GraphicCard graphicCardToRemove)
+        {
+            Grid currentCardParent = VisualTreeHelper.GetParent(graphicCardToRemove) as Grid;
+
+            if (currentCardParent != null)
+            {
+                int columnIndex = Grid.GetColumn(graphicCardToRemove);
+                currentCardParent.Children.Remove(graphicCardToRemove);
+                RemoveColumn(currentCardParent, columnIndex);
+
+            }
+        }
+
         private void PlaceCardInSlot(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (gameManager.IsMyTurn && selectedCard != null)
@@ -224,7 +267,7 @@ namespace Astralis.Views.Game
                 Grid boardCardSlot = sender as Grid;
                 Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
 
-                if (currentCardParent != boardCardSlot && currentCardParent != gdPlayerHand)
+                if (currentCardParent != boardCardSlot && currentCardParent != gdPlayerHand && boardCardSlot.Children.Count == 0)
                 {
                     selectedCard.IsSelected = false;
 
@@ -235,22 +278,19 @@ namespace Astralis.Views.Game
                     selectedCard = null;
                 }
 
-                if (currentCardParent == gdPlayerHand && userTeam.UseMana(selectedCard.Card.Mana))
+                if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && userTeam.UseMana(selectedCard.Card.Mana))
                 {
-                    if (boardCardSlot.Children.Count == 0)
-                    {
-                        selectedCard.IsSelected = false;
+                    selectedCard.IsSelected = false;
 
-                        int columnIndex = Grid.GetColumn(selectedCard);
-                        currentCardParent.Children.Remove(selectedCard);
-                        RemoveColumn(currentCardParent, columnIndex);
+                    int columnIndex = Grid.GetColumn(selectedCard);
+                    currentCardParent.Children.Remove(selectedCard);
+                    RemoveColumn(currentCardParent, columnIndex);
 
-                        boardCardSlot.Children.Add(selectedCard);
-                        playedCards.Add(selectedCard.Card);
+                    boardCardSlot.Children.Add(selectedCard);
+                    playedCards.Add(selectedCard.Card);
 
-                        selectedCard.IsSelected = false;
-                        selectedCard = null;
-                    }
+                    selectedCard.IsSelected = false;
+                    selectedCard = null;
                 }
 
             }
@@ -301,34 +341,27 @@ namespace Astralis.Views.Game
         {
             if (usersTeam[nickname] == usersTeam[UserSession.Instance().Nickname])
             {
-                foreach (GraphicCard graphicCard in gdAllyHand.Children)
-                {
-                    if (graphicCard.Card.Equals(graphicCardToRemove.Card))
-                    {
-                        int columnIndex = Grid.GetColumn(graphicCard);
-                        gdAllyHand.Children.Remove(graphicCard);
-                        RemoveColumn(gdAllyHand, columnIndex);
-                        break;
-                    }
-                }
+                RemoveCardFromHand(gdAllyHand, graphicCardToRemove);
             }
             else if (nickname == gameManager.MyEnemy)
             {
-                foreach (GraphicCard graphicCard in gdEnemyHand.Children)
-                {
-                    int columnIndex = Grid.GetColumn(graphicCard);
-                    gdEnemyHand.Children.Remove(graphicCard);
-                    RemoveColumn(gdEnemyHand, columnIndex);
-                    break;
-                }
+                RemoveCardFromHand(gdEnemyHand, graphicCardToRemove);
             }
             else
             {
-                foreach (GraphicCard graphicCard in gdEnemyAllyHand.Children)
+                RemoveCardFromHand(gdEnemyAllyHand, graphicCardToRemove);
+            }
+        }
+
+        private void RemoveCardFromHand(Grid gridToModify, GraphicCard graphicCardToRemove)
+        {
+            foreach (GraphicCard graphicCard in gridToModify.Children)
+            {
+                if (graphicCard.Card.Equals(graphicCardToRemove.Card))
                 {
                     int columnIndex = Grid.GetColumn(graphicCard);
-                    gdEnemyAllyHand.Children.Remove(graphicCard);
-                    RemoveColumn(gdEnemyAllyHand, columnIndex);
+                    gdAllyHand.Children.Remove(graphicCard);
+                    RemoveColumn(gdAllyHand, columnIndex);
                     break;
                 }
             }
@@ -345,7 +378,7 @@ namespace Astralis.Views.Game
         {
             gameManager.UsersTeam = users;
 
-            lblEnemyHealth.Content = gameManager.UsersTeam[UserSession.Instance().Nickname].ToString(); //CAMBIAR DESPUES DE PROBAR
+            lblUserTeam.Content += gameManager.UsersTeam[UserSession.Instance().Nickname].ToString(); //CAMBIAR DESPUES DE PROBAR
 
             _ = StartGameAsync();
         }
@@ -378,13 +411,11 @@ namespace Astralis.Views.Game
             {
                 await Task.Delay(2000);
                 GetUserDeck();
-                await Task.Delay(5000);
                 
                 if (isHost)
                 {
                     client.StartFirstPhase(UserSession.Instance().Nickname);
                 }
-
             }
         }
 

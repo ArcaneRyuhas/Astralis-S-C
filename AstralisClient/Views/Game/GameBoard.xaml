@@ -176,17 +176,18 @@
         <Grid Width="200" Height="200" HorizontalAlignment="Left">
             <Ellipse Width="100" Height="100" HorizontalAlignment="Right" Fill="Beige"/>
             <Label x:Name="lblTurnMana" Content="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="48" Width="100" HorizontalContentAlignment="Center" FontFamily="Bernard MT Condensed"/>
-            <Label x:Name="lblUserTurn" Content="Is your turn" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="150" Height="50" FontSize="20"/>
-            <Label x:Name="lblUserTeam" Content="Team:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Height="50" FontSize="20"/>
+            <Label x:Name="lblUserTurn" Content="It's not your turn" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="150" Height="50" FontSize="20"/>
+            <Label x:Name="lblUserTeam" Content="Team: " Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Height="50" FontSize="20"/>
         </Grid>
 
         <Grid Width="200" Height="200" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Label x:Name="lblMyNickname" Content="hola" VerticalAlignment="Top" FontSize="20" FontFamily="Arial" Foreground="Wheat"/>
             <Border Width="100" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Border.Background>
                     <ImageBrush ImageSource="InGameAssets/Heart.png"/>
                 </Border.Background>
             </Border>
-            <Label x:Name="lblEnemyHealth" Content="20" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" Width="68" HorizontalContentAlignment="Center" FontFamily="Bahnschrift Condensed"/>
+            <Label x:Name="lblEnemyHealth" Content="20" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Width="68" HorizontalContentAlignment="Center" Foreground="Black"  FontFamily="Bahnschrift Condensed"/>
         </Grid>
 
         <Grid Width="300" Height="200" HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -203,7 +204,7 @@
                     <ImageBrush ImageSource="InGameAssets/Heart.png"/>
                 </Border.Background>
             </Border>
-            <Label Grid.Row="1" x:Name="lblPlayerHealth" Content="20" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" Width="68" HorizontalContentAlignment="Center" FontFamily="Bahnschrift Condensed"/>
+            <Label Grid.Row="1" x:Name="lblPlayerHealth" Content="20" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Width="68" Foreground="Black" HorizontalContentAlignment="Center" FontFamily="Bahnschrift Condensed"/>
         </Grid>
 
         <Button x:Name="btnMenu" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Click="BtnMenuClick">

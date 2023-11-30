@@ -50,7 +50,6 @@ namespace Astralis.Views.Game
             }
             else
             {
-
                 this.card = card;
                 this.card.PropertyChanged += Card_PropertyChanged;
 

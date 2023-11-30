@@ -93,7 +93,7 @@ namespace Astralis.Views.Game.GameLogic
         {
             int dealtDamage;
 
-            if (Type.Equals(Constants.MAGE))
+            if (Type.Equals(Constants.MAGE) && Attack != Constants.DEAD_DAMAGE)
             {
                 dealtDamage = Attack + mageCount;
             }

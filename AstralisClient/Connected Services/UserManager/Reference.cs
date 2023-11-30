@@ -520,10 +520,10 @@ namespace Astralis.UserManager {
         System.Threading.Tasks.Task<int[]> DispenseCardsAsync(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawCard")]
-        void DrawCard(string nickname, int cardId);
+        void DrawCard(string nickname, int[] cardId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawCard")]
-        System.Threading.Tasks.Task DrawCardAsync(string nickname, int cardId);
+        System.Threading.Tasks.Task DrawCardAsync(string nickname, int[] cardId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/EndGame")]
         void EndGame(int winnerTeam);
@@ -554,7 +554,7 @@ namespace Astralis.UserManager {
         void ShowUsersInGame(System.Collections.Generic.Dictionary<string, int> users);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DrawCardClient", ReplyAction="http://tempuri.org/IGameManager/DrawCardClientResponse")]
-        void DrawCardClient(string nickname, int cardId);
+        void DrawCardClient(string nickname, int[] cardId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/PlayerEndedTurn", ReplyAction="http://tempuri.org/IGameManager/PlayerEndedTurnResponse")]
         void PlayerEndedTurn(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
@@ -610,11 +610,11 @@ namespace Astralis.UserManager {
             return base.Channel.DispenseCardsAsync(nickname);
         }
         
-        public void DrawCard(string nickname, int cardId) {
+        public void DrawCard(string nickname, int[] cardId) {
             base.Channel.DrawCard(nickname, cardId);
         }
         
-        public System.Threading.Tasks.Task DrawCardAsync(string nickname, int cardId) {
+        public System.Threading.Tasks.Task DrawCardAsync(string nickname, int[] cardId) {
             return base.Channel.DrawCardAsync(nickname, cardId);
         }
         
