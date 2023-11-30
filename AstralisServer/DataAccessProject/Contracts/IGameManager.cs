@@ -17,13 +17,13 @@ namespace DataAccessProject.Contracts
         List<int> DispenseCards(string nickname);
 
         [OperationContract(IsOneWay = true)]
-        void DrawCard(string nickname, int cardId); // Este metodo se llama cuando un jugador roba una carta, este se encarga de decirle al aliado que carta agarro.
+        void DrawCard(string nickname, int [] cardId); 
 
         [OperationContract(IsOneWay = true)]
         void EndGame(int winnerTeam); //Solo el host manda esto
 
         [OperationContract(IsOneWay = true)]
-        void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn);//Es un diccionario del board completo
+        void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn);
 
         [OperationContract(IsOneWay = true)]
         void StartFirstPhase(string hostNickname);
@@ -41,10 +41,10 @@ namespace DataAccessProject.Contracts
         void ShowUsersInGame(Dictionary<string, int> users);
 
         [OperationContract]
-        void DrawCardClient (string nickname, int cardId);
+        void DrawCardClient (string nickname, int [] cardId);
 
         [OperationContract]
-        void PlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn); //Es un diccionario del board completo
+        void PlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn);
 
         [OperationContract]
         void StartFirstPhaseClient(Tuple<string, string> firstPlayers);
