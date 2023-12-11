@@ -203,7 +203,15 @@ namespace Astralis.Views
 
         public void StartClientGame()
         {
-            Game.GameBoard gameBoard = new Game.GameBoard();
+            GameWindow windowParent = (GameWindow)this.Parent;
+
+            if(windowParent != null)
+            {
+                windowParent.Visibility = Visibility.Collapsed;
+            }
+
+            Game.GameBoard gameBoard = new Game.GameBoard(windowParent);
+            
             gameBoard.IsHost = isHost;
             gameBoard.Show();
         }
@@ -298,6 +306,12 @@ namespace Astralis.Views
             InstanceContext context = new InstanceContext(this);
             UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
 
+            GameWindow windowParent = (GameWindow)this.Parent; 
+            if(windowParent != null)
+            {
+                windowParent.Visibility = Visibility.Collapsed;
+            }
+    
             client.StartGame(gameId);
         }
     }

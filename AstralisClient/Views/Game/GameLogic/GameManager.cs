@@ -19,6 +19,7 @@ namespace Astralis.Views.Game.GameLogic
         private const int ERROR_CARD_ID = 0;
         private const int COUNTDOWN_STARTING_VALUE = 240; //RECORDAR REGRESARLO A 20
         private const int NO_MAGES = 0;
+        private const int DRAW = 3;
 
         private GameBoard gameBoard;
         private Dictionary<string, int> usersTeam;
@@ -35,9 +36,9 @@ namespace Astralis.Views.Game.GameLogic
         private Team userTeam;
         private Team enemyTeam;
 
+        
         public Queue<int> UserDeckQueue { get { return userDeckQueue; } set { userDeckQueue = value; } }
         public bool IsMyTurn { get { return isMyTurn; } }
-        public bool RoundEnded { get { return roundEnded; } }
         public Team UserTeam { get { return userTeam; } set { userTeam = value; } }
         public Dictionary<string, int> UsersTeam { get { return usersTeam; } set { usersTeam = value; } }
         public string MyEnemy { get { return myEnemy; } }
@@ -211,11 +212,36 @@ namespace Astralis.Views.Game.GameLogic
 
                     gameBoard.DrawCard();
                     AttackPhase();
+                    HasGameEnded();
                     roundEnded = false;
 
                     break;
             }
         }
+
+        private void HasGameEnded()
+        {
+            string myNickname = UserSession.Instance().Nickname;
+            int winnerTeam;
+
+            if(enemyTeam.Health < 1 && userTeam.Health < 1) 
+            {
+                winnerTeam = DRAW;
+                gameBoard.GameHasEnded(winnerTeam);
+            }
+            else if(enemyTeam.Health < 1)
+            {
+                winnerTeam = usersTeam[myEnemy];
+                gameBoard.GameHasEnded(winnerTeam);
+
+            }
+            else if(userTeam.Health < 1)
+            {
+                winnerTeam = usersTeam[myNickname];
+                gameBoard.GameHasEnded(winnerTeam);
+            }
+        }
+
 
         private void AttackPhase()
         {

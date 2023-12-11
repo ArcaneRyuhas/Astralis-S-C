@@ -32,6 +32,14 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IEndGame_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
@@ -89,6 +97,12 @@
   <wsdl:message name="ILobbyManager_GameIsNotFull_OutputMessage">
     <wsdl:part name="parameters" element="tns:GameIsNotFullResponse" />
   </wsdl:message>
+  <wsdl:message name="ILobbyManager_SendFriendInvitation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendInvitation" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_SendFriendInvitation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendInvitationResponse" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_ConnectLobby_InputMessage">
     <wsdl:part name="parameters" element="tns:ConnectLobby" />
   </wsdl:message>
@@ -127,12 +141,6 @@
   </wsdl:message>
   <wsdl:message name="ILobbyManager_UpdateLobbyUserTeam_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:UpdateLobbyUserTeamResponse" />
-  </wsdl:message>
-  <wsdl:message name="ILobbyManager_GiveLobbyId_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:GiveLobbyId" />
-  </wsdl:message>
-  <wsdl:message name="ILobbyManager_GiveLobbyId_InputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:GiveLobbyIdResponse" />
   </wsdl:message>
   <wsdl:message name="ILobbyManager_ReceiveMessage_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveMessage" />
@@ -257,6 +265,15 @@
   <wsdl:message name="IGameManager_EndGameClient_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:EndGameClientResponse" />
   </wsdl:message>
+  <wsdl:message name="IEndGame_GetUsersWithTeam_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUsersWithTeam" />
+  </wsdl:message>
+  <wsdl:message name="IEndGame_SetUsers_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:SetUsers" />
+  </wsdl:message>
+  <wsdl:message name="IEndGame_SetUsers_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:SetUsersResponse" />
+  </wsdl:message>
   <wsdl:portType name="IUserManager">
     <wsdl:operation name="AddUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
@@ -292,6 +309,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFull" message="tns:ILobbyManager_GameIsNotFull_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFullResponse" message="tns:ILobbyManager_GameIsNotFull_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendFriendInvitation">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/SendFriendInvitation" message="tns:ILobbyManager_SendFriendInvitation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/SendFriendInvitationResponse" message="tns:ILobbyManager_SendFriendInvitation_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ConnectLobby">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ConnectLobby" message="tns:ILobbyManager_ConnectLobby_InputMessage" />
     </wsdl:operation>
@@ -322,10 +343,6 @@
     <wsdl:operation name="UpdateLobbyUserTeam">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam" message="tns:ILobbyManager_UpdateLobbyUserTeam_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeamResponse" message="tns:ILobbyManager_UpdateLobbyUserTeam_InputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GiveLobbyId">
-      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GiveLobbyId" message="tns:ILobbyManager_GiveLobbyId_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GiveLobbyIdResponse" message="tns:ILobbyManager_GiveLobbyId_InputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="ReceiveMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessage" message="tns:ILobbyManager_ReceiveMessage_OutputCallbackMessage" />
@@ -421,6 +438,15 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGameClientResponse" message="tns:IGameManager_EndGameClient_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
+  <wsdl:portType name="IEndGame">
+    <wsdl:operation name="GetUsersWithTeam">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEndGame/GetUsersWithTeam" message="tns:IEndGame_GetUsersWithTeam_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetUsers">
+      <wsdl:output wsaw:Action="http://tempuri.org/IEndGame/SetUsers" message="tns:IEndGame_SetUsers_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEndGame/SetUsersResponse" message="tns:IEndGame_SetUsers_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
     <wsp:PolicyReference URI="#NetTcpBinding_IUserManager_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
@@ -500,6 +526,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SendFriendInvitation">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/SendFriendInvitation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ConnectLobby">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ConnectLobby" style="document" />
       <wsdl:input>
@@ -559,15 +594,6 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateLobbyUserTeam">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GiveLobbyId">
-      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GiveLobbyId" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -779,6 +805,25 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IEndGame" type="tns:IEndGame">
+    <wsp:PolicyReference URI="#NetTcpBinding_IEndGame_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetUsersWithTeam">
+      <soap12:operation soapAction="http://tempuri.org/IEndGame/GetUsersWithTeam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SetUsers">
+      <soap12:operation soapAction="http://tempuri.org/IEndGame/SetUsers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:service name="UserManager">
     <wsdl:port name="NetTcpBinding_IUserManager" binding="tns:NetTcpBinding_IUserManager">
       <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
@@ -799,6 +844,12 @@
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IGameManager" binding="tns:NetTcpBinding_IGameManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IEndGame" binding="tns:NetTcpBinding_IEndGame">
       <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>

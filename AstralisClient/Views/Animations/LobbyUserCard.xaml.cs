@@ -21,10 +21,10 @@ namespace Astralis.Views.Animations
 
     public partial class LobbyUserCard : UserControl
     {
-        
-        private List<string> ItemsList { get; set; }
         private const int TEAM_ONE = 1;
         private const int TEAM_TWO = 2;
+
+        private List<string> ItemsList { get; set; }
         private string userNickname;
         private int team;
         public event EventHandler<Tuple<string, int>> TeamSelectionChanged;

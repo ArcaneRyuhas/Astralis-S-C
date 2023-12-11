@@ -1,5 +1,6 @@
 ﻿using Astralis.Logic;
 using Astralis.Views.Game.GameLogic;
+using Astralis.Views.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace Astralis.Views.Game
         private List<Card> playedCards = new List<Card>();
         private Team userTeam;
         private Team enemyTeam;
+        private GameWindow gameWindow;
 
         public bool IsHost { get { return isHost; } set { isHost = value; } }
 
@@ -37,10 +39,11 @@ namespace Astralis.Views.Game
 
         public Label LblTurnMana { get { return lblTurnMana; } }
 
-        public GameBoard()
+        public GameBoard(GameWindow gameWindow)
         {
             InitializeComponent();
             InitializeGame();
+            this.gameWindow = gameWindow;
         }
 
         private void InitializeGame()
@@ -256,7 +259,6 @@ namespace Astralis.Views.Game
                 int columnIndex = Grid.GetColumn(graphicCardToRemove);
                 currentCardParent.Children.Remove(graphicCardToRemove);
                 RemoveColumn(currentCardParent, columnIndex);
-
             }
         }
 
@@ -324,11 +326,24 @@ namespace Astralis.Views.Game
             }
         }
 
+        public void GameHasEnded(int winnerTeam)
+        {
+            string myNickname = UserSession.Instance().Nickname;
+
+            if (isHost)
+            {
+                client.EndGame(winnerTeam, myNickname);
+            }
+        }
+
         public void EndGameClient(int winnerTeam)
         {
-            //MOSTRAR EN PANTALLA GANADOR
+            string myNickname = UserSession.Instance().Nickname;
+            EndGame endGame = new EndGame(winnerTeam, gameManager.UsersTeam[myNickname]);
 
-            //ABRIR VENTANA DE PARTIDA ACABADA
+            gameWindow.ChangePage(endGame);
+            gameWindow.Visibility = Visibility.Visible;
+            
             this.Close();
         }
 

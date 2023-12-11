@@ -1,6 +1,7 @@
 ﻿using Astralis.Logic;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Astralis.Views
 {
@@ -18,6 +19,10 @@ namespace Astralis.Views
             mainFrame.Content = mainMenu;
         }
 
+        public void ChangePage(Page pageToSet)
+        {
+            mainFrame.Content = pageToSet;
+        }
 
         private void CloseWindowEventHandler(object sender, EventArgs e)
         {
