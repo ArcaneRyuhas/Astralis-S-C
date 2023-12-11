@@ -58,7 +58,7 @@ namespace Astralis.Views
             Lobby lobby = new Lobby();
             if (lobby.GameIsNotFull(code)  && lobby.SetLobby(code))
             {
-                NavigationService.Navigate(lobby);
+                lobby.Show();
             }
             else
             {

@@ -4,6 +4,8 @@ using System.Windows.Input;
 using Astralis.Logic;
 using Astralis.UserManager;
 using System.Security.Cryptography;
+using Astralis.Views.Animations;
+using System.Windows.Navigation;
 
 namespace Astralis.Views
 {
@@ -77,6 +79,45 @@ namespace Astralis.Views
             if (e.Key == Key.Enter)
             {
                 btnLogIn_Click(sender, e);
+            }
+        }
+
+        private void BtnJoinAsGuestClick(object sender, RoutedEventArgs e)
+        {
+            var guestInvitation = new GuestInvitation();
+
+            guestInvitation.OnSubmit += guestInvitation_OnSubmit;
+
+             var window = new Window
+             {
+                Content = guestInvitation,
+                Title = "Join As Guest",
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+             };
+             window.ShowDialog();
+        }
+
+        private void guestInvitation_OnSubmit(object sender, string invitationCode)
+        {
+            UserManager.UserManagerClient client = new UserManager.UserManagerClient();
+            if (client.AddGuest() > 0)
+            {
+                Lobby lobby = new Lobby();
+                if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
+                {
+                    var gameWindow = Window.GetWindow(this) as GameWindow;
+
+                    if (gameWindow != null)
+                    {
+                        gameWindow.mainFrame.Navigate(lobby);
+                    }
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("msgGameIsFullOrLobbyDoesntExist", "titleLobbyDoesntExist", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
     }
