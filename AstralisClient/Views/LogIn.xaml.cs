@@ -4,6 +4,9 @@ using System.Windows.Input;
 using Astralis.Logic;
 using Astralis.UserManager;
 using System.Security.Cryptography;
+using Astralis.Views.Animations;
+using System.Windows.Navigation;
+using System;
 
 namespace Astralis.Views
 {
@@ -22,7 +25,7 @@ namespace Astralis.Views
 
             UserManager.UserManagerClient client = new UserManager.UserManagerClient();
 
-            if(string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(password))
             {
                 noEmptyFields = false;
             }
@@ -79,5 +82,41 @@ namespace Astralis.Views
                 btnLogIn_Click(sender, e);
             }
         }
+
+        private void BtnJoinAsGuestClick(object sender, RoutedEventArgs e)
+        {
+            GuestInvitation guestInvitation = new GuestInvitation();
+
+            guestInvitation.OnSubmit += GuestInvitationOnSubmit;
+
+            guestInvitation.ShowDialog();
+        }
+
+        private void GuestInvitationOnSubmit(object sender, string invitationCode)
+        {
+            UserManager.UserManagerClient client = new UserManager.UserManagerClient();
+            User user = client.AddGuest();
+
+            if (user.Nickname != "ERROR")
+            {
+                UserSession.Instance(user);
+                Lobby lobby = new Lobby();
+                if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
+                {
+                    var gameWindow = Window.GetWindow(this) as GameWindow;
+
+                    if (gameWindow != null)
+                    {
+                        gameWindow.mainFrame.Navigate(lobby);
+                    }
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("msgGameIsFullOrLobbyDoesntExist", "titleLobbyDoesntExist", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+
     }
 }

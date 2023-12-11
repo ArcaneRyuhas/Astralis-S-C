@@ -14,6 +14,7 @@ namespace MessageService
 
     public partial class UserManager : IUserManager
     {
+        private const string NICKNAME_ERROR = "ERROR";
         private static readonly ILog log = LogManager.GetLogger(typeof(UserManager));
 
         public int ConfirmUser(string nickname, string password)
@@ -37,6 +38,34 @@ namespace MessageService
             result = userAccess.CreateUser(user);
 
             return result;
+        }
+
+        public User AddGuest()
+        {
+            UserAccess userAccess = new UserAccess();
+            int maxGuestNumber = userAccess.GetHigherGuests();
+            int nextGuestNumber = maxGuestNumber + 1;
+
+            string guestNickname = $"Guest{nextGuestNumber}";
+
+            User guestUser = new User
+            {
+                Nickname = guestNickname,
+                Password = guestNickname
+            };
+
+            int result = userAccess.CreateUser(guestUser);
+
+            if (result > 0)
+            {
+                return guestUser;
+            }
+            else
+            {
+                User userError = new User();
+                userError.Nickname = NICKNAME_ERROR;
+                return userError;
+            }
         }
 
         public bool FindUserByNickname(string nickname)

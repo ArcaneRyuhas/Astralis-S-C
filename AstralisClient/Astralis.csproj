@@ -80,6 +80,9 @@
     <Compile Include="Views\Animations\FriendWindow.xaml.cs">
       <DependentUpon>FriendWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Animations\GuestInvitation.xaml.cs">
+      <DependentUpon>GuestInvitation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Animations\LeftLineAnimation.xaml.cs">
       <DependentUpon>LeftLineAnimation.xaml</DependentUpon>
     </Compile>
@@ -123,6 +126,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Animations\FriendWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Animations\GuestInvitation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
