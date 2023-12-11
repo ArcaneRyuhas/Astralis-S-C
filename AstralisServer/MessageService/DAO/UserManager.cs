@@ -270,26 +270,32 @@ namespace MessageService
         {
             if (!onlineUsers.ContainsKey(nickname))
             {
-                IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
-                List<string> onlineNicknames = onlineUsers.Keys.ToList();
-                FriendAccess friendAccess = new FriendAccess();
+                ChangeSingle();
 
-                currentUserCallbackChannel.ShowOnlineFriends(friendAccess.GetFriendList(nickname, onlineUsers.Keys.ToList()));
-
-                try
+                lock (onlineUsers)
                 {
-                    foreach (var user in onlineUsers)
+                    IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
+                    List<string> onlineNicknames = onlineUsers.Keys.ToList();
+                    FriendAccess friendAccess = new FriendAccess();
+
+                    currentUserCallbackChannel.ShowOnlineFriends(friendAccess.GetFriendList(nickname, onlineUsers.Keys.ToList()));
+
+                    try
                     {
-                        user.Value.ShowUserConected(nickname);
+                        foreach (var user in onlineUsers)
+                        {
+                            user.Value.ShowUserConected(nickname);
+                        }
                     }
-                }
-                catch (CommunicationObjectAbortedException exception)
-                {
-                    log.Error(exception);
+                    catch (CommunicationObjectAbortedException exception)
+                    {
+                        log.Error("Error in ConnectUser IOnlineUserManager\n" + exception);
+                    }
+
+                    onlineUsers.Add(nickname, currentUserCallbackChannel);
                 }
 
-                onlineUsers.Add(nickname, currentUserCallbackChannel);
-
+                ChangeMultiple();
             }
         }
 
@@ -372,6 +378,7 @@ namespace MessageService
     public partial class UserManager : IGameManager
     {
 
+        private readonly Random random = new Random();
         private static Dictionary<string, IGameManagerCallback> usersInGameContext = new Dictionary<string, IGameManagerCallback>();
 
         public void ConnectGame(string nickname)
@@ -395,36 +402,53 @@ namespace MessageService
                         usersInGameContext[userInGame].ShowUserConnectedGame(nickname, usersTeam[nickname]);
                     }
                 }
+
+                Console.WriteLine(nickname + usersTeam[nickname]);
             }
         }
 
-        public List <int> DispenseCards(string nickname)
+        public List<int> DispenseCards(string nickname)
         {
-            DeckAccess deckAccess = new DeckAccess();
-            List <int> userDeck = deckAccess.GetDeckByNickname(nickname);
-            Random random = new Random();
+            ChangeSingle();
 
+            DeckAccess deckAccess = new DeckAccess();
+            List<int> userDeck = deckAccess.GetDeckByNickname(nickname);
             List<int> shuffledDeck = userDeck.OrderBy(x => random.Next()).ToList();
+
+            Console.Write("USER DECK: "); //DESDE AQUI BORRAR PARA PROBAR
+            foreach (int cardId in shuffledDeck)
+            {
+                Console.Write(cardId + " ");
+            }
+            Console.WriteLine();  // Add a new line for clarity
+
+            Console.WriteLine("USUARIO: " + nickname);// HACIA ARRIBA
+
+            ChangeMultiple();
 
             return shuffledDeck;
         }
 
-        public void DrawCard(string nickname, int cardId)
+        public void DrawCard(string nickname, int [] cardsId)
         {
             ChangeSingle();
 
             Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
 
-            lock (usersInGame)
+            foreach (string userInGame in usersInGame.Keys)
             {
-                foreach (string userInGame in usersInGame.Keys)
+                if (userInGame != nickname && usersInGame[nickname] == usersInGame[userInGame])
                 {
-                    if (userInGame != nickname && usersInGame[nickname] == usersInGame[userInGame])
-                    {
-                        usersInGameContext[userInGame].DrawCardClient(nickname, cardId);
-                    }
+                    usersInGameContext[userInGame].DrawCardClient(nickname, cardsId);
                 }
-            }       
+            }
+
+            Console.WriteLine("USER: " + nickname) ;
+
+            foreach (int card in cardsId)
+            {
+                Console.WriteLine($"{card}");
+            }
 
             ChangeMultiple();
         }
@@ -445,12 +469,17 @@ namespace MessageService
                     if(userInGame != nickname)
                     {
                         usersInGameContext[userInGame].PlayerEndedTurn(nickname, boardAfterTurn);
+
+                        foreach (int key in boardAfterTurn.Keys)
+                        {
+                            Console.WriteLine("USER: " + nickname + " SLOT: " + key + "CARDiD: " + boardAfterTurn[key]);
+                        }
                     }
                 }
                 else
                 {
-                    boardAfterTurn = ReverseBoard(boardAfterTurn);//REGRESAR AL ELSE
-                    usersInGameContext[userInGame].PlayerEndedTurn(nickname, boardAfterTurn);
+                    Dictionary<int, int> reversedBoard = ReverseBoard(boardAfterTurn);
+                    usersInGameContext[userInGame].PlayerEndedTurn(nickname, reversedBoard);
                 }
             }
         }
