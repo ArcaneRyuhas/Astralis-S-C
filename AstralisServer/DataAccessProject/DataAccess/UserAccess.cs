@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -52,7 +53,28 @@ namespace DataAccessProject.DataAccess
                 return maxGuestNumber;
             }
         }
+        public int CreateGuest(Contracts.User user)
+        {
+            int result = INT_VALIDATION_SUCCESS;
 
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+
+                User databaseUser = new User();
+                databaseUser.nickName = user.Nickname;
+                databaseUser.imageId = (short)user.ImageId;
+
+                var newUser = context.User.Add(databaseUser);
+
+                result = context.SaveChanges();
+
+                DeckAccess deckAccess = new DeckAccess();
+                deckAccess.CreateDefaultDeck(context, user.Nickname);
+
+                return result;
+            }
+        }
 
         public int CreateUser(Contracts.User user)
         {

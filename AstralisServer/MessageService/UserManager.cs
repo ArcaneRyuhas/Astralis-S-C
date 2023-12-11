@@ -54,7 +54,7 @@ namespace MessageService
                 Password = guestNickname
             };
 
-            int result = userAccess.CreateUser(guestUser);
+            int result = userAccess.CreateGuest(guestUser);
 
             if (result > 0)
             {
