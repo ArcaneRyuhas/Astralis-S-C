@@ -101,15 +101,12 @@ namespace Astralis.Views
             {
                 UserSession.Instance(user);
                 Lobby lobby = new Lobby();
+
                 if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
                 {
-                    var gameWindow = Window.GetWindow(this) as GameWindow;
-
-                    if (gameWindow != null)
-                    {
-                        gameWindow.mainFrame.Navigate(lobby);
-                    }
-                    Close();
+                    GameWindow gameWindow = new GameWindow();
+                    this.Close();
+                    gameWindow.ChangePage(lobby);
                 }
                 else
                 {
