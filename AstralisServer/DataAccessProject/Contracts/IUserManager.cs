@@ -16,6 +16,9 @@ namespace DataAccessProject.Contracts
         int AddUser(User user);
 
         [OperationContract]
+        User AddGuest();
+
+        [OperationContract]
         int ConfirmUser(string nickname, string password);
 
         [OperationContract]

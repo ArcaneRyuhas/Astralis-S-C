@@ -39,6 +39,59 @@ namespace MessageService
             return result;
         }
 
+        public User AddGuest()
+        {
+            int maxGuestNumber = GetMaxGuestNumber();
+            int nextGuestNumber = maxGuestNumber + 1;
+
+            string guestNickname = $"Guest{nextGuestNumber}";
+
+            User guestUser = new User
+            {
+                Nickname = guestNickname,
+                Password = guestNickname
+            };
+
+            UserAccess userAccess = new UserAccess();
+            int result = userAccess.CreateUser(guestUser);
+
+            if (result > 0)
+            {
+                return guestUser;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private int GetMaxGuestNumber()
+        {
+            int maxGuestNumber = 0;
+            List<User> guestUsers = GetAllUsers().Where(user => user.Nickname.StartsWith("Guest")).ToList();
+
+            if (guestUsers.Any())
+            {
+                maxGuestNumber = guestUsers.Max(user =>
+                {
+                    int number;
+                    if (int.TryParse(user.Nickname.Substring("Guest".Length), out number))
+                    {
+                        return number;
+                    }
+                    return 0;
+                });
+            }
+
+            return maxGuestNumber;
+        }
+
+        private List<User> GetAllUsers()
+        {
+            UserAccess userAccess = new UserAccess();
+            return userAccess.GetAllUsers();
+        }
+
         public bool FindUserByNickname(string nickname)
         {
             bool isFound = false;
