@@ -17,7 +17,7 @@ namespace Astralis.Views.Game
     public partial class GameBoard : Window, UserManager.IGameManagerCallback
     {
         private const int GAME_MODE_STARTING_HEALT = 20;
-        private const int GAME_MODE_STARTING_MANA = 2; // CAMBIAR DESPUES DE PROBAR A 2
+        private const int GAME_MODE_STARTING_MANA = 2;
         private const string TEAM_HEALTH = "Health";
         private const string TEAM_MANA = "Mana";
         private const int ERROR_CARD_ID = 0;
