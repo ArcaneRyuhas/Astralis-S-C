@@ -6,7 +6,7 @@ using System.ServiceModel;
 using DataAccessProject.Contracts;
 using DataAccessProject.DataAccess;
 using User = DataAccessProject.Contracts.User;
-using DataAccessProject;
+using MessageService.Mail;
 
 namespace MessageService
 {
@@ -154,6 +154,14 @@ namespace MessageService
             }
 
             return gameId;
+        }
+
+        public string SendFriendInvitation(string gameId, string userToSend)
+        {
+            UserAccess userAccess = new UserAccess();
+            User user = userAccess.GetUserByNickname(userToSend);
+
+            return Mail.Mail.Instance().sendInvitationMail(user.Mail, gameId);
         }
 
         public void DisconnectLobby(User user)
@@ -453,9 +461,14 @@ namespace MessageService
             ChangeMultiple();
         }
 
-        public void EndGame(int winnerTeam)
+        public void EndGame(int winnerTeam, string nickname)
         {
-            throw new NotImplementedException();
+            Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
+
+            foreach (string userInGame in usersInGame.Keys)
+            {
+                usersInGameContext[userInGame].EndGameClient(winnerTeam);
+            }
         }
 
         public void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn)
@@ -548,4 +561,33 @@ namespace MessageService
             behaviour.ConcurrencyMode = ConcurrencyMode.Multiple;
         }
     }
+
+    public partial class UserManager : IEndGame
+    {
+        public void GetUsersWithTeam(string nickname)
+        {
+            UserAccess userAccess = new UserAccess();
+            Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
+            List<UserWithTeam> usersWithTeam = new List<UserWithTeam>();
+            IEndGameCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IEndGameCallback>();
+
+
+            foreach (string userNickname in usersInGame.Keys)
+            {
+                UserWithTeam userWithTeam = new UserWithTeam();
+                User user = GetUserByNickname(userNickname);
+
+                userWithTeam.Nickname = nickname;
+                userWithTeam.Mail = user.Mail;
+                userWithTeam.ImageId = user.ImageId;
+                userWithTeam.Team = usersInGame[userNickname];
+
+                usersWithTeam.Add(userWithTeam);
+            }
+
+            currentUserCallbackChannel.SetUsers(usersWithTeam);
+
+        }
+    }
+
 }

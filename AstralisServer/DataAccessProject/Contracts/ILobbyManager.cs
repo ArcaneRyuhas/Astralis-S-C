@@ -20,6 +20,9 @@ namespace DataAccessProject.Contracts
         [OperationContract()]
         bool GameIsNotFull(string gameId);
 
+        [OperationContract()]
+        string SendFriendInvitation(string gameId, string userToSend);
+
         [OperationContract(IsOneWay = true)]
         void ConnectLobby(User user, string gameId);
 
@@ -51,9 +54,6 @@ namespace DataAccessProject.Contracts
 
         [OperationContract]
         void UpdateLobbyUserTeam(string userNickname, int team);
-
-        [OperationContract]
-        void GiveLobbyId(string gameId);
 
         [OperationContract]
         void ReceiveMessage(string message);

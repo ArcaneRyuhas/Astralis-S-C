@@ -20,7 +20,7 @@ namespace DataAccessProject.Contracts
         void DrawCard(string nickname, int [] cardId); 
 
         [OperationContract(IsOneWay = true)]
-        void EndGame(int winnerTeam); //Solo el host manda esto
+        void EndGame(int winnerTeam, string nickname); //Solo el host manda esto
 
         [OperationContract(IsOneWay = true)]
         void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn);
