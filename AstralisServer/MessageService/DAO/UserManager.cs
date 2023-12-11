@@ -10,10 +10,12 @@ using DataAccessProject;
 
 namespace MessageService
 {
+
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
 
     public partial class UserManager : IUserManager
     {
+        private const string NICKNAME_ERROR = "ERROR";
         private static readonly ILog log = LogManager.GetLogger(typeof(UserManager));
 
         public int ConfirmUser(string nickname, string password)
@@ -41,7 +43,8 @@ namespace MessageService
 
         public User AddGuest()
         {
-            int maxGuestNumber = GetMaxGuestNumber();
+            UserAccess userAccess = new UserAccess();
+            int maxGuestNumber = userAccess.GetHigherGuests();
             int nextGuestNumber = maxGuestNumber + 1;
 
             string guestNickname = $"Guest{nextGuestNumber}";
@@ -52,7 +55,6 @@ namespace MessageService
                 Password = guestNickname
             };
 
-            UserAccess userAccess = new UserAccess();
             int result = userAccess.CreateUser(guestUser);
 
             if (result > 0)
@@ -61,36 +63,12 @@ namespace MessageService
             }
             else
             {
-                return null;
+                User userError = new User();
+                userError.Nickname = NICKNAME_ERROR;
+                return userError;
             }
         }
 
-        private int GetMaxGuestNumber()
-        {
-            int maxGuestNumber = 0;
-            List<User> guestUsers = GetAllUsers().Where(user => user.Nickname.StartsWith("Guest")).ToList();
-
-            if (guestUsers.Any())
-            {
-                maxGuestNumber = guestUsers.Max(user =>
-                {
-                    int number;
-                    if (int.TryParse(user.Nickname.Substring("Guest".Length), out number))
-                    {
-                        return number;
-                    }
-                    return 0;
-                });
-            }
-
-            return maxGuestNumber;
-        }
-
-        private List<User> GetAllUsers()
-        {
-            UserAccess userAccess = new UserAccess();
-            return userAccess.GetAllUsers();
-        }
 
         public bool FindUserByNickname(string nickname)
         {

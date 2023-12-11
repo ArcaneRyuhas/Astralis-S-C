@@ -6,6 +6,7 @@ using Astralis.UserManager;
 using System.Security.Cryptography;
 using Astralis.Views.Animations;
 using System.Windows.Navigation;
+using System;
 
 namespace Astralis.Views
 {
@@ -84,25 +85,21 @@ namespace Astralis.Views
 
         private void BtnJoinAsGuestClick(object sender, RoutedEventArgs e)
         {
-            var guestInvitation = new GuestInvitation();
+            GuestInvitation guestInvitation = new GuestInvitation();
 
-            guestInvitation.OnSubmit += guestInvitation_OnSubmit;
+            guestInvitation.OnSubmit += GuestInvitationOnSubmit;
 
-            var window = new Window
-            {
-                Content = guestInvitation,
-                Title = "Join As Guest",
-                SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.NoResize
-            };
-            window.ShowDialog();
+            guestInvitation.ShowDialog();
         }
 
-        private void guestInvitation_OnSubmit(object sender, string invitationCode)
+        private void GuestInvitationOnSubmit(object sender, string invitationCode)
         {
             UserManager.UserManagerClient client = new UserManager.UserManagerClient();
-            if (client.AddGuest() > 0)
+            User user = client.AddGuest();
+
+            if (user.Nickname != "ERROR")
             {
+                UserSession.Instance(user);
                 Lobby lobby = new Lobby();
                 if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
                 {
@@ -120,5 +117,6 @@ namespace Astralis.Views
                 }
             }
         }
+
     }
 }

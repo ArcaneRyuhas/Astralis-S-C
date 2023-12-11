@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 namespace Astralis.Views.Animations
 {
-    public partial class GuestInvitation : UserControl
+    public partial class GuestInvitation : Window
     {
 
         public event EventHandler<string> OnSubmit;

@@ -19,6 +19,40 @@ namespace DataAccessProject.DataAccess
 
         public UserAccess() { }
 
+        public int GetHigherGuests()
+        {
+            int maxGuestNumber = 0;
+
+            using (var context = new AstralisDBEntities())
+            {
+                context.Database.Log = Console.WriteLine;
+
+                var guestUsers = context.User
+                .Where(user => user.nickName.StartsWith("Guest"))
+                .Select(databaseUser => new Contracts.User
+                {
+                    Nickname = databaseUser.nickName,
+                    Mail = databaseUser.mail,
+                    ImageId = databaseUser.imageId
+                })
+            .ToList();
+
+                if (guestUsers.Any())
+                {
+                    maxGuestNumber = guestUsers.Max(user =>
+                    {
+                        int number;
+                        if (int.TryParse(user.Nickname.Substring("Guest".Length), out number))
+                        {
+                            return number;
+                        }
+                        return 0;
+                    });
+                }
+                return maxGuestNumber;
+            }
+        }
+
         public int CreateUser(Contracts.User user)
         {
             int result = INT_VALIDATION_SUCCESS;
