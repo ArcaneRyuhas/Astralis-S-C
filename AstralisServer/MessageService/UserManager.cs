@@ -7,6 +7,7 @@ using DataAccessProject.Contracts;
 using DataAccessProject.DataAccess;
 using User = DataAccessProject.Contracts.User;
 using MessageService.Mail;
+using System.Configuration.Internal;
 
 namespace MessageService
 {
@@ -14,7 +15,9 @@ namespace MessageService
 
     public partial class UserManager : IUserManager
     {
-        private const string NICKNAME_ERROR = "ERROR";
+        private const string NICKNAME_GUEST_ERROR = "ERROR";
+        private const int GUEST_IMAGE_ID = 1;
+
         private static readonly ILog log = LogManager.GetLogger(typeof(UserManager));
 
         public int ConfirmUser(string nickname, string password)
@@ -48,10 +51,13 @@ namespace MessageService
 
             string guestNickname = $"Guest{nextGuestNumber}";
 
+
             User guestUser = new User
             {
                 Nickname = guestNickname,
-                Password = guestNickname
+                Password = guestNickname,
+                ImageId = GUEST_IMAGE_ID,
+                Mail = $"{guestNickname.ToLower()}@guest.com"
             };
 
             int result = userAccess.CreateGuest(guestUser);
@@ -63,7 +69,7 @@ namespace MessageService
             else
             {
                 User userError = new User();
-                userError.Nickname = NICKNAME_ERROR;
+                userError.Nickname = NICKNAME_GUEST_ERROR;
                 return userError;
             }
         }

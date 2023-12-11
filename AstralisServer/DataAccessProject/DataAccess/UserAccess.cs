@@ -64,6 +64,7 @@ namespace DataAccessProject.DataAccess
                 User databaseUser = new User();
                 databaseUser.nickName = user.Nickname;
                 databaseUser.imageId = (short)user.ImageId;
+                databaseUser.mail = user.Mail;
 
                 var newUser = context.User.Add(databaseUser);
 
