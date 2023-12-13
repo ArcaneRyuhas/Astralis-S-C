@@ -37,6 +37,8 @@ namespace DataAccessProject.Contracts
 
         [OperationContract(IsOneWay = true)]
         void StartGame(string gameId);
+        [OperationContract(IsOneWay = true)]
+        void KickUser(string userNickname);
 
     }
 
@@ -60,5 +62,8 @@ namespace DataAccessProject.Contracts
 
         [OperationContract]
         void StartClientGame();
+
+        [OperationContract]
+        void GetKicked();
     }
 }

@@ -30,6 +30,9 @@ namespace DataAccessProject.Contracts
         [OperationContract]
         int UpdateUser(User user);
 
+        [OperationContract]
+        bool UserOnline(string nickname);
+
     }
 
     [ServiceContract(CallbackContract = typeof(IOnlineUserManagerCallback))]

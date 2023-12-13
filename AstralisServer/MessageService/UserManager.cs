@@ -105,6 +105,14 @@ namespace MessageService
             return result;
 
         }
+
+        public bool UserOnline(string nickname)
+        {
+            lock (onlineUsers)
+            {
+                return onlineUsers.ContainsKey(nickname);
+            }
+        }
     }
 
     public partial class UserManager : ILobbyManager
@@ -308,6 +316,30 @@ namespace MessageService
                 .ToList();
         }
 
+        public void KickUser(string userNickname)
+        {
+            if (usersInLobby.ContainsKey(userNickname))
+            {
+                string gameId = usersInLobby[userNickname];
+
+                List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+
+                foreach (var userInTheLobby in usersNickname)
+                {
+                    usersContext[userInTheLobby].ShowDisconnectionInLobby(new User { Nickname = userNickname });
+                }
+
+                if (usersContext.ContainsKey(userNickname))
+                {
+                    usersContext[userNickname].GetKicked();
+                }
+
+                // Eliminar al usuario de los diccionarios
+                usersInLobby.Remove(userNickname);
+                usersContext.Remove(userNickname);
+                usersTeam.Remove(userNickname);
+            }
+        }
     }
 
     public partial class UserManager : IOnlineUserManager

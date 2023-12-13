@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using Astralis.Logic;
+using System.ServiceModel;
 
 namespace Astralis.Views.Animations
 {
@@ -92,6 +93,14 @@ namespace Astralis.Views.Animations
                 }
                 
             }
+        }
+
+        private void BtnKickoutClick(object sender, RoutedEventArgs e)
+        {
+            InstanceContext context = new InstanceContext(this);
+            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+
+            client.KickUser(_userNickname);
         }
     }
 }

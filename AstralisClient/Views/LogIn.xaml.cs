@@ -38,19 +38,28 @@ namespace Astralis.Views
                 noEmptyFields = false;
             }
 
-            if (noEmptyFields && client.ConfirmUser(nickname, password) == 1)
+            if (noEmptyFields)
             {
-                User user = client.GetUserByNickname(nickname);
-                UserSession.Instance(user);
+                bool userOnline = client.UserOnline(nickname);
 
-                GameWindow gameWindow = new GameWindow();
-                this.Close();
-                gameWindow.Show();
-            }
-            else
-            {
-                txbInvalidFields.Text = Astralis.Properties.Resources.txbInvalidFields;
-                txbInvalidFields.Visibility = Visibility.Visible;
+                if (userOnline)
+                {
+                    MessageBox.Show("No se puede iniciar sesión porque el usuario está en línea.", "Usuario en línea", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if (client.ConfirmUser(nickname, password) == 1)
+                {
+                    User user = client.GetUserByNickname(nickname);
+                    UserSession.Instance(user);
+
+                    GameWindow gameWindow = new GameWindow();
+                    this.Close();
+                    gameWindow.Show();
+                }
+                else
+                {
+                    txbInvalidFields.Text = Astralis.Properties.Resources.txbInvalidFields;
+                    txbInvalidFields.Visibility = Visibility.Visible;
+                }
             }
         }
 
