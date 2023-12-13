@@ -1,5 +1,0 @@
-﻿C:\Users\mario\Source\Repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\Host\Program.cs
-C:\Users\mario\Source\Repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\Host\Properties\AssemblyInfo.cs
-C:\Users\mario\Source\Repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\Host\App.config
-C:\Users\mario\Source\Repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\Host\Log4Net.config
-C:\Users\mario\Source\Repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\Host\packages.config

@@ -1,4 +1,0 @@
-﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Properties\AssemblyInfo.cs
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\DAO\UserManager.cs
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\App.config
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\packages.config

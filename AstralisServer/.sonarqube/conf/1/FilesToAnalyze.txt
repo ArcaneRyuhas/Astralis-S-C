@@ -1,4 +1,14 @@
-﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Properties\AssemblyInfo.cs
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\DAO\UserManager.cs
+﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Mail.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Properties\AssemblyInfo.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\UserManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\astralis.html
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\Beefree-logo.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\facebook2x.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\Group_29.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\Group_30_1.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\instagram2x.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\linkedin2x.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\twitter2x.png
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\App.config
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\MailConfiguration.json
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\packages.config

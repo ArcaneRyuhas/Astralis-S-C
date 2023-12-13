@@ -1,4 +1,5 @@
 ﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Ban.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IEndGame.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IGameManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\ILobbyManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IUserManager.cs
