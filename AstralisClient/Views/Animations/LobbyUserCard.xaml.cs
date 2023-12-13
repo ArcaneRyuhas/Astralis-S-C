@@ -22,6 +22,9 @@ namespace Astralis.Views.Animations
         public string UserNickname { get { return _userNickname; }}
         public int Team {get { return _team; }}
 
+        public event EventHandler<string> UserKicked;
+
+
         public LobbyUserCard()
         {
             InitializeComponent();
@@ -97,10 +100,7 @@ namespace Astralis.Views.Animations
 
         private void BtnKickoutClick(object sender, RoutedEventArgs e)
         {
-            InstanceContext context = new InstanceContext(this);
-            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
-
-            client.KickUser(_userNickname);
+            UserKicked?.Invoke(this, _userNickname);
         }
     }
 }

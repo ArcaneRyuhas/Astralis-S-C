@@ -113,6 +113,7 @@ namespace Astralis.Views
             lobbyUserCard.SetCard(user, _isHost);
             lobbyUserCard.ChangeTeam(team);
             lobbyUserCard.TeamSelectionChanged += LobbyUserCardTeamSelectionChanged;
+            lobbyUserCard.UserKicked += LobbyUserCardUserKicked;
             bool isAdded = false;
 
             for(int gridRow = 0; gridRow < 4; gridRow++)
@@ -325,6 +326,18 @@ namespace Astralis.Views
 
             string mailString = _client.SendFriendInvitation(_gameId, toSendMail);
             MessageBox.Show(mailString, "titleMail", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void LobbyUserCardUserKicked(object sender, string userNickname)
+        {
+            // Llama al método del servidor para expulsar al usuario
+            _client.KickUser(userNickname);
+        }
+
+        public void GetKicked()
+        {           
+            MessageBox.Show("Has sido expulsado del lobby.", "Expulsado", MessageBoxButton.OK, MessageBoxImage.Information);
+            NavigationService.GoBack();
         }
     }
 }
