@@ -14,7 +14,7 @@ namespace MessageService.Mail
     {
         private static Mail instance;
         private readonly ILog log = LogManager.GetLogger(typeof(UserManager));
-        private string configPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "MailConfiguration.json");
+        private string configPath = Path.Combine(Directory.GetCurrentDirectory(), "Mail", "Resources", "MailConfiguration.json");
         private readonly IConfiguration configuration;
         private const string MAIL_DISPLAY_NAME = "Astralis";
         private readonly string fromEmail;
@@ -22,7 +22,7 @@ namespace MessageService.Mail
         private readonly string password;
         private readonly int smtpPort;
         private readonly SmtpClient smtpClient;
-        private MailMessage mail;
+        private MailMessage mail = new MailMessage();
 
         public static Mail Instance()
         {
@@ -41,7 +41,7 @@ namespace MessageService.Mail
 
             fromEmail = configuration["EmailSettings:Email"];
             smtpHost = configuration["EmailSettings:SmtpHost"];
-            password = configuration["password"];
+            password = configuration["EmailSettings:Password"];
             smtpPort = configuration.GetSection("EmailSettings")["SmtpPort"] != null ? int.Parse(configuration.GetSection("EmailSettings")["SmtpPort"]) : 0;
             smtpClient = new SmtpClient(smtpHost, smtpPort)
             {
@@ -51,8 +51,9 @@ namespace MessageService.Mail
 
         public string sendInvitationMail(string to, string gameId)
         {
+            mail = new MailMessage();
             string message = "Message could not be sent...";
-            string htmlFilePath = "Resources/astralis.html";
+            string htmlFilePath = "Mail/Resources/astralis.html";
             string body;
 
             try
@@ -62,8 +63,7 @@ namespace MessageService.Mail
                     body = reader.ReadToEnd();
                 }
 
-                body.Replace("[field id = \"gameCode\"]", gameId);
-
+                body = body.Replace("[field id = \"gameCode\"]", gameId);
                 mail.From = new MailAddress(fromEmail, MAIL_DISPLAY_NAME);
                 mail.To.Add(to);
 
@@ -98,10 +98,12 @@ namespace MessageService.Mail
             return message;
         }
 
-        private string Decrypt(string encryptedText)
+        private static string Decrypt(string encryptedText)
         {
             byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+
             byte[] decryptedBytes = ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.CurrentUser);
+
             return Encoding.UTF8.GetString(decryptedBytes);
         }
     }

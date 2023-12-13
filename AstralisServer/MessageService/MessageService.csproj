@@ -118,7 +118,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Mail\Resources\MailConfiguration.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
