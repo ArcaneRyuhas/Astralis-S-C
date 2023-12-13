@@ -14,6 +14,7 @@ namespace MessageService.Mail
     {
         private static Mail instance;
         private readonly ILog log = LogManager.GetLogger(typeof(UserManager));
+        private string configPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "MailConfiguration.json");
         private readonly IConfiguration configuration;
         private const string MAIL_DISPLAY_NAME = "Astralis";
         private readonly string fromEmail;
@@ -35,9 +36,9 @@ namespace MessageService.Mail
         public Mail() 
         {
             configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("MailConfiguration.json")
+            .AddJsonFile(configPath)
             .Build();
+
             fromEmail = configuration["EmailSettings:Email"];
             smtpHost = configuration["EmailSettings:SmtpHost"];
             password = configuration["password"];

@@ -8,6 +8,7 @@ using DataAccessProject.DataAccess;
 using User = DataAccessProject.Contracts.User;
 using MessageService.Mail;
 using System.Configuration.Internal;
+using DataAccessProject;
 
 namespace MessageService
 {
@@ -111,6 +112,7 @@ namespace MessageService
         private const bool IS_SUCCESFULL = true;
         private const string ERROR_CODE_LOBBY = "error";
         private const int NO_TEAM = 0;
+        private const string USER_NOT_FOUND = "UserNotFound";
 
         private static Dictionary<string, string> usersInLobby = new Dictionary<string, string>();
         private static Dictionary<string, ILobbyManagerCallback> usersContext = new Dictionary<string, ILobbyManagerCallback>();
@@ -195,8 +197,18 @@ namespace MessageService
         {
             UserAccess userAccess = new UserAccess();
             User user = userAccess.GetUserByNickname(userToSend);
+            string mailString;
 
-            return Mail.Mail.Instance().sendInvitationMail(user.Mail, gameId);
+            if(user.Nickname != USER_NOT_FOUND)
+            {
+                mailString = Mail.Mail.Instance().sendInvitationMail(user.Mail, gameId);
+            }
+            else
+            {
+                mailString = Mail.Mail.Instance().sendInvitationMail(userToSend, gameId);
+            }
+
+            return mailString;
         }
 
         public void DisconnectLobby(User user)
@@ -499,10 +511,30 @@ namespace MessageService
         public void EndGame(int winnerTeam, string nickname)
         {
             Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
+            string user = "";
 
-            foreach (string userInGame in usersInGame.Keys)
+            try
             {
-                usersInGameContext[userInGame].EndGameClient(winnerTeam);
+                foreach (string userInGame in usersInGame.Keys)
+                {
+                    if (usersInGameContext.ContainsKey(userInGame))
+                    {
+                        user = userInGame;
+                        usersInGameContext[userInGame].EndGameClient(winnerTeam);
+                        usersInGameContext.Remove(userInGame);
+
+                    }
+                }
+            } catch (FaultException faultException) 
+            {
+                if (usersInGameContext.ContainsKey(user))
+                {
+                    usersInGameContext.Remove(user);
+                }
+
+                EndGame(winnerTeam, nickname);
+
+                log.Error(faultException.Message);
             }
         }
 
@@ -543,8 +575,6 @@ namespace MessageService
 
             return reversedBoard;
         }
-
-
 
         private Dictionary<string, int> GetUsersPerTeam(string nickname)
         {
@@ -612,7 +642,7 @@ namespace MessageService
                 UserWithTeam userWithTeam = new UserWithTeam();
                 User user = GetUserByNickname(userNickname);
 
-                userWithTeam.Nickname = nickname;
+                userWithTeam.Nickname = userNickname;
                 userWithTeam.Mail = user.Mail;
                 userWithTeam.ImageId = user.ImageId;
                 userWithTeam.Team = usersInGame[userNickname];
