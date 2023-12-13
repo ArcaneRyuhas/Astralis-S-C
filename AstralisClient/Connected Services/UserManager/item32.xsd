@@ -86,6 +86,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="UserOnline">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UserOnlineResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserOnlineResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="CreateLobby">
     <xs:complexType>
       <xs:sequence>
@@ -181,6 +195,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="KickUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userNickname" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ShowConnectionInLobby">
     <xs:complexType>
       <xs:sequence>
@@ -248,6 +269,16 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="StartClientGameResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetKicked">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetKickedResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

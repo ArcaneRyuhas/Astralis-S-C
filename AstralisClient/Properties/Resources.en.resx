@@ -123,6 +123,9 @@
   <data name="btnCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="btnCopyToClipboard" xml:space="preserve">
+    <value>Copy code</value>
+  </data>
   <data name="btnCreateGame" xml:space="preserve">
     <value>CREATE GAME</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="btnRegister" xml:space="preserve">
     <value>Sign up</value>
+  </data>
+  <data name="btnSendInvitation" xml:space="preserve">
+    <value>Send invitation</value>
   </data>
   <data name="btnSendMessage" xml:space="preserve">
     <value>Send</value>
@@ -191,6 +197,9 @@
   </data>
   <data name="lblErrorPasswordsNoMatch" xml:space="preserve">
     <value>Passwords do not match</value>
+  </data>
+  <data name="lblGameCode" xml:space="preserve">
+    <value>Code</value>
   </data>
   <data name="lblInviteFriend" xml:space="preserve">
     <value>Invite Friend</value>
@@ -234,11 +243,38 @@
   <data name="lblVolume" xml:space="preserve">
     <value>Volume</value>
   </data>
+  <data name="msgCopyToClipboard" xml:space="preserve">
+    <value>Text has been copied to clipboard:</value>
+  </data>
+  <data name="msgErrorCreateLobby" xml:space="preserve">
+    <value>Can't create lobby</value>
+  </data>
+  <data name="msgKickedOut" xml:space="preserve">
+    <value>You have been kicked</value>
+  </data>
+  <data name="msgNoGameFound" xml:space="preserve">
+    <value>Can't found lobby</value>
+  </data>
   <data name="msgUserAddedSucceed" xml:space="preserve">
     <value>Sign up successful!</value>
   </data>
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>
+  </data>
+  <data name="titleCopyToClipboard" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="titleError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="titleKickedOut" xml:space="preserve">
+    <value>Kicked Out</value>
+  </data>
+  <data name="titleMail" xml:space="preserve">
+    <value>Mail</value>
+  </data>
+  <data name="titleNoGameFound" xml:space="preserve">
+    <value>Not found</value>
   </data>
   <data name="titleUserAdded" xml:space="preserve">
     <value>Sign up</value>
@@ -269,5 +305,8 @@ At least 1 capital letter</value>
   </data>
   <data name="txtChat" xml:space="preserve">
     <value>Write something...</value>
+  </data>
+  <data name="txtFriendMail" xml:space="preserve">
+    <value>Friend mail</value>
   </data>
 </root>

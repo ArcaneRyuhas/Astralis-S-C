@@ -79,6 +79,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copiar código.
+        /// </summary>
+        public static string btnCopyToClipboard {
+            get {
+                return ResourceManager.GetString("btnCopyToClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CREAR PARTIDA.
         /// </summary>
         public static string btnCreateGame {
@@ -174,6 +183,15 @@ namespace Astralis.Properties {
         public static string btnRegister {
             get {
                 return ResourceManager.GetString("btnRegister", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enviar invitación.
+        /// </summary>
+        public static string btnSendInvitation {
+            get {
+                return ResourceManager.GetString("btnSendInvitation", resourceCulture);
             }
         }
         
@@ -282,6 +300,15 @@ namespace Astralis.Properties {
         public static string lblErrorPasswordsNoMatch {
             get {
                 return ResourceManager.GetString("lblErrorPasswordsNoMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Código.
+        /// </summary>
+        public static string lblGameCode {
+            get {
+                return ResourceManager.GetString("lblGameCode", resourceCulture);
             }
         }
         
@@ -412,6 +439,42 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ha sido copiado el texto:.
+        /// </summary>
+        public static string msgCopyToClipboard {
+            get {
+                return ResourceManager.GetString("msgCopyToClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No se pudo crear el lobby.
+        /// </summary>
+        public static string msgErrorCreateLobby {
+            get {
+                return ResourceManager.GetString("msgErrorCreateLobby", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has sido expulsado del lobby..
+        /// </summary>
+        public static string msgKickedOut {
+            get {
+                return ResourceManager.GetString("msgKickedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No se encontro el lobby.
+        /// </summary>
+        public static string msgNoGameFound {
+            get {
+                return ResourceManager.GetString("msgNoGameFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ¡Registro exitoso!.
         /// </summary>
         public static string msgUserAddedSucceed {
@@ -426,6 +489,51 @@ namespace Astralis.Properties {
         public static string title {
             get {
                 return ResourceManager.GetString("title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copiado.
+        /// </summary>
+        public static string titleCopyToClipboard {
+            get {
+                return ResourceManager.GetString("titleCopyToClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string titleError {
+            get {
+                return ResourceManager.GetString("titleError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expulsado.
+        /// </summary>
+        public static string titleKickedOut {
+            get {
+                return ResourceManager.GetString("titleKickedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correo.
+        /// </summary>
+        public static string titleMail {
+            get {
+                return ResourceManager.GetString("titleMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No se encontro.
+        /// </summary>
+        public static string titleNoGameFound {
+            get {
+                return ResourceManager.GetString("titleNoGameFound", resourceCulture);
             }
         }
         
@@ -510,6 +618,15 @@ namespace Astralis.Properties {
         public static string txtChat {
             get {
                 return ResourceManager.GetString("txtChat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correo de amigo.
+        /// </summary>
+        public static string txtFriendMail {
+            get {
+                return ResourceManager.GetString("txtFriendMail", resourceCulture);
             }
         }
     }

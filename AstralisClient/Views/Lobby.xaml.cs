@@ -61,7 +61,7 @@ namespace Astralis.Views
 
                 if (_gameId == ERROR_CODE_LOBBY)
                 {
-                    MessageBox.Show("msgErrorCreateLobby", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.msgErrorCreateLobby, Properties.Resources.titleError, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
@@ -76,7 +76,7 @@ namespace Astralis.Views
             }
             else
             {
-                MessageBox.Show("msgNoGameFound " , "titleNoGameFound", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Properties.Resources.msgNoGameFound, Properties.Resources.titleNoGameFound, MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
             return gameExist;
@@ -275,7 +275,7 @@ namespace Astralis.Views
             return (teamOneCounter == MAX_TEAM_SIZE && teamTwoCounter == MAX_TEAM_SIZE);
         }
 
-        private void btnExit_Click(object sender, RoutedEventArgs e)
+        private void BtnExitClick(object sender, RoutedEventArgs e)
         {
             InstanceContext context = new InstanceContext(this);
             UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
@@ -291,11 +291,9 @@ namespace Astralis.Views
         private void BtnSendMessageClick(object sender, RoutedEventArgs e)
         {
             string message = UserSession.Instance().Nickname + ": " + txtChat.Text;
-
-            InstanceContext context = new InstanceContext(this);
-            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+            txtChat.Text = Properties.Resources.txtChat;
             
-            client.SendMessage(message, _gameId);
+            _client.SendMessage(message, _gameId);
         }
 
 
@@ -305,7 +303,7 @@ namespace Astralis.Views
 
             Clipboard.SetText(textToCopy);
 
-            MessageBox.Show("Text has been copied to clipboard: " + textToCopy, "Clipboard Copy", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Properties.Resources.msgCopyToClipboard + textToCopy, Properties.Resources.titleCopyToClipboard, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void BtnStartGameClick(object sender, RoutedEventArgs e)
@@ -325,18 +323,17 @@ namespace Astralis.Views
             string toSendMail = txtFriendMail.Text;
 
             string mailString = _client.SendFriendInvitation(_gameId, toSendMail);
-            MessageBox.Show(mailString, "titleMail", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void LobbyUserCardUserKicked(object sender, string userNickname)
         {
-            // Llama al método del servidor para expulsar al usuario
             _client.KickUser(userNickname);
         }
 
         public void GetKicked()
         {           
-            MessageBox.Show("Has sido expulsado del lobby.", "Expulsado", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Properties.Resources.msgKickedOut, Properties.Resources.titleKickedOut, MessageBoxButton.OK, MessageBoxImage.Information);
             NavigationService.GoBack();
         }
     }

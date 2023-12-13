@@ -50,7 +50,7 @@
 
             <Label Content="{x:Static p:Resources.lblPlayersConecteds}" HorizontalAlignment="Left" Margin="42,10,0,0" VerticalAlignment="Top" Grid.Row="1" Width="285" FontSize="22" Height="33"/>
             <Button x:Name="btnStartGame" Content="{x:Static p:Resources.btnStartGame}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" FontSize="36" Height="40" Width="126" Margin="10,0,0,0" Template="{DynamicResource ButtonTemplateNormal}" Click="BtnStartGameClick"/>
-            <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Grid.Column="1" FontSize="36" Height="40" Width="150" Click="btnExit_Click" Template="{DynamicResource ButtonTemplateNormal}"/>
+            <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Grid.Column="1" FontSize="36" Height="40" Width="150" Click="BtnExitClick" Template="{DynamicResource ButtonTemplateNormal}"/>
             <Grid Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -60,15 +60,15 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
                 <Label Content="{x:Static p:Resources.lblInviteWithCode}" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0" FontSize="24" Height="38" Width="220"/>
-                <Label x:Name="lblGameCode" Content="Code" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Height="40" Width="210" FontSize="24"/>
-                <Button x:Name="btnCopyToClipboard" Content="btnCopyToClipboard" HorizontalAlignment="Center" Grid.Row="2" Width="200" Height="40" Click="BtnCopyToClipboardClick"/>
+                <Label x:Name="lblGameCode" Content="{x:Static p:Resources.lblGameCode}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Height="40" Width="210" FontSize="24"/>
+                <Button x:Name="btnCopyToClipboard" Content="{x:Static p:Resources.btnCopyToClipboard}" HorizontalAlignment="Center" Grid.Row="2" Width="200" Height="40" Click="BtnCopyToClipboardClick"/>
                 <Label Content="{x:Static p:Resources.lblInviteFriend}" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="4" FontSize="24" Height="40" Width="172"/>
-                <TextBox x:Name="txtFriendMail" Grid.Row="5" Grid.Column="1" Text="friendMail" HorizontalAlignment="Center" Width="200" HorizontalContentAlignment="Center"/>
-                <Button x:Name="btnSendInvitation" Grid.Row="6" Grid.Column="1" Content="btnSendInvitation" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Width="200" VerticalAlignment="Bottom" Height="40" Click="BtnSendInvitationClick"/>
+                <TextBox x:Name="txtFriendMail" Grid.Row="5" Grid.Column="1" Text="{x:Static p:Resources.txtFriendMail}" HorizontalAlignment="Center" Width="200" HorizontalContentAlignment="Center"/>
+                <Button x:Name="btnSendInvitation" Grid.Row="6" Grid.Column="1" Content="{x:Static p:Resources.btnSendInvitation}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Width="200" VerticalAlignment="Bottom" Height="40" Click="BtnSendInvitationClick"/>
 
             </Grid>
             

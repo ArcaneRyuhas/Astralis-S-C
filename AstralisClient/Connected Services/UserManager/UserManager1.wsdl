@@ -85,6 +85,12 @@
   <wsdl:message name="IUserManager_UpdateUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserManager_UserOnline_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserOnline" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_UserOnline_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserOnlineResponse" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_CreateLobby_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateLobby" />
   </wsdl:message>
@@ -124,6 +130,9 @@
   <wsdl:message name="ILobbyManager_StartGame_InputMessage">
     <wsdl:part name="parameters" element="tns:StartGame" />
   </wsdl:message>
+  <wsdl:message name="ILobbyManager_KickUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:KickUser" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_ShowConnectionInLobby_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowConnectionInLobby" />
   </wsdl:message>
@@ -159,6 +168,12 @@
   </wsdl:message>
   <wsdl:message name="ILobbyManager_StartClientGame_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:StartClientGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GetKicked_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetKicked" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GetKicked_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetKickedResponse" />
   </wsdl:message>
   <wsdl:message name="IOnlineUserManager_ConectUser_InputMessage">
     <wsdl:part name="parameters" element="tns:ConectUser" />
@@ -305,6 +320,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/UpdateUser" message="tns:IUserManager_UpdateUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/UpdateUserResponse" message="tns:IUserManager_UpdateUser_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="UserOnline">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/UserOnline" message="tns:IUserManager_UserOnline_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/UserOnlineResponse" message="tns:IUserManager_UserOnline_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="ILobbyManager">
     <wsdl:operation name="CreateLobby">
@@ -338,6 +357,9 @@
     <wsdl:operation name="StartGame">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/StartGame" message="tns:ILobbyManager_StartGame_InputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="KickUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/KickUser" message="tns:ILobbyManager_KickUser_InputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ShowConnectionInLobby">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobby" message="tns:ILobbyManager_ShowConnectionInLobby_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobbyResponse" message="tns:ILobbyManager_ShowConnectionInLobby_InputCallbackMessage" />
@@ -361,6 +383,10 @@
     <wsdl:operation name="StartClientGame">
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/StartClientGame" message="tns:ILobbyManager_StartClientGame_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/StartClientGameResponse" message="tns:ILobbyManager_StartClientGame_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetKicked">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GetKicked" message="tns:ILobbyManager_GetKicked_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GetKickedResponse" message="tns:ILobbyManager_GetKicked_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IOnlineUserManager">
@@ -514,6 +540,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="UserOnline">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/UserOnline" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="NetTcpBinding_ILobbyManager" type="tns:ILobbyManager">
     <wsp:PolicyReference URI="#NetTcpBinding_ILobbyManager_policy" />
@@ -584,6 +619,12 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="KickUser">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/KickUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="ShowConnectionInLobby">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ShowConnectionInLobby" style="document" />
       <wsdl:input>
@@ -631,6 +672,15 @@
     </wsdl:operation>
     <wsdl:operation name="StartClientGame">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/StartClientGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetKicked">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GetKicked" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

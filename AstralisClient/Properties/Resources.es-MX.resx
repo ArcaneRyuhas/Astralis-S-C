@@ -123,6 +123,9 @@
   <data name="btnCancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="btnCopyToClipboard" xml:space="preserve">
+    <value>Copiar código</value>
+  </data>
   <data name="btnCreateGame" xml:space="preserve">
     <value>CREAR PARTIDA</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="btnRegister" xml:space="preserve">
     <value>Registro</value>
+  </data>
+  <data name="btnSendInvitation" xml:space="preserve">
+    <value>Enviar invitación</value>
   </data>
   <data name="btnSendMessage" xml:space="preserve">
     <value>Enviar</value>
@@ -191,6 +197,9 @@
   </data>
   <data name="lblErrorPasswordsNoMatch" xml:space="preserve">
     <value>Las contraseñas no coinciden</value>
+  </data>
+  <data name="lblGameCode" xml:space="preserve">
+    <value>Código</value>
   </data>
   <data name="lblInviteFriend" xml:space="preserve">
     <value>Invitar amigo</value>
@@ -234,11 +243,38 @@
   <data name="lblVolume" xml:space="preserve">
     <value>Volumen</value>
   </data>
+  <data name="msgCopyToClipboard" xml:space="preserve">
+    <value>Ha sido copiado el texto:</value>
+  </data>
+  <data name="msgErrorCreateLobby" xml:space="preserve">
+    <value>No se pudo crear el lobby</value>
+  </data>
+  <data name="msgKickedOut" xml:space="preserve">
+    <value>Has sido expulsado del lobby.</value>
+  </data>
+  <data name="msgNoGameFound" xml:space="preserve">
+    <value>No se encontro el lobby</value>
+  </data>
   <data name="msgUserAddedSucceed" xml:space="preserve">
     <value>¡Registro exitoso!</value>
   </data>
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>
+  </data>
+  <data name="titleCopyToClipboard" xml:space="preserve">
+    <value>Copiado</value>
+  </data>
+  <data name="titleError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="titleKickedOut" xml:space="preserve">
+    <value>Expulsado</value>
+  </data>
+  <data name="titleMail" xml:space="preserve">
+    <value>Correo</value>
+  </data>
+  <data name="titleNoGameFound" xml:space="preserve">
+    <value>No se encontro</value>
   </data>
   <data name="titleUserAdded" xml:space="preserve">
     <value>Registro</value>
@@ -269,5 +305,8 @@ Al menos 1 mayuscula</value>
   </data>
   <data name="txtChat" xml:space="preserve">
     <value>Escribe algo...</value>
+  </data>
+  <data name="txtFriendMail" xml:space="preserve">
+    <value>Correo de amigo</value>
   </data>
 </root>

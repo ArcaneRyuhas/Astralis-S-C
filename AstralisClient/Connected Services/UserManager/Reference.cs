@@ -238,6 +238,12 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UpdateUser", ReplyAction="http://tempuri.org/IUserManager/UpdateUserResponse")]
         System.Threading.Tasks.Task<int> UpdateUserAsync(Astralis.UserManager.User user);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UserOnline", ReplyAction="http://tempuri.org/IUserManager/UserOnlineResponse")]
+        bool UserOnline(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UserOnline", ReplyAction="http://tempuri.org/IUserManager/UserOnlineResponse")]
+        System.Threading.Tasks.Task<bool> UserOnlineAsync(string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -314,6 +320,14 @@ namespace Astralis.UserManager {
         public System.Threading.Tasks.Task<int> UpdateUserAsync(Astralis.UserManager.User user) {
             return base.Channel.UpdateUserAsync(user);
         }
+        
+        public bool UserOnline(string nickname) {
+            return base.Channel.UserOnline(nickname);
+        }
+        
+        public System.Threading.Tasks.Task<bool> UserOnlineAsync(string nickname) {
+            return base.Channel.UserOnlineAsync(nickname);
+        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -373,6 +387,12 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/StartGame")]
         System.Threading.Tasks.Task StartGameAsync(string gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/KickUser")]
+        void KickUser(string userNickname);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/KickUser")]
+        System.Threading.Tasks.Task KickUserAsync(string userNickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -395,6 +415,9 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/StartClientGame", ReplyAction="http://tempuri.org/ILobbyManager/StartClientGameResponse")]
         void StartClientGame();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GetKicked", ReplyAction="http://tempuri.org/ILobbyManager/GetKickedResponse")]
+        void GetKicked();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -495,6 +518,14 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task StartGameAsync(string gameId) {
             return base.Channel.StartGameAsync(gameId);
+        }
+        
+        public void KickUser(string userNickname) {
+            base.Channel.KickUser(userNickname);
+        }
+        
+        public System.Threading.Tasks.Task KickUserAsync(string userNickname) {
+            return base.Channel.KickUserAsync(userNickname);
         }
     }
     
