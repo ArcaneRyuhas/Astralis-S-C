@@ -3,18 +3,16 @@ using Astralis.Views.Game.GameLogic;
 using Astralis.Views.Pages;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
+using Astralis.UserManager;
 
 namespace Astralis.Views.Game
 {
-    public partial class GameBoard : Window, UserManager.IGameManagerCallback
+    public partial class GameBoard : Window, IGameManagerCallback
     {
         private const int GAME_MODE_STARTING_HEALT = 20;
         private const int GAME_MODE_STARTING_MANA = 2;
@@ -24,18 +22,17 @@ namespace Astralis.Views.Game
         private const int ENEMY_CARD = -1;
         private const int ALL_USERS_CONNECTED = 4;
 
-        private GameManager gameManager;
-        UserManager.GameManagerClient client;
-        private GraphicCard selectedCard;
-        private bool isHost = false;
-        private List<Card> playedCards = new List<Card>();
-        private Team userTeam;
-        private Team enemyTeam;
-        private GameWindow gameWindow;
+        private GameManager _gameManager;
+        private GameManagerClient _client;
+        private GraphicCard _selectedCard;
+        private bool _isHost = false;
+        private List<Card> _playedCards = new List<Card>();
+        private Team _userTeam;
+        private Team _enemyTeam;
 
-        public bool IsHost { get { return isHost; } set { isHost = value; } }
+        public bool IsHost { get { return _isHost; } set { _isHost = value; } }
 
-        public List<Card> PlayedCards { get { return playedCards; } }
+        public List<Card> PlayedCards { get { return _playedCards; } }
 
         public Label LblTurnMana { get { return lblTurnMana; } }
 
@@ -43,44 +40,43 @@ namespace Astralis.Views.Game
         {
             InitializeComponent();
             InitializeGame();
-            this.gameWindow = gameWindow;
         }
 
         private void InitializeGame()
         {
             Connect();
             SetTeams();
-            gameManager = new GameManager();
+            _gameManager = new GameManager();
             lblMyNickname.Content = UserSession.Instance().Nickname;
 
-            gameManager.SetGameBoard(this);
-            gameManager.SetCounter(progressBarCounter);
-            gameManager.UserTeam = userTeam;
-            gameManager.EnemyTeam = enemyTeam;
+            _gameManager.SetGameBoard(this);
+            _gameManager.SetCounter(progressBarCounter);
+            _gameManager.UserTeam = _userTeam;
+            _gameManager.EnemyTeam = _enemyTeam;
         }
 
         private void Connect()
         {
-            client = SetGameContext();
-            client.ConnectGame(UserSession.Instance().Nickname);
+            _client = SetGameContext();
+            _client.ConnectGame(UserSession.Instance().Nickname);
         }
 
-        private UserManager.GameManagerClient SetGameContext()
+        private GameManagerClient SetGameContext()
         {
             InstanceContext context = new InstanceContext(this);
-            UserManager.GameManagerClient client = new UserManager.GameManagerClient(context);
+            GameManagerClient client = new GameManagerClient(context);
 
             return client;
         }
 
         private void GetUserDeck()
         {
-            int[] userDeck = client.DispenseCards(UserSession.Instance().Nickname);
-            gameManager.UserDeckQueue = new Queue<int>(userDeck);
+            int[] userDeck = _client.DispenseCards(UserSession.Instance().Nickname);
+            _gameManager.UserDeckQueue = new Queue<int>(userDeck);
         }
 
 
-        //We preferred to leave the DrawFourCards in this class because we need the Await and here was found to be more easy to implement and to understand.
+        //We preferred to leave the DrawFourCards in this class because we need to make graphic cards for every card that is drawn.
         private void DrawFourCards()
         {
             string myNickname = UserSession.Instance().Nickname;
@@ -89,33 +85,33 @@ namespace Astralis.Views.Game
 
             for (int cardsToDraw = 0; cardsToDraw < 4; cardsToDraw++)
             {
-                drawnCard[cardsToDraw] = gameManager.DrawCard();
+                drawnCard[cardsToDraw] = _gameManager.DrawCard();
             }
 
-            client.DrawCard(myNickname, drawnCard);
+            _client.DrawCard(myNickname, drawnCard);
         }
 
         public void DrawCard()
         {
             string myNickname = UserSession.Instance().Nickname;
-            int[] drawnCard = new int[1] { gameManager.DrawCard()};
+            int[] drawnCard = new int[1] { _gameManager.DrawCard()};
 
-            client.DrawCard(myNickname, drawnCard);
+            _client.DrawCard(myNickname, drawnCard);
         }
 
-        //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges.
+        //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges in the graphic mannerjj.
         private void SetTeams()
         {
-            userTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
-            userTeam.PropertyChanged += UserTeam_PropertyChanged;
+            _userTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
+            _userTeam.PropertyChanged += UserTeam_PropertyChanged;
 
-            enemyTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
-            enemyTeam.PropertyChanged += EnemyTeam_PropertyChange;
+            _enemyTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
+            _enemyTeam.PropertyChanged += EnemyTeam_PropertyChange;
         }
 
         public void EndGameTurn()
         {
-            client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
+            _client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
         }
 
         private Dictionary<int, int> GetBoardDictionary()
@@ -179,11 +175,11 @@ namespace Astralis.Views.Game
 
             if (changedProperty == TEAM_HEALTH)
             {
-                lblPlayerHealth.Content = userTeam.Health;
+                lblPlayerHealth.Content = _userTeam.Health;
             }
             else if (changedProperty == TEAM_MANA)
             {
-                lblTurnMana.Content = userTeam.Mana;
+                lblTurnMana.Content = _userTeam.Mana;
             }
         }
 
@@ -193,7 +189,7 @@ namespace Astralis.Views.Game
 
             if (changedProperty == TEAM_HEALTH)
             {
-                lblEnemyHealth.Content = enemyTeam.Health;
+                lblEnemyHealth.Content = _enemyTeam.Health;
             }
         }
 
@@ -220,19 +216,19 @@ namespace Astralis.Views.Game
 
         private void GraphicCardClickedHandler(object sender, bool leftClick)
         {
-            if (gameManager.IsMyTurn)
+            if (_gameManager.IsMyTurn)
             {
                 GraphicCard clickedCard = sender as GraphicCard;
 
                 if (leftClick)
                 {
-                    if (selectedCard != null)
+                    if (_selectedCard != null)
                     {
-                        selectedCard.IsSelected = false;
+                        _selectedCard.IsSelected = false;
                     }
 
-                    selectedCard = clickedCard;
-                    selectedCard.IsSelected = true;
+                    _selectedCard = clickedCard;
+                    _selectedCard.IsSelected = true;
                 }
                 else
                 {
@@ -242,9 +238,9 @@ namespace Astralis.Views.Game
                     {
                         currentCardParent.Children.Remove(clickedCard);
                         AddGraphicCardToGrid(clickedCard, gdPlayerHand);
-                        playedCards.Remove(clickedCard.Card);
+                        _playedCards.Remove(clickedCard.Card);
 
-                        userTeam.Mana += clickedCard.Card.Mana;
+                        _userTeam.Mana += clickedCard.Card.Mana;
                     }
                 }
             }
@@ -264,35 +260,35 @@ namespace Astralis.Views.Game
 
         private void PlaceCardInSlot(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (gameManager.IsMyTurn && selectedCard != null)
+            if (_gameManager.IsMyTurn && _selectedCard != null)
             {
                 Grid boardCardSlot = sender as Grid;
-                Grid currentCardParent = VisualTreeHelper.GetParent(selectedCard) as Grid;
+                Grid currentCardParent = VisualTreeHelper.GetParent(_selectedCard) as Grid;
 
                 if (currentCardParent != boardCardSlot && currentCardParent != gdPlayerHand && boardCardSlot.Children.Count == 0)
                 {
-                    selectedCard.IsSelected = false;
+                    _selectedCard.IsSelected = false;
 
-                    currentCardParent.Children.Remove(selectedCard);
-                    boardCardSlot.Children.Add(selectedCard);
+                    currentCardParent.Children.Remove(_selectedCard);
+                    boardCardSlot.Children.Add(_selectedCard);
 
-                    selectedCard.IsSelected = false;
-                    selectedCard = null;
+                    _selectedCard.IsSelected = false;
+                    _selectedCard = null;
                 }
 
-                if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && userTeam.UseMana(selectedCard.Card.Mana))
+                if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && _userTeam.UseMana(_selectedCard.Card.Mana))
                 {
-                    selectedCard.IsSelected = false;
+                    _selectedCard.IsSelected = false;
 
-                    int columnIndex = Grid.GetColumn(selectedCard);
-                    currentCardParent.Children.Remove(selectedCard);
+                    int columnIndex = Grid.GetColumn(_selectedCard);
+                    currentCardParent.Children.Remove(_selectedCard);
                     RemoveColumn(currentCardParent, columnIndex);
 
-                    boardCardSlot.Children.Add(selectedCard);
-                    playedCards.Add(selectedCard.Card);
+                    boardCardSlot.Children.Add(_selectedCard);
+                    _playedCards.Add(_selectedCard.Card);
 
-                    selectedCard.IsSelected = false;
-                    selectedCard = null;
+                    _selectedCard.IsSelected = false;
+                    _selectedCard = null;
                 }
 
             }
@@ -330,26 +326,37 @@ namespace Astralis.Views.Game
         {
             string myNickname = UserSession.Instance().Nickname;
 
-            if (isHost)
+            if (_isHost)
             {
-                client.EndGame(winnerTeam, myNickname);
+                _client.EndGame(winnerTeam, myNickname);
             }
         }
 
         public void EndGameClient(int winnerTeam)
         {
             string myNickname = UserSession.Instance().Nickname;
-            EndGame endGame = new EndGame(winnerTeam, gameManager.UsersTeam[myNickname]);
+            EndGame endGame = new EndGame(winnerTeam, _gameManager.UsersTeam[myNickname]);
 
+            GameWindow gameWindow = new GameWindow();
             gameWindow.ChangePage(endGame);
             gameWindow.Visibility = Visibility.Visible;
             
             this.Close();
         }
 
+        public void ErrorEndGameClient()
+        {
+            MessageBox.Show("msgAPlayerHasDisconnected ", "titlePlayerDisconnected", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            GameWindow gameWindow = new GameWindow();
+            
+            gameWindow.Show();
+            this.Close();
+        }
+
         public void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn)
         {
-            gameManager.PlayerEndedTurn(player, boardAfterTurn, gdEnemySlots, gdPlayerSlots);
+            _gameManager.PlayerEndedTurn(player, boardAfterTurn, gdEnemySlots, gdPlayerSlots);
         }
 
         public void TakeCardOutOfHand(string nickname, GraphicCard graphicCardToRemove, Dictionary<string, int> usersTeam)
@@ -358,7 +365,7 @@ namespace Astralis.Views.Game
             {
                 RemoveCardFromHand(gdAllyHand, graphicCardToRemove);
             }
-            else if (nickname == gameManager.MyEnemy)
+            else if (nickname == _gameManager.MyEnemy)
             {
                 RemoveCardFromHand(gdEnemyHand, graphicCardToRemove);
             }
@@ -384,25 +391,25 @@ namespace Astralis.Views.Game
 
         public void ShowUserConnectedGame(string nickname, int team)
         {
-            gameManager.UsersTeam.Add(nickname, team);
+            _gameManager.UsersTeam.Add(nickname, team);
 
             _ = StartGameAsync();
         }
 
         public void ShowUsersInGame(Dictionary<string, int> users)
         {
-            gameManager.UsersTeam = users;
+            _gameManager.UsersTeam = users;
 
-            lblUserTeam.Content += gameManager.UsersTeam[UserSession.Instance().Nickname].ToString(); //CAMBIAR DESPUES DE PROBAR
+            lblUserTeam.Content += _gameManager.UsersTeam[UserSession.Instance().Nickname].ToString(); //CAMBIAR DESPUES DE PROBAR
 
             _ = StartGameAsync();
         }
 
         public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
         {
-            gameManager.StartFirstPhaseClient(firstPlayers);
+            _gameManager.StartFirstPhaseClient(firstPlayers);
             DrawFourCards();
-            gameManager.StartCountdown();
+            _gameManager.StartCountdown();
         }
 
         public void EnemyDrawCard ()
@@ -422,21 +429,21 @@ namespace Astralis.Views.Game
 
         private async Task StartGameAsync()
         {
-            if(gameManager.UsersTeam.Count == ALL_USERS_CONNECTED ) 
+            if(_gameManager.UsersTeam.Count == ALL_USERS_CONNECTED ) 
             {
                 await Task.Delay(2000);
                 GetUserDeck();
                 
-                if (isHost)
+                if (_isHost)
                 {
-                    client.StartFirstPhase(UserSession.Instance().Nickname);
+                    _client.StartFirstPhase(UserSession.Instance().Nickname);
                 }
             }
         }
 
         private void BtnMenuClick(object sender, RoutedEventArgs e)
         {
-            gameManager.EndTurn();
+            _gameManager.EndTurn();
         }
 
         private void BtnChangeViewClick(object sender, RoutedEventArgs e)

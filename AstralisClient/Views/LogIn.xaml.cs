@@ -5,19 +5,22 @@ using Astralis.Logic;
 using Astralis.UserManager;
 using System.Security.Cryptography;
 using Astralis.Views.Animations;
-using System.Windows.Navigation;
-using System;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 
 namespace Astralis.Views
 {
     public partial class LogIn : Window
     {
+        private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";
+        private const int MAX_FIELDS_LENGHT = 39;
+
         public LogIn()
         {
             InitializeComponent();
         }
 
-        private void btnLogIn_Click(object sender, RoutedEventArgs e)
+        private void BtnLogInClick(object sender, RoutedEventArgs e)
         {
             string password = CreateSha2(pbPassword.Password);
             string nickname = tbNickname.Text;
@@ -68,7 +71,7 @@ namespace Astralis.Views
             return hash;
         }
 
-        private void btnRegister_Click(object sender, RoutedEventArgs e)
+        private void BtnRegisterClick(object sender, RoutedEventArgs e)
         {
             SignUp signUp = new SignUp();
             this.Close();
@@ -79,7 +82,7 @@ namespace Astralis.Views
         {
             if (e.Key == Key.Enter)
             {
-                btnLogIn_Click(sender, e);
+                BtnLogInClick(sender, e);
             }
         }
 
@@ -107,11 +110,28 @@ namespace Astralis.Views
                     GameWindow gameWindow = new GameWindow();
                     this.Close();
                     gameWindow.ChangePage(lobby);
+                    gameWindow.Show();
                 }
                 else
                 {
                     MessageBox.Show("msgGameIsFullOrLobbyDoesntExist", "titleLobbyDoesntExist", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+            }
+        }
+
+        private void TextFilterForNickname(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            string fullString = textBox.Text + e.Text;
+
+            if (!Regex.IsMatch(fullString, DELIMITER_NICKNAME_REGEX))
+            {
+                e.Handled = true;
+            }
+
+            if (textBox.Text.Length >= MAX_FIELDS_LENGHT)
+            {
+                e.Handled = true;
             }
         }
 

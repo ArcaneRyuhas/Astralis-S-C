@@ -1,18 +1,9 @@
 ﻿using Astralis.Views.Game.GameLogic;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Astralis.Views.Game
 {
@@ -24,13 +15,14 @@ namespace Astralis.Views.Game
         private const string CARD_ATTACK = "Attack";
         private const string CARD_MANA = "Mana";
 
-        private bool isSelected = false;
+        private bool _isSelected = false;
+        private Card _card;
         public event EventHandler<bool> OnCardClicked;
-        private Card card;
+        
 
-        public bool IsSelected { get { return isSelected; } set { isSelected = value; UpdateVisualState(); } }
+        public bool IsSelected { get { return _isSelected; } set { _isSelected = value; UpdateVisualState(); } }
 
-        public Card Card { get { return card; } }
+        public Card Card { get { return _card; } }
 
         public GraphicCard()
         {
@@ -39,7 +31,7 @@ namespace Astralis.Views.Game
 
         private void UpdateVisualState()
         {
-            rectangleCard.Stroke = isSelected ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#B52727")) : Brushes.Black;
+            rectangleCard.Stroke = _isSelected ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#B52727")) : Brushes.Black;
         }
 
         public void SetGraphicCard(Card card)
@@ -50,8 +42,8 @@ namespace Astralis.Views.Game
             }
             else
             {
-                this.card = card;
-                this.card.PropertyChanged += Card_PropertyChanged;
+                this._card = card;
+                this._card.PropertyChanged += Card_PropertyChanged;
 
                 lblHealth.Content = card.Health.ToString();
                 lblAttack.Content = card.Attack.ToString();
@@ -76,15 +68,15 @@ namespace Astralis.Views.Game
             switch (e.PropertyName)
             {
                 case CARD_HEALTH:
-                    lblHealth.Content = card.Health.ToString();
+                    lblHealth.Content = _card.Health.ToString();
                     break;
 
                 case CARD_ATTACK:
-                    lblAttack.Content = card.Attack.ToString();
+                    lblAttack.Content = _card.Attack.ToString();
                     break;
 
                 case CARD_MANA:
-                    lblMana.Content = card.Mana.ToString();
+                    lblMana.Content = _card.Mana.ToString();
                     break;
             }
         }

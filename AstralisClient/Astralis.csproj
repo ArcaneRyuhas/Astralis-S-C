@@ -324,5 +324,29 @@
   <ItemGroup>
     <Resource Include="Views\Game\InGameAssets\CardSlot.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\falling.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fox.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eye.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Gangster.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Duck.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mondongo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DogeCoin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Patrick.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

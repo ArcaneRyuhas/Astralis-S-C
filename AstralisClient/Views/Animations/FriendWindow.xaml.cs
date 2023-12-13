@@ -2,26 +2,13 @@
 using Astralis.UserManager;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Astralis.Views.Animations
 {
-    /// <summary>
-    /// Interaction logic for FriendWindow.xaml
-    /// </summary>
+
     public partial class FriendWindow : UserControl, UserManager.IOnlineUserManagerCallback
     {
         private const int IS_PENDING_FRIEND = 2;
@@ -30,8 +17,8 @@ namespace Astralis.Views.Animations
         private const bool OFFLINE = false;
         private const bool ONLINE = true;
         private const bool IS_OFFLINE = false;
-        private int cardsAddedRow = 0;
-        private Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
+        private int _cardsAddedRow = 0;
+        private Dictionary<string, Tuple<bool, int>> _friendList = new Dictionary<string, Tuple<bool, int>>();
 
         public FriendWindow()
         {
@@ -57,11 +44,11 @@ namespace Astralis.Views.Animations
 
         public void SetFriendWindow()
         {
-            cardsAddedRow = 0;
+            _cardsAddedRow = 0;
             gdFriends.Children.Clear();
             gdFriends.RowDefinitions.Clear();
 
-            foreach (var friendEntry in friendList)
+            foreach (var friendEntry in _friendList)
             {
                 if(friendEntry.Value.Item1 == IS_ONLINE && friendEntry.Value.Item2 == IS_FRIEND)
                 {
@@ -69,7 +56,7 @@ namespace Astralis.Views.Animations
                 }
             }
 
-            foreach (var friendEntry in friendList)
+            foreach (var friendEntry in _friendList)
             {
                 if (friendEntry.Value.Item1 == IS_OFFLINE && friendEntry.Value.Item2 == IS_FRIEND)
                 {
@@ -77,7 +64,7 @@ namespace Astralis.Views.Animations
                 }
             }
 
-            foreach (var friendEntry in friendList)
+            foreach (var friendEntry in _friendList)
             {
                 if (friendEntry.Value.Item2 == IS_PENDING_FRIEND)
                 {
@@ -95,9 +82,9 @@ namespace Astralis.Views.Animations
             FriendCard card = new FriendCard();
             card.ReplyToFriendRequestEvent += ReplyToFriendRequestEvent;
             card.SetCard(friendOnlineKey, friendOnlineValue, friendStatus);
-            Grid.SetRow(card, cardsAddedRow);
+            Grid.SetRow(card, _cardsAddedRow);
             gdFriends.Children.Add(card);
-            cardsAddedRow++;
+            _cardsAddedRow++;
 
             RowDefinition rowDefinition = new RowDefinition();
             rowDefinition.Height = GridLength.Auto;
@@ -120,13 +107,13 @@ namespace Astralis.Views.Animations
 
         public void ShowUserConected(string nickname)
         {
-            if (friendList.ContainsKey(nickname))
+            if (_friendList.ContainsKey(nickname))
             {
 
-                if (friendList[nickname].Item2 == IS_FRIEND)
+                if (_friendList[nickname].Item2 == IS_FRIEND)
                 {
                     Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
-                    friendList[nickname] = friendTuple;
+                    _friendList[nickname] = friendTuple;
 
                     SetFriendWindow();
 
@@ -134,7 +121,7 @@ namespace Astralis.Views.Animations
                 else
                 {
                     Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
-                    friendList[nickname] = friendTuple;
+                    _friendList[nickname] = friendTuple;
 
                     SetFriendWindow();
 
@@ -144,20 +131,20 @@ namespace Astralis.Views.Animations
 
         public void ShowUserDisconected(string nickname)
         {
-            if (friendList.ContainsKey(nickname))
+            if (_friendList.ContainsKey(nickname))
             {
 
-                if (friendList[nickname].Item2 == IS_FRIEND)
+                if (_friendList[nickname].Item2 == IS_FRIEND)
                 {
                     Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
-                    friendList[nickname] = friendTuple;
+                    _friendList[nickname] = friendTuple;
 
                     SetFriendWindow();
                 }
                 else
                 {
                     Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
-                    friendList[nickname] = friendTuple;
+                    _friendList[nickname] = friendTuple;
 
                     SetFriendWindow();
 
@@ -167,14 +154,14 @@ namespace Astralis.Views.Animations
 
         public void ShowOnlineFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
         {
-            friendList = onlineFriends;
+            _friendList = onlineFriends;
         }
 
         public void ShowFriendRequest(string nickname)
         {
             Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
 
-            friendList.Add(nickname, friendTuple);
+            _friendList.Add(nickname, friendTuple);
 
             SetFriendWindow();
         }
@@ -183,7 +170,7 @@ namespace Astralis.Views.Animations
         {
             Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
 
-            friendList.Add(nickname, friendTuple);
+            _friendList.Add(nickname, friendTuple);
 
             SetFriendWindow();
         }
@@ -224,8 +211,8 @@ namespace Astralis.Views.Animations
 
                 if (requestAccepted)
                 {
-                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(friendList[friendUsername].Item1, IS_FRIEND);
-                    friendList[friendUsername] = friendTuple;
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
+                    _friendList[friendUsername] = friendTuple;
 
                     MessageBox.Show($"Has aceptado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 }

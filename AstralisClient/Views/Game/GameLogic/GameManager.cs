@@ -1,126 +1,120 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using Astralis.Logic;
 using System.Windows.Threading;
 using System.Windows.Media.Animation;
-using System.Windows.Media;
-using Astralis.UserManager;
-using System.Reflection;
 
 namespace Astralis.Views.Game.GameLogic
 {
     internal class GameManager
     {
         private const int ERROR_CARD_ID = 0;
-        private const int COUNTDOWN_STARTING_VALUE = 240; //RECORDAR REGRESARLO A 20
+        private const int COUNTDOWN_STARTING_VALUE = 20;
         private const int NO_MAGES = 0;
         private const int DRAW = 3;
 
-        private GameBoard gameBoard;
-        private Dictionary<string, int> usersTeam;
-        private int endTurnCounter = 0;
-        private bool isMyTurn = false; //CAMBIAR A FALSO
-        private Queue<int> userDeckQueue = new Queue<int>();
-        private Tuple<string, string> firstPlayers = Tuple.Create<string, string>("", "");
-        private string myEnemy;
-        private int countdownValue = COUNTDOWN_STARTING_VALUE;
-        private DispatcherTimer timer;
-        private ProgressBar progressBarCounter;
-        private bool roundEnded = false;
-        private List<Card> userHand = new List<Card>();
-        private Team userTeam;
-        private Team enemyTeam;
+        private GameBoard _gameBoard;
+        private Dictionary<string, int> _usersTeam;
+        private int _endTurnCounter = 0;
+        private bool _isMyTurn = false;
+        private Queue<int> _userDeckQueue = new Queue<int>();
+        private Tuple<string, string> _firstPlayers = Tuple.Create<string, string>("", "");
+        private string _myEnemy;
+        private int _countdownValue = COUNTDOWN_STARTING_VALUE;
+        private DispatcherTimer _timer;
+        private ProgressBar _progressBarCounter;
+        private bool _roundEnded = false;
+        private List<Card> _userHand = new List<Card>();
+        private Team _userTeam;
+        private Team _enemyTeam;
 
         
-        public Queue<int> UserDeckQueue { get { return userDeckQueue; } set { userDeckQueue = value; } }
-        public bool IsMyTurn { get { return isMyTurn; } }
-        public Team UserTeam { get { return userTeam; } set { userTeam = value; } }
-        public Dictionary<string, int> UsersTeam { get { return usersTeam; } set { usersTeam = value; } }
-        public string MyEnemy { get { return myEnemy; } }
-        public Team EnemyTeam { get { return enemyTeam; } set { enemyTeam = value; } }
-
+        public Queue<int> UserDeckQueue { get { return _userDeckQueue; } set { _userDeckQueue = value; } }
+        public bool IsMyTurn { get { return _isMyTurn; } }
+        public Team UserTeam { get { return _userTeam; } set { _userTeam = value; } }
+        public Dictionary<string, int> UsersTeam { get { return _usersTeam; } set { _usersTeam = value; } }
+        public string MyEnemy { get { return _myEnemy; } }
+        public Team EnemyTeam { get { return _enemyTeam; } set { _enemyTeam = value; } }
         public GameManager() { }
 
         public void SetGameBoard(GameBoard gameBoard)
         {
-            this.gameBoard = gameBoard;
+            this._gameBoard = gameBoard;
         }
 
         public void SetCounter(ProgressBar progressBarCounter)
         {
-            this.progressBarCounter = progressBarCounter;
+            this._progressBarCounter = progressBarCounter;
 
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += TimerTick;
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += TimerTick;
 
-            progressBarCounter.Maximum = countdownValue;
-            progressBarCounter.Value = countdownValue;
+            progressBarCounter.Maximum = _countdownValue;
+            progressBarCounter.Value = _countdownValue;
         }
 
         public int DrawCard()
         {
             int cardToDraw = ERROR_CARD_ID;
 
-            if (userHand.Count < 7)
+            if (_userHand.Count < 7)
             {
                 cardToDraw = UserDeckQueue.Dequeue();
                 Card card = CardManager.Instance().GetCard(cardToDraw);
 
-                userHand.Add(card);
-                int indexOfDrawnCard = userHand.IndexOf(card);
+                _userHand.Add(card);
+                int indexOfDrawnCard = _userHand.IndexOf(card);
 
-                gameBoard.AddCardToHand(userHand[indexOfDrawnCard]);
+                _gameBoard.AddCardToHand(_userHand[indexOfDrawnCard]);
             }
 
-            gameBoard.EnemyDrawCard();
+            _gameBoard.EnemyDrawCard();
 
             return cardToDraw;
         }
 
         private void TimerTick(object sender, EventArgs e)
         {
-            countdownValue--;
-            progressBarCounter.Value = countdownValue;
+            _countdownValue--;
+            _progressBarCounter.Value = _countdownValue;
 
-            if (countdownValue == 0)
+            if (_countdownValue == 0)
             {
-                timer.Stop();
+                _timer.Stop();
 
                 EndTurn();
             }
 
-            DoubleAnimation animation = new DoubleAnimation(countdownValue, TimeSpan.FromSeconds(1));
-            progressBarCounter.BeginAnimation(ProgressBar.ValueProperty, animation);
+            DoubleAnimation animation = new DoubleAnimation(_countdownValue, TimeSpan.FromSeconds(1));
+            _progressBarCounter.BeginAnimation(ProgressBar.ValueProperty, animation);
         }
 
         public void EndTurn()
         {
-            if (!roundEnded && isMyTurn)
+            if (!_roundEnded && _isMyTurn)
             {
-                gameBoard.lblUserTurn.Content = "You have ended your turn";// MODIFICAR DESPUES
-                roundEnded = true;
-                endTurnCounter++;
+                _gameBoard.lblUserTurn.Content = "You have ended your turn";// MODIFICAR DESPUES
+                _roundEnded = true;
+                _endTurnCounter++;
 
                 List<Card> removedCards = new List<Card>();
 
-                foreach (Card playedCard in gameBoard.PlayedCards)
+                foreach (Card playedCard in _gameBoard.PlayedCards)
                 {
-                    userHand.Remove(playedCard);
+                    _userHand.Remove(playedCard);
                     removedCards.Add(playedCard);
                 }
 
                 foreach (Card cardToRemove in removedCards)
                 {
-                    gameBoard.PlayedCards.Remove(cardToRemove);
+                    _gameBoard.PlayedCards.Remove(cardToRemove);
                 }
 
-                gameBoard.EndGameTurn();
+                _gameBoard.EndGameTurn();
                 TurnCounter();
             }
         }
@@ -131,9 +125,9 @@ namespace Astralis.Views.Game.GameLogic
 
             if(player != myNickname)
             {
-                endTurnCounter++;
+                _endTurnCounter++;
 
-                if (usersTeam[player] != usersTeam[myNickname])
+                if (_usersTeam[player] != _usersTeam[myNickname])
                 {
                     AddCardsToBoard(player, gdEnemySlots, boardAfterTurn);
                 }
@@ -144,7 +138,6 @@ namespace Astralis.Views.Game.GameLogic
 
                 TurnCounter();
             }
-            
         }
 
         public void AddCardsToBoard(string player, Grid gdSlots, Dictionary<int,int> boardAfterTurn)
@@ -154,7 +147,7 @@ namespace Astralis.Views.Game.GameLogic
             foreach (UIElement child in gdSlots.Children)
             {
                 
-                if (child is Grid)
+                if (child is Grid grid)
                 {
                     Grid childGrid = child as Grid;
                     counter++;
@@ -163,11 +156,11 @@ namespace Astralis.Views.Game.GameLogic
                     {
                         Card card = CardManager.Instance().GetCard(boardAfterTurn[counter]);
                         GraphicCard graphicCard = new GraphicCard();
-                        Grid innerGrid = (Grid)child;
+                        Grid innerGrid = grid;
 
                         graphicCard.SetGraphicCard(card);
                         innerGrid.Children.Add(graphicCard);
-                        gameBoard.TakeCardOutOfHand(player, graphicCard, usersTeam);
+                        _gameBoard.TakeCardOutOfHand(player, graphicCard, _usersTeam);
                     }
                 }
             }
@@ -177,76 +170,88 @@ namespace Astralis.Views.Game.GameLogic
         {
             string myNickname = UserSession.Instance().Nickname;
 
-            switch (endTurnCounter)
+            switch (_endTurnCounter)
             {
                 case 2:
-                    if (myNickname != firstPlayers.Item1 && myNickname != firstPlayers.Item2)
+                    if (myNickname != _firstPlayers.Item1 && myNickname != _firstPlayers.Item2)
                     {
-                        isMyTurn = true;
-                        gameBoard.lblUserTurn.Content = "It's your turn";
+                        _isMyTurn = true;
+                        _gameBoard.lblUserTurn.Content = "It's your turn";
                     }
                     else
                     {
-                        isMyTurn = false;
-                        gameBoard.lblUserTurn.Content = " Your turn has ended";
+                        _isMyTurn = false;
+                        _gameBoard.lblUserTurn.Content = " Your turn has ended";
                     }
                     StartCountdown();
                     break;
 
                 case 4:
-                    string[] secondPlayers = usersTeam.Keys.Where(name => name != firstPlayers.Item2 && name != firstPlayers.Item1).ToArray();
-                    firstPlayers = Tuple.Create(secondPlayers[0], secondPlayers[1]);
+                    string[] secondPlayers = _usersTeam.Keys.Where(name => name != _firstPlayers.Item2 && name != _firstPlayers.Item1).ToArray();
+                    _firstPlayers = Tuple.Create(secondPlayers[0], secondPlayers[1]);
 
-                    if (myNickname == firstPlayers.Item1 || myNickname == firstPlayers.Item2)
+                    if (myNickname == _firstPlayers.Item1 || myNickname == _firstPlayers.Item2)
                     {
-                        isMyTurn = true;
-                        gameBoard.lblUserTurn.Content = "It's your turn";
+                        _isMyTurn = true;
+                        _gameBoard.lblUserTurn.Content = "It's your turn";
                     }
 
-                    
-                    StartCountdown();
-                    endTurnCounter = 0;
-
-                    userTeam.RoundMana++;
-                    userTeam.Mana = userTeam.RoundMana;
-
-                    gameBoard.DrawCard();
-                    AttackPhase();
-                    HasGameEnded();
-                    roundEnded = false;
-
+                    ReviewEndGame();
                     break;
             }
         }
 
-        private void HasGameEnded()
+        private void ReviewEndGame()
+        {
+            StartCountdown();
+            _endTurnCounter = 0;
+
+            _userTeam.RoundMana++;
+            _userTeam.Mana = _userTeam.RoundMana;
+            
+            AttackPhase();
+
+            if (!HasGameEnded())
+            {
+                _gameBoard.DrawCard();
+                _roundEnded = false;
+            }
+        }
+
+        private bool HasGameEnded()
         {
             string myNickname = UserSession.Instance().Nickname;
-            int winnerTeam;
+            int winnerTeam = 0;
+            bool gameEnded = false;
 
-            if(enemyTeam.Health < 1 && userTeam.Health < 1) 
+            if(_enemyTeam.Health < 1 || _userTeam.Health < 1)
             {
-                winnerTeam = DRAW;
-                gameBoard.GameHasEnded(winnerTeam);
-            }
-            else if(enemyTeam.Health < 1)
-            {
-                winnerTeam = usersTeam[myEnemy];
-                gameBoard.GameHasEnded(winnerTeam);
+                gameEnded = true;
 
+                if (_enemyTeam.Health < 1 && _userTeam.Health < 1)
+                {
+                    winnerTeam = DRAW;
+                }
+                else if (_enemyTeam.Health < 1)
+                {
+                    winnerTeam = _usersTeam[myNickname];
+
+                }
+                else if (_userTeam.Health < 1)
+                {
+                    winnerTeam = _usersTeam[_myEnemy];
+                }
+                _gameBoard.GameHasEnded(winnerTeam);
             }
-            else if(userTeam.Health < 1)
-            {
-                winnerTeam = usersTeam[myNickname];
-                gameBoard.GameHasEnded(winnerTeam);
-            }
+            
+            return gameEnded;
         }
 
 
         private void AttackPhase()
         {
-            GraphicCard[] teamBoard = gameBoard.GetAttackBoard(gameBoard.gdPlayerSlots);
-            GraphicCard[] enemyTeamBoard = gameBoard.GetAttackBoard(gameBoard.gdEnemySlots);
+            GraphicCard[] teamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdPlayerSlots);
+            GraphicCard[] enemyTeamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdEnemySlots);
 
             int allyMagesCount = GetMagesCount(teamBoard);
             int enemyMagesCount = GetMagesCount(enemyTeamBoard);
@@ -286,7 +291,7 @@ namespace Astralis.Views.Game.GameLogic
                 }
                 else
                 {
-                    enemyTeam.ReceiveDamage(allyCard.DealDamage(NO_MAGES));
+                    _enemyTeam.ReceiveDamage(allyCard.DealDamage(NO_MAGES));
                 }
             }
 
@@ -298,7 +303,7 @@ namespace Astralis.Views.Game.GameLogic
                 }
                 else
                 {
-                    userTeam.ReceiveDamage(enemyCard.DealDamage(NO_MAGES));
+                    _userTeam.ReceiveDamage(enemyCard.DealDamage(NO_MAGES));
                 }
             }
 
@@ -318,7 +323,7 @@ namespace Astralis.Views.Game.GameLogic
                 }
                 else
                 {
-                    enemyTeam.ReceiveDamage(allyCard.DealDamage(allyMagesCount));
+                    _enemyTeam.ReceiveDamage(allyCard.DealDamage(allyMagesCount));
                 }
             }
             if (enemyGraphicCard.Card.Type != Constants.WARRIOR && enemyGraphicCard.Card.Type != Constants.NO_CLASS)
@@ -329,7 +334,7 @@ namespace Astralis.Views.Game.GameLogic
                 }
                 else
                 {
-                    userTeam.ReceiveDamage(enemyCard.DealDamage(enemyMagesCount));
+                    _userTeam.ReceiveDamage(enemyCard.DealDamage(enemyMagesCount));
                 }
             }
 
@@ -340,54 +345,54 @@ namespace Astralis.Views.Game.GameLogic
         {
             if (allyGraphicCard.Card.Health < 1)
             {
-                gameBoard.DeleteGraphicCard(allyGraphicCard);
+                _gameBoard.DeleteGraphicCard(allyGraphicCard);
                 allyGraphicCard.Card.Attack = Constants.DEAD_DAMAGE;
             }
 
             if(enemyGraphicCard.Card.Health < 1) 
             {
-                gameBoard.DeleteGraphicCard(enemyGraphicCard);
+                _gameBoard.DeleteGraphicCard(enemyGraphicCard);
                 enemyGraphicCard.Card.Attack = Constants.DEAD_DAMAGE;
             }
         }
 
         public void StartCountdown()
         {
-            countdownValue = COUNTDOWN_STARTING_VALUE;
+            _countdownValue = COUNTDOWN_STARTING_VALUE;
 
-            timer.Start();
+            _timer.Start();
         }
 
         public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
         {
-            this.firstPlayers = firstPlayers;
+            this._firstPlayers = firstPlayers;
             string myNickname = UserSession.Instance().Nickname;
 
             if (firstPlayers.Item1 == myNickname)
             {
-                isMyTurn = true;
-                gameBoard.lblUserTurn.Content = "It's your turn";
-                myEnemy = firstPlayers.Item2;
+                _isMyTurn = true;
+                _gameBoard.lblUserTurn.Content = "It's your turn";
+                _myEnemy = firstPlayers.Item2;
             }
             else if (firstPlayers.Item2 == myNickname)
             {
-                isMyTurn = true;
-                gameBoard.lblUserTurn.Content = "It's your turn";
-                myEnemy = firstPlayers.Item1;
+                _isMyTurn = true;
+                _gameBoard.lblUserTurn.Content = "It's your turn";
+                _myEnemy = firstPlayers.Item1;
             }
             else
             {
-                foreach (string nickname in usersTeam.Keys)
+                foreach (string nickname in _usersTeam.Keys)
                 {
                     if (firstPlayers.Item1 != nickname && firstPlayers.Item2 != nickname && nickname != myNickname)
                     {
-                        isMyTurn = false;
-                        myEnemy = nickname;
+                        _isMyTurn = false;
+                        _myEnemy = nickname;
                     }
                 }
             }
 
-            roundEnded = false;
+            _roundEnded = false;
         }
     }
 }

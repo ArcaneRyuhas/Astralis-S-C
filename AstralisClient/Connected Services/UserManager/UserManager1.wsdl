@@ -55,6 +55,12 @@
   <wsdl:message name="IUserManager_AddUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserManager_AddGuest_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddGuest" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_AddGuest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddGuestResponse" />
+  </wsdl:message>
   <wsdl:message name="IUserManager_ConfirmUser_InputMessage">
     <wsdl:part name="parameters" element="tns:ConfirmUser" />
   </wsdl:message>
@@ -279,6 +285,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/AddUserResponse" message="tns:IUserManager_AddUser_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="AddGuest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddGuest" message="tns:IUserManager_AddGuest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/AddGuestResponse" message="tns:IUserManager_AddGuest_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ConfirmUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/ConfirmUser" message="tns:IUserManager_ConfirmUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/ConfirmUserResponse" message="tns:IUserManager_ConfirmUser_OutputMessage" />
@@ -452,6 +462,15 @@
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="AddUser">
       <soap12:operation soapAction="http://tempuri.org/IUserManager/AddUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddGuest">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/AddGuest" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -1,12 +1,7 @@
-﻿using Astralis.UserManager;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace Astralis.Logic
@@ -24,6 +19,14 @@ namespace Astralis.Logic
                 {1, ImageResource.Window},
                 {2, ImageResource.Piranhas},
                 {3, ImageResource.Pumpkin},
+                {4, ImageResource.Falling},
+                {5, ImageResource.Fox},
+                {6, ImageResource.Eye },
+                {7, ImageResource.Gangster},
+                {8, ImageResource.Duck},
+                {9, ImageResource.Mondongo},
+                {10, ImageResource.DogeCoin},
+                {11, ImageResource.Patrick}
             };
         }
 

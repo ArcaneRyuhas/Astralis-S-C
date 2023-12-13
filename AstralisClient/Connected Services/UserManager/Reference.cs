@@ -209,6 +209,12 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddUser", ReplyAction="http://tempuri.org/IUserManager/AddUserResponse")]
         System.Threading.Tasks.Task<int> AddUserAsync(Astralis.UserManager.User user);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddGuest", ReplyAction="http://tempuri.org/IUserManager/AddGuestResponse")]
+        Astralis.UserManager.User AddGuest();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddGuest", ReplyAction="http://tempuri.org/IUserManager/AddGuestResponse")]
+        System.Threading.Tasks.Task<Astralis.UserManager.User> AddGuestAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUser", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserResponse")]
         int ConfirmUser(string nickname, string password);
         
@@ -267,6 +273,14 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task<int> AddUserAsync(Astralis.UserManager.User user) {
             return base.Channel.AddUserAsync(user);
+        }
+        
+        public Astralis.UserManager.User AddGuest() {
+            return base.Channel.AddGuest();
+        }
+        
+        public System.Threading.Tasks.Task<Astralis.UserManager.User> AddGuestAsync() {
+            return base.Channel.AddGuestAsync();
         }
         
         public int ConfirmUser(string nickname, string password) {

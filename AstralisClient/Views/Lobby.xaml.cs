@@ -19,22 +19,23 @@ namespace Astralis.Views
         private const int TEAM_TWO = 2;
         private const int MAX_TEAM_SIZE = 2;
 
-        private bool isHost = false;
-        private string gameId;
-        private Dictionary<int , bool> freeSpaces;
-        private Dictionary<int , LobbyUserCard> userCards = new Dictionary<int, LobbyUserCard>();
+        private bool _isHost = false;
+        private string _gameId;
+        private Dictionary<int , bool> _freeSpaces;
+        private Dictionary<int , LobbyUserCard> _userCards = new Dictionary<int, LobbyUserCard>();
+        private LobbyManagerClient _client;
 
         public Lobby()
         {
             InitializeComponent();
-            freeSpaces = new Dictionary<int, bool>()
+            _freeSpaces = new Dictionary<int, bool>()
             {
                 {0, true },
                 {1, true },
                 {2, true },
                 {3, true },
             };
-            btnStartGame.IsEnabled = true; //CAMBIAR A FALSE DESPUES DE PROBAR
+            btnStartGame.IsEnabled = false;
         }
 
         public bool SetLobby(string code) 
@@ -42,11 +43,11 @@ namespace Astralis.Views
             bool gameExist = false;
 
             InstanceContext context = new InstanceContext(this);
-            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+            _client = new LobbyManagerClient(context);
 
             if (code == HOST_CODE)
             {
-                isHost = true;
+                _isHost = true;
 
                 User user = new User
                 {
@@ -56,31 +57,22 @@ namespace Astralis.Views
 
                 AddCard(user, NO_TEAM);
 
-                gameId = client.CreateLobby(user);
+                _gameId = _client.CreateLobby(user);
 
-                if (gameId == ERROR_CODE_LOBBY)
+                if (_gameId == ERROR_CODE_LOBBY)
                 {
                     MessageBox.Show("msgErrorCreateLobby", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
                     gameExist = true;
-                    lblGameCode.Content = gameId;
+                    lblGameCode.Content = _gameId;
                 }
             }
-            else if(client.GameExist(code))
+            else if(_client.GameExist(code))
             {
-                User user = new User
-                {
-                    Nickname = UserSession.Instance().Nickname,
-                    ImageId = UserSession.Instance().ImageId
-                };
-
-                client.ConnectLobby(user, code);
-
+                ConnectToGame(code);
                 gameExist = true;
-                gameId = code;
-                lblGameCode.Content = gameId;
             }
             else
             {
@@ -88,6 +80,20 @@ namespace Astralis.Views
             }
 
             return gameExist;
+        }
+
+        private void ConnectToGame(string code)
+        {
+            User user = new User
+            {
+                Nickname = UserSession.Instance().Nickname,
+                ImageId = UserSession.Instance().ImageId
+            };
+
+            _client.ConnectLobby(user, code);
+            
+            _gameId = code;
+            lblGameCode.Content = _gameId;
         }
 
         public bool GameIsNotFull(string gameId)
@@ -103,45 +109,45 @@ namespace Astralis.Views
         private void AddCard (User user, int team)
         {
             LobbyUserCard lobbyUserCard = new LobbyUserCard();
-            lobbyUserCard.setCard(user, isHost);
+
+            lobbyUserCard.SetCard(user, _isHost);
             lobbyUserCard.ChangeTeam(team);
-            lobbyUserCard.TeamSelectionChanged += LobbyUserCard_TeamSelectionChanged;
+            lobbyUserCard.TeamSelectionChanged += LobbyUserCardTeamSelectionChanged;
             bool isAdded = false;
 
             for(int gridRow = 0; gridRow < 4; gridRow++)
             {
-                if (freeSpaces[gridRow] == true && isAdded == false)
+                if (_freeSpaces[gridRow] == true && isAdded == false)
                 {
                     gridUsers.Children.Add(lobbyUserCard);
                     Grid.SetRow(lobbyUserCard, gridRow);
-                    freeSpaces[gridRow] = false;
-                    userCards.Add(gridRow, lobbyUserCard );
+                    _freeSpaces[gridRow] = false;
+                    _userCards.Add(gridRow, lobbyUserCard );
                     isAdded = true;
                 }
 
             }
         }
 
-        private void LobbyUserCard_TeamSelectionChanged(object sender, Tuple<string, int> userTeam)
+        private void LobbyUserCardTeamSelectionChanged(object sender, Tuple<string, int> userTeam)
         {
-            InstanceContext context = new InstanceContext(this);
-            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
 
-            client.ChangeLobbyUserTeam(userTeam.Item1, userTeam.Item2);
+            _client.ChangeLobbyUserTeam(userTeam.Item1, userTeam.Item2);
 
+            EnableStartButton();
         }
 
         private void RemoveCard(User user)
         {
             for (int gridRow = 0; gridRow < 4; gridRow++)
             {
-                if (userCards.ContainsKey(gridRow))
+                if (_userCards.ContainsKey(gridRow))
                 {
-                    if (userCards[gridRow].UserNickname == user.Nickname)
+                    if (_userCards[gridRow].UserNickname == user.Nickname)
                     {
-                        gridUsers.Children.Remove(userCards[gridRow]);
-                        userCards.Remove(gridRow);
-                        freeSpaces[gridRow] = true;
+                        gridUsers.Children.Remove(_userCards[gridRow]);
+                        _userCards.Remove(gridRow);
+                        _freeSpaces[gridRow] = true;
                     }
                 }  
 
@@ -188,11 +194,11 @@ namespace Astralis.Views
         {
             for (int gridRow = 0; gridRow < 4; gridRow++)
             {
-                if (userCards.ContainsKey(gridRow))
+                if (_userCards.ContainsKey(gridRow))
                 {
-                    if (userCards[gridRow].UserNickname == userNickname)
+                    if (_userCards[gridRow].UserNickname == userNickname)
                     {
-                        userCards[gridRow].ChangeTeam(team);
+                        _userCards[gridRow].ChangeTeam(team);
                         break;
                     }
                 }
@@ -212,13 +218,13 @@ namespace Astralis.Views
 
             Game.GameBoard gameBoard = new Game.GameBoard(windowParent);
             
-            gameBoard.IsHost = isHost;
+            gameBoard.IsHost = _isHost;
             gameBoard.Show();
         }
 
         private void EnableStartButton()
         {
-            if (NoFreeSpaces() && TeamsAreComplete() && isHost)
+            if (NoFreeSpaces() && TeamsAreComplete() && _isHost)
             {
                 btnStartGame.IsEnabled = true;
             }
@@ -233,7 +239,7 @@ namespace Astralis.Views
         {
             bool noFreeSpaces = true;
 
-            foreach (var space in freeSpaces)
+            foreach (var space in _freeSpaces)
             {
                 if (space.Value == true)
                 {
@@ -252,13 +258,13 @@ namespace Astralis.Views
 
             for (int gridRow = 0; gridRow < 4; gridRow++)
             {
-                if (userCards.ContainsKey(gridRow))
+                if (_userCards.ContainsKey(gridRow))
                 {
-                    if (userCards[gridRow].Team == TEAM_ONE)
+                    if (_userCards[gridRow].Team == TEAM_ONE)
                     {
                         teamOneCounter++;
                     }
-                    else if (userCards[gridRow].Team == TEAM_TWO)
+                    else if (_userCards[gridRow].Team == TEAM_TWO)
                     {
                         teamTwoCounter++;
                     }
@@ -281,18 +287,18 @@ namespace Astralis.Views
             NavigationService.GoBack();
         }
 
-        private void btnSendMessage_Click(object sender, RoutedEventArgs e)
+        private void BtnSendMessageClick(object sender, RoutedEventArgs e)
         {
             string message = UserSession.Instance().Nickname + ": " + txtChat.Text;
 
             InstanceContext context = new InstanceContext(this);
             UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
             
-            client.SendMessage(message, gameId);
+            client.SendMessage(message, _gameId);
         }
 
 
-        private void btnCopyToClipboard_Click(object sender, RoutedEventArgs e)
+        private void BtnCopyToClipboardClick(object sender, RoutedEventArgs e)
         {
             string textToCopy = lblGameCode.Content.ToString();
 
@@ -301,10 +307,8 @@ namespace Astralis.Views
             MessageBox.Show("Text has been copied to clipboard: " + textToCopy, "Clipboard Copy", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void btnStartGame_Click(object sender, RoutedEventArgs e)
+        private void BtnStartGameClick(object sender, RoutedEventArgs e)
         {
-            InstanceContext context = new InstanceContext(this);
-            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
 
             GameWindow windowParent = (GameWindow)this.Parent; 
             if(windowParent != null)
@@ -312,7 +316,15 @@ namespace Astralis.Views
                 windowParent.Visibility = Visibility.Collapsed;
             }
     
-            client.StartGame(gameId);
+            _client.StartGame(_gameId);
+        }
+
+        private void BtnSendInvitationClick(object sender, RoutedEventArgs e)
+        {
+            string toSendMail = txtFriendMail.Text;
+
+            string mailString = _client.SendFriendInvitation(_gameId, toSendMail);
+            MessageBox.Show(mailString, "titleMail", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
