@@ -24,6 +24,7 @@ namespace Astralis.Views
         private Dictionary<int , bool> _freeSpaces;
         private Dictionary<int , LobbyUserCard> _userCards = new Dictionary<int, LobbyUserCard>();
         private LobbyManagerClient _client;
+        FriendWindow friendWindow;
 
         public Lobby()
         {
@@ -35,6 +36,8 @@ namespace Astralis.Views
                 {2, true },
                 {3, true },
             };
+            friendWindow = new FriendWindow(LOBBY_WINDOW);
+            friendWindow.SetFriendWindow();
             btnStartGame.IsEnabled = false;
         }
 

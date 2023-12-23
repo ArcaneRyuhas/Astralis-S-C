@@ -19,13 +19,14 @@ namespace Astralis.Views
         public event CloseWindowEventHandler CloseWindowEvent;
 
         private const string IS_HOST = "host";
+        private const string MAIN_MENU_WINDOW = "MAIN_MENU";
 
         private FriendWindow friendWindow;
 
         public MainMenu()
         {
             InitializeComponent();
-            friendWindow = new FriendWindow();
+            friendWindow = new FriendWindow(MAIN_MENU_WINDOW);
             friendWindow.SetFriendWindow();
             gridFriendsWindow.Children.Add(friendWindow);
             btnMyProfile.Content = UserSession.Instance().Nickname;
