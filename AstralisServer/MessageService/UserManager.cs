@@ -355,18 +355,16 @@ namespace MessageService
         [OperationBehavior]
         public void ConectUser(string nickname)
         {
-            if (!onlineUsers.ContainsKey(nickname))
+            lock (onlineUsers)
             {
-                ChangeSingle();
 
-                lock (onlineUsers)
+                IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
+                List<string> onlineNicknames = onlineUsers.Keys.ToList();
+                FriendAccess friendAccess = new FriendAccess();
+
+                currentUserCallbackChannel.ShowOnlineFriends(friendAccess.GetFriendList(nickname, onlineUsers.Keys.ToList()));
+                if (!onlineUsers.ContainsKey(nickname))
                 {
-                    IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
-                    List<string> onlineNicknames = onlineUsers.Keys.ToList();
-                    FriendAccess friendAccess = new FriendAccess();
-
-                    currentUserCallbackChannel.ShowOnlineFriends(friendAccess.GetFriendList(nickname, onlineUsers.Keys.ToList()));
-
                     try
                     {
                         foreach (var user in onlineUsers)
@@ -381,8 +379,11 @@ namespace MessageService
 
                     onlineUsers.Add(nickname, currentUserCallbackChannel);
                 }
-
-                ChangeMultiple();
+                else
+                {
+                    onlineUsers[nickname] = currentUserCallbackChannel;
+                }
+                
             }
         }
 

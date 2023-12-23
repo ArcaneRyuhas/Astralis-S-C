@@ -34,7 +34,6 @@ namespace Astralis.Views.Animations
         private bool onlineStatus = false;
         private const bool ACCEPTED_FRIEND = true;
         private const bool DENIED_FRIEND = false;
-        private const string LOBBY_WINDOW = "LOBBY";
         public FriendCard()
         {
             InitializeComponent();
@@ -87,7 +86,8 @@ namespace Astralis.Views.Animations
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Red;
             }
 
-            btnAcceptFriendRequest.Visibility = Visibility.Hidden; //PREGUNTAR A MARIO POR ESTO
+            btnAcceptFriendRequest.Visibility = Visibility.Hidden;
+            btnDenyFriendRequest.Visibility = Visibility.Hidden; //PREGUNTAR A MARIO POR ESTO
 
             ReplyToFriendRequestEvent?.Invoke(this, new Tuple<string, bool>(friendUsername, ACCEPTED_FRIEND));
         }
@@ -114,6 +114,7 @@ namespace Astralis.Views.Animations
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Red;
             }
 
+            btnAcceptFriendRequest.Visibility = Visibility.Hidden;
             btnAcceptFriendRequest.Visibility = Visibility.Hidden;
 
             ReplyToFriendRequestEvent?.Invoke(this, new Tuple<string, bool>(friendUsername, DENIED_FRIEND));

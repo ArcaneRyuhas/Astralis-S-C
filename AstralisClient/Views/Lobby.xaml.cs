@@ -7,11 +7,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using Astralis.Views.Animations;
+using Astralis.Views.Game.GameLogic;
 
 namespace Astralis.Views
 {
     public partial class Lobby : Page, UserManager.ILobbyManagerCallback
     {
+
+        
+
         private const string HOST_CODE = "host";
         private const string ERROR_CODE_LOBBY = "error";
         private const int NO_TEAM = 0;
@@ -24,6 +28,7 @@ namespace Astralis.Views
         private Dictionary<int , bool> _freeSpaces;
         private Dictionary<int , LobbyUserCard> _userCards = new Dictionary<int, LobbyUserCard>();
         private LobbyManagerClient _client;
+        private const string LOBBY_WINDOW = "LOBBY";
         FriendWindow friendWindow;
 
         public Lobby()
@@ -36,17 +41,27 @@ namespace Astralis.Views
                 {2, true },
                 {3, true },
             };
-            friendWindow = new FriendWindow(LOBBY_WINDOW);
-            friendWindow.SetFriendWindow();
+
+            InstanceContext context = new InstanceContext(this);
+            _client = new LobbyManagerClient(context);
             btnStartGame.IsEnabled = false;
+            friendWindow = new FriendWindow(LOBBY_WINDOW);
+
+            friendWindow.SetFriendWindow();
+
+            friendWindow.SendGameInvitation += SendGameInvitationEvent;
+            gridFriendsWindow.Children.Add(friendWindow);
+        }
+
+        private void SendGameInvitationEvent(object sender, string friendUsername)
+        {
+            string mailString = _client.SendFriendInvitation(_gameId, friendUsername);
+            MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public bool SetLobby(string code) 
         {
             bool gameExist = false;
-
-            InstanceContext context = new InstanceContext(this);
-            _client = new LobbyManagerClient(context);
 
             if (code == HOST_CODE)
             {
@@ -338,6 +353,20 @@ namespace Astralis.Views
         {           
             MessageBox.Show(Properties.Resources.msgKickedOut, Properties.Resources.titleKickedOut, MessageBoxButton.OK, MessageBoxImage.Information);
             NavigationService.GoBack();
+        }
+
+        private void BtnFriendWindowClick(object sender, RoutedEventArgs e)
+        {
+            if (friendWindow.IsVisible == true)
+            {
+                friendWindow.Visibility = Visibility.Hidden;
+            }
+
+            else
+            {
+                friendWindow.SetFriendWindow();
+                friendWindow.Visibility = Visibility.Visible;
+            }
         }
     }
 }

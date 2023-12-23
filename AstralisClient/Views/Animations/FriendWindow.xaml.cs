@@ -19,9 +19,10 @@ namespace Astralis.Views.Animations
         private const bool IS_OFFLINE = false;
         private const bool ACCEPTED_FRIEND = true;
         private const string LOBBY_WINDOW = "LOBBY";
-        private const string MAIN_MENU_WINDOW = "MAIN_MENU";
         private int _cardsAddedRow = 0;
         private string typeFriendWindow = "";
+
+        public event EventHandler<string> SendGameInvitation;
 
         private Dictionary<string, Tuple<bool, int>> _friendList = new Dictionary<string, Tuple<bool, int>>();
 
@@ -30,6 +31,11 @@ namespace Astralis.Views.Animations
             this.typeFriendWindow = typeFriendWindow;
             InitializeComponent();
             Connect();
+            if(typeFriendWindow == LOBBY_WINDOW)
+            {
+                txtSearchUser.Visibility = Visibility.Collapsed;
+                btnSendFriendRequest.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void Connect()
@@ -94,7 +100,7 @@ namespace Astralis.Views.Animations
             card.ReplyToFriendRequestEvent += ReplyToFriendRequestEvent;
             card.RemoveFriendEvent += RemoveFriendEvent;
             card.SendGameInvitation += SendGameInvitationEvent;
-
+            
             if (typeFriendWindow == LOBBY_WINDOW)
             {
                 card.SetLobbyCard(friendOnlineKey, friendOnlineValue, friendStatus);
@@ -179,6 +185,7 @@ namespace Astralis.Views.Animations
         public void ShowOnlineFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
         {
             _friendList = onlineFriends;
+            SetFriendWindow();
         }
 
         public void ShowFriendRequest(string nickname)
@@ -236,19 +243,25 @@ namespace Astralis.Views.Animations
             {
                 bool requestReplySucceded = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, reply);
 
-                if (requestReplySucceded && reply == ACCEPTED_FRIEND)
+                if (requestReplySucceded)
                 {
-                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
-                    _friendList[friendUsername] = friendTuple;
+                    if (reply == ACCEPTED_FRIEND)
+                    {
+                        Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
+                        _friendList[friendUsername] = friendTuple;
+                        SetFriendWindow();
 
-                    MessageBox.Show($"Has aceptado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show($"Has aceptado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        _friendList.Remove(friendUsername);
+                        SetFriendWindow();
+                        MessageBox.Show($"Has rechazado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+
                 }
                 else
-                {
-                    MessageBox.Show($"No se pudo aceptar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                if (!requestReplySucceded && reply != ACCEPTED_FRIEND)
                 {
                     MessageBox.Show($"No se pudo rechazar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -265,14 +278,16 @@ namespace Astralis.Views.Animations
 
                 if (removedFriendSucceded)
                 {
+                    _friendList.Remove(friendUsername);
+                    SetFriendWindow();
                     MessageBox.Show($"Has eliminado de tus amigos a {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
 
-        private void SendGameInvitationEvent(object sender, string e)
+        private void SendGameInvitationEvent(object sender, string friendUsername)
         {
-            throw new NotImplementedException();
+            SendGameInvitation?.Invoke(this, friendUsername);
         }
     }
 }

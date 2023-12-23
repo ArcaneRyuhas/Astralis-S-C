@@ -17,7 +17,6 @@ namespace DataAccessProject
         public string nickName { get; set; }
         public string gameId { get; set; }
         public Nullable<int> team { get; set; }
-        public string Team { get; internal set; }
         public int playId { get; set; }
     
         public virtual Game Game { get; set; }
