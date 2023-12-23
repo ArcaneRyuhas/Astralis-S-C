@@ -94,7 +94,16 @@ namespace Astralis.Views.Animations
             card.ReplyToFriendRequestEvent += ReplyToFriendRequestEvent;
             card.RemoveFriendEvent += RemoveFriendEvent;
             card.SendGameInvitation += SendGameInvitationEvent;
-            card.SetCard(friendOnlineKey, friendOnlineValue, friendStatus, typeFriendWindow);
+
+            if(typeFriendWindow == LOBBY_WINDOW)
+            {
+                card.SetLobbyCard(friendOnlineKey, friendOnlineValue, friendStatus);
+            }
+            else
+            {
+                card.SetMainMenuCard(friendOnlineKey, friendOnlineValue, friendStatus);
+            }
+            
             Grid.SetRow(card, _cardsAddedRow);
             gdFriends.Children.Add(card);
             _cardsAddedRow++;

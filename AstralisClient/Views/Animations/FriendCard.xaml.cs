@@ -40,38 +40,37 @@ namespace Astralis.Views.Animations
             InitializeComponent();
         }
 
-        public void SetCard(string nickname, bool onlineStatus, int friendStatus, string typeFriendWindow)
+
+        public void SetLobbyCard(string nickname, bool onlineStatus, int friendStatus)
         {
-            lblNickname.Content = nickname;
-
-            this.friendStatus = friendStatus;
-            this.onlineStatus = onlineStatus;
-
             if (friendStatus == IS_FRIEND)
             {
                 if (onlineStatus == true)
                 {
                     ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
                 }
+            }
+            btnSendGameInvitation.Visibility = Visibility.Visible;
+        }
 
-                btnAcceptFriendRequest.Visibility = Visibility.Hidden;
-                btnDeleteFriend.Visibility = Visibility.Hidden;
+        public void SetMainMenuCard(string nickname, bool onlineStatus, int friendStatus)
+        {
+            if (friendStatus == IS_FRIEND)
+            {
+                if (onlineStatus == true)
+                {
+                    ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
+                    btnDeleteFriend.Visibility = Visibility.Visible;
+                }
+
             }
             else
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Yellow;
                 btnAcceptFriendRequest.Visibility = Visibility.Visible;
                 btnDenyFriendRequest.Visibility = Visibility.Visible;
-
             }
-
-            if(typeFriendWindow == LOBBY_WINDOW)
-            {
-                btnSendGameInvitation.Visibility = Visibility.Visible;
-            }
-            
         }
-
 
         private void btnAcceptFriendRequest_Click(object sender, RoutedEventArgs e)
         {
