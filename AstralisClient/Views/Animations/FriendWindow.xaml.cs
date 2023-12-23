@@ -17,11 +17,17 @@ namespace Astralis.Views.Animations
         private const bool OFFLINE = false;
         private const bool ONLINE = true;
         private const bool IS_OFFLINE = false;
+        private const bool ACCEPTED_FRIEND = true;
+        private const string LOBBY_WINDOW = "LOBBY";
+        private const string MAIN_MENU_WINDOW = "MAIN_MENU";
         private int _cardsAddedRow = 0;
+        private string typeFriendWindow = "";
+
         private Dictionary<string, Tuple<bool, int>> _friendList = new Dictionary<string, Tuple<bool, int>>();
 
-        public FriendWindow()
+        public FriendWindow(string typeFriendWindow)
         {
+            this.typeFriendWindow = typeFriendWindow;
             InitializeComponent();
             Connect();
         }
@@ -72,16 +78,23 @@ namespace Astralis.Views.Animations
                 }
             }
 
-            RowDefinition lastRowDefinition =new RowDefinition();
+            RowDefinition lastRowDefinition = new RowDefinition();
             lastRowDefinition.Height = new GridLength(1, GridUnitType.Star);
             gdFriends.RowDefinitions.Add(lastRowDefinition);
+
+            if(typeFriendWindow == LOBBY_WINDOW)
+            {
+                txtSearchUser.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void AddFriendRow(string friendOnlineKey, bool friendOnlineValue, int friendStatus)
         {
             FriendCard card = new FriendCard();
             card.ReplyToFriendRequestEvent += ReplyToFriendRequestEvent;
-            card.SetCard(friendOnlineKey, friendOnlineValue, friendStatus);
+            card.RemoveFriendEvent += RemoveFriendEvent;
+            card.SendGameInvitation += SendGameInvitationEvent;
+            card.SetCard(friendOnlineKey, friendOnlineValue, friendStatus, typeFriendWindow);
             Grid.SetRow(card, _cardsAddedRow);
             gdFriends.Children.Add(card);
             _cardsAddedRow++;
@@ -90,6 +103,8 @@ namespace Astralis.Views.Animations
             rowDefinition.Height = GridLength.Auto;
             gdFriends.RowDefinitions.Add(rowDefinition);
         }
+
+      
 
         private void btnSendFriendRequest_Click(object sender, RoutedEventArgs e)
         {
@@ -201,15 +216,18 @@ namespace Astralis.Views.Animations
             }
         }
 
-        private void ReplyToFriendRequestEvent(object sender, string friendUsername)
+        private void ReplyToFriendRequestEvent(object sender, Tuple<string, bool> e)
         {
+            string friendUsername = e.Item1;
+            bool reply = e.Item2;
+
             InstanceContext context = new InstanceContext(this);
 
             using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
             {
-                bool requestAccepted = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, true);
+                bool requestReplySucceded = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, reply);
 
-                if (requestAccepted)
+                if (requestReplySucceded && reply == ACCEPTED_FRIEND)
                 {
                     Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
                     _friendList[friendUsername] = friendTuple;
@@ -220,7 +238,32 @@ namespace Astralis.Views.Animations
                 {
                     MessageBox.Show($"No se pudo aceptar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+
+                if (!requestReplySucceded && reply != ACCEPTED_FRIEND)
+                {
+                    MessageBox.Show($"No se pudo rechazar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
+        }
+
+        private void RemoveFriendEvent(object sender, string friendUsername)
+        {
+            InstanceContext context = new InstanceContext(this);
+
+            using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
+            {
+                bool removedFriendSucceded = client.RemoveFriend(UserSession.Instance().Nickname, friendUsername);
+
+                if (removedFriendSucceded)
+                {
+                    MessageBox.Show($"Has eliminado de tus amigos a {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+
+        private void SendGameInvitationEvent(object sender, string e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

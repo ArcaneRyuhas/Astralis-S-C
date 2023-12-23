@@ -25,18 +25,22 @@ namespace Astralis.Views.Animations
     /// </summary>
     public partial class FriendCard : UserControl
     {
-        public event EventHandler<string> ReplyToFriendRequestEvent;
+        public event EventHandler<Tuple<string, bool>> ReplyToFriendRequestEvent;
+        public event EventHandler<string> RemoveFriendEvent;
+        public event EventHandler<string> SendGameInvitation;
         private const int IS_PENDING_FRIEND = 2;
         private const int IS_FRIEND = 1;
         private int friendStatus = 0;
-        private bool onlineStatus = false; 
-
+        private bool onlineStatus = false;
+        private const bool ACCEPTED_FRIEND = true;
+        private const bool DENIED_FRIEND = false;
+        private const string LOBBY_WINDOW = "LOBBY";
         public FriendCard()
         {
             InitializeComponent();
         }
 
-        public void SetCard(string nickname, bool onlineStatus, int friendStatus)
+        public void SetCard(string nickname, bool onlineStatus, int friendStatus, string typeFriendWindow)
         {
             lblNickname.Content = nickname;
 
@@ -50,17 +54,26 @@ namespace Astralis.Views.Animations
                     ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
                 }
 
-                btnActionFriend.Visibility = Visibility.Hidden;
+                btnAcceptFriendRequest.Visibility = Visibility.Hidden;
+                btnDeleteFriend.Visibility = Visibility.Hidden;
             }
             else
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Yellow;
+                btnAcceptFriendRequest.Visibility = Visibility.Visible;
+                btnDenyFriendRequest.Visibility = Visibility.Visible;
+
+            }
+
+            if(typeFriendWindow == LOBBY_WINDOW)
+            {
+                btnSendGameInvitation.Visibility = Visibility.Visible;
             }
             
         }
 
 
-        private void btnActionFriend_Click(object sender, RoutedEventArgs e)
+        private void btnAcceptFriendRequest_Click(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
 
@@ -73,9 +86,45 @@ namespace Astralis.Views.Animations
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Red;
             }
 
-            btnActionFriend.Visibility = Visibility.Hidden;
+            btnAcceptFriendRequest.Visibility = Visibility.Hidden; //PREGUNTAR A MARIO POR ESTO
 
-            ReplyToFriendRequestEvent?.Invoke(this, friendUsername);
+            ReplyToFriendRequestEvent?.Invoke(this, new Tuple<string, bool>(friendUsername, ACCEPTED_FRIEND));
+        }
+
+        private void btnDeleteFriend_Click(object sender, RoutedEventArgs e)
+        {
+            string friendUsername = lblNickname.Content.ToString();
+
+            btnAcceptFriendRequest.Visibility = Visibility.Hidden;
+
+            RemoveFriendEvent?.Invoke(this, friendUsername);
+        }
+
+        private void btnDenyFriendRequest_Click(object sender, RoutedEventArgs e)
+        {
+            string friendUsername = lblNickname.Content.ToString();
+
+            if (onlineStatus == true)
+            {
+                ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
+            }
+            else
+            {
+                ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Red;
+            }
+
+            btnAcceptFriendRequest.Visibility = Visibility.Hidden;
+
+            ReplyToFriendRequestEvent?.Invoke(this, new Tuple<string, bool>(friendUsername, DENIED_FRIEND));
+        }
+
+        private void btnSendGameInvitation_Click(object sender, RoutedEventArgs e)
+        {
+            string friendUsername = lblNickname.Content.ToString();
+
+            btnSendGameInvitation.Visibility = Visibility.Hidden;
+
+            SendGameInvitation?.Invoke(this, friendUsername);
         }
     }
 }

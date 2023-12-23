@@ -18,6 +18,7 @@ namespace Astralis.Views
         private const int TEAM_ONE = 1;
         private const int TEAM_TWO = 2;
         private const int MAX_TEAM_SIZE = 2;
+        private const string LOBBY_WINDOW = "LOBBY";
 
         private bool _isHost = false;
         private string _gameId;
@@ -25,6 +26,7 @@ namespace Astralis.Views
         private Dictionary<int , LobbyUserCard> _userCards = new Dictionary<int, LobbyUserCard>();
         private LobbyManagerClient _client;
 
+        private FriendWindow friendWindow;
         public Lobby()
         {
             InitializeComponent();
@@ -36,6 +38,8 @@ namespace Astralis.Views
                 {3, true },
             };
             btnStartGame.IsEnabled = false;
+            friendWindow = new FriendWindow(LOBBY_WINDOW);
+            friendWindow.SetFriendWindow();
         }
 
         public bool SetLobby(string code) 

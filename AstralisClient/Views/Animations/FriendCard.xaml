@@ -16,7 +16,16 @@
 
             <Ellipse x:Name="ellipseOnlineStatus" Width="20" Height="20" Fill="Red" Grid.Column="0"/>
             <Label x:Name="lblNickname" Content="lblNickname" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button x:Name="btnActionFriend" Width="20" Height="20" Grid.Column="2" Click="btnActionFriend_Click">
+            <Button x:Name="btnAcceptFriendRequest" Width="20" Height="20" Grid.Column="2" Click="btnAcceptFriendRequest_Click" Visibility="Hidden" Margin="0,30,0,10">
+                <Rectangle Width="10" Height="10" Fill="GREEN"/>
+            </Button>
+            <Button x:Name="btnDeleteFriend" Width="20" Height="20" Grid.Column="2" Click="btnDeleteFriend_Click" Visibility="Hidden">
+                <Rectangle Width="10" Height="10" Fill="Red"/>
+            </Button>
+            <Button x:Name="btnDenyFriendRequest" Width="20" Height="20" Grid.Column="2" Click="btnDenyFriendRequest_Click" Visibility="Hidden" Margin="0,6,0,34">
+                <Rectangle Width="10" Height="10" Fill="Red"/>
+            </Button>
+            <Button x:Name="btnSendGameInvitation" Width="20" Height="20" Grid.Column="2" Click="btnSendGameInvitation_Click" Visibility="Hidden">
                 <Rectangle Width="10" Height="10" Fill="Red"/>
             </Button>
 

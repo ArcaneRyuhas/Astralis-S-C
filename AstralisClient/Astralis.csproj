@@ -169,6 +169,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Pages\Leaderboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Pages\MyProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -190,6 +194,9 @@
     </Compile>
     <Compile Include="Views\Pages\EndGame.xaml.cs">
       <DependentUpon>EndGame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\Leaderboard.xaml.cs">
+      <DependentUpon>Leaderboard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\MyProfile.xaml.cs">
       <DependentUpon>MyProfile.xaml</DependentUpon>
