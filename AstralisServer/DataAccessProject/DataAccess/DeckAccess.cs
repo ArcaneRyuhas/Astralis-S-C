@@ -11,13 +11,13 @@ namespace DataAccessProject.DataAccess
     public class DeckAccess
     {
         private const string DEFAULT_DECK = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30";
+        private const int ERROR = 0;
 
         public DeckAccess() { }
 
         public int CreateDefaultDeck(AstralisDBEntities context, string nickname)
         {
-            int result = 0;
-
+            int result = ERROR;
             Deck deck = new Deck
             {
                 Card = DEFAULT_DECK
@@ -30,9 +30,9 @@ namespace DataAccessProject.DataAccess
 
                 CreateRelationUserDeck(context, deck.DeckId, nickname);
             }
-            catch (EntityException entityException)
+            catch (SqlException sqlException)
             {
-                throw entityException;
+                throw sqlException;
             }
 
             return result;
@@ -40,7 +40,7 @@ namespace DataAccessProject.DataAccess
 
         private int CreateRelationUserDeck(AstralisDBEntities context, int deckId, string nickname)
         {
-            int result = 0;
+            int result = ERROR;
 
             try
             {
@@ -52,9 +52,9 @@ namespace DataAccessProject.DataAccess
 
                 context.SaveChanges();
             }
-            catch (EntityException entityException)
+            catch (SqlException sqlException)
             {
-                throw entityException;
+                throw sqlException;
             }
 
             return result;
@@ -67,16 +67,21 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                UserDeck userDeck = new UserDeck();
-                userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
+                try
+                {
+                    UserDeck userDeck = new UserDeck();
+                    userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
 
-                Deck deck = context.Deck.Find(userDeck.DeckId);
-                cardList = deck.Card.Split(',').Select(int.Parse).ToList();
-
+                    Deck deck = context.Deck.Find(userDeck.DeckId);
+                    cardList = deck.Card.Split(',').Select(int.Parse).ToList();
+                }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
+                }
             }
 
             return cardList;
-            
         }
         
     }

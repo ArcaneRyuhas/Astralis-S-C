@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace DataAccessProject.DataAccess
     {
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
+        private const string USER_NICKNAME_ERROR = "Error";
         private const bool BOOL_VALIDATION_SUCCESS = true;
         private const bool BOOL_VALIDATION_FAILURE = false;
         private const string USER_NOT_FOUND = "UserNotFound";
@@ -36,18 +38,18 @@ namespace DataAccessProject.DataAccess
                     Mail = databaseUser.mail,
                     ImageId = databaseUser.imageId
                 })
-            .ToList();
+                .ToList();
 
                 if (guestUsers.Any())
                 {
                     maxGuestNumber = guestUsers.Max(user =>
                     {
-                        int number;
+                        int number = 0;
                         if (int.TryParse(user.Nickname.Substring("Guest".Length), out number))
                         {
                             return number;
                         }
-                        return 0;
+                        return number;
                     });
                 }
                 return maxGuestNumber;
@@ -59,21 +61,28 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
+                try
+                {
+                    context.Database.Log = Console.WriteLine;
 
-                User databaseUser = new User();
-                databaseUser.nickName = user.Nickname;
-                databaseUser.imageId = (short)user.ImageId;
-                databaseUser.mail = user.Mail;
+                    User databaseUser = new User();
+                    databaseUser.nickName = user.Nickname;
+                    databaseUser.imageId = (short)user.ImageId;
+                    databaseUser.mail = user.Mail;
 
-                var newUser = context.User.Add(databaseUser);
+                    var newUser = context.User.Add(databaseUser);
 
-                result = context.SaveChanges();
+                    result = context.SaveChanges();
 
-                DeckAccess deckAccess = new DeckAccess();
-                deckAccess.CreateDefaultDeck(context, user.Nickname);
+                    DeckAccess deckAccess = new DeckAccess();
+                    deckAccess.CreateDefaultDeck(context, user.Nickname);
 
-                return result;
+                    return result;
+                }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
+                }
             }
         }
 
@@ -109,9 +118,10 @@ namespace DataAccessProject.DataAccess
 
                         transactionContext.Commit();
                     }
-                    catch (Exception SqlException)
+                    catch (SqlException sqlException)
                     {
                         transactionContext.Rollback();
+                        throw sqlException;
                     }
                 }
             };
@@ -119,32 +129,40 @@ namespace DataAccessProject.DataAccess
             return result;
         }
 
-        public int UpdateUser(Contracts.User user) 
+        public int UpdateUser(Contracts.User user)
         {
             int result = 0;
 
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
-                var databaseUser = context.User.Find(user.Nickname);
-
-                if (databaseUser != null)
+                try
                 {
-                    databaseUser.mail = user.Mail;
-                    databaseUser.imageId = (short)user.ImageId;
+                    context.Database.Log = Console.WriteLine;
+                    var databaseUser = context.User.Find(user.Nickname);
 
-                    var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
-
-                    if (databaseUserSession != null)
+                    if (databaseUser != null)
                     {
-                        if (!string.IsNullOrEmpty(user.Password))
-                        {
-                            databaseUserSession.password = user.Password;
-                        }
-                    }
+                        databaseUser.mail = user.Mail;
+                        databaseUser.imageId = (short)user.ImageId;
 
-                    result = context.SaveChanges();
+                        var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
+
+                        if (databaseUserSession != null)
+                        {
+                            if (!string.IsNullOrEmpty(user.Password))
+                            {
+                                databaseUserSession.password = user.Password;
+                            }
+                        }
+
+                        result = context.SaveChanges();
+                    }
                 }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
+                }
+                
             }
 
             return result;
@@ -153,23 +171,31 @@ namespace DataAccessProject.DataAccess
         public Contracts.User GetUserByNickname (string nickname)
         {
             Contracts.User foundUser = new Contracts.User();
+            foundUser.Nickname = USER_NICKNAME_ERROR;
 
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
-                var databaseUser = context.User.Find(nickname);
-
-                if (databaseUser != null)
+                try
                 {
-                    foundUser.Nickname = databaseUser.nickName;
-                    foundUser.Mail = databaseUser.mail;
-                    foundUser.ImageId = databaseUser.imageId;
-                }
-                else
-                {
-                    foundUser.Nickname = USER_NOT_FOUND;
-                }
+                    context.Database.Log = Console.WriteLine;
+                    var databaseUser = context.User.Find(nickname);
 
+                    if (databaseUser != null)
+                    {
+                        foundUser.Nickname = databaseUser.nickName;
+                        foundUser.Mail = databaseUser.mail;
+                        foundUser.ImageId = databaseUser.imageId;
+                    }
+                    else
+                    {
+                        foundUser.Nickname = USER_NOT_FOUND;
+                    }
+                }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
+                }
+                
             }
             return foundUser;
         }
@@ -180,38 +206,49 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
-
-                var databaseUser = context.User.Find(nickname);
-
-                if (databaseUser != null)
+                try
                 {
-                    isFound = BOOL_VALIDATION_SUCCESS;
-                }
-            }
+                    context.Database.Log = Console.WriteLine;
 
+                    var databaseUser = context.User.Find(nickname);
+
+                    if (databaseUser != null)
+                    {
+                        isFound = BOOL_VALIDATION_SUCCESS;
+                    }
+                }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
+                }
+                
+            }
             return isFound;
         }
 
         public int ConfirmUser(string nickname, string password)
         {
-            int result = 0;
+            int result = INT_VALIDATION_FAILURE;
 
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
-
-                var databaseUser = context.User.Find(nickname);
-                var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
-
-                if (databaseUsersession != null && databaseUsersession.password == password)
+                try
                 {
-                    result = INT_VALIDATION_SUCCESS;
+                    context.Database.Log = Console.WriteLine;
+
+                    var databaseUser = context.User.Find(nickname);
+                    var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
+
+                    if (databaseUsersession != null && databaseUsersession.password == password)
+                    {
+                        result = INT_VALIDATION_SUCCESS;
+                    }
                 }
-                else
+                catch(SqlException sqlException)
                 {
-                    result = INT_VALIDATION_FAILURE;
+                    throw sqlException;
                 }
+                
             }
 
             return result;

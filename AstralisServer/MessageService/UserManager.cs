@@ -6,9 +6,7 @@ using System.ServiceModel;
 using DataAccessProject.Contracts;
 using DataAccessProject.DataAccess;
 using User = DataAccessProject.Contracts.User;
-using MessageService.Mail;
-using System.Configuration.Internal;
-using DataAccessProject;
+using System.Data.SqlClient;
 
 namespace MessageService
 {
@@ -16,19 +14,24 @@ namespace MessageService
 
     public partial class UserManager : IUserManager
     {
-        private const string NICKNAME_GUEST_ERROR = "ERROR";
+        private const string NICKNAME_ERROR = "ERROR";
         private const int GUEST_IMAGE_ID = 1;
+        private const int ERROR = 0;
 
         private static readonly ILog log = LogManager.GetLogger(typeof(UserManager));
 
         public int ConfirmUser(string nickname, string password)
         {
-            int result = 0;
+            int result;
 
             if (FindUserByNickname(nickname))
             {
                 UserAccess userAccess = new UserAccess();
                 result = userAccess.ConfirmUser(nickname, password);
+            }
+            else
+            {
+                result = ERROR;
             }
 
             return result;
@@ -36,10 +39,17 @@ namespace MessageService
 
         public int AddUser(User user)
         {
-            int result = 0;
+            int result = ERROR;
 
             UserAccess userAccess = new UserAccess();
-            result = userAccess.CreateUser(user);
+            try
+            {
+                result = userAccess.CreateUser(user);
+            }
+            catch(SqlException sqlException) 
+            {
+                log.Error(sqlException);
+            }
 
             return result;
         }
@@ -70,7 +80,7 @@ namespace MessageService
             else
             {
                 User userError = new User();
-                userError.Nickname = NICKNAME_GUEST_ERROR;
+                userError.Nickname = NICKNAME_ERROR;
                 return userError;
             }
         }
@@ -88,19 +98,34 @@ namespace MessageService
         public User GetUserByNickname(string nickname)
         {
             User foundUser = new User();
+            foundUser.Nickname = NICKNAME_ERROR;
             
             UserAccess userAccess = new UserAccess();
-            foundUser = userAccess.GetUserByNickname(nickname);
+            try
+            {
+                foundUser = userAccess.GetUserByNickname(nickname);
+            }
+            catch (SqlException sqlException)
+            {
+                log.Error(sqlException);
+            }
 
             return foundUser;
         }
 
         public int UpdateUser(User user)
         {
-            int result = 0;
+            int result = ERROR;
 
             UserAccess userAccess = new UserAccess();
-            result = userAccess.UpdateUser(user);
+            try
+            {
+                result = userAccess.UpdateUser(user);
+            }
+            catch(SqlException sqlException)
+            {
+                log.Error(sqlException);
+            }
 
             return result;
 
@@ -362,28 +387,38 @@ namespace MessageService
                 List<string> onlineNicknames = onlineUsers.Keys.ToList();
                 FriendAccess friendAccess = new FriendAccess();
 
-                currentUserCallbackChannel.ShowOnlineFriends(friendAccess.GetFriendList(nickname, onlineUsers.Keys.ToList()));
-                if (!onlineUsers.ContainsKey(nickname))
+                try
                 {
-                    try
+                    currentUserCallbackChannel.ShowOnlineFriends(friendAccess.GetFriendList(nickname, onlineUsers.Keys.ToList()));
+                    if (!onlineUsers.ContainsKey(nickname))
                     {
+                        onlineUsers.Add(nickname, currentUserCallbackChannel);
+
                         foreach (var user in onlineUsers)
                         {
-                            user.Value.ShowUserConected(nickname);
-                        }
+                            try
+                            {
+                                if(user.Key != nickname)
+                                {
+                                    user.Value.ShowUserConected(nickname);
+                                }
+                            }
+                            catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                            {
+                                onlineUsers.Remove(user.Key);
+                                log.Error("Error in ConnectUser IOnlineUserManager\n" + communicationObjectAbortedException);
+                            }
+                        }                       
                     }
-                    catch (CommunicationObjectAbortedException exception)
+                    else
                     {
-                        log.Error("Error in ConnectUser IOnlineUserManager\n" + exception);
+                        onlineUsers[nickname] = currentUserCallbackChannel;
                     }
-
-                    onlineUsers.Add(nickname, currentUserCallbackChannel);
                 }
-                else
+                catch (SqlException sqlException)
                 {
-                    onlineUsers[nickname] = currentUserCallbackChannel;
+                    log.Error(sqlException);
                 }
-                
             }
         }
 
@@ -393,16 +428,17 @@ namespace MessageService
             {
                 onlineUsers.Remove(nickname);
 
-                try
+                foreach (var user in onlineUsers)
                 {
-                    foreach (var user in onlineUsers)
+                    try
                     {
                         user.Value.ShowUserDisconected(nickname);
                     }
-                }
-                catch(CommunicationObjectAbortedException exception) 
-                {
-                    log.Error("Error in DisconnectUser method ", exception);
+                    catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                    {
+                        onlineUsers.Remove(user.Key);
+                        log.Error("Error in DisconnectUser method ", communicationObjectAbortedException);
+                    }
                 }
             }
         }
@@ -411,18 +447,26 @@ namespace MessageService
         {
             bool isSucceded = false;
 
-            if (FindUserByNickname(nicknameSender) && FindUserByNickname(nicknameReciever))
+            try
             {
-                FriendAccess friendAccess = new FriendAccess();
-                if (friendAccess.SendFriendRequest(nicknameSender, nicknameReciever))
+                if (FindUserByNickname(nicknameSender) && FindUserByNickname(nicknameReciever))
                 {
-                    isSucceded = true;
-                    if (onlineUsers.ContainsKey(nicknameReciever))
+                    FriendAccess friendAccess = new FriendAccess();
+                    if (friendAccess.SendFriendRequest(nicknameSender, nicknameReciever))
                     {
-                        onlineUsers[nicknameReciever].ShowFriendRequest(nicknameSender);
+                        isSucceded = true;
+                        if (onlineUsers.ContainsKey(nicknameReciever))
+                        {
+                            onlineUsers[nicknameReciever].ShowFriendRequest(nicknameSender);
+                        }
                     }
                 }
             }
+            catch (SqlException sqlException)
+            {
+                log.Error(sqlException);
+            }
+            
             return isSucceded;
         }
 
@@ -430,24 +474,31 @@ namespace MessageService
         {
             bool IsSucceded = false;
 
-            if (FindUserByNickname(nicknameReciever) && FindUserByNickname(nicknameSender))
+            try
             {
-                FriendAccess friendAccess = new FriendAccess();
-
-                if (friendAccess.ReplyFriendRequest(nicknameReciever, nicknameSender, answer) > IS_SUCCEDED)
+                if (FindUserByNickname(nicknameReciever) && FindUserByNickname(nicknameSender))
                 {
-                    IsSucceded = true;
+                    FriendAccess friendAccess = new FriendAccess();
 
-                    if (answer == ACCEPTED_FRIEND)
+                    if (friendAccess.ReplyFriendRequest(nicknameReciever, nicknameSender, answer) > IS_SUCCEDED)
                     {
-                        if (onlineUsers.ContainsKey(nicknameSender))
+                        IsSucceded = true;
+
+                        if (answer == ACCEPTED_FRIEND)
                         {
-                            onlineUsers[nicknameSender].ShowFriendAccepted(nicknameReciever);
+                            if (onlineUsers.ContainsKey(nicknameSender))
+                            {
+                                onlineUsers[nicknameSender].ShowFriendAccepted(nicknameReciever);
+                            }
                         }
                     }
                 }
             }
-            
+            catch (SqlException sqlException)
+            {
+                log.Error(sqlException);
+            }
+
             return IsSucceded;
         }
 
@@ -456,11 +507,17 @@ namespace MessageService
             bool isSucceded = false;
 
             FriendAccess friendAccess = new FriendAccess();
-            isSucceded = friendAccess.RemoveFriend(nickname, nicknamefriendToRemove);
+            try
+            {
+                isSucceded = friendAccess.RemoveFriend(nickname, nicknamefriendToRemove);
+            }
+            catch (SqlException sqlException)
+            {
+                log.Error(sqlException);
+            }
 
             return isSucceded;
         }
-
     }
 
     public partial class UserManager : IGameManager
