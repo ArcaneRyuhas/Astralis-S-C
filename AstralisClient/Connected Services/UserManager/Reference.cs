@@ -581,6 +581,9 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowFriendAcceptedResponse")]
         void ShowFriendAccepted(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/FriendDeleted", ReplyAction="http://tempuri.org/IOnlineUserManager/FriendDeletedResponse")]
+        void FriendDeleted(string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
