@@ -1,6 +1,7 @@
 ﻿using DataAccessProject.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,11 +18,18 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
-                var newSession = context.Game.Add(new Game() { gameId = gameId });
-                if( context.SaveChanges() > 0)
+                try
                 {
-                    isSuccesfullyCreated = true;
+                    context.Database.Log = Console.WriteLine;
+                    var newSession = context.Game.Add(new Game() { gameId = gameId });
+                    if (context.SaveChanges() > 0)
+                    {
+                        isSuccesfullyCreated = true;
+                    }
+                }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
                 }
             };
 
@@ -32,15 +40,21 @@ namespace DataAccessProject.DataAccess
         {
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
-
-                var newSession = context.Plays.Add(new Plays()
+                try
                 {
-                    nickName = userNickname,
-                    gameId = gameId,
-                    team = team
-                });
+                    context.Database.Log = Console.WriteLine;
 
+                    var newSession = context.Plays.Add(new Plays()
+                    {
+                        nickName = userNickname,
+                        gameId = gameId,
+                        team = team
+                    });
+                }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
+                }
                 return context.SaveChanges();
             }
         }
@@ -51,16 +65,22 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
-
-                var databaseGameId = context.User.Find(gameId);
-
-                if (databaseGameId != null)
+                try
                 {
-                    isRepeated = true;
+                    context.Database.Log = Console.WriteLine;
+
+                    var databaseGameId = context.User.Find(gameId);
+
+                    if (databaseGameId != null)
+                    {
+                        isRepeated = true;
+                    }
+                }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
                 }
             }
-
             return isRepeated;
         }
     }

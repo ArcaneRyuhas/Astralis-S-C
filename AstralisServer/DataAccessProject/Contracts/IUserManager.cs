@@ -50,6 +50,7 @@ namespace DataAccessProject.Contracts
         [OperationContract]
         bool RemoveFriend(string nickname, string nicknamefriendToRemove);
 
+
     }
 
     [ServiceContract]
@@ -69,6 +70,9 @@ namespace DataAccessProject.Contracts
 
         [OperationContract]
         void ShowFriendAccepted(string nickname);
+
+        [OperationContract]
+        void FriendDeleted(string nickname);
     }
 
 

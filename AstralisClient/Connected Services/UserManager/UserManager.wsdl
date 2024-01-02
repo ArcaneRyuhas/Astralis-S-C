@@ -229,6 +229,12 @@
   <wsdl:message name="IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowFriendAcceptedResponse" />
   </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_FriendDeleted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:FriendDeleted" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_FriendDeleted_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:FriendDeletedResponse" />
+  </wsdl:message>
   <wsdl:message name="IGameManager_ConnectGame_InputMessage">
     <wsdl:part name="parameters" element="tns:ConnectGame" />
   </wsdl:message>
@@ -427,6 +433,10 @@
     <wsdl:operation name="ShowFriendAccepted">
       <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted" message="tns:IOnlineUserManager_ShowFriendAccepted_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendAcceptedResponse" message="tns:IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FriendDeleted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/FriendDeleted" message="tns:IOnlineUserManager_FriendDeleted_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/FriendDeletedResponse" message="tns:IOnlineUserManager_FriendDeleted_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IGameManager">
@@ -769,6 +779,15 @@
     </wsdl:operation>
     <wsdl:operation name="ShowFriendAccepted">
       <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FriendDeleted">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/FriendDeleted" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

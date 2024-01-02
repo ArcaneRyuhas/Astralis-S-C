@@ -255,8 +255,7 @@ namespace Astralis.Views.Animations
                     }
                     else
                     {
-                        _friendList.Remove(friendUsername);
-                        SetFriendWindow();
+                        RemoveFriendFromFriendList(friendUsername);
                         MessageBox.Show($"Has rechazado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
 
@@ -278,8 +277,7 @@ namespace Astralis.Views.Animations
 
                 if (removedFriendSucceded)
                 {
-                    _friendList.Remove(friendUsername);
-                    SetFriendWindow();
+                    RemoveFriendFromFriendList(friendUsername);
                     MessageBox.Show($"Has eliminado de tus amigos a {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -288,6 +286,17 @@ namespace Astralis.Views.Animations
         private void SendGameInvitationEvent(object sender, string friendUsername)
         {
             SendGameInvitation?.Invoke(this, friendUsername);
+        }
+
+        public void FriendDeleted(string nickname)
+        {
+           RemoveFriendFromFriendList(nickname);
+        }
+
+        private void RemoveFriendFromFriendList(string nickname)
+        {
+            _friendList.Remove(nickname);
+            SetFriendWindow();
         }
     }
 }
