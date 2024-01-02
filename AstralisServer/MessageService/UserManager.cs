@@ -7,6 +7,7 @@ using DataAccessProject.Contracts;
 using DataAccessProject.DataAccess;
 using User = DataAccessProject.Contracts.User;
 using System.Data.SqlClient;
+using System.Data.Entity.Core;
 
 namespace MessageService
 {
@@ -16,42 +17,59 @@ namespace MessageService
     {
         private const string NICKNAME_ERROR = "ERROR";
         private const int GUEST_IMAGE_ID = 1;
-        private const int ERROR = 0;
+        private const int VALIDATION_FAILURE = 0;
+        private const int ERROR = -1;
+        private const int VALIDATION_SUCCES = 1;
 
         private static readonly ILog log = LogManager.GetLogger(typeof(UserManager));
 
         public int ConfirmUser(string nickname, string password)
         {
-            int result = ERROR;
+            int result = VALIDATION_FAILURE;
 
-            if (FindUserByNickname(nickname))
+            try
             {
-                UserAccess userAccess = new UserAccess();
-                try
+                int findUserAnswer = FindUserByNickname(nickname);
+                if (findUserAnswer == VALIDATION_SUCCES)
                 {
+                    UserAccess userAccess = new UserAccess();
                     result = userAccess.ConfirmUser(nickname, password);
                 }
-                catch(SqlException sqlException)
+                else if(findUserAnswer == ERROR)
                 {
-                    log.Error(sqlException);
+                    result = ERROR;
                 }
             }
-
+            catch(EntityException entityException)
+            {
+                log.Error(entityException);
+                result = ERROR;
+            }
+            catch (SqlException sqlException)
+            {
+                log.Error(sqlException);
+                result = ERROR;
+            }
             return result;
         }
 
         public int AddUser(User user)
         {
-            int result = ERROR;
-
             UserAccess userAccess = new UserAccess();
+            int result;
             try
             {
                 result = userAccess.CreateUser(user);
             }
-            catch(SqlException sqlException) 
+            catch (SqlException sqlException)
             {
                 log.Error(sqlException);
+                result = ERROR;
+            }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                result = ERROR;
             }
 
             return result;
@@ -59,49 +77,58 @@ namespace MessageService
 
         public User AddGuest()
         {
-            UserAccess userAccess = new UserAccess();
-            int maxGuestNumber = userAccess.GetHigherGuests();
-            int nextGuestNumber = maxGuestNumber + 1;
-
-            string guestNickname = $"Guest{nextGuestNumber}";
-
-
-            User guestUser = new User
+            User guestUser = new User();
+            try
             {
-                Nickname = guestNickname,
-                Password = guestNickname,
-                ImageId = GUEST_IMAGE_ID,
-                Mail = $"{guestNickname.ToLower()}@guest.com"
-            };
+                UserAccess userAccess = new UserAccess();
+                int maxGuestNumber = userAccess.GetHigherGuests();
+                int nextGuestNumber = maxGuestNumber + 1;
 
-            int result = userAccess.CreateGuest(guestUser);
+                string guestNickname = $"Guest{nextGuestNumber}";
 
-            if (result > 0)
-            {
-                return guestUser;
+                guestUser.Nickname = guestNickname;
+                guestUser.Password = guestNickname;
+                guestUser.ImageId = GUEST_IMAGE_ID;
+                guestUser.Mail = $"{guestNickname.ToLower()}@guest.com";
+
+                int result = userAccess.CreateGuest(guestUser);
             }
-            else
+            catch (SqlException sqlException)
             {
-                User userError = new User();
-                userError.Nickname = NICKNAME_ERROR;
-                return userError;
+                log.Error(sqlException);
+                guestUser.Nickname = NICKNAME_ERROR;
             }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                guestUser.Nickname = NICKNAME_ERROR;
+            }
+
+
+            return guestUser;
         }
 
-        public bool FindUserByNickname(string nickname)
+        public int FindUserByNickname(string nickname)
         {
-            bool isFound = false;
+
+            int isFound;
 
             UserAccess userAccess = new UserAccess();
-
             try
             {
                 isFound = userAccess.FindUserByNickname(nickname);
             }
-            catch(SqlException sqlException)
+            catch(EntityException entityException)
+            {
+                log.Error(entityException);
+                isFound = ERROR;
+            }
+            catch (SqlException sqlException)
             {
                 log.Error(sqlException);
+                isFound = ERROR;
             }
+
 
             return isFound;
         }
@@ -126,7 +153,7 @@ namespace MessageService
 
         public int UpdateUser(User user)
         {
-            int result = ERROR;
+            int result = VALIDATION_FAILURE;
 
             UserAccess userAccess = new UserAccess();
             try
@@ -136,6 +163,12 @@ namespace MessageService
             catch(SqlException sqlException)
             {
                 log.Error(sqlException);
+                result = ERROR;
+            }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                result = ERROR;
             }
 
             return result;
@@ -529,30 +562,42 @@ namespace MessageService
             }
         }
 
-        public bool SendFriendRequest(string nicknameSender, string nicknameReciever) //Se puede cambiar el retorno a un int para saber 0.- NO EXISITE EL USUARIO 1.- Exitoso 2.-Ya existe la solicitud o son amigos
+        public int SendFriendRequest(string nicknameSender, string nicknameReciever)
         {
-            bool isSucceded = false;
+            int isSucceded = VALIDATION_FAILURE;
 
             try
             {
-                if (FindUserByNickname(nicknameSender) && FindUserByNickname(nicknameReciever))
+                int findUserAnswer = FindUserByNickname(nicknameReciever);
+
+                if (findUserAnswer == VALIDATION_SUCCES)
                 {
                     FriendAccess friendAccess = new FriendAccess();
                     if (friendAccess.SendFriendRequest(nicknameSender, nicknameReciever))
                     {
-                        isSucceded = true;
+                        isSucceded = VALIDATION_SUCCES;
                         if (onlineUsers.ContainsKey(nicknameReciever))
                         {
                             onlineUsers[nicknameReciever].ShowFriendRequest(nicknameSender);
                         }
                     }
                 }
+                else if(findUserAnswer == ERROR)
+                {
+                    isSucceded = ERROR;
+                }
             }
             catch (SqlException sqlException)
             {
                 log.Error(sqlException);
+                isSucceded = ERROR;
             }
-            catch(CommunicationObjectAbortedException communicationObjectAbortedException)
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                isSucceded = ERROR;
+            }
+            catch (CommunicationObjectAbortedException communicationObjectAbortedException)
             {
                 log.Error(communicationObjectAbortedException);
                 DisconectUser(nicknameReciever);
@@ -561,19 +606,21 @@ namespace MessageService
             return isSucceded;
         }
 
-        public bool ReplyFriendRequest(string nicknameReciever, string nicknameSender, bool answer)
+        public int ReplyFriendRequest(string nicknameReciever, string nicknameSender, bool answer)
         {
-            bool IsSucceded = false;
+            int isSucceded = VALIDATION_FAILURE;
 
             try
             {
-                if (FindUserByNickname(nicknameReciever) && FindUserByNickname(nicknameSender))
+                int findUserAnswer = FindUserByNickname(nicknameReciever);
+
+                if (findUserAnswer == VALIDATION_SUCCES)
                 {
                     FriendAccess friendAccess = new FriendAccess();
 
                     if (friendAccess.ReplyFriendRequest(nicknameReciever, nicknameSender, answer) > IS_SUCCEDED)
                     {
-                        IsSucceded = true;
+                        isSucceded = VALIDATION_SUCCES;
 
                         if (answer == ACCEPTED_FRIEND)
                         {
@@ -584,10 +631,20 @@ namespace MessageService
                         }
                     }
                 }
+                else if (findUserAnswer == ERROR)
+                {
+                    isSucceded = ERROR;
+                }
             }
             catch (SqlException sqlException)
             {
                 log.Error(sqlException);
+                isSucceded = ERROR;
+            }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                isSucceded = ERROR;
             }
             catch (CommunicationObjectAbortedException communicationObjectAbortedException)
             {
@@ -595,21 +652,30 @@ namespace MessageService
                 DisconectUser(nicknameReciever);
             }
 
-            return IsSucceded;
+            return isSucceded;
         }
 
-        public bool RemoveFriend(string nickname, string nicknamefriendToRemove)
+        public int RemoveFriend(string nickname, string nicknamefriendToRemove)
         {
-            bool isSucceded = false;
+            int isSucceded = VALIDATION_FAILURE;
 
             FriendAccess friendAccess = new FriendAccess();
             try
             {
-                isSucceded = friendAccess.RemoveFriend(nickname, nicknamefriendToRemove);
+                if(friendAccess.RemoveFriend(nickname, nicknamefriendToRemove))
+                {
+                    isSucceded = VALIDATION_SUCCES;
+                }
             }
             catch (SqlException sqlException)
             {
                 log.Error(sqlException);
+                isSucceded = ERROR;
+            }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                isSucceded = ERROR;
             }
 
             if (onlineUsers.ContainsKey(nicknamefriendToRemove))

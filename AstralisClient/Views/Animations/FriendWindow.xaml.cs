@@ -43,7 +43,15 @@ namespace Astralis.Views.Animations
             InstanceContext context = new InstanceContext(this);
             UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
 
-            client.ConectUser(UserSession.Instance().Nickname);
+            try
+            {
+                client.ConectUser(UserSession.Instance().Nickname);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         public void Disconnect()
@@ -51,7 +59,15 @@ namespace Astralis.Views.Animations
             InstanceContext context = new InstanceContext(this);
             UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
 
-            client.DisconectUser(UserSession.Instance().Nickname);
+            try
+            {
+                client.DisconectUser(UserSession.Instance().Nickname);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         public void SetFriendWindow()
@@ -131,7 +147,7 @@ namespace Astralis.Views.Animations
             }
             else
             {
-                MessageBox.Show($"No andes loqueando {friendUsername} chavito.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -214,21 +230,40 @@ namespace Astralis.Views.Animations
 
                 using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
                 {
-                    bool requestSent = client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
+                    try
+                    {
+                        int requestSent = client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
 
-                    if (requestSent)
-                    {
-                        MessageBox.Show("Solicitud de amistad enviada con éxito.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                        if (requestSent == Constants.VALIDATION_SUCCESS)
+                        {
+                            MessageBox.Show(Properties.Resources.msgFriendRequestSuccessful, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else if(requestSent == Constants.ERROR)
+                        {
+                            MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                            Disconnect();
+                            App.RestartApplication();
+                        }
+                        else
+                        {
+                            MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
-                    else
+                    catch (CommunicationException)
                     {
-                        MessageBox.Show("No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
+                    }
+                    catch (TimeoutException)
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Por favor, ingresa un nombre de usuario.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Properties.Resources.msgUsernameMissing, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -241,29 +276,46 @@ namespace Astralis.Views.Animations
 
             using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
             {
-                bool requestReplySucceded = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, reply);
-
-                if (requestReplySucceded)
+                try
                 {
-                    if (reply == ACCEPTED_FRIEND)
-                    {
-                        Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
-                        _friendList[friendUsername] = friendTuple;
-                        SetFriendWindow();
+                    int requestReply = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, reply);
 
-                        MessageBox.Show($"Has aceptado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
+                    if (requestReply == Constants.VALIDATION_SUCCESS)
                     {
-                        RemoveFriendFromFriendList(friendUsername);
-                        MessageBox.Show($"Has rechazado la solicitud de amistad de {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                        if (reply == ACCEPTED_FRIEND)
+                        {
+                            Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
+                            _friendList[friendUsername] = friendTuple;
+                            SetFriendWindow();
 
+                            MessageBox.Show(Properties.Resources.msgFriendRequestAccepted, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            RemoveFriendFromFriendList(friendUsername);
+                            MessageBox.Show(Properties.Resources.msgFriendRequestDeclined, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+
+                    }
+                    else if (requestReply == Constants.ERROR)
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Disconnect();
+                        App.RestartApplication();
+                    }
                 }
-                else
+                catch (CommunicationException)
                 {
-                    MessageBox.Show($"No se pudo rechazar la solicitud de amistad de {friendUsername}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
                 }
+                catch (TimeoutException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
+                }
+
+
             }
         }
 
@@ -273,12 +325,31 @@ namespace Astralis.Views.Animations
 
             using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
             {
-                bool removedFriendSucceded = client.RemoveFriend(UserSession.Instance().Nickname, friendUsername);
-
-                if (removedFriendSucceded)
+                try
                 {
-                    RemoveFriendFromFriendList(friendUsername);
-                    MessageBox.Show($"Has eliminado de tus amigos a {friendUsername}.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                    int removedFriendAnswer = client.RemoveFriend(UserSession.Instance().Nickname, friendUsername);
+
+                    if (removedFriendAnswer == Constants.VALIDATION_SUCCESS)
+                    {
+                        RemoveFriendFromFriendList(friendUsername);
+                        MessageBox.Show(Properties.Resources.msgFriendRemoved, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else if (removedFriendAnswer == Constants.ERROR)
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Disconnect();
+                        App.RestartApplication();
+                    }
+                }
+                catch (CommunicationException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
+                }
+                catch (TimeoutException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
                 }
             }
         }

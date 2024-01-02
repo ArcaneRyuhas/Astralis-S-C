@@ -19,7 +19,7 @@ namespace DataAccessProject.Contracts
         int ConfirmUser(string nickname, string password);
 
         [OperationContract]
-        bool FindUserByNickname(string nickname);
+        int FindUserByNickname(string nickname);
 
         [OperationContract]
         User GetUserByNickname(string nickname);
@@ -42,13 +42,13 @@ namespace DataAccessProject.Contracts
         void DisconectUser(string nickname);
 
         [OperationContract]
-        bool SendFriendRequest(string nickname, string nicknameFriend);
+        int SendFriendRequest(string nickname, string nicknameFriend);
 
         [OperationContract]
-        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
+        int ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
 
         [OperationContract]
-        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
+        int RemoveFriend(string nickname, string nicknamefriendToRemove);
 
 
     }

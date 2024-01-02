@@ -21,8 +21,8 @@
             </Grid.RowDefinitions>
 
             <Label Content="{x:Static p:Resources.lblMyProfile}" Width="260" FontSize="50" HorizontalContentAlignment="Center" Grid.Row="0"/>
-            <Button x:Name="btnAccept"  Content="{x:Static p:Resources.btnAccept}" Width="200" Grid.Row="2" HorizontalAlignment="Left" FontSize="40" VerticalAlignment="Bottom" Click="btnAccept_Click"/>
-            <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" Width="250" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="40" Click="btnCancel_Click"/>
+            <Button x:Name="btnAccept"  Content="{x:Static p:Resources.btnAccept}" Width="200" Grid.Row="2" HorizontalAlignment="Left" FontSize="40" VerticalAlignment="Bottom" Click="BtnAcceptClick"/>
+            <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" Width="250" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="40" Click="BtnCancelClick"/>
 
             <Grid Grid.Row="1" Background="Black" >
 

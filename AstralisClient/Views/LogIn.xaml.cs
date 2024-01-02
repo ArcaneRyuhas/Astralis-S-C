@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using Astralis.Views.Animations;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using System.ServiceModel;
+using System;
 
 namespace Astralis.Views
 {
@@ -14,6 +16,8 @@ namespace Astralis.Views
     {
         private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";
         private const int MAX_FIELDS_LENGHT = 39;
+        private const int VALIDATION_FAILURE = 0;
+        private const int VALIDATION_SUCCES = 1;
 
         public LogIn()
         {
@@ -40,25 +44,42 @@ namespace Astralis.Views
 
             if (noEmptyFields)
             {
-                bool userOnline = client.UserOnline(nickname);
+                bool userOnline = false;
+                try
+                {
+                    userOnline = client.UserOnline(nickname);
+                    int userConfirmed = client.ConfirmUser(nickname, password);
 
-                if (userOnline)
-                {
-                    MessageBox.Show("No se puede iniciar sesión porque el usuario está en línea.", "Usuario en línea", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else if (client.ConfirmUser(nickname, password) == 1)
-                {
-                    User user = client.GetUserByNickname(nickname);
-                    UserSession.Instance(user);
+                    if (userOnline)
+                    {
+                        MessageBox.Show(Astralis.Properties.Resources.msgUserOnline, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else if (userConfirmed == VALIDATION_SUCCES)
+                    {
+                        User user = client.GetUserByNickname(nickname);
+                        UserSession.Instance(user);
 
-                    GameWindow gameWindow = new GameWindow();
-                    this.Close();
-                    gameWindow.Show();
+                        GameWindow gameWindow = new GameWindow();
+                        this.Close();
+                        gameWindow.Show();
+                    }
+                    else if(userConfirmed == VALIDATION_FAILURE)
+                    {
+                        txbInvalidFields.Text = Astralis.Properties.Resources.txbInvalidFields;
+                        txbInvalidFields.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
-                else
+                catch (CommunicationException)
                 {
-                    txbInvalidFields.Text = Astralis.Properties.Resources.txbInvalidFields;
-                    txbInvalidFields.Visibility = Visibility.Visible;
+                    MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (TimeoutException)
+                {
+                    MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
@@ -107,24 +128,40 @@ namespace Astralis.Views
         private void GuestInvitationOnSubmit(object sender, string invitationCode)
         {
             UserManager.UserManagerClient client = new UserManager.UserManagerClient();
-            User user = client.AddGuest();
 
-            if (user.Nickname != "ERROR")
+            try
             {
-                UserSession.Instance(user);
-                Lobby lobby = new Lobby();
+                User user = client.AddGuest();
 
-                if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
+                if (user.Nickname != "ERROR")
                 {
-                    GameWindow gameWindow = new GameWindow();
-                    this.Close();
-                    gameWindow.ChangePage(lobby);
-                    gameWindow.Show();
+                    UserSession.Instance(user);
+                    Lobby lobby = new Lobby();
+
+                    if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
+                    {
+                        GameWindow gameWindow = new GameWindow();
+                        this.Close();
+                        gameWindow.ChangePage(lobby);
+                        gameWindow.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show(Astralis.Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("msgGameIsFullOrLobbyDoesntExist", "titleLobbyDoesntExist", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Astralis.Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

@@ -222,10 +222,10 @@ namespace Astralis.UserManager {
         System.Threading.Tasks.Task<int> ConfirmUserAsync(string nickname, string password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/FindUserByNickname", ReplyAction="http://tempuri.org/IUserManager/FindUserByNicknameResponse")]
-        bool FindUserByNickname(string nickname);
+        int FindUserByNickname(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/FindUserByNickname", ReplyAction="http://tempuri.org/IUserManager/FindUserByNicknameResponse")]
-        System.Threading.Tasks.Task<bool> FindUserByNicknameAsync(string nickname);
+        System.Threading.Tasks.Task<int> FindUserByNicknameAsync(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/GetUserByNickname", ReplyAction="http://tempuri.org/IUserManager/GetUserByNicknameResponse")]
         Astralis.UserManager.User GetUserByNickname(string nickname);
@@ -297,11 +297,11 @@ namespace Astralis.UserManager {
             return base.Channel.ConfirmUserAsync(nickname, password);
         }
         
-        public bool FindUserByNickname(string nickname) {
+        public int FindUserByNickname(string nickname) {
             return base.Channel.FindUserByNickname(nickname);
         }
         
-        public System.Threading.Tasks.Task<bool> FindUserByNicknameAsync(string nickname) {
+        public System.Threading.Tasks.Task<int> FindUserByNicknameAsync(string nickname) {
             return base.Channel.FindUserByNicknameAsync(nickname);
         }
         
@@ -546,22 +546,22 @@ namespace Astralis.UserManager {
         System.Threading.Tasks.Task DisconectUserAsync(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/SendFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/SendFriendRequestResponse")]
-        bool SendFriendRequest(string nickname, string nicknameFriend);
+        int SendFriendRequest(string nickname, string nicknameFriend);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/SendFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/SendFriendRequestResponse")]
-        System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string nickname, string nicknameFriend);
+        System.Threading.Tasks.Task<int> SendFriendRequestAsync(string nickname, string nicknameFriend);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ReplyFriendRequestResponse")]
-        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
+        int ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ReplyFriendRequestResponse")]
-        System.Threading.Tasks.Task<bool> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer);
+        System.Threading.Tasks.Task<int> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/RemoveFriend", ReplyAction="http://tempuri.org/IOnlineUserManager/RemoveFriendResponse")]
-        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
+        int RemoveFriend(string nickname, string nicknamefriendToRemove);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/RemoveFriend", ReplyAction="http://tempuri.org/IOnlineUserManager/RemoveFriendResponse")]
-        System.Threading.Tasks.Task<bool> RemoveFriendAsync(string nickname, string nicknamefriendToRemove);
+        System.Threading.Tasks.Task<int> RemoveFriendAsync(string nickname, string nicknamefriendToRemove);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -630,27 +630,27 @@ namespace Astralis.UserManager {
             return base.Channel.DisconectUserAsync(nickname);
         }
         
-        public bool SendFriendRequest(string nickname, string nicknameFriend) {
+        public int SendFriendRequest(string nickname, string nicknameFriend) {
             return base.Channel.SendFriendRequest(nickname, nicknameFriend);
         }
         
-        public System.Threading.Tasks.Task<bool> SendFriendRequestAsync(string nickname, string nicknameFriend) {
+        public System.Threading.Tasks.Task<int> SendFriendRequestAsync(string nickname, string nicknameFriend) {
             return base.Channel.SendFriendRequestAsync(nickname, nicknameFriend);
         }
         
-        public bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer) {
+        public int ReplyFriendRequest(string nickname, string nicknameRequest, bool answer) {
             return base.Channel.ReplyFriendRequest(nickname, nicknameRequest, answer);
         }
         
-        public System.Threading.Tasks.Task<bool> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer) {
+        public System.Threading.Tasks.Task<int> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer) {
             return base.Channel.ReplyFriendRequestAsync(nickname, nicknameRequest, answer);
         }
         
-        public bool RemoveFriend(string nickname, string nicknamefriendToRemove) {
+        public int RemoveFriend(string nickname, string nicknamefriendToRemove) {
             return base.Channel.RemoveFriend(nickname, nicknamefriendToRemove);
         }
         
-        public System.Threading.Tasks.Task<bool> RemoveFriendAsync(string nickname, string nicknamefriendToRemove) {
+        public System.Threading.Tasks.Task<int> RemoveFriendAsync(string nickname, string nicknamefriendToRemove) {
             return base.Channel.RemoveFriendAsync(nickname, nicknamefriendToRemove);
         }
     }

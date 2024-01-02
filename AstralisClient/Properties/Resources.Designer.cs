@@ -439,6 +439,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error al conectarse con el servidor.
+        /// </summary>
+        public static string msgConnectionError {
+            get {
+                return ResourceManager.GetString("msgConnectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ha sido copiado el texto:.
         /// </summary>
         public static string msgCopyToClipboard {
@@ -457,11 +466,56 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amigo eliminado exitosamente.
+        /// </summary>
+        public static string msgFriendRemoved {
+            get {
+                return ResourceManager.GetString("msgFriendRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solicitud de amistad aceptada con éxito.
+        /// </summary>
+        public static string msgFriendRequestAccepted {
+            get {
+                return ResourceManager.GetString("msgFriendRequestAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solicitud de amistad rechazada con éxito.
+        /// </summary>
+        public static string msgFriendRequestDeclined {
+            get {
+                return ResourceManager.GetString("msgFriendRequestDeclined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solicitud de amistar enviada con éxito.
+        /// </summary>
+        public static string msgFriendRequestSuccessful {
+            get {
+                return ResourceManager.GetString("msgFriendRequestSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Has sido expulsado del lobby..
         /// </summary>
         public static string msgKickedOut {
             get {
                 return ResourceManager.GetString("msgKickedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La lobby esta llena o hay un problema con el servidor.
+        /// </summary>
+        public static string msgLobbyError {
+            get {
+                return ResourceManager.GetString("msgLobbyError", resourceCulture);
             }
         }
         
@@ -475,11 +529,56 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente..
+        /// </summary>
+        public static string msgUnableToSendFriendRequest {
+            get {
+                return ResourceManager.GetString("msgUnableToSendFriendRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ¡Registro exitoso!.
         /// </summary>
         public static string msgUserAddedSucceed {
             get {
                 return ResourceManager.GetString("msgUserAddedSucceed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Por favor, ingresa un nombre de usuario..
+        /// </summary>
+        public static string msgUsernameMissing {
+            get {
+                return ResourceManager.GetString("msgUsernameMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El usuario no fue encontrado.
+        /// </summary>
+        public static string msgUserNotFound {
+            get {
+                return ResourceManager.GetString("msgUserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No se pudo iniciar sesión debido a que el usuario está en línea.
+        /// </summary>
+        public static string msgUserOnline {
+            get {
+                return ResourceManager.GetString("msgUserOnline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El usuario se ha actualizado correctamen, se reinicará la aplicación.
+        /// </summary>
+        public static string msgUserUpdated {
+            get {
+                return ResourceManager.GetString("msgUserUpdated", resourceCulture);
             }
         }
         

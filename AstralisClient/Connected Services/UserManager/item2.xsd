@@ -54,7 +54,7 @@
   <xs:element name="FindUserByNicknameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="FindUserByNicknameResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="FindUserByNicknameResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -308,7 +308,7 @@
   <xs:element name="SendFriendRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="SendFriendRequestResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="SendFriendRequestResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -324,7 +324,7 @@
   <xs:element name="ReplyFriendRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="ReplyFriendRequestResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="ReplyFriendRequestResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -339,7 +339,7 @@
   <xs:element name="RemoveFriendResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="RemoveFriendResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="RemoveFriendResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

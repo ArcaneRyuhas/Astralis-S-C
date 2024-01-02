@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
@@ -61,28 +62,21 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
 
-                    User databaseUser = new User();
-                    databaseUser.nickName = user.Nickname;
-                    databaseUser.imageId = (short)user.ImageId;
-                    databaseUser.mail = user.Mail;
+                User databaseUser = new User();
+                databaseUser.nickName = user.Nickname;
+                databaseUser.imageId = (short)user.ImageId;
+                databaseUser.mail = user.Mail;
 
-                    var newUser = context.User.Add(databaseUser);
+                var newUser = context.User.Add(databaseUser);
 
-                    result = context.SaveChanges();
+                result = context.SaveChanges();
 
-                    DeckAccess deckAccess = new DeckAccess();
-                    deckAccess.CreateDefaultDeck(context, user.Nickname);
+                DeckAccess deckAccess = new DeckAccess();
+                deckAccess.CreateDefaultDeck(context, user.Nickname);
 
-                    return result;
-                }
-                catch (SqlException sqlException)
-                {
-                    throw sqlException;
-                }
+                return result;
             }
         }
 
@@ -94,35 +88,27 @@ namespace DataAccessProject.DataAccess
             {
                 using (var transactionContext = context.Database.BeginTransaction())
                 {
-                    try
-                    {
-                        context.Database.Log = Console.WriteLine;
+                    context.Database.Log = Console.WriteLine;
 
-                        string cleanedPassword = user.Password.Trim();
+                    string cleanedPassword = user.Password.Trim();
 
-                        var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
+                    var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
 
-                        User databaseUser = new User();
-                        databaseUser.nickName = user.Nickname;
-                        databaseUser.mail = user.Mail;
-                        databaseUser.imageId = (short)user.ImageId;
-                        databaseUser.userSessionFk = newSession.userSessionId;
-                        databaseUser.UserSession = newSession;
+                    User databaseUser = new User();
+                    databaseUser.nickName = user.Nickname;
+                    databaseUser.mail = user.Mail;
+                    databaseUser.imageId = (short)user.ImageId;
+                    databaseUser.userSessionFk = newSession.userSessionId;
+                    databaseUser.UserSession = newSession;
 
-                        var newUser = context.User.Add(databaseUser);
+                    var newUser = context.User.Add(databaseUser);
 
-                        result = context.SaveChanges();
+                    result = context.SaveChanges();
 
-                        DeckAccess deckAccess = new DeckAccess();
-                        deckAccess.CreateDefaultDeck(context, user.Nickname);
+                    DeckAccess deckAccess = new DeckAccess();
+                    deckAccess.CreateDefaultDeck(context, user.Nickname);
 
-                        transactionContext.Commit();
-                    }
-                    catch (SqlException sqlException)
-                    {
-                        transactionContext.Rollback();
-                        throw sqlException;
-                    }
+                    transactionContext.Commit();
                 }
             };
 
@@ -135,34 +121,26 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
-                    var databaseUser = context.User.Find(user.Nickname);
+                context.Database.Log = Console.WriteLine;
+                var databaseUser = context.User.Find(user.Nickname);
 
-                    if (databaseUser != null)
+                if (databaseUser != null)
+                {
+                    databaseUser.mail = user.Mail;
+                    databaseUser.imageId = (short)user.ImageId;
+
+                    var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
+
+                    if (databaseUserSession != null)
                     {
-                        databaseUser.mail = user.Mail;
-                        databaseUser.imageId = (short)user.ImageId;
-
-                        var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
-
-                        if (databaseUserSession != null)
+                        if (!string.IsNullOrEmpty(user.Password))
                         {
-                            if (!string.IsNullOrEmpty(user.Password))
-                            {
-                                databaseUserSession.password = user.Password;
-                            }
+                            databaseUserSession.password = user.Password;
                         }
-
-                        result = context.SaveChanges();
                     }
+
+                    result = context.SaveChanges();
                 }
-                catch (SqlException sqlException)
-                {
-                    throw sqlException;
-                }
-                
             }
 
             return result;
@@ -175,53 +153,37 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
-                    var databaseUser = context.User.Find(nickname);
+                context.Database.Log = Console.WriteLine;
+                var databaseUser = context.User.Find(nickname);
 
-                    if (databaseUser != null)
-                    {
-                        foundUser.Nickname = databaseUser.nickName;
-                        foundUser.Mail = databaseUser.mail;
-                        foundUser.ImageId = databaseUser.imageId;
-                    }
-                    else
-                    {
-                        foundUser.Nickname = USER_NOT_FOUND;
-                    }
-                }
-                catch (SqlException sqlException)
+                if (databaseUser != null)
                 {
-                    throw sqlException;
+                    foundUser.Nickname = databaseUser.nickName;
+                    foundUser.Mail = databaseUser.mail;
+                    foundUser.ImageId = databaseUser.imageId;
                 }
-                
+                else
+                {
+                    foundUser.Nickname = USER_NOT_FOUND;
+                }
             }
             return foundUser;
         }
 
-        public bool FindUserByNickname(string nickname)
+        public int FindUserByNickname(string nickname)
         {
-            bool isFound = BOOL_VALIDATION_FAILURE;
+            int isFound = INT_VALIDATION_FAILURE;
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
 
-                    var databaseUser = context.User.Find(nickname);
+                var databaseUser = context.User.Find(nickname);
 
-                    if (databaseUser != null)
-                    {
-                        isFound = BOOL_VALIDATION_SUCCESS;
-                    }
-                }
-                catch (SqlException sqlException)
+                if (databaseUser != null)
                 {
-                    throw sqlException;
+                    isFound = INT_VALIDATION_SUCCESS;
                 }
-                
             }
             return isFound;
         }
@@ -232,23 +194,15 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
 
-                    var databaseUser = context.User.Find(nickname);
-                    var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
+                var databaseUser = context.User.Find(nickname);
+                var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
 
-                    if (databaseUsersession != null && databaseUsersession.password == password)
-                    {
-                        result = INT_VALIDATION_SUCCESS;
-                    }
-                }
-                catch(SqlException sqlException)
+                if (databaseUsersession != null && databaseUsersession.password == password)
                 {
-                    throw sqlException;
+                    result = INT_VALIDATION_SUCCESS;
                 }
-                
             }
 
             return result;

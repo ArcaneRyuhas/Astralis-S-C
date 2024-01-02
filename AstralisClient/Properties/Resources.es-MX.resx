@@ -243,20 +243,53 @@
   <data name="lblVolume" xml:space="preserve">
     <value>Volumen</value>
   </data>
+  <data name="msgConnectionError" xml:space="preserve">
+    <value>Error al conectarse con el servidor</value>
+  </data>
   <data name="msgCopyToClipboard" xml:space="preserve">
     <value>Ha sido copiado el texto:</value>
   </data>
   <data name="msgErrorCreateLobby" xml:space="preserve">
     <value>No se pudo crear el lobby</value>
   </data>
+  <data name="msgFriendRemoved" xml:space="preserve">
+    <value>Amigo eliminado exitosamente</value>
+  </data>
+  <data name="msgFriendRequestAccepted" xml:space="preserve">
+    <value>Solicitud de amistad aceptada con éxito</value>
+  </data>
+  <data name="msgFriendRequestDeclined" xml:space="preserve">
+    <value>Solicitud de amistad rechazada con éxito</value>
+  </data>
+  <data name="msgFriendRequestSuccessful" xml:space="preserve">
+    <value>Solicitud de amistar enviada con éxito</value>
+  </data>
   <data name="msgKickedOut" xml:space="preserve">
     <value>Has sido expulsado del lobby.</value>
+  </data>
+  <data name="msgLobbyError" xml:space="preserve">
+    <value>La lobby esta llena o hay un problema con el servidor</value>
   </data>
   <data name="msgNoGameFound" xml:space="preserve">
     <value>No se encontro el lobby</value>
   </data>
+  <data name="msgUnableToSendFriendRequest" xml:space="preserve">
+    <value>No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente.</value>
+  </data>
   <data name="msgUserAddedSucceed" xml:space="preserve">
     <value>¡Registro exitoso!</value>
+  </data>
+  <data name="msgUsernameMissing" xml:space="preserve">
+    <value>Por favor, ingresa un nombre de usuario.</value>
+  </data>
+  <data name="msgUserNotFound" xml:space="preserve">
+    <value>El usuario no fue encontrado</value>
+  </data>
+  <data name="msgUserOnline" xml:space="preserve">
+    <value>No se pudo iniciar sesión debido a que el usuario está en línea</value>
+  </data>
+  <data name="msgUserUpdated" xml:space="preserve">
+    <value>El usuario se ha actualizado correctamen, se reinicará la aplicación</value>
   </data>
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>

@@ -69,7 +69,7 @@ namespace Astralis.Views
 
         private void btnMyProfile_Click(object sender, RoutedEventArgs e)
         {
-            MyProfile myProfile = new MyProfile();
+            MyProfile myProfile = new MyProfile(friendWindow);
             NavigationService.Navigate(myProfile);
         }
 

@@ -243,20 +243,53 @@
   <data name="lblVolume" xml:space="preserve">
     <value>Volume</value>
   </data>
+  <data name="msgConnectionError" xml:space="preserve">
+    <value>Error trying to conect to server</value>
+  </data>
   <data name="msgCopyToClipboard" xml:space="preserve">
     <value>Text has been copied to clipboard:</value>
   </data>
   <data name="msgErrorCreateLobby" xml:space="preserve">
     <value>Can't create lobby</value>
   </data>
+  <data name="msgFriendRemoved" xml:space="preserve">
+    <value>Friend removed succesfully</value>
+  </data>
+  <data name="msgFriendRequestAccepted" xml:space="preserve">
+    <value>Friend request accepted succesfully</value>
+  </data>
+  <data name="msgFriendRequestDeclined" xml:space="preserve">
+    <value>Friend request declined succesfully</value>
+  </data>
+  <data name="msgFriendRequestSuccessful" xml:space="preserve">
+    <value>Friend request sent successfully</value>
+  </data>
   <data name="msgKickedOut" xml:space="preserve">
     <value>You have been kicked</value>
+  </data>
+  <data name="msgLobbyError" xml:space="preserve">
+    <value>The lobby is full or there´s a problem with the server</value>
   </data>
   <data name="msgNoGameFound" xml:space="preserve">
     <value>Can't found lobby</value>
   </data>
+  <data name="msgUnableToSendFriendRequest" xml:space="preserve">
+    <value>Unable to send the friend reques. Verify that the user exists or that there´s no pending requests</value>
+  </data>
   <data name="msgUserAddedSucceed" xml:space="preserve">
     <value>Sign up successful!</value>
+  </data>
+  <data name="msgUsernameMissing" xml:space="preserve">
+    <value>Please, insert a user nickname.</value>
+  </data>
+  <data name="msgUserNotFound" xml:space="preserve">
+    <value>The user couldn´t be founded</value>
+  </data>
+  <data name="msgUserOnline" xml:space="preserve">
+    <value>Unable to logIn because the user is already online</value>
+  </data>
+  <data name="msgUserUpdated" xml:space="preserve">
+    <value>The user has been updated succesfully. the app will restart.</value>
   </data>
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>

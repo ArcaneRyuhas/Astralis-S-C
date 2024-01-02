@@ -61,9 +61,8 @@ namespace Astralis.Views.Animations
                 if (onlineStatus == true)
                 {
                     ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
-                    btnDeleteFriend.Visibility = Visibility.Visible;
                 }
-
+                btnDeleteFriend.Visibility = Visibility.Visible;
             }
             else
             {

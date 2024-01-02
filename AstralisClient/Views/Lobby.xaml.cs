@@ -55,8 +55,33 @@ namespace Astralis.Views
 
         private void SendGameInvitationEvent(object sender, string friendUsername)
         {
-            string mailString = _client.SendFriendInvitation(_gameId, friendUsername);
-            MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                string mailString = _client.SendFriendInvitation(_gameId, friendUsername);
+
+                if (mailString == Constants.USER_NOT_FOUND)
+                {
+                    MessageBox.Show(Properties.Resources.msgUserNotFound, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if (mailString == Constants.ERROR_STRING)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    friendWindow.Disconnect();
+                }
+                else
+                {
+                    MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public bool SetLobby(string code) 
