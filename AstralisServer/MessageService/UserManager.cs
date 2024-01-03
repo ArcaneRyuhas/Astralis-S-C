@@ -219,6 +219,24 @@ namespace MessageService
             return gameIsNotFull;
         }
 
+        public int CanPlay(string nickname)
+        {
+            int result = VALIDATION_FAILURE;
+
+            GameAccess gameAccess = new GameAccess();
+            try
+            {
+               result = gameAccess.CanPlay(nickname);
+            }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                result = ERROR;
+            }
+
+            return result;
+        }
+
         public void ConnectLobby(User user, string gameId)
         {
             if (usersInLobby.ContainsValue(gameId))
@@ -236,17 +254,17 @@ namespace MessageService
                 try
                 {
                     currentUserCallbackChannel.ShowUsersInLobby(users);
+
+                    if (!usersContext.ContainsKey(user.Nickname))
+                    {
+                        usersContext.Add(user.Nickname, currentUserCallbackChannel);
+                        usersInLobby.Add(user.Nickname, gameId);
+                        usersTeam.Add(user.Nickname, NO_TEAM);
+                    }
                 }
                 catch(CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
                     log.Error(communicationObjectAbortedException);
-                }
-                
-                if (!usersContext.ContainsKey(user.Nickname))
-                {
-                    usersContext.Add(user.Nickname, currentUserCallbackChannel);
-                    usersInLobby.Add(user.Nickname, gameId);
-                    usersTeam.Add(user.Nickname, NO_TEAM);
                 }
 
                 foreach (string userInTheLobby in usersNickname)
@@ -383,7 +401,7 @@ namespace MessageService
         {
 
             List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
-            int result = 0;
+            int result = VALIDATION_FAILURE;
 
             if (usersInLobby.ContainsValue(gameId))
             {
@@ -393,15 +411,19 @@ namespace MessageService
                 {
                     try
                     {
-                        result = +gameAccess.CreatePlaysRelation(user, gameId, usersTeam[user]);
+                        result =+ gameAccess.CreatePlaysRelation(user, gameId, usersTeam[user]);
                     }
                     catch(SqlException sqlException)
                     {
                         log.Error(sqlException);
                     }
+                    catch (EntityException entityException)
+                    {
+                        log.Error(entityException);
+                    }
                 }
 
-                if (result > 0)
+                if (result > VALIDATION_FAILURE)
                 {
                     foreach (string userInTheLobby in usersNickname)
                     {
@@ -812,9 +834,6 @@ namespace MessageService
                     {
                         user = userInGame;
                         usersInGameContext[userInGame].EndGameClient(winnerTeam);
-                        usersInGameContext.Remove(userInGame);
-                        usersInLobby.Remove(userInGame);
-                        usersTeam.Remove(userInGame);
                     }
                 }
                 catch (FaultException faultException)
@@ -939,7 +958,6 @@ namespace MessageService
 
     public partial class UserManager : IEndGame
     {
-        //Lo ARREGLA MARIO
         public void GetUsersWithTeam(string nickname)
         {
             UserAccess userAccess = new UserAccess();
@@ -968,6 +986,49 @@ namespace MessageService
             {
                 log.Error(communicationObjectAbortedException);
             }
+        }
+
+        public void GameEnded(string nickname)
+        {
+            if(usersInGameContext.ContainsKey(nickname))
+            {
+                usersInGameContext.Remove(nickname);
+            }
+            
+            if(usersInLobby.ContainsKey(nickname))
+            {
+                usersInLobby.Remove(nickname);
+            }
+
+            if (usersTeam.ContainsKey(nickname))
+            {
+                usersTeam.Remove(nickname);
+            }
+        }
+    }
+
+    public partial class UserManager : ILeaderboardManager
+    {
+        public List<GamesWonInfo> GetLeaderboardInfo()
+        {
+            List<GamesWonInfo> listOfGamers = new List<GamesWonInfo>();
+
+            GameAccess gameAccess = new GameAccess();
+
+            try
+            {
+                listOfGamers = gameAccess.GetTopGamesWon();
+            }
+            catch (SqlException sqlException)
+            {
+                log.Error(sqlException);
+            }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+            }
+
+            return listOfGamers;
         }
     }
 

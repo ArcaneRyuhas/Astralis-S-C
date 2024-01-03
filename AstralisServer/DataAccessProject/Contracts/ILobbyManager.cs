@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessProject.Contracts
 {
@@ -13,6 +9,9 @@ namespace DataAccessProject.Contracts
     {
         [OperationContract()]
         string CreateLobby(User user);
+
+        [OperationContract()]
+        int CanPlay(string nickname);
 
         [OperationContract()]
         bool GameExist(string gameId);
@@ -37,6 +36,7 @@ namespace DataAccessProject.Contracts
 
         [OperationContract(IsOneWay = true)]
         void StartGame(string gameId);
+
         [OperationContract(IsOneWay = true)]
         void KickUser(string userNickname);
 

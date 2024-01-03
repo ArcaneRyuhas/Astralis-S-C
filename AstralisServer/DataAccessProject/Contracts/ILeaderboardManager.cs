@@ -8,7 +8,6 @@ namespace DataAccessProject.Contracts
     [ServiceContract]
     public interface ILeaderboardManager
     {
-
         [OperationContract]
         List<GamesWonInfo> GetLeaderboardInfo();
 

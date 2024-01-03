@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Contracts\IEndGame.cs" />
     <Compile Include="Contracts\IGameManager.cs" />
+    <Compile Include="Contracts\ILeaderboardManager.cs" />
     <Compile Include="Contracts\ILobbyManager.cs" />
     <Compile Include="Contracts\IUserManager.cs" />
     <Compile Include="DataAccess\DeckAccess.cs" />
