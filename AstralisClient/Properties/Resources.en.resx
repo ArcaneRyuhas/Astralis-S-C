@@ -213,6 +213,9 @@
   <data name="lblLobby" xml:space="preserve">
     <value>Lobby</value>
   </data>
+  <data name="lblLoserTeam" xml:space="preserve">
+    <value>You have lost :c</value>
+  </data>
   <data name="lblMail" xml:space="preserve">
     <value>Mail</value>
   </data>
@@ -242,6 +245,9 @@
   </data>
   <data name="lblVolume" xml:space="preserve">
     <value>Volume</value>
+  </data>
+  <data name="lblWinnerTeam" xml:space="preserve">
+    <value>You have won!!</value>
   </data>
   <data name="msgConnectionError" xml:space="preserve">
     <value>Error trying to conect to server</value>
