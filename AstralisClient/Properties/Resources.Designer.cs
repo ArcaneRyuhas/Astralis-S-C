@@ -349,6 +349,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have lost :c.
+        /// </summary>
+        public static string lblLoserTeam {
+            get {
+                return ResourceManager.GetString("lblLoserTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Correo.
         /// </summary>
         public static string lblMail {
@@ -435,6 +444,15 @@ namespace Astralis.Properties {
         public static string lblVolume {
             get {
                 return ResourceManager.GetString("lblVolume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has ganado!!.
+        /// </summary>
+        public static string lblWinnerTeam {
+            get {
+                return ResourceManager.GetString("lblWinnerTeam", resourceCulture);
             }
         }
         

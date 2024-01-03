@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Astralis.UserManager;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 
 
@@ -11,6 +13,7 @@ namespace Astralis.Views.Pages
     public partial class LeaderBoard : Page
     {
         private const int MAX_USER_LENGHT = 10;
+        private const int INITIAL_LENGHT = 0;
 
         public LeaderBoard()
         {
@@ -20,19 +23,22 @@ namespace Astralis.Views.Pages
 
         private void SetLeaderBoard()
         {
-            throw new NotImplementedException();
+            LeaderboardManagerClient client = new LeaderboardManagerClient();
+            List<GamesWonInfo> gamesWonInfos = new List<GamesWonInfo> (client.GetLeaderboardInfo());
+
+            SetUserList(gamesWonInfos);
         }
 
-        private void SetUserList(List<Tuple<string, int>> usersAndWins)
+        private void SetUserList(List<GamesWonInfo> usersAndWins)
         {
-            int rowNumber = 0;
+            int rowNumber = INITIAL_LENGHT;
 
-            foreach (Tuple<string, int> userAndWins in usersAndWins)
+            foreach (GamesWonInfo userAndWins in usersAndWins)
             {
-                if (rowNumber < MAX_USER_LENGHT) { }
+                if (rowNumber < MAX_USER_LENGHT)
                 {
-                    string nickname = userAndWins.Item1;
-                    string wins = userAndWins.Item2.ToString();
+                    string nickname = userAndWins.Username;
+                    string wins = userAndWins.GamesWonCount.ToString();
 
                     TextBox txtNickname = CreateTextBox(nickname);
                     TextBox txtWins = CreateTextBox(wins);
@@ -63,15 +69,17 @@ namespace Astralis.Views.Pages
         
         private TextBox CreateTextBox(string textToAdd)
         {
-            TextBox txtText = new TextBox();
-            txtText.Text = textToAdd;
+            TextBox txtText = new TextBox
+            {
+                Text = textToAdd
+            };
 
             return txtText;
         }
 
         public void btnExit_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            NavigationService.GoBack();
         }
     }
 }
