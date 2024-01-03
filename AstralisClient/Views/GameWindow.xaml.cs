@@ -14,7 +14,7 @@ namespace Astralis.Views
             InitializeComponent();
             ImageManager.Instance();
 
-            mainMenu = new MainMenu();
+            mainMenu = new MainMenu(this);
             mainMenu.CloseWindowEvent += CloseWindowEventHandler;
             mainFrame.Content = mainMenu;
         }
@@ -22,6 +22,10 @@ namespace Astralis.Views
         public void ChangePage(Page pageToSet)
         {
             mainFrame.Content = pageToSet;
+        }
+        public void CloseGameWindow()
+        {
+            this.Close();
         }
 
         private void CloseWindowEventHandler(object sender, EventArgs e)

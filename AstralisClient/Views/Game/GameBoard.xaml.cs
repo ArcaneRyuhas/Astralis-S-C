@@ -36,7 +36,7 @@ namespace Astralis.Views.Game
 
         public Label LblTurnMana { get { return lblTurnMana; } }
 
-        public GameBoard(GameWindow gameWindow)
+        public GameBoard()
         {
             InitializeComponent();
             InitializeGame();

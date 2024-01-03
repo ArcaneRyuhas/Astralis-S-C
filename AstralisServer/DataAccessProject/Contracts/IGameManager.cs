@@ -51,6 +51,9 @@ namespace DataAccessProject.Contracts
 
         [OperationContract]
         void EndGameClient(int winnerTeam);
+
+        [OperationContract]
+        void AbortGameClient();
         
     }
 }
