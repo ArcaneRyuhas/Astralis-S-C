@@ -13,6 +13,9 @@ namespace DataAccessProject.Contracts
     {
         [OperationContract(IsOneWay = true)]
         void GetUsersWithTeam(string nickname);
+
+        [OperationContract(IsOneWay = true)]
+        void GameEnded(string nickname);
     }
 
     public interface IEndGameCallback
