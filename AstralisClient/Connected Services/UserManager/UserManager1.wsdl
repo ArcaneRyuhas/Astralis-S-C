@@ -24,6 +24,14 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_ILeaderboardManager_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="NetTcpBinding_IGameManager_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -42,11 +50,11 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" />
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System" />
-      <xsd:import schemaLocation="http://localhost:8082/?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IUserManager_AddUser_InputMessage">
@@ -96,6 +104,12 @@
   </wsdl:message>
   <wsdl:message name="ILobbyManager_CreateLobby_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateLobbyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_CanPlay_InputMessage">
+    <wsdl:part name="parameters" element="tns:CanPlay" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_CanPlay_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CanPlayResponse" />
   </wsdl:message>
   <wsdl:message name="ILobbyManager_GameExist_InputMessage">
     <wsdl:part name="parameters" element="tns:GameExist" />
@@ -235,6 +249,12 @@
   <wsdl:message name="IOnlineUserManager_FriendDeleted_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:FriendDeletedResponse" />
   </wsdl:message>
+  <wsdl:message name="ILeaderboardManager_GetLeaderboardInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLeaderboardInfo" />
+  </wsdl:message>
+  <wsdl:message name="ILeaderboardManager_GetLeaderboardInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLeaderboardInfoResponse" />
+  </wsdl:message>
   <wsdl:message name="IGameManager_ConnectGame_InputMessage">
     <wsdl:part name="parameters" element="tns:ConnectGame" />
   </wsdl:message>
@@ -295,6 +315,9 @@
   <wsdl:message name="IEndGame_GetUsersWithTeam_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUsersWithTeam" />
   </wsdl:message>
+  <wsdl:message name="IEndGame_GameEnded_InputMessage">
+    <wsdl:part name="parameters" element="tns:GameEnded" />
+  </wsdl:message>
   <wsdl:message name="IEndGame_SetUsers_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:SetUsers" />
   </wsdl:message>
@@ -335,6 +358,10 @@
     <wsdl:operation name="CreateLobby">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/CreateLobby" message="tns:ILobbyManager_CreateLobby_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/CreateLobbyResponse" message="tns:ILobbyManager_CreateLobby_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CanPlay">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/CanPlay" message="tns:ILobbyManager_CanPlay_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/CanPlayResponse" message="tns:ILobbyManager_CanPlay_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GameExist">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GameExist" message="tns:ILobbyManager_GameExist_InputMessage" />
@@ -439,6 +466,12 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/FriendDeletedResponse" message="tns:IOnlineUserManager_FriendDeleted_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
+  <wsdl:portType name="ILeaderboardManager">
+    <wsdl:operation name="GetLeaderboardInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILeaderboardManager/GetLeaderboardInfo" message="tns:ILeaderboardManager_GetLeaderboardInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILeaderboardManager/GetLeaderboardInfoResponse" message="tns:ILeaderboardManager_GetLeaderboardInfo_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
   <wsdl:portType name="IGameManager">
     <wsdl:operation name="ConnectGame">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ConnectGame" message="tns:IGameManager_ConnectGame_InputMessage" />
@@ -487,6 +520,9 @@
   <wsdl:portType name="IEndGame">
     <wsdl:operation name="GetUsersWithTeam">
       <wsdl:input wsaw:Action="http://tempuri.org/IEndGame/GetUsersWithTeam" message="tns:IEndGame_GetUsersWithTeam_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GameEnded">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEndGame/GameEnded" message="tns:IEndGame_GameEnded_InputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SetUsers">
       <wsdl:output wsaw:Action="http://tempuri.org/IEndGame/SetUsers" message="tns:IEndGame_SetUsers_OutputCallbackMessage" />
@@ -565,6 +601,15 @@
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="CreateLobby">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/CreateLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CanPlay">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/CanPlay" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -796,6 +841,19 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_ILeaderboardManager" type="tns:ILeaderboardManager">
+    <wsp:PolicyReference URI="#NetTcpBinding_ILeaderboardManager_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetLeaderboardInfo">
+      <soap12:operation soapAction="http://tempuri.org/ILeaderboardManager/GetLeaderboardInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:binding name="NetTcpBinding_IGameManager" type="tns:IGameManager">
     <wsp:PolicyReference URI="#NetTcpBinding_IGameManager_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
@@ -902,6 +960,12 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="GameEnded">
+      <soap12:operation soapAction="http://tempuri.org/IEndGame/GameEnded" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="SetUsers">
       <soap12:operation soapAction="http://tempuri.org/IEndGame/SetUsers" style="document" />
       <wsdl:input>
@@ -914,33 +978,39 @@
   </wsdl:binding>
   <wsdl:service name="UserManager">
     <wsdl:port name="NetTcpBinding_IUserManager" binding="tns:NetTcpBinding_IUserManager">
-      <soap12:address location="net.tcp://localhost:8081/MessageService" />
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_ILobbyManager" binding="tns:NetTcpBinding_ILobbyManager">
-      <soap12:address location="net.tcp://localhost:8081/MessageService" />
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IOnlineUserManager" binding="tns:NetTcpBinding_IOnlineUserManager">
-      <soap12:address location="net.tcp://localhost:8081/MessageService" />
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_ILeaderboardManager" binding="tns:NetTcpBinding_ILeaderboardManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IGameManager" binding="tns:NetTcpBinding_IGameManager">
-      <soap12:address location="net.tcp://localhost:8081/MessageService" />
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEndGame" binding="tns:NetTcpBinding_IEndGame">
-      <soap12:address location="net.tcp://localhost:8081/MessageService" />
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:8081/MessageService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>
