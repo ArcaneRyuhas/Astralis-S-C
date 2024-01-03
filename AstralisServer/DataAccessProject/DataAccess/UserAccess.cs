@@ -207,5 +207,24 @@ namespace DataAccessProject.DataAccess
 
             return result;
         }
+
+        public int DeleteUser(string nickname)
+        {
+
+            int result = INT_VALIDATION_FAILURE;
+
+            using (var context = new AstralisDBEntities())
+            {
+                var userToDelete = context.User.FirstOrDefault(u => u.nickName == nickname);
+
+                if (userToDelete != null)
+                {
+                    context.User.Remove(userToDelete);
+                    result = context.SaveChanges();
+                }
+            }
+
+            return result;
+        }
     }
 }
