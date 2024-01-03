@@ -29,9 +29,11 @@ namespace Astralis.Views
         private Dictionary<int , LobbyUserCard> _userCards = new Dictionary<int, LobbyUserCard>();
         private LobbyManagerClient _client;
         private const string LOBBY_WINDOW = "LOBBY";
-        FriendWindow friendWindow;
+        private FriendWindow _friendWindow;
+        private GameWindow _gameWindow;
 
-        public Lobby()
+
+        public Lobby(GameWindow gameWindow)
         {
             InitializeComponent();
             _freeSpaces = new Dictionary<int, bool>()
@@ -45,12 +47,14 @@ namespace Astralis.Views
             InstanceContext context = new InstanceContext(this);
             _client = new LobbyManagerClient(context);
             btnStartGame.IsEnabled = false;
-            friendWindow = new FriendWindow(LOBBY_WINDOW);
+            _friendWindow = new FriendWindow(LOBBY_WINDOW);
 
-            friendWindow.SetFriendWindow();
+            _friendWindow.SetFriendWindow();
 
-            friendWindow.SendGameInvitation += SendGameInvitationEvent;
-            gridFriendsWindow.Children.Add(friendWindow);
+            _friendWindow.SendGameInvitation += SendGameInvitationEvent;
+            gridFriendsWindow.Children.Add(_friendWindow);
+
+            _gameWindow = gameWindow;
         }
 
         private void SendGameInvitationEvent(object sender, string friendUsername)
@@ -66,7 +70,7 @@ namespace Astralis.Views
                 else if (mailString == Constants.ERROR_STRING)
                 {
                     MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    friendWindow.Disconnect();
+                    _friendWindow.Disconnect();
                 }
                 else
                 {
@@ -110,7 +114,7 @@ namespace Astralis.Views
                     else if (_gameId == Constants.ERROR_STRING)
                     {
                         MessageBox.Show(Properties.Resources.msgConnectionError, Properties.Resources.titleNoGameFound, MessageBoxButton.OK, MessageBoxImage.Information);
-                        friendWindow.Disconnect();
+                        _friendWindow.Disconnect();
                         App.RestartApplication();
                     }
                     else
@@ -310,17 +314,11 @@ namespace Astralis.Views
 
         public void StartClientGame()
         {
-            GameWindow windowParent = (GameWindow)this.Parent;
-
-            if(windowParent != null)
-            {
-                windowParent.Visibility = Visibility.Collapsed;
-            }
-
-            Game.GameBoard gameBoard = new Game.GameBoard(windowParent);
+            Game.GameBoard gameBoard = new Game.GameBoard();
             
             gameBoard.IsHost = _isHost;
             gameBoard.Show();
+            _gameWindow.Close();
         }
 
         private void EnableStartButton()
@@ -471,7 +469,7 @@ namespace Astralis.Views
                 else if (mailString == Constants.ERROR_STRING)
                 {
                     MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    friendWindow.Disconnect();
+                    _friendWindow.Disconnect();
                 }
                 else
                 {
@@ -516,15 +514,15 @@ namespace Astralis.Views
 
         private void BtnFriendWindowClick(object sender, RoutedEventArgs e)
         {
-            if (friendWindow.IsVisible == true)
+            if (_friendWindow.IsVisible == true)
             {
-                friendWindow.Visibility = Visibility.Hidden;
+                _friendWindow.Visibility = Visibility.Hidden;
             }
 
             else
             {
-                friendWindow.SetFriendWindow();
-                friendWindow.Visibility = Visibility.Visible;
+                _friendWindow.SetFriendWindow();
+                _friendWindow.Visibility = Visibility.Visible;
             }
         }
     }

@@ -136,11 +136,11 @@ namespace Astralis.Views
                 if (user.Nickname != "ERROR")
                 {
                     UserSession.Instance(user);
-                    Lobby lobby = new Lobby();
+                    GameWindow gameWindow = new GameWindow();
+                    Lobby lobby = new Lobby(gameWindow);
 
                     if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
                     {
-                        GameWindow gameWindow = new GameWindow();
                         this.Close();
                         gameWindow.ChangePage(lobby);
                         gameWindow.Show();

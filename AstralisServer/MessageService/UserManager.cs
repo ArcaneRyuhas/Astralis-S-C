@@ -371,7 +371,10 @@ namespace MessageService
                 {
                     try
                     {
-                        usersContext[userInTheLobby].ShowDisconnectionInLobby(user);
+                        if (usersContext.ContainsKey(user.Nickname))
+                        {
+                            usersContext[userInTheLobby].ShowDisconnectionInLobby(user);
+                        }
                     }
                     catch(CommunicationObjectAbortedException communicationObjectAbortedException)
                     {
@@ -580,20 +583,23 @@ namespace MessageService
 
         public void DisconectUser(string nickname)
         {
-            if (onlineUsers.ContainsKey(nickname))
+            lock (onlineUsers)
             {
-                onlineUsers.Remove(nickname);
-
-                foreach (var user in onlineUsers)
+                if (onlineUsers.ContainsKey(nickname))
                 {
-                    try
+                    onlineUsers.Remove(nickname);
+
+                    foreach (var user in onlineUsers)
                     {
-                        user.Value.ShowUserDisconected(nickname);
-                    }
-                    catch (CommunicationObjectAbortedException communicationObjectAbortedException)
-                    {
-                        onlineUsers.Remove(user.Key);
-                        log.Error("Error in DisconnectUser method ", communicationObjectAbortedException);
+                        try
+                        {
+                            user.Value.ShowUserDisconected(nickname);
+                        }
+                        catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                        {
+                            onlineUsers.Remove(user.Key);
+                            log.Error("Error in DisconnectUser method ", communicationObjectAbortedException);
+                        }
                     }
                 }
             }
@@ -845,6 +851,7 @@ namespace MessageService
             {
                 try
                 {
+
                     if (usersInGameContext.ContainsKey(userInGame))
                     {
                         user = userInGame;
@@ -858,6 +865,11 @@ namespace MessageService
                         usersInGameContext.Remove(user);
                     }
                     log.Error(faultException.Message);
+                }
+                catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                {
+                    log.Error(communicationObjectAbortedException);
+                    usersInGameContext.Remove(user);
                 }
             } 
             

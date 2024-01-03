@@ -22,9 +22,11 @@ namespace Astralis.Views
         private const string MAIN_MENU_WINDOW = "MAIN_MENU";
 
         private FriendWindow friendWindow;
+        private GameWindow _gameWindow;
 
-        public MainMenu()
+        public MainMenu(GameWindow gameWindow)
         {
+            _gameWindow = gameWindow;
             InitializeComponent();
             friendWindow = new FriendWindow(MAIN_MENU_WINDOW);
             friendWindow.SetFriendWindow();
@@ -35,7 +37,7 @@ namespace Astralis.Views
 
         private void btnCreateGame_Click(object sender, RoutedEventArgs e)
         {
-            Lobby lobby = new Lobby();
+            Lobby lobby = new Lobby(_gameWindow);
 
 
             if (lobby.SetLobby(IS_HOST))
@@ -56,7 +58,7 @@ namespace Astralis.Views
         {
             string code = txtJoinCode.Text;
 
-            Lobby lobby = new Lobby();
+            Lobby lobby = new Lobby(_gameWindow);
             if (lobby.GameIsNotFull(code)  && lobby.SetLobby(code))
             {
                 NavigationService.Navigate(lobby);
