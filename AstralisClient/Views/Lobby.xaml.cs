@@ -87,39 +87,57 @@ namespace Astralis.Views
         public bool SetLobby(string code) 
         {
             bool gameExist = false;
-
-            if (code == HOST_CODE)
+            try
             {
-                _isHost = true;
-
-                User user = new User
+                if (code == HOST_CODE)
                 {
-                    Nickname = UserSession.Instance().Nickname,
-                    ImageId = UserSession.Instance().ImageId
-                };
+                    _isHost = true;
 
-                AddCard(user, NO_TEAM);
+                    User user = new User
+                    {
+                        Nickname = UserSession.Instance().Nickname,
+                        ImageId = UserSession.Instance().ImageId
+                    };
 
-                _gameId = _client.CreateLobby(user);
+                    AddCard(user, NO_TEAM);
 
-                if (_gameId == ERROR_CODE_LOBBY)
+                    _gameId = _client.CreateLobby(user);
+
+                    if (_gameId == Constants.VALIDATION_FAILURE_STRING)
+                    {
+                        MessageBox.Show(Properties.Resources.msgErrorCreateLobby, Properties.Resources.titleError, MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else if (_gameId == Constants.ERROR_STRING)
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, Properties.Resources.titleNoGameFound, MessageBoxButton.OK, MessageBoxImage.Information);
+                        friendWindow.Disconnect();
+                        App.RestartApplication();
+                    }
+                    else
+                    {
+                        gameExist = true;
+                        lblGameCode.Content = _gameId;
+                    }
+                }
+                else if (_client.GameExist(code))
                 {
-                    MessageBox.Show(Properties.Resources.msgErrorCreateLobby, Properties.Resources.titleError, MessageBoxButton.OK, MessageBoxImage.Information);
+                    ConnectToGame(code);
+                    gameExist = true;
                 }
                 else
                 {
-                    gameExist = true;
-                    lblGameCode.Content = _gameId;
+                    MessageBox.Show(Properties.Resources.msgNoGameFound, Properties.Resources.titleNoGameFound, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-            else if(_client.GameExist(code))
+            catch (CommunicationException)
             {
-                ConnectToGame(code);
-                gameExist = true;
+                MessageBox.Show(Properties.Resources.msgConnectionError, Properties.Resources.titleNoGameFound, MessageBoxButton.OK, MessageBoxImage.Information);
+                App.RestartApplication();
             }
-            else
+            catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgNoGameFound, Properties.Resources.titleNoGameFound, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Properties.Resources.msgConnectionError, Properties.Resources.titleNoGameFound, MessageBoxButton.OK, MessageBoxImage.Information);
+                App.RestartApplication();
             }
 
             return gameExist;
@@ -133,7 +151,20 @@ namespace Astralis.Views
                 ImageId = UserSession.Instance().ImageId
             };
 
-            _client.ConnectLobby(user, code);
+            try
+            {
+                _client.ConnectLobby(user, code);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
             
             _gameId = code;
             lblGameCode.Content = _gameId;
@@ -143,9 +174,22 @@ namespace Astralis.Views
         {
             InstanceContext context = new InstanceContext(this);
             UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+            bool gameIsNotFull = false;
 
-            bool gameIsNotFull = client.GameIsNotFull(gameId);
-
+            try
+            {
+                gameIsNotFull = client.GameIsNotFull(gameId);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
             return gameIsNotFull;
         }
 
@@ -176,7 +220,20 @@ namespace Astralis.Views
         private void LobbyUserCardTeamSelectionChanged(object sender, Tuple<string, int> userTeam)
         {
 
-            _client.ChangeLobbyUserTeam(userTeam.Item1, userTeam.Item2);
+            try
+            {
+                _client.ChangeLobbyUserTeam(userTeam.Item1, userTeam.Item2);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
 
             EnableStartButton();
         }
@@ -326,7 +383,20 @@ namespace Astralis.Views
             User user = new User();
             user.Nickname = UserSession.Instance().Nickname;
 
-            client.DisconnectLobby(user);
+            try
+            {
+                client.DisconnectLobby(user);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
 
             NavigationService.GoBack();
         }
@@ -335,8 +405,20 @@ namespace Astralis.Views
         {
             string message = UserSession.Instance().Nickname + ": " + txtChat.Text;
             txtChat.Text = Properties.Resources.txtChat;
-            
-            _client.SendMessage(message, _gameId);
+            try
+            {
+                _client.SendMessage(message, _gameId);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
 
@@ -357,21 +439,73 @@ namespace Astralis.Views
             {
                 windowParent.Visibility = Visibility.Collapsed;
             }
-    
-            _client.StartGame(_gameId);
+
+            try
+            {
+                _client.StartGame(_gameId);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         private void BtnSendInvitationClick(object sender, RoutedEventArgs e)
         {
-            string toSendMail = txtFriendMail.Text;
+            
+            try
+            {
+                string toSendMail = txtFriendMail.Text;
+                string mailString = _client.SendFriendInvitation(_gameId, toSendMail);
 
-            string mailString = _client.SendFriendInvitation(_gameId, toSendMail);
-            MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
+                if (mailString == Constants.USER_NOT_FOUND)
+                {
+                    MessageBox.Show(Properties.Resources.msgUserNotFound, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if (mailString == Constants.ERROR_STRING)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    friendWindow.Disconnect();
+                }
+                else
+                {
+                    MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void LobbyUserCardUserKicked(object sender, string userNickname)
         {
-            _client.KickUser(userNickname);
+            try
+            {
+                _client.KickUser(userNickname);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+           
         }
 
         public void GetKicked()

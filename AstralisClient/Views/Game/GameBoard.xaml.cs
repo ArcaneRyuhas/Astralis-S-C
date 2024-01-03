@@ -58,7 +58,20 @@ namespace Astralis.Views.Game
         private void Connect()
         {
             _client = SetGameContext();
-            _client.ConnectGame(UserSession.Instance().Nickname);
+            try
+            {
+                _client.ConnectGame(UserSession.Instance().Nickname);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         private GameManagerClient SetGameContext()
@@ -88,7 +101,21 @@ namespace Astralis.Views.Game
                 drawnCard[cardsToDraw] = _gameManager.DrawCard();
             }
 
-            _client.DrawCard(myNickname, drawnCard);
+            try
+            {
+                _client.DrawCard(myNickname, drawnCard);
+
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         public void DrawCard()
@@ -96,7 +123,20 @@ namespace Astralis.Views.Game
             string myNickname = UserSession.Instance().Nickname;
             int[] drawnCard = new int[1] { _gameManager.DrawCard()};
 
-            _client.DrawCard(myNickname, drawnCard);
+            try
+            {
+                _client.DrawCard(myNickname, drawnCard);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges in the graphic mannerjj.
@@ -111,7 +151,21 @@ namespace Astralis.Views.Game
 
         public void EndGameTurn()
         {
-            _client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
+            try
+            {
+                _client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
+
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         private Dictionary<int, int> GetBoardDictionary()
@@ -328,7 +382,20 @@ namespace Astralis.Views.Game
 
             if (_isHost)
             {
-                _client.EndGame(winnerTeam, myNickname);
+                try
+                {
+                    _client.EndGame(winnerTeam, myNickname);
+                }
+                catch (CommunicationException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
+                }
+                catch (TimeoutException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
+                }
             }
         }
 
@@ -436,7 +503,20 @@ namespace Astralis.Views.Game
                 
                 if (_isHost)
                 {
-                    _client.StartFirstPhase(UserSession.Instance().Nickname);
+                    try
+                    {
+                        _client.StartFirstPhase(UserSession.Instance().Nickname);
+                    }
+                    catch (CommunicationException)
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
+                    }
+                    catch (TimeoutException)
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
+                    }
                 }
             }
         }

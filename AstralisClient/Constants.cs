@@ -15,6 +15,7 @@ namespace Astralis
         public const int ERROR = -1;
         public const string USER_NOT_FOUND = "UserNotFound";
         public const string ERROR_STRING = "ERROR";
+        public const string VALIDATION_FAILURE_STRING = "FAILURE";
     }
 
 }

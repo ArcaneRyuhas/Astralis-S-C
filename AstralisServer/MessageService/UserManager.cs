@@ -187,9 +187,10 @@ namespace MessageService
     public partial class UserManager : ILobbyManager
     {
         private const bool IS_SUCCESFULL = true;
-        private const string ERROR_CODE_LOBBY = "error";
         private const int NO_TEAM = 0;
         private const string USER_NOT_FOUND = "UserNotFound";
+        private const string ERROR_STRING = "ERROR";
+        private const string VALIDATION_FAILURE_STRING = "FAILURE";
 
         private static Dictionary<string, string> usersInLobby = new Dictionary<string, string>();
         private static Dictionary<string, ILobbyManagerCallback> usersContext = new Dictionary<string, ILobbyManagerCallback>();
@@ -286,12 +287,18 @@ namespace MessageService
                 }
                 else
                 {
-                    gameId = ERROR_CODE_LOBBY;
+                    gameId = VALIDATION_FAILURE_STRING;
                 }
             }
             catch(SqlException sqlException)
             {
                 log.Error(sqlException);
+                gameId = ERROR_STRING;
+            }
+            catch(EntityException entityException)
+            {
+                log.Error(entityException);
+                gameId = ERROR_STRING;
             }
             return gameId;
         }
@@ -305,20 +312,28 @@ namespace MessageService
             try
             {
                 user = userAccess.GetUserByNickname(userToSend);
+
+                if (user.Nickname != USER_NOT_FOUND)
+                {
+                    mailString = Mail.Mail.Instance().sendInvitationMail(user.Mail, gameId);
+                }
+                else
+                {
+                    mailString = Mail.Mail.Instance().sendInvitationMail(userToSend, gameId);
+                }
             }
             catch(SqlException sqlException)
             {
                 log.Error(sqlException);
+                mailString = ERROR_STRING;
+            }
+            catch(EntityException entityException)
+            {
+                log.Error(entityException);
+                mailString = ERROR_STRING;
             }
 
-            if(user.Nickname != USER_NOT_FOUND)
-            {
-                mailString = Mail.Mail.Instance().sendInvitationMail(user.Mail, gameId);
-            }
-            else
-            {
-                mailString = Mail.Mail.Instance().sendInvitationMail(userToSend, gameId);
-            }
+           
 
             return mailString;
         }

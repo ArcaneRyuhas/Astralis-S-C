@@ -68,5 +68,10 @@ namespace Astralis.Views.Pages
 
             return txtText;
         }
+
+        public void btnExit_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }
