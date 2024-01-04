@@ -13,9 +13,6 @@ namespace Astralis.Views
 {
     public partial class Lobby : Page, UserManager.ILobbyManagerCallback
     {
-
-        
-
         private const string HOST_CODE = "host";
         private const string ERROR_CODE_LOBBY = "error";
         private const int NO_TEAM = 0;
