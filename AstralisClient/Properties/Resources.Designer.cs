@@ -304,6 +304,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Juego abortado, no hay ganadores.
+        /// </summary>
+        public static string lblGameAborted {
+            get {
+                return ResourceManager.GetString("lblGameAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Código.
         /// </summary>
         public static string lblGameCode {

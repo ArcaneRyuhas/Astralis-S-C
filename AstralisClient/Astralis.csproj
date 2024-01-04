@@ -259,6 +259,12 @@
       <LastGenOutput>CardImageResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Fonts\PixelFont.ttf" />
+    <None Include="Connected Services\UserManager\Astralis.UserManager.GamesWonInfo1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\UserManager\Astralis.UserManager.User.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\UserManager\item2.xsd">
       <SubType>Designer</SubType>
     </None>

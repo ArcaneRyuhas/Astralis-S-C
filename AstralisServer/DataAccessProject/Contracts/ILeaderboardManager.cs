@@ -16,7 +16,13 @@ namespace DataAccessProject.Contracts
     [DataContract]
     public class GamesWonInfo
     {
-        public string Username { get; set; }
-        public int GamesWonCount { get; set; }
+        private string username;
+        private int gamesWonCount;
+
+        [DataMember]
+        public string Username { get { return username; } set { username = value; } }
+
+        [DataMember]
+        public int GamesWonCount { get { return gamesWonCount; } set { gamesWonCount = value; } }
     }
 }
