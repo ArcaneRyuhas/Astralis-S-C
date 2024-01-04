@@ -1,14 +1,10 @@
 ﻿using Astralis.Logic;
-using Astralis.UserManager;
+using Astralis.Views.Animations;
+using Astralis.Views.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using Astralis.Views.Pages;
-using Astralis.Views.Animations;
 
 namespace Astralis.Views
 {
@@ -96,15 +92,10 @@ namespace Astralis.Views
             }
         }
 
-       
-
-
-        
-
-        
-
-        
-
-      
+        private void BtnLeaderboardClick(object sender, RoutedEventArgs e)
+        {
+            LeaderBoard leaderboard = new LeaderBoard();
+            NavigationService.Navigate(leaderboard);
+        }
     }
 }

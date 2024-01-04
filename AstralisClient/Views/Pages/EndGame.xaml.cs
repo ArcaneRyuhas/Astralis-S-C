@@ -16,7 +16,7 @@ namespace Astralis.Views.Pages
     {
 
         private EndGameClient client;
-        private const int GAME_ABORTED = -1;
+        private const int GAME_ABORTED = 0;
 
         public EndGame(int winnerTeam, int myTeam)
         {
@@ -29,15 +29,15 @@ namespace Astralis.Views.Pages
         {
             if (winnerTeam == myTeam)
             {
-               // lblWinnerTeam.Content = Properties.Resources.lblWinnerTeam;
+                lblWinnerTeam.Content = Properties.Resources.lblWinnerTeam;
             }
             else if (winnerTeam == GAME_ABORTED)
             {
-               
+                lblWinnerTeam.Content = Properties.Resources.lblGameAborted;
             }
             else
             {
-                // lblWinnerTeam.Content = Properties.Resources.lblLoserTeam;
+                lblWinnerTeam.Content = Properties.Resources.lblLoserTeam;
             }
         }
 
@@ -75,6 +75,8 @@ namespace Astralis.Views.Pages
             GameWindow gameWindow = new GameWindow();
             MainMenu mainMenu = new MainMenu(gameWindow);
             NavigationService.Navigate(mainMenu);
+
+            client.GameEnded(UserSession.Instance().Nickname);
         }
     }
 }

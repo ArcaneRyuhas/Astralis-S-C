@@ -198,6 +198,9 @@
   <data name="lblErrorPasswordsNoMatch" xml:space="preserve">
     <value>Las contraseñas no coinciden</value>
   </data>
+  <data name="lblGameAborted" xml:space="preserve">
+    <value>Juego abortado, no hay ganadores</value>
+  </data>
   <data name="lblGameCode" xml:space="preserve">
     <value>Código</value>
   </data>
