@@ -204,6 +204,9 @@
   <data name="lblGameCode" xml:space="preserve">
     <value>Código</value>
   </data>
+  <data name="lblGamesWon" xml:space="preserve">
+    <value>Partidas ganadas</value>
+  </data>
   <data name="lblInviteFriend" xml:space="preserve">
     <value>Invitar amigo</value>
   </data>
@@ -212,6 +215,9 @@
   </data>
   <data name="lblLanguage" xml:space="preserve">
     <value>Idioma</value>
+  </data>
+  <data name="lblLeaderboard" xml:space="preserve">
+    <value>TABLERO</value>
   </data>
   <data name="lblLobby" xml:space="preserve">
     <value>Sala</value>
@@ -233,6 +239,9 @@
   </data>
   <data name="lblPasswordHelp" xml:space="preserve">
     <value>Si necesitas ayuda pon el cursor aqui</value>
+  </data>
+  <data name="lblPlayer" xml:space="preserve">
+    <value>Jugadores</value>
   </data>
   <data name="lblPlayersConecteds" xml:space="preserve">
     <value>Jugadores Conectados</value>

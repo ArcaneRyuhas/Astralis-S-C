@@ -21,11 +21,15 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height= "*"/>
             </Grid.RowDefinitions>
 
-            <Rectangle Grid.Row="1" Grid.Column="1" Width="300" Height="500" Stroke="Red"/>
-            <Grid x:Name="gdUsersName" Grid.Row="1" Grid.Column="1" Width="300" Height="500">
+            <Label Content="{x:Static p:Resources.lblPlayer}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" FontSize="30"/>
+            <TextBox Text="{x:Static p:Resources.lblGamesWon}" Width="150" HorizontalContentAlignment="Center" Grid.Row="1" Grid.Column="2" FontSize="30" TextWrapping="Wrap" IsReadOnly="True"/>
+
+            <Rectangle Grid.Row="2" Grid.Column="1" Width="300" Height="500" Stroke="Red"/>
+            <Grid x:Name="gdUsersName" Grid.Row="2" Grid.Column="1" Width="300" Height="500">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
@@ -41,9 +45,9 @@
                 </Grid.RowDefinitions>
             </Grid>
 
-            <Rectangle Grid.Row="1" Grid.Column="2" Width="100" Height="500" Stroke="Red"/>
+            <Rectangle Grid.Row="2" Grid.Column="2" Width="100" Height="500" Stroke="Red"/>
             
-            <Grid x:Name="gdUsersWins" Grid.Row="1" Grid.Column="2" Width="100" Height="500">
+            <Grid x:Name="gdUsersWins" Grid.Row="2" Grid.Column="2" Width="100" Height="500">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
@@ -59,11 +63,12 @@
                 </Grid.RowDefinitions>
             </Grid>
 
-            <Label x:Name="lblWinnerTeam" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Width="285" FontSize="22" Height="33"/>
-
+            <Label Content="{x:Static p:Resources.lblLeaderboard}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="1" FontSize="40" Height="58" Width="Auto"/>
+            <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="1" FontSize="36" Height="60" Width="Auto" Click="BtnExitClick" Template="{DynamicResource ButtonTemplateNormal}"/>
+            
         </Grid>
         
-        <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="1" FontSize="36" Height="60" Width="Auto" Click="btnExit_Click" Template="{DynamicResource ButtonTemplateNormal}"/>
-        <Label Content="LEADERBOARD" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="40" Height="58" Width="Auto"/>
+        
+        
     </Grid>
 </Page>
