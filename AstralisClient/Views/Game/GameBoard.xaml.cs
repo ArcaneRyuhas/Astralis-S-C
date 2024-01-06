@@ -444,13 +444,6 @@ namespace Astralis.Views.Game
                         break;
                     }
                 }
-                else
-                {
-                    int columnIndex = Grid.GetColumn(graphicCard);
-                    gdAllyHand.Children.Remove(graphicCard);
-                    RemoveColumn(gdAllyHand, columnIndex);
-                    break;
-                }
             }
         }
 
@@ -519,6 +512,11 @@ namespace Astralis.Views.Game
             }
         }
 
+        public void ReceiveMessageGame(string message)
+        {
+            tbChat.Text = tbChat.Text + "\n" + message;
+        }
+
         private void BtnMenuClick(object sender, RoutedEventArgs e)
         {
             lblUserTurn.Content = Properties.Resources.lblUserTurnFalse;
@@ -543,6 +541,38 @@ namespace Astralis.Views.Game
             }
         }
 
+        private void BtnOpenChatClick(object sender, RoutedEventArgs e)
+        {
+            if (gdChat.IsVisible)
+            {
+                gdChat.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                gdChat.Visibility = Visibility.Visible;
+            }
+        }
 
+        private void BtnSendMessageClick(object sender, RoutedEventArgs e)
+        {
+
+            string nickname = UserSession.Instance().Nickname;
+            string message = nickname + ": " + txtChat.Text;
+            txtChat.Text = Properties.Resources.txtChat;
+            try
+            {
+                _client.SendMessageGame(message, nickname);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+        }
     }
 }

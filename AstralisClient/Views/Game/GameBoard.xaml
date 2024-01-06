@@ -121,6 +121,15 @@
                 </ProgressBar.RenderTransformOrigin>
             </ProgressBar>
 
+            <Grid x:Name="gdChat" Width="400" Height="250" Background="#FF313131" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <ScrollViewer Style="{DynamicResource ScrollViewerTemplatNormal}" VerticalAlignment="Top" Grid.Row="1" Height="230" Width="400">
+                    <Grid Background="Black" Height="220" Width="400">
+                        <TextBlock x:Name="tbChat" TextWrapping="Wrap" Foreground="#FFC32525"/>
+                    </Grid>
+                </ScrollViewer>
+                <TextBox x:Name="txtChat"  HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" Text="{x:Static p:Resources.txtChat}" VerticalAlignment="Bottom" Width="280" FontSize="16" Height="20"/>
+                <Button x:Name="btnSendMessage" Content="{x:Static p:Resources.btnSendMessage}" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Click="BtnSendMessageClick" FontSize="20" Width="100" Template="{DynamicResource ButtonTemplateNormal}"/>
+            </Grid>
         </Grid>
 
         <Grid  Width="800" Height="200" HorizontalAlignment="Center" VerticalAlignment="Bottom">
@@ -219,20 +228,29 @@
         </Button>
 
         <Button x:Name="btnChangeView" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,400,0,0" Click="BtnChangeViewClick">
+            
             <Grid>
                 <Ellipse HorizontalAlignment="Left" Height="48" Stroke="White" VerticalAlignment="Center" Width="86" Fill="#FF1D0505">
                 </Ellipse>
+                <Grid Height="20" Width="30">
+                    <Grid.Background>
+                        <ImageBrush ImageSource="InGameAssets/eye.png"/>
+                    </Grid.Background>
+                </Grid>
             </Grid>
+            
         </Button>
 
-        <Button x:Name="btnOpenChat" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,0,0,150">
+        <Button x:Name="btnOpenChat" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,0,0,150" Click="BtnOpenChatClick">
             <Grid>
                 <Ellipse HorizontalAlignment="Left" Height="48" Stroke="White" VerticalAlignment="Center" Width="86" Fill="#FF1D0505"/>
+                <Grid Height="20" Width="30">
+                    <Grid.Background>
+                        <ImageBrush ImageSource="InGameAssets/chat.png"/>
+                    </Grid.Background>
+                </Grid>
             </Grid>
         </Button>
-
-
-
 
     </Grid>
 </Window>

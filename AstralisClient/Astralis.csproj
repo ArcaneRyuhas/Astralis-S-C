@@ -362,5 +362,11 @@
     <Resource Include="Views\Cards\FriendWindowImages\cross.png" />
     <Resource Include="Views\Cards\FriendWindowImages\message.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\eye.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\chat.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
