@@ -35,7 +35,7 @@
             </Grid>
 
             <Label x:Name="lblWinnerTeam" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Width="285" FontSize="22" Height="33"/>
-            <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Grid.Column="1" FontSize="36" Height="40" Width="150" Click="btnExit_Click" Template="{DynamicResource ButtonTemplateNormal}"/>
+            <Button x:Name="btnExit" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Grid.Column="1" FontSize="36" Height="40" Width="150" Click="BtnExitClick" Template="{DynamicResource ButtonTemplateNormal}"/>
             <Grid Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

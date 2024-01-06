@@ -61,7 +61,6 @@ namespace Astralis.Views.Pages
             }
         }
 
-
         private void AddCard(UserWithTeam user, int team, int gridRow)
         {
             EndGameUserCard endGameUserCard = new EndGameUserCard();
@@ -70,7 +69,8 @@ namespace Astralis.Views.Pages
             gridUsers.Children.Add(endGameUserCard);
             Grid.SetRow(endGameUserCard, gridRow);
         }
-        private void btnExit_Click(object sender, RoutedEventArgs e)
+
+        private void BtnExitClick(object sender, RoutedEventArgs e)
         {
             GameWindow gameWindow = new GameWindow();
             MainMenu mainMenu = new MainMenu(gameWindow);

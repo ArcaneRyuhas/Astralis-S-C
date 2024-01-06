@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows;
 
 
 namespace Astralis.Views.Pages
@@ -40,44 +41,47 @@ namespace Astralis.Views.Pages
                     string nickname = userAndWins.Username;
                     string wins = userAndWins.GamesWonCount.ToString();
 
-                    TextBox txtNickname = CreateTextBox(nickname);
-                    TextBox txtWins = CreateTextBox(wins);
+                    Label lblNickname = CreateTextBox(nickname);
+                    Label lblWins = CreateTextBox(wins);
 
-                    AddTextBoxToUserGrid(txtNickname, rowNumber);
-                    AddTextBoxToWinsGrid(txtWins, rowNumber);
+                    AddTextBoxToUserGrid(lblNickname, rowNumber);
+                    AddTextBoxToWinsGrid(lblWins, rowNumber);
 
                     rowNumber++;
                 }
             }
         }
 
-        private void AddTextBoxToUserGrid(TextBox txtNickname, int rowNumber)
+        private Label CreateTextBox(string textToAdd)
         {
-            Grid.SetColumn(txtNickname, rowNumber);
-
-            gdUsersName.Children.Add(txtNickname);
-        }
-
-
-        private void AddTextBoxToWinsGrid(TextBox txtWins, int rowNumber)
-        {
-            Grid.SetColumn(txtWins, rowNumber);
-
-            gdUsersWins.Children.Add(txtWins);
-        }
-
-        
-        private TextBox CreateTextBox(string textToAdd)
-        {
-            TextBox txtText = new TextBox
+            Label lblText = new Label
             {
-                Text = textToAdd
+                Content = textToAdd
             };
 
-            return txtText;
+            lblText.FontSize = 22;
+            lblText.VerticalContentAlignment = VerticalAlignment.Center;
+            lblText.HorizontalContentAlignment = HorizontalAlignment.Center;
+
+            return lblText;
         }
 
-        public void btnExit_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void AddTextBoxToUserGrid(Label lblNickname, int rowNumber)
+        {
+            Grid.SetRow(lblNickname, rowNumber);
+
+            gdUsersName.Children.Add(lblNickname);
+        }
+
+
+        private void AddTextBoxToWinsGrid(Label lblWins, int rowNumber)
+        {
+            Grid.SetRow(lblWins, rowNumber);
+
+            gdUsersWins.Children.Add(lblWins);
+        }
+
+        public void BtnExitClick(object sender, System.Windows.RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }

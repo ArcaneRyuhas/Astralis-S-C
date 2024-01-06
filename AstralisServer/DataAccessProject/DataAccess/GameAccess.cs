@@ -122,13 +122,13 @@ namespace DataAccessProject.DataAccess
 
         public List<GamesWonInfo> GetTopGamesWon()
         {
-            List<GamesWonInfo> results = new List<GamesWonInfo>();
+            List<GamesWonInfo> gameInfo = new List<GamesWonInfo>();
 
             using (var context = new AstralisDBEntities())
             {
                 try
                 {
-                    var query = context.Database.SqlQuery<GamesWonInfo>(
+                    var query = context.Database.SqlQuery<GamesWonInfo>( 
                         @"SELECT TOP 10 p.Nickname AS Username, COUNT(*) AS GamesWonCount
                           FROM [AstralisDB].[dbo].[Plays] p
                           JOIN Game g ON p.GameId = g.GameId
@@ -137,7 +137,18 @@ namespace DataAccessProject.DataAccess
                           ORDER BY GamesWonCount DESC;"
                     );
 
-                    results = query.ToList();
+                    var results = query.ToList();
+
+                    foreach (var result in results)
+                    {
+                        GamesWonInfo gamesWonInfo = new GamesWonInfo()
+                        {
+                            Username = result.Username,
+                            GamesWonCount = result.GamesWonCount
+                        };
+
+                        gameInfo.Add(gamesWonInfo);
+                    }
                 }
                 catch (SqlException sqlException)
                 {
@@ -146,7 +157,7 @@ namespace DataAccessProject.DataAccess
                 }
             }
 
-            return results;
+            return gameInfo;
         }
 
         private const string GAME_BAN = "gameBan";

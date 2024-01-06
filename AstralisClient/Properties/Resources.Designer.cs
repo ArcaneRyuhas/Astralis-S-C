@@ -322,6 +322,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Partidas ganadas.
+        /// </summary>
+        public static string lblGamesWon {
+            get {
+                return ResourceManager.GetString("lblGamesWon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invitar amigo.
         /// </summary>
         public static string lblInviteFriend {
@@ -345,6 +354,15 @@ namespace Astralis.Properties {
         public static string lblLanguage {
             get {
                 return ResourceManager.GetString("lblLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TABLERO.
+        /// </summary>
+        public static string lblLeaderboard {
+            get {
+                return ResourceManager.GetString("lblLeaderboard", resourceCulture);
             }
         }
         
@@ -408,6 +426,15 @@ namespace Astralis.Properties {
         public static string lblPasswordHelp {
             get {
                 return ResourceManager.GetString("lblPasswordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jugadores.
+        /// </summary>
+        public static string lblPlayer {
+            get {
+                return ResourceManager.GetString("lblPlayer", resourceCulture);
             }
         }
         
