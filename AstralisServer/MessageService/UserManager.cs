@@ -950,6 +950,20 @@ namespace MessageService
             return reversedBoard;
         }
 
+        public void SendMessageGame(string message, string nickname)
+        {
+            Dictionary <string, int> usersInTeam = GetUsersPerTeam(nickname);
+
+            foreach (string userInGame in usersInTeam.Keys)
+            {
+                if (usersInTeam[userInGame] == usersInTeam[nickname])
+                {
+                    usersInGameContext[userInGame].ReceiveMessageGame(message);
+                }
+            }
+        }
+
+
         private Dictionary<string, int> GetUsersPerTeam(string nickname)
         {
             Dictionary<string, int> usersInGame = new Dictionary<string, int>();

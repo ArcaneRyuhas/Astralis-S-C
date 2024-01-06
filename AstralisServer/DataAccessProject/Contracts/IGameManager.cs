@@ -28,6 +28,8 @@ namespace DataAccessProject.Contracts
         [OperationContract(IsOneWay = true)]
         void StartFirstPhase(string hostNickname);
 
+        [OperationContract(IsOneWay = true)]
+        void SendMessageGame(string message, string nickname);
     }
 
     [ServiceContract]
@@ -51,6 +53,9 @@ namespace DataAccessProject.Contracts
 
         [OperationContract]
         void EndGameClient(int winnerTeam);
+
+        [OperationContract]
+        void ReceiveMessageGame(string message);
         
     }
 }
