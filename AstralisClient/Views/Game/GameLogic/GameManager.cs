@@ -13,6 +13,7 @@ namespace Astralis.Views.Game.GameLogic
     {
         private const int ERROR_CARD_ID = 0;
         private const int COUNTDOWN_STARTING_VALUE = 20;
+        private const int EXIT_COUNTDOWN_STARTING_VALUE = COUNTDOWN_STARTING_VALUE + 15;
         private const int NO_MAGES = 0;
         private const int DRAW = 3;
         private const int MINIMUN_HEALTH = 1;
@@ -20,6 +21,7 @@ namespace Astralis.Views.Game.GameLogic
         private const int MAXIMUM_CARD_POSITION = 5;
         private const int MINIMUM_MAGE_COUNT = 0;
         private const int TURN_INITIALIZER = 0;
+        private const int MAXIMUM_MANA = 10;
 
         private GameBoard _gameBoard;
         private Dictionary<string, int> _usersTeam;
@@ -29,7 +31,9 @@ namespace Astralis.Views.Game.GameLogic
         private Tuple<string, string> _firstPlayers = Tuple.Create<string, string>("", "");
         private string _myEnemy;
         private int _countdownValue = COUNTDOWN_STARTING_VALUE;
+        private int _exitCountdown = EXIT_COUNTDOWN_STARTING_VALUE;
         private DispatcherTimer _timer;
+        private DispatcherTimer _exitTimer;
         private ProgressBar _progressBarCounter;
         private bool _roundEnded = false;
         private readonly List<Card> _userHand = new List<Card>();
@@ -69,6 +73,10 @@ namespace Astralis.Views.Game.GameLogic
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += TimerTick;
 
+            _exitTimer = new DispatcherTimer();
+            _exitTimer.Interval = TimeSpan.FromSeconds(1);
+            _exitTimer.Tick += ExitTimerTick;
+
             progressBarCounter.Maximum = _countdownValue;
             progressBarCounter.Value = _countdownValue;
         }
@@ -107,6 +115,17 @@ namespace Astralis.Views.Game.GameLogic
 
             DoubleAnimation animation = new DoubleAnimation(_countdownValue, TimeSpan.FromSeconds(1));
             _progressBarCounter.BeginAnimation(ProgressBar.ValueProperty, animation);
+        }
+
+        private void ExitTimerTick(object sender, EventArgs e)
+        {
+            _exitCountdown--;
+
+            if (_exitCountdown == 0)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         public void EndTurn()
@@ -221,13 +240,17 @@ namespace Astralis.Views.Game.GameLogic
             StartCountdown();
             _endTurnCounter = TURN_INITIALIZER;
 
-            _userTeam.RoundMana++;
+            if(_userTeam.RoundMana < MAXIMUM_MANA)
+            {
+                _userTeam.RoundMana++;
+            }
             _userTeam.Mana = _userTeam.RoundMana;
             
             AttackPhase();
 
             if (!HasGameEnded())
             {
+                _exitTimer.Stop();
                 _gameBoard.DrawCard();
                 _roundEnded = false;
             }
@@ -377,8 +400,10 @@ namespace Astralis.Views.Game.GameLogic
         public void StartCountdown()
         {
             _countdownValue = COUNTDOWN_STARTING_VALUE;
+            _exitCountdown = EXIT_COUNTDOWN_STARTING_VALUE;
 
             _timer.Start();
+            _exitTimer.Start();
         }
 
         public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
