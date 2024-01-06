@@ -368,3 +368,5 @@ AstralisServer/MessageService/App.config
 
 # Images - To not load the images into Git
 AstralisClient/Resources
+AstralisClient/Music
+AstralisClient/Cards/FriendWindowImages
