@@ -8,6 +8,9 @@ using System.ComponentModel;
 using DataAccessProject;
 using User = DataAccessProject.Contracts.User;
 using System.Collections.Generic;
+using System.Linq;
+using System.Globalization;
+using System.Runtime.Remoting.Contexts;
 
 namespace DataAccessTestProject
 {
@@ -776,6 +779,276 @@ namespace DataAccessTestProject
 
 
     }
+
+    [TestClass]
+    public class GameAccessTest
+    {
+        private const int INT_VALIDATION_SUCCESS = 1;
+        private const int INT_VALIDATION_FAILURE = 0;
+        private const bool BOOL_VALIDATION_FAILURE = false;
+        private const string GAME_ID = "TestGameId"; 
+        private const int WINNER_TEAM_TEST = 1;
+        private const string USER_NICKNAME = "TestUser";
+        private static GameAccess gameAccess = new GameAccess();
+        private static UserAccess userAccess = new UserAccess();
+        
+
+
+        [TestMethod]
+        public void SuccessfullyCreateGame()
+        {
+            gameAccess.CleanupGame(GAME_ID);
+            Assert.IsTrue(gameAccess.CreateGame(GAME_ID));
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyCreateGame()
+        {
+            gameAccess.CleanupGame(GAME_ID);
+            gameAccess.CreateGame(GAME_ID);
+
+            Assert.IsTrue(gameAccess.CreateGame(GAME_ID) == BOOL_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccessfullyCreatePlayRelation()
+        {
+            gameAccess.CleanupGame(GAME_ID);
+            gameAccess.CreateGame(GAME_ID);
+            Assert.IsTrue(gameAccess.CreatePlaysRelation(USER_NICKNAME, GAME_ID, 1) == INT_VALIDATION_SUCCESS);
+
+        }
+
+        [TestMethod]
+        public void SuccessfullyGameIdIsReapeted()
+        {
+            gameAccess.CleanupGame(GAME_ID);
+            gameAccess.CreateGame(GAME_ID);
+            Assert.IsTrue(gameAccess.GameIdIsRepeated(GAME_ID));
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyGameIdIsReapeted()
+        {
+            gameAccess.CleanupGame(GAME_ID);
+            Assert.IsTrue(gameAccess.GameIdIsRepeated(GAME_ID) == BOOL_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccessfullyEndGame()
+        {
+            gameAccess.CleanupGame(GAME_ID);
+            gameAccess.CreateGame(GAME_ID);
+            Assert.IsTrue(gameAccess.EndGame(WINNER_TEAM_TEST, GAME_ID) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyEndGame()
+        {
+            gameAccess.CleanupGame(GAME_ID);
+            Assert.IsTrue(gameAccess.EndGame(WINNER_TEAM_TEST, "NotGameIdValid") == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccessfullyBanUser()
+        {
+            User userToBan = new User()
+            {
+                Nickname = "UserToBan",
+                ImageId = 1,
+                Mail = "UserToBan@hotmail.com",
+                Password = "password"
+            };
+
+            userAccess.CreateUser(userToBan);
+
+            Assert.IsTrue(gameAccess.BanUser(userToBan.Nickname) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyBanUser()
+        {
+            Assert.IsTrue(gameAccess.BanUser("NotValidNickname") == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccessfullyCanPlay()
+        {
+            User userCanPlay = new User()
+            {
+                Nickname = "UserCanPlay",
+                ImageId = 1,
+                Mail = "UserCanPlay@hotmail.com",
+                Password = "password"
+            };
+
+            userAccess.CreateUser(userCanPlay);
+
+            Assert.IsTrue(gameAccess.CanPlay(userCanPlay.Nickname) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyCanPlay()
+        {
+            User userCanPlay = new User()
+            {
+                Nickname = "UserCanPlayUnSuccess",
+                ImageId = 1,
+                Mail = "UserCanPlay@hotmail.com",
+                Password = "password"
+            };
+
+            userAccess.CreateUser(userCanPlay);
+            gameAccess.BanUser(userCanPlay.Nickname);
+
+            Assert.IsTrue(gameAccess.CanPlay(userCanPlay.Nickname) == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccessfullyCleanUpGame()
+        {
+            gameAccess.CreateGame(GAME_ID);
+
+            Assert.IsTrue(gameAccess.CleanupGame(GAME_ID) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyCleanUpGame()
+        {
+            gameAccess.CleanupGame(GAME_ID);
+            Assert.IsTrue(gameAccess.CleanupGame(GAME_ID) == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccessfullyRemoveBan()
+        {
+
+            User userBanToRemove = new User()
+            {
+                Nickname = "UserBanToRemove",
+                ImageId = 1,
+                Mail = "UserBanToRemove@hotmail.com",
+                Password = "password"
+            };
+
+            userAccess.CreateUser(userBanToRemove);
+            gameAccess.BanUser(userBanToRemove.Nickname);
+
+            Assert.IsTrue(gameAccess.RemoveBan(userBanToRemove.Nickname) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyRemoveBan()
+        {
+
+            User userBanToRemove = new User()
+            {
+                Nickname = "UserBanToRemove",
+                ImageId = 1,
+                Mail = "UserBanToRemove@hotmail.com",
+                Password = "password"
+            };
+
+            Assert.IsTrue(gameAccess.RemoveBan(userBanToRemove.Nickname) == INT_VALIDATION_FAILURE);
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            gameAccess.RemoveBan("UserToBan");
+            gameAccess.RemoveBan("UserCanPlayUnSuccess");
+
+            userAccess.DeleteUser("UserToBan");
+            userAccess.DeleteUser("UserToBanUn");
+            userAccess.DeleteUser("UserCanPlay");
+            userAccess.DeleteUser("UserCanPlayUnSuccess");
+            userAccess.DeleteUser("UserBanToRemove");
+        }
+
+
+    }
+
+    [TestClass]
+    public class GamekAccessTestExceptions
+    {
+        private const string GAME_ID = "TestGameId";
+        private const string USER_NICKNAME = "TestUser";
+        private const int WINNER_TEAM_TEST = 1;
+        private static GameAccess gameAccess = new GameAccess();
+
+        [TestMethod]
+        public void CreateGameEntityException()
+        {
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                gameAccess.CreateGame(GAME_ID);
+            });
+        }
+
+        [TestMethod]
+        public void CreatePLayRelationEntityException()
+        {
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                gameAccess.CreatePlaysRelation(USER_NICKNAME, GAME_ID, 1);
+            });
+        }
+
+        [TestMethod]
+        public void GameIdIsReaetedEntityException()
+        {
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                gameAccess.GameIdIsRepeated(GAME_ID);
+            });
+        }
+
+        [TestMethod]
+        public void EndGameEntityException()
+        {
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                gameAccess.EndGame(WINNER_TEAM_TEST, GAME_ID);
+            });
+        }
+
+        [TestMethod]
+        public void BanUserEntityException()
+        {
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                gameAccess.BanUser(USER_NICKNAME);
+            });
+        }
+
+        [TestMethod]
+        public void CanPlayEntityException()
+        {
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                gameAccess.CanPlay(USER_NICKNAME);
+            });
+        }
+
+        [TestMethod]
+        public void CleanUpGameEntityException()
+        {
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                gameAccess.CleanupGame(GAME_ID);
+            });
+        }
+
+        [TestMethod]
+        public void RemoveBanEntityException()
+        {
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                gameAccess.RemoveBan(USER_NICKNAME);
+            });
+        }
+    }
+
 
 }
 
