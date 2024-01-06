@@ -20,6 +20,9 @@ namespace DataAccessProject.Contracts
         bool GameIsNotFull(string gameId);
 
         [OperationContract()]
+        bool IsBanned(string nickname);
+
+        [OperationContract()]
         string SendFriendInvitation(string gameId, string userToSend);
 
         [OperationContract(IsOneWay = true)]

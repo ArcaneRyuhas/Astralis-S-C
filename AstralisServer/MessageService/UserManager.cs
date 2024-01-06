@@ -8,6 +8,7 @@ using DataAccessProject.DataAccess;
 using User = DataAccessProject.Contracts.User;
 using System.Data.SqlClient;
 using System.Data.Entity.Core;
+using DataAccessProject;
 
 namespace MessageService
 {
@@ -104,7 +105,6 @@ namespace MessageService
                 guestUser.Nickname = NICKNAME_ERROR;
             }
 
-
             return guestUser;
         }
 
@@ -128,8 +128,7 @@ namespace MessageService
                 log.Error(sqlException);
                 isFound = ERROR;
             }
-
-
+             
             return isFound;
         }
 
@@ -371,7 +370,7 @@ namespace MessageService
                 {
                     try
                     {
-                        if (usersContext.ContainsKey(user.Nickname))
+                        if (usersContext.ContainsKey(userInTheLobby))
                         {
                             usersContext[userInTheLobby].ShowDisconnectionInLobby(user);
                         }
@@ -528,6 +527,19 @@ namespace MessageService
                 }
             }
         }
+
+        public bool IsBanned(string nickname)
+        {
+            GameAccess gameAccess = new GameAccess();
+            bool banned = false;
+
+            if (gameAccess.CanPlay(nickname) == VALIDATION_FAILURE)
+            {
+                 banned = true;
+            }
+
+            return banned;
+        }
     }
 
     public partial class UserManager : IOnlineUserManager
@@ -541,7 +553,6 @@ namespace MessageService
         {
             lock (onlineUsers)
             {
-
                 IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
                 List<string> onlineNicknames = onlineUsers.Keys.ToList();
                 FriendAccess friendAccess = new FriendAccess();
@@ -553,21 +564,29 @@ namespace MessageService
                     {
                         onlineUsers.Add(nickname, currentUserCallbackChannel);
 
-                        foreach (var user in onlineUsers)
+                        try
                         {
-                            try
+                            foreach (var user in onlineUsers)
                             {
-                                if(user.Key != nickname)
+                                try
                                 {
-                                    user.Value.ShowUserConected(nickname);
+                                    if (user.Key != nickname)
+                                    {
+                                        user.Value.ShowUserConected(nickname);
+                                    }
+                                }
+                                catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                                {
+                                    DisconectUser(user.Key);
+                                    log.Error("Error in ConnectUser IOnlineUserManager\n" + communicationObjectAbortedException);
                                 }
                             }
-                            catch (CommunicationObjectAbortedException communicationObjectAbortedException)
-                            {
-                                DisconectUser(user.Key);
-                                log.Error("Error in ConnectUser IOnlineUserManager\n" + communicationObjectAbortedException);
-                            }
-                        }                       
+                        }
+                        catch (InvalidOperationException invalidOperationException) 
+                        {
+                            log.Error(invalidOperationException);
+                        }
+                                             
                     }
                     else
                     {
@@ -588,18 +607,24 @@ namespace MessageService
                 if (onlineUsers.ContainsKey(nickname))
                 {
                     onlineUsers.Remove(nickname);
-
-                    foreach (var user in onlineUsers)
+                    try
                     {
-                        try
+                        foreach (var user in onlineUsers)
                         {
-                            user.Value.ShowUserDisconected(nickname);
+                            try
+                            {
+                                user.Value.ShowUserDisconected(nickname);
+                            }
+                            catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                            {
+                                onlineUsers.Remove(user.Key);
+                                log.Error("Error in DisconnectUser method ", communicationObjectAbortedException);
+                            }
                         }
-                        catch (CommunicationObjectAbortedException communicationObjectAbortedException)
-                        {
-                            onlineUsers.Remove(user.Key);
-                            log.Error("Error in DisconnectUser method ", communicationObjectAbortedException);
-                        }
+                    }
+                    catch (InvalidOperationException invalidOperationException)
+                    {
+                        log.Error(invalidOperationException);
                     }
                 }
             }
@@ -778,7 +803,7 @@ namespace MessageService
                         }
                         catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                         {
-                            log.Error(communicationObjectAbortedException);
+                            log.Error("Error in ConnectGame " + communicationObjectAbortedException);
                             EndGame(GAME_ABORTED, nickname);
                         }
                     }
@@ -825,17 +850,10 @@ namespace MessageService
                     }
                     catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                     {
-                        log.Error(communicationObjectAbortedException);
+                        log.Error("Error in DrawCard " + communicationObjectAbortedException);
                         EndGame(GAME_ABORTED, nickname);
                     }
                 }
-            }
-
-            Console.WriteLine("USER: " + nickname) ;
-
-            foreach (int card in cardsId)
-            {
-                Console.WriteLine($"{card}");
             }
 
             ChangeMultiple();
@@ -844,32 +862,35 @@ namespace MessageService
         public void EndGame(int winnerTeam, string nickname)
         {
             Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
-            string user = "";
 
+            GameAccess gameAccess = new GameAccess();
+            gameAccess.EndGame(winnerTeam, usersInLobby[nickname]);
 
             foreach (string userInGame in usersInGame.Keys)
             {
                 try
                 {
-
                     if (usersInGameContext.ContainsKey(userInGame))
                     {
-                        user = userInGame;
                         usersInGameContext[userInGame].EndGameClient(winnerTeam);
                     }
                 }
                 catch (FaultException faultException)
                 {
-                    if (usersInGameContext.ContainsKey(user))
+                    if (usersInGameContext.ContainsKey(userInGame))
                     {
-                        usersInGameContext.Remove(user);
+                        usersInGameContext.Remove(userInGame);
                     }
                     log.Error(faultException.Message);
                 }
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
                     log.Error(communicationObjectAbortedException);
-                    usersInGameContext.Remove(user);
+                    usersInGameContext.Remove(userInGame);
+                }
+                catch (ObjectDisposedException objectDisposedException)
+                {
+                    log.Error(objectDisposedException);
                 }
             } 
             
@@ -908,6 +929,11 @@ namespace MessageService
                         log.Error(communicationObjectAbortedException);
                         EndGame(GAME_ABORTED, nickname);
                     }
+                    catch (FaultException faultException)
+                    {
+                        log.Error(faultException);
+                        EndGame(GAME_ABORTED, nickname);
+                    }
                 }
             }
         }
@@ -926,16 +952,20 @@ namespace MessageService
 
         private Dictionary<string, int> GetUsersPerTeam(string nickname)
         {
-            List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[nickname]);
             Dictionary<string, int> usersInGame = new Dictionary<string, int>();
 
-            foreach (string userNickname in usersNickname)
+            if (usersInLobby.ContainsKey(nickname))
             {
-                if (usersInGameContext.ContainsKey(userNickname))
+                List<string> usersNickname = FindKeysByValue(usersInLobby, usersInLobby[nickname]);
+
+                foreach (string userNickname in usersNickname)
                 {
-                    usersInGame.Add(userNickname, usersTeam[userNickname]);
+                    if (usersInGameContext.ContainsKey(userNickname))
+                    {
+                        usersInGame.Add(userNickname, usersTeam[userNickname]);
+                    }
                 }
-            }
+            }            
 
             return usersInGame;
         }
@@ -1017,12 +1047,17 @@ namespace MessageService
 
         public void GameEnded(string nickname)
         {
+            RemoveUser(nickname);
+        }
+
+        private void RemoveUser(string nickname)
+        {
             if(usersInGameContext.ContainsKey(nickname))
             {
                 usersInGameContext.Remove(nickname);
             }
-            
-            if(usersInLobby.ContainsKey(nickname))
+
+            if (usersInLobby.ContainsKey(nickname))
             {
                 usersInLobby.Remove(nickname);
             }

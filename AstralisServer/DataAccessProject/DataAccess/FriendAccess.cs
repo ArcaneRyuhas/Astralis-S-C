@@ -14,6 +14,9 @@ namespace DataAccessProject.DataAccess
         private const bool ONLINE = true;
         private const bool OFFLINE = false;
         private const bool ACCEPTED_FRIEND = true;
+        private const int INT_VALIDATION_SUCCESS = 1;
+        private const int INT_VALIDATION_FAILURE = 0;
+        private UserAccess userAccess = new UserAccess();
 
         public FriendAccess() { }  
 
@@ -89,7 +92,7 @@ namespace DataAccessProject.DataAccess
 
         public int ReplyFriendRequest(string nicknameReciever, string nicknameSender, bool answer)
         {
-            int result = 0;
+            int result = INT_VALIDATION_FAILURE;
 
             using (var context = new AstralisDBEntities())
             {
@@ -115,6 +118,11 @@ namespace DataAccessProject.DataAccess
                         }
 
                         result = context.SaveChanges();
+
+                        if (result !=  INT_VALIDATION_FAILURE)
+                        {
+                            result = INT_VALIDATION_SUCCESS;
+                        }
                     }
                 }
                 catch (SqlException sqlException)
@@ -133,14 +141,16 @@ namespace DataAccessProject.DataAccess
             {
                 try
                 {
-                    context.Database.Log = Console.WriteLine;
-                    var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
+                    if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS){
+                        context.Database.Log = Console.WriteLine;
+                        var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
 
-                    friendList = AddFriendToDictionary(onlineUsers, databaseFriends, nickname);
+                        friendList = AddFriendToDictionary(onlineUsers, databaseFriends, nickname);
 
-                    var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname || f.Nickname1 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
+                        var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname || f.Nickname1 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
 
-                    AddPendingRequests(pendingRequests, nickname, friendList);
+                        AddPendingRequests(pendingRequests, nickname, friendList);
+                    }
                 }
                 catch (SqlException sqlException)
                 {
