@@ -23,15 +23,16 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="80"/>
             </Grid.RowDefinitions>
+            
             <local:AstralisAnimation Grid.Column="1" Grid.Row="0" Margin="10,0,10,0" />
             <TextBox Template="{DynamicResource TextBoxTemplateNormal}" x:Name="tbNickname" PreviewTextInput="TextFilterForNickname" HorizontalAlignment="Center" Margin="0,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1" Grid.Column="1" KeyDown="EnterKeyDownHandler"/>
-            <PasswordBox Template="{DynamicResource PasswordBoxTemplate}" x:Name="pbPassword" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="120" Grid.Row="1" Grid.Column="1" KeyDown="EnterKeyDownHandler"/>
+            <PasswordBox Template="{DynamicResource PasswordBoxTemplate}" PreviewTextInput="TextLimeterForPassword" x:Name="pbPassword" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="120" Grid.Row="1" Grid.Column="1" KeyDown="EnterKeyDownHandler"/>
             <Label x:Name="lbUser" Content="{x:Static p:Resources.lblNickname}" HorizontalAlignment="Center" Margin="0,100,0,0" VerticalAlignment="Top" FontSize="25" Grid.Row="1" Grid.Column="1"/>
             <Label x:Name="lbPassword" Content="{x:Static p:Resources.lblPassword}" HorizontalAlignment="Center" Margin="0,250,0,0" VerticalAlignment="Top" FontSize="25" Grid.Row="1" Grid.Column="1"/>
             <Button Template="{DynamicResource ButtonTemplateNormal}" x:Name="btnLogIn" Content="{x:Static p:Resources.btnLogIn}" HorizontalAlignment="Left" Margin="21,0,0,0" VerticalAlignment="Center" Click="BtnLogInClick" FontSize="25" Grid.Row="2" Grid.Column="0"/>
             <Button Template="{DynamicResource ButtonTemplateNormal}" x:Name="btnSignIn" Content="{x:Static p:Resources.btnRegister}" HorizontalAlignment="Right" Margin="0,0,20,0" VerticalAlignment="Center" Click="BtnRegisterClick" FontSize="25" RenderTransformOrigin="0.439,-0.481" Grid.Column="2" Grid.Row="2"/>
-            <Button Template="{DynamicResource ButtonTemplateNormal}" x:Name="btnJoinAsGuest" Grid.Column="1" Grid.Row="1" Content="btnJoinAsGuest" Width="130" Height="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="BtnJoinAsGuestClick"/>
-            <TextBlock Style="{StaticResource TextBlockError}" TextAlignment="Center" x:Name="txbInvalidFields" Margin="0,432,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Visibility="Hidden" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
+            <Button Template="{DynamicResource ButtonTemplateNormal}" x:Name="btnJoinAsGuest" Grid.Column="1" Grid.Row="1" Content="{x:Static p:Resources.btnJoinAsGuest}" Width="Auto" Height="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="BtnJoinAsGuestClick"/>
+            <TextBlock Style="{StaticResource TextBlockError}" TextAlignment="Center" x:Name="txbInvalidFields" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Visibility="Hidden" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center"/>
 
         </Grid>
     </Grid>

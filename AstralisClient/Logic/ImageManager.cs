@@ -10,11 +10,11 @@ namespace Astralis.Logic
     {
 
         private static ImageManager instance;
-        private Dictionary<int, Bitmap> imageMap;
+        private Dictionary<int, Bitmap> _imageMap;
 
         private ImageManager() 
         {
-            imageMap = new Dictionary<int, Bitmap>()
+            _imageMap = new Dictionary<int, Bitmap>()
             {
                 {1, ImageResource.Window},
                 {2, ImageResource.Piranhas},
@@ -42,12 +42,12 @@ namespace Astralis.Logic
 
         public int GetImageCount()
         {
-            return imageMap.Count;
+            return _imageMap.Count;
         }
 
         public BitmapImage GetImage(int imageId)
         {
-            Bitmap image = imageMap[imageId];
+            Bitmap image = _imageMap[imageId];
             return ConvertBitmapToBitmapImage(image);
         }
 

@@ -7,16 +7,16 @@ namespace Astralis.Views
 {
     public partial class GameWindow : Window
     {
-        MainMenu mainMenu;
+        private MainMenu _mainMenu;
 
         public GameWindow()
         {
             InitializeComponent();
             ImageManager.Instance();
 
-            mainMenu = new MainMenu(this);
-            mainMenu.CloseWindowEvent += CloseWindowEventHandler;
-            mainFrame.Content = mainMenu;
+            _mainMenu = new MainMenu(this);
+            _mainMenu.CloseWindowEvent += CloseWindowEventHandler;
+            mainFrame.Content = _mainMenu;
         }
 
         public void ChangePage(Page pageToSet)

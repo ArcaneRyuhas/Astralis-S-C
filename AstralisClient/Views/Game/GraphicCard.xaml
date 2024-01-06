@@ -5,10 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Astralis.Views.Game"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="142
-             ">
+             d:DesignHeight="200" d:DesignWidth="142">
     <Grid>
 
+        <Grid>
+            <Grid.Background>
+                <ImageBrush x:Name="imageBrushCardBack" ImageSource="InGameAssets/CardBack.png"/>
+            </Grid.Background>
+        </Grid>
+        
         <Grid x:Name="gdCard" MouseLeftButtonDown="GraphicCardOnLeftClick" MouseRightButtonDown="GraphicCardOnRightClick">
             <Grid.Background>
                 <ImageBrush x:Name="imageBrushCard" ImageSource="InGameAssets/Card.png"/>

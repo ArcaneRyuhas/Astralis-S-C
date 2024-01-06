@@ -419,6 +419,12 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameIsNotFull", ReplyAction="http://tempuri.org/ILobbyManager/GameIsNotFullResponse")]
         System.Threading.Tasks.Task<bool> GameIsNotFullAsync(string gameId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/IsBanned", ReplyAction="http://tempuri.org/ILobbyManager/IsBannedResponse")]
+        bool IsBanned(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/IsBanned", ReplyAction="http://tempuri.org/ILobbyManager/IsBannedResponse")]
+        System.Threading.Tasks.Task<bool> IsBannedAsync(string nickname);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/SendFriendInvitation", ReplyAction="http://tempuri.org/ILobbyManager/SendFriendInvitationResponse")]
         string SendFriendInvitation(string gameId, string userToSend);
         
@@ -545,6 +551,14 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task<bool> GameIsNotFullAsync(string gameId) {
             return base.Channel.GameIsNotFullAsync(gameId);
+        }
+        
+        public bool IsBanned(string nickname) {
+            return base.Channel.IsBanned(nickname);
+        }
+        
+        public System.Threading.Tasks.Task<bool> IsBannedAsync(string nickname) {
+            return base.Channel.IsBannedAsync(nickname);
         }
         
         public string SendFriendInvitation(string gameId, string userToSend) {
@@ -769,6 +783,12 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartFirstPhase")]
         System.Threading.Tasks.Task StartFirstPhaseAsync(string hostNickname);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/SendMessageGame")]
+        void SendMessageGame(string message, string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/SendMessageGame")]
+        System.Threading.Tasks.Task SendMessageGameAsync(string message, string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -791,6 +811,9 @@ namespace Astralis.UserManager {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/EndGameClient", ReplyAction="http://tempuri.org/IGameManager/EndGameClientResponse")]
         void EndGameClient(int winnerTeam);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ReceiveMessageGame", ReplyAction="http://tempuri.org/IGameManager/ReceiveMessageGameResponse")]
+        void ReceiveMessageGame(string message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -867,6 +890,14 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task StartFirstPhaseAsync(string hostNickname) {
             return base.Channel.StartFirstPhaseAsync(hostNickname);
+        }
+        
+        public void SendMessageGame(string message, string nickname) {
+            base.Channel.SendMessageGame(message, nickname);
+        }
+        
+        public System.Threading.Tasks.Task SendMessageGameAsync(string message, string nickname) {
+            return base.Channel.SendMessageGameAsync(message, nickname);
         }
     }
     

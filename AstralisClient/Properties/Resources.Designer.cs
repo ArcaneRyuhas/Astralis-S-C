@@ -133,6 +133,24 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unirse.
+        /// </summary>
+        public static string btnJoin {
+            get {
+                return ResourceManager.GetString("btnJoin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unirse como invitado.
+        /// </summary>
+        public static string btnJoinAsGuest {
+            get {
+                return ResourceManager.GetString("btnJoinAsGuest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to UNIRSE A PARTIDA.
         /// </summary>
         public static string btnJoinGame {
@@ -246,6 +264,15 @@ namespace Astralis.Properties {
         public static string cbxTeamTwo {
             get {
                 return ResourceManager.GetString("cbxTeamTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Código:.
+        /// </summary>
+        public static string lblCodeInvitation {
+            get {
+                return ResourceManager.GetString("lblCodeInvitation", resourceCulture);
             }
         }
         
@@ -475,6 +502,33 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Equipo: .
+        /// </summary>
+        public static string lblUserTeam {
+            get {
+                return ResourceManager.GetString("lblUserTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No es tu turno.
+        /// </summary>
+        public static string lblUserTurnFalse {
+            get {
+                return ResourceManager.GetString("lblUserTurnFalse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Es tu turno.
+        /// </summary>
+        public static string lblUserTurnTrue {
+            get {
+                return ResourceManager.GetString("lblUserTurnTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Volumen.
         /// </summary>
         public static string lblVolume {
@@ -489,6 +543,15 @@ namespace Astralis.Properties {
         public static string lblWinnerTeam {
             get {
                 return ResourceManager.GetString("lblWinnerTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estas baneado, intenta mas tarde..
+        /// </summary>
+        public static string msgBanned {
+            get {
+                return ResourceManager.GetString("msgBanned", resourceCulture);
             }
         }
         
@@ -552,6 +615,15 @@ namespace Astralis.Properties {
         public static string msgFriendRequestSuccessful {
             get {
                 return ResourceManager.GetString("msgFriendRequestSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El lobby esta lleno o no existe.
+        /// </summary>
+        public static string msgGameIsFullOrLobbyDoesntExist {
+            get {
+                return ResourceManager.GetString("msgGameIsFullOrLobbyDoesntExist", resourceCulture);
             }
         }
         
@@ -727,27 +799,6 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reglas de la contraseña.
-        /// </summary>
-        public static string tpPasswordHelp {
-            get {
-                return ResourceManager.GetString("tpPasswordHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Al menos 8 caracteres
-        ///Al menos 1 número
-        ///Al menos 1 simbolo
-        ///Al menos 1 mayuscula.
-        /// </summary>
-        public static string tpPasswordRules {
-            get {
-                return ResourceManager.GetString("tpPasswordRules", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Este campo no puede estar vacío.
         /// </summary>
         public static string txbEmptyFieldError {
@@ -766,6 +817,20 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reglas de la contraseña:
+        ///
+        ///Al menos 8 caracteres
+        ///Al menos 1 número
+        ///Al menos 1 simbolo
+        ///Al menos 1 mayuscula.
+        /// </summary>
+        public static string txbPasswordRules {
+            get {
+                return ResourceManager.GetString("txbPasswordRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Escribe algo....
         /// </summary>
         public static string txtChat {
@@ -780,6 +845,15 @@ namespace Astralis.Properties {
         public static string txtFriendMail {
             get {
                 return ResourceManager.GetString("txtFriendMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Escribe un nombre....
+        /// </summary>
+        public static string txtSearchUser {
+            get {
+                return ResourceManager.GetString("txtSearchUser", resourceCulture);
             }
         }
     }

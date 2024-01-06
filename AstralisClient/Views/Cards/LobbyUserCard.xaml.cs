@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using Astralis.Logic;
 using System.ServiceModel;
 
-namespace Astralis.Views.Animations
+namespace Astralis.Views.Cards
 {
 
     public partial class LobbyUserCard : UserControl
@@ -14,7 +14,7 @@ namespace Astralis.Views.Animations
         private const int TEAM_ONE = 1;
         private const int TEAM_TWO = 2;
 
-        private List<string> _itemsList { get; set; }
+        private List<string> _itemsList;
         private string _userNickname;
         private int _team;
         public event EventHandler<Tuple<string, int>> TeamSelectionChanged;
@@ -47,8 +47,6 @@ namespace Astralis.Views.Animations
             if (!isHost)
             {
                 btnKickout.Visibility = Visibility.Collapsed;
-
-                
             }
             else
             {
@@ -56,7 +54,6 @@ namespace Astralis.Views.Animations
                 {
                     btnKickout.Visibility = Visibility.Collapsed;
                 }
-
             }
         }
 
@@ -64,12 +61,12 @@ namespace Astralis.Views.Animations
         {
             if (team == TEAM_ONE)
             {
-                this._team = TEAM_ONE;
+                _team = TEAM_ONE;
                 cbxTeam.SelectedItem = Properties.Resources.cbxTeamOne;
             }
             else if (team == TEAM_TWO)
             {
-                this._team = TEAM_TWO;
+                _team = TEAM_TWO;
                 cbxTeam.SelectedItem = Properties.Resources.cbxTeamTwo;
             }
         }
@@ -79,7 +76,7 @@ namespace Astralis.Views.Animations
             return _userNickname == UserSession.Instance().Nickname;
         }
 
-        private void cbxTeam_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbxTeamSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cbxTeam.SelectedValue != null && IsTheClientCard())
             {
@@ -91,7 +88,7 @@ namespace Astralis.Views.Animations
                 }
                 else
                 {
-                    _team = TEAM_ONE;
+                    _team = TEAM_TWO;
                     TeamSelectionChanged?.Invoke(this, new Tuple<string, int>(_userNickname, TEAM_TWO));
                 }
                 

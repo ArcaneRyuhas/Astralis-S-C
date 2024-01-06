@@ -6,7 +6,7 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Astralis.Views.Animations
+namespace Astralis.Views.Cards
 {
 
     public partial class FriendWindow : UserControl, UserManager.IOnlineUserManagerCallback
@@ -19,16 +19,16 @@ namespace Astralis.Views.Animations
         private const bool IS_OFFLINE = false;
         private const bool ACCEPTED_FRIEND = true;
         private const string LOBBY_WINDOW = "LOBBY";
+
         private int _cardsAddedRow = 0;
-        private string typeFriendWindow = "";
+        private string _typeFriendWindow = "";
+        private Dictionary<string, Tuple<bool, int>> _friendList = new Dictionary<string, Tuple<bool, int>>();
 
         public event EventHandler<string> SendGameInvitation;
 
-        private Dictionary<string, Tuple<bool, int>> _friendList = new Dictionary<string, Tuple<bool, int>>();
-
         public FriendWindow(string typeFriendWindow)
         {
-            this.typeFriendWindow = typeFriendWindow;
+            this._typeFriendWindow = typeFriendWindow;
             InitializeComponent();
             Connect();
             if(typeFriendWindow == LOBBY_WINDOW)
@@ -41,7 +41,7 @@ namespace Astralis.Views.Animations
         private void Connect()
         {
             InstanceContext context = new InstanceContext(this);
-            UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
+            OnlineUserManagerClient client = new OnlineUserManagerClient(context);
 
             try
             {
@@ -57,7 +57,7 @@ namespace Astralis.Views.Animations
         public void Disconnect()
         {
             InstanceContext context = new InstanceContext(this);
-            UserManager.OnlineUserManagerClient client = new UserManager.OnlineUserManagerClient(context);
+            OnlineUserManagerClient client = new OnlineUserManagerClient(context);
 
             try
             {
@@ -104,7 +104,7 @@ namespace Astralis.Views.Animations
             lastRowDefinition.Height = new GridLength(1, GridUnitType.Star);
             gdFriends.RowDefinitions.Add(lastRowDefinition);
 
-            if (typeFriendWindow == LOBBY_WINDOW)
+            if (_typeFriendWindow == LOBBY_WINDOW)
             {
                 txtSearchUser.Visibility = Visibility.Collapsed;
             }
@@ -117,7 +117,7 @@ namespace Astralis.Views.Animations
             card.RemoveFriendEvent += RemoveFriendEvent;
             card.SendGameInvitation += SendGameInvitationEvent;
             
-            if (typeFriendWindow == LOBBY_WINDOW)
+            if (_typeFriendWindow == LOBBY_WINDOW)
             {
                 card.SetLobbyCard(friendOnlineKey, friendOnlineValue, friendStatus);
             }
@@ -133,22 +133,6 @@ namespace Astralis.Views.Animations
             RowDefinition rowDefinition = new RowDefinition();
             rowDefinition.Height = GridLength.Auto;
             gdFriends.RowDefinitions.Add(rowDefinition);
-        }
-
-
-
-        private void btnSendFriendRequest_Click(object sender, RoutedEventArgs e)
-        {
-            string friendUsername = txtSearchUser.Text.Trim();
-
-            if (friendUsername != UserSession.Instance().Nickname)
-            {
-                SendFriendRequest(friendUsername);
-            }
-            else
-            {
-                MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
         public void ShowUserConected(string nickname)
@@ -220,51 +204,6 @@ namespace Astralis.Views.Animations
             _friendList.Add(nickname, friendTuple);
 
             SetFriendWindow();
-        }
-
-        private void SendFriendRequest(string friendUsername)
-        {
-            if (!string.IsNullOrEmpty(friendUsername))
-            {
-                InstanceContext context = new InstanceContext(this);
-
-                using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
-                {
-                    try
-                    {
-                        int requestSent = client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
-
-                        if (requestSent == Constants.VALIDATION_SUCCESS)
-                        {
-                            MessageBox.Show(Properties.Resources.msgFriendRequestSuccessful, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else if(requestSent == Constants.ERROR)
-                        {
-                            MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                            Disconnect();
-                            App.RestartApplication();
-                        }
-                        else
-                        {
-                            MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    catch (CommunicationException)
-                    {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        App.RestartApplication();
-                    }
-                    catch (TimeoutException)
-                    {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        App.RestartApplication();
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show(Properties.Resources.msgUsernameMissing, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
         }
 
         private void ReplyToFriendRequestEvent(object sender, Tuple<string, bool> e)
@@ -368,6 +307,65 @@ namespace Astralis.Views.Animations
         {
             _friendList.Remove(nickname);
             SetFriendWindow();
+        }
+
+        private void BtnSendFriendRequestClick(object sender, RoutedEventArgs e)
+        {
+            string friendUsername = txtSearchUser.Text.Trim();
+
+            if (friendUsername != UserSession.Instance().Nickname)
+            {
+                SendFriendRequest(friendUsername);
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SendFriendRequest(string friendUsername)
+        {
+            if (!string.IsNullOrEmpty(friendUsername))
+            {
+                InstanceContext context = new InstanceContext(this);
+
+                using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
+                {
+                    try
+                    {
+                        int requestSent = client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
+
+                        if (requestSent == Constants.VALIDATION_SUCCESS)
+                        {
+                            MessageBox.Show(Properties.Resources.msgFriendRequestSuccessful, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else if (requestSent == Constants.ERROR)
+                        {
+                            MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                            Disconnect();
+                            App.RestartApplication();
+                        }
+                        else
+                        {
+                            MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    catch (CommunicationException)
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
+                    }
+                    catch (TimeoutException)
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.msgUsernameMissing, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }

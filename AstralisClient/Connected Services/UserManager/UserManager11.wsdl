@@ -123,6 +123,12 @@
   <wsdl:message name="ILobbyManager_GameIsNotFull_OutputMessage">
     <wsdl:part name="parameters" element="tns:GameIsNotFullResponse" />
   </wsdl:message>
+  <wsdl:message name="ILobbyManager_IsBanned_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsBanned" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_IsBanned_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsBannedResponse" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_SendFriendInvitation_InputMessage">
     <wsdl:part name="parameters" element="tns:SendFriendInvitation" />
   </wsdl:message>
@@ -270,6 +276,9 @@
   <wsdl:message name="IGameManager_StartFirstPhase_InputMessage">
     <wsdl:part name="parameters" element="tns:StartFirstPhase" />
   </wsdl:message>
+  <wsdl:message name="IGameManager_SendMessageGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessageGame" />
+  </wsdl:message>
   <wsdl:message name="IGameManager_ShowUserConnectedGame_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowUserConnectedGame" />
   </wsdl:message>
@@ -305,6 +314,12 @@
   </wsdl:message>
   <wsdl:message name="IGameManager_EndGameClient_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:EndGameClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ReceiveMessageGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessageGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ReceiveMessageGame_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessageGameResponse" />
   </wsdl:message>
   <wsdl:message name="IEndGame_GetUsersWithTeam_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUsersWithTeam" />
@@ -370,6 +385,10 @@
     <wsdl:operation name="GameIsNotFull">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFull" message="tns:ILobbyManager_GameIsNotFull_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFullResponse" message="tns:ILobbyManager_GameIsNotFull_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsBanned">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/IsBanned" message="tns:ILobbyManager_IsBanned_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/IsBannedResponse" message="tns:ILobbyManager_IsBanned_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SendFriendInvitation">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/SendFriendInvitation" message="tns:ILobbyManager_SendFriendInvitation_InputMessage" />
@@ -486,6 +505,9 @@
     <wsdl:operation name="StartFirstPhase">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhase" message="tns:IGameManager_StartFirstPhase_InputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendMessageGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/SendMessageGame" message="tns:IGameManager_SendMessageGame_InputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ShowUserConnectedGame">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ShowUserConnectedGame" message="tns:IGameManager_ShowUserConnectedGame_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ShowUserConnectedGameResponse" message="tns:IGameManager_ShowUserConnectedGame_InputCallbackMessage" />
@@ -509,6 +531,10 @@
     <wsdl:operation name="EndGameClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/EndGameClient" message="tns:IGameManager_EndGameClient_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGameClientResponse" message="tns:IGameManager_EndGameClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessageGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ReceiveMessageGame" message="tns:IGameManager_ReceiveMessageGame_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ReceiveMessageGameResponse" message="tns:IGameManager_ReceiveMessageGame_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEndGame">
@@ -628,6 +654,15 @@
     </wsdl:operation>
     <wsdl:operation name="GameIsNotFull">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GameIsNotFull" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsBanned">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/IsBanned" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -883,6 +918,12 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
+    <wsdl:operation name="SendMessageGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/SendMessageGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="ShowUserConnectedGame">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/ShowUserConnectedGame" style="document" />
       <wsdl:input>
@@ -930,6 +971,15 @@
     </wsdl:operation>
     <wsdl:operation name="EndGameClient">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/EndGameClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessageGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/ReceiveMessageGame" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

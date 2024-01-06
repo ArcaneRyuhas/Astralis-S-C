@@ -46,7 +46,7 @@ namespace Astralis.Views.Game
         {
             Connect();
             SetTeams();
-            _gameManager = new GameManager();
+            _gameManager = new GameManager(gdEnemySlots, gdPlayerSlots);
             lblMyNickname.Content = UserSession.Instance().Nickname;
 
             _gameManager.SetGameBoard(this);
@@ -64,12 +64,12 @@ namespace Astralis.Views.Game
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -88,7 +88,6 @@ namespace Astralis.Views.Game
             _gameManager.UserDeckQueue = new Queue<int>(userDeck);
         }
 
-
         //We preferred to leave the DrawFourCards in this class because we need to make graphic cards for every card that is drawn.
         private void DrawFourCards()
         {
@@ -104,16 +103,15 @@ namespace Astralis.Views.Game
             try
             {
                 _client.DrawCard(myNickname, drawnCard);
-
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -129,12 +127,12 @@ namespace Astralis.Views.Game
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -143,10 +141,10 @@ namespace Astralis.Views.Game
         private void SetTeams()
         {
             _userTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
-            _userTeam.PropertyChanged += UserTeam_PropertyChanged;
+            _userTeam.PropertyChanged += UserTeamPropertyChanged;
 
             _enemyTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
-            _enemyTeam.PropertyChanged += EnemyTeam_PropertyChange;
+            _enemyTeam.PropertyChanged += EnemyTeamPropertyChange;
         }
 
         public void EndGameTurn()
@@ -154,16 +152,15 @@ namespace Astralis.Views.Game
             try
             {
                 _client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
-
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -175,11 +172,11 @@ namespace Astralis.Views.Game
 
             foreach (UIElement child in gdPlayerSlots.Children)
             {
-                if (child is Grid)
+                if (child is Grid grid)
                 {
                     counter++;
 
-                    Grid innerGrid = (Grid)child;
+                    Grid innerGrid = grid;
                     int cardId = ERROR_CARD_ID;
 
                     foreach (GraphicCard innerCard in innerGrid.Children)
@@ -203,9 +200,8 @@ namespace Astralis.Views.Game
 
             foreach (UIElement child in gdBoard.Children)
             {
-                if (child is Grid)
+                if (child is Grid innerGrid)
                 {
-                    Grid innerGrid = (Grid)child;
                     GraphicCard graphicCard = new GraphicCard();
                     graphicCard.SetGraphicCard(CardManager.Instance().GetCard(ERROR_CARD_ID));
 
@@ -223,7 +219,7 @@ namespace Astralis.Views.Game
             return attackBoard;
         }
 
-        private void UserTeam_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void UserTeamPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             string changedProperty = e.PropertyName;
 
@@ -237,7 +233,7 @@ namespace Astralis.Views.Game
             }
         }
 
-        private void EnemyTeam_PropertyChange(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void EnemyTeamPropertyChange(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             string changedProperty = e.PropertyName;
 
@@ -388,12 +384,12 @@ namespace Astralis.Views.Game
                 }
                 catch (CommunicationException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.RestartApplication();
                 }
                 catch (TimeoutException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.RestartApplication();
                 }
             }
@@ -405,25 +401,17 @@ namespace Astralis.Views.Game
             EndGame endGame = new EndGame(winnerTeam, _gameManager.UsersTeam[myNickname]);
 
             GameWindow gameWindow = new GameWindow();
+
+            endGame.EndGameWindow = gameWindow;
             gameWindow.ChangePage(endGame);
             gameWindow.Visibility = Visibility.Visible;
             
             this.Close();
         }
 
-        public void ErrorEndGameClient()
-        {
-            MessageBox.Show("msgAPlayerHasDisconnected ", "titlePlayerDisconnected", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            GameWindow gameWindow = new GameWindow();
-            
-            gameWindow.Show();
-            this.Close();
-        }
-
         public void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn)
         {
-            _gameManager.PlayerEndedTurn(player, boardAfterTurn, gdEnemySlots, gdPlayerSlots);
+            _gameManager.PlayerEndedTurn(player, boardAfterTurn);
         }
 
         public void TakeCardOutOfHand(string nickname, GraphicCard graphicCardToRemove, Dictionary<string, int> usersTeam)
@@ -446,12 +434,15 @@ namespace Astralis.Views.Game
         {
             foreach (GraphicCard graphicCard in gridToModify.Children)
             {
-                if (graphicCard.Card.Equals(graphicCardToRemove.Card))
+                if (graphicCardToRemove.Card != null && graphicCard.Card != null)
                 {
-                    int columnIndex = Grid.GetColumn(graphicCard);
-                    gdAllyHand.Children.Remove(graphicCard);
-                    RemoveColumn(gdAllyHand, columnIndex);
-                    break;
+                    if (graphicCard.Card.Equals(graphicCardToRemove.Card))
+                    {
+                        int columnIndex = Grid.GetColumn(graphicCard);
+                        gdAllyHand.Children.Remove(graphicCard);
+                        RemoveColumn(gdAllyHand, columnIndex);
+                        break;
+                    }
                 }
             }
         }
@@ -467,7 +458,7 @@ namespace Astralis.Views.Game
         {
             _gameManager.UsersTeam = users;
 
-            lblUserTeam.Content += _gameManager.UsersTeam[UserSession.Instance().Nickname].ToString(); //CAMBIAR DESPUES DE PROBAR
+            lblUserTeam.Content += _gameManager.UsersTeam[UserSession.Instance().Nickname].ToString();
 
             _ = StartGameAsync();
         }
@@ -484,7 +475,7 @@ namespace Astralis.Views.Game
             Card card = CardManager.Instance().GetCard(ENEMY_CARD);
             GraphicCard graphicCardOne = new GraphicCard();
 
-            graphicCardOne.SetGraphicCard(card);
+           graphicCardOne.SetGraphicCard(card);
 
             GraphicCard graphicCardTwo = new GraphicCard();
 
@@ -509,20 +500,26 @@ namespace Astralis.Views.Game
                     }
                     catch (CommunicationException)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         App.RestartApplication();
                     }
                     catch (TimeoutException)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         App.RestartApplication();
                     }
                 }
             }
         }
 
+        public void ReceiveMessageGame(string message)
+        {
+            tbChat.Text = tbChat.Text + "\n" + message;
+        }
+
         private void BtnMenuClick(object sender, RoutedEventArgs e)
         {
+            lblUserTurn.Content = Properties.Resources.lblUserTurnFalse;
             _gameManager.EndTurn();
         }
 
@@ -544,6 +541,38 @@ namespace Astralis.Views.Game
             }
         }
 
+        private void BtnOpenChatClick(object sender, RoutedEventArgs e)
+        {
+            if (gdChat.IsVisible)
+            {
+                gdChat.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                gdChat.Visibility = Visibility.Visible;
+            }
+        }
 
+        private void BtnSendMessageClick(object sender, RoutedEventArgs e)
+        {
+
+            string nickname = UserSession.Instance().Nickname;
+            string message = nickname + ": " + txtChat.Text;
+            txtChat.Text = Properties.Resources.txtChat;
+            try
+            {
+                _client.SendMessageGame(message, nickname);
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+        }
     }
 }

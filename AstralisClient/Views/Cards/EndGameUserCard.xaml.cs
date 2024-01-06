@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Astralis.Views.Animations
+namespace Astralis.Views.Cards
 {
     /// <summary>
     /// Interaction logic for EndGameUserCard.xaml
@@ -27,7 +27,7 @@ namespace Astralis.Views.Animations
             InitializeComponent();
         }
 
-        public void setCard(UserWithTeam user, int team)
+        public void SetCard(UserWithTeam user, int team)
         {
             string userNickname = user.Nickname;
             string teamString = team.ToString();

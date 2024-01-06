@@ -141,6 +141,12 @@
   <data name="btnFriends" xml:space="preserve">
     <value>Friends</value>
   </data>
+  <data name="btnJoin" xml:space="preserve">
+    <value>Join</value>
+  </data>
+  <data name="btnJoinAsGuest" xml:space="preserve">
+    <value>Join as guest</value>
+  </data>
   <data name="btnJoinGame" xml:space="preserve">
     <value>JOIN GAME</value>
   </data>
@@ -179,6 +185,9 @@
   </data>
   <data name="cbxTeamTwo" xml:space="preserve">
     <value>Team 2</value>
+  </data>
+  <data name="lblCodeInvitation" xml:space="preserve">
+    <value>Code:</value>
   </data>
   <data name="lblConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>
@@ -255,11 +264,23 @@
   <data name="lblTitle" xml:space="preserve">
     <value>ASTRALIS</value>
   </data>
+  <data name="lblUserTeam" xml:space="preserve">
+    <value>Team: </value>
+  </data>
+  <data name="lblUserTurnFalse" xml:space="preserve">
+    <value>It's not your turn</value>
+  </data>
+  <data name="lblUserTurnTrue" xml:space="preserve">
+    <value>It's your turn</value>
+  </data>
   <data name="lblVolume" xml:space="preserve">
     <value>Volume</value>
   </data>
   <data name="lblWinnerTeam" xml:space="preserve">
     <value>You have won!!</value>
+  </data>
+  <data name="msgBanned" xml:space="preserve">
+    <value>You are banned, try later.</value>
   </data>
   <data name="msgConnectionError" xml:space="preserve">
     <value>Error trying to conect to server</value>
@@ -281,6 +302,9 @@
   </data>
   <data name="msgFriendRequestSuccessful" xml:space="preserve">
     <value>Friend request sent successfully</value>
+  </data>
+  <data name="msgGameIsFullOrLobbyDoesntExist" xml:space="preserve">
+    <value>Lobby is full or game doesnt exists</value>
   </data>
   <data name="msgKickedOut" xml:space="preserve">
     <value>You have been kicked</value>
@@ -339,25 +363,27 @@
   <data name="tpNicknameLenghtHelp" xml:space="preserve">
     <value>Username must have more than 2 and less than 30 characters</value>
   </data>
-  <data name="tpPasswordHelp" xml:space="preserve">
-    <value>Password rules</value>
-  </data>
-  <data name="tpPasswordRules" xml:space="preserve">
-    <value>At least 8 letters
-At least 1 number
-At least 1 simbol
-At least 1 capital letter</value>
-  </data>
   <data name="txbEmptyFieldError" xml:space="preserve">
     <value>This field cannot be empty</value>
   </data>
   <data name="txbInvalidFields" xml:space="preserve">
     <value>Invalid credentials, please enter a valid user</value>
   </data>
+  <data name="txbPasswordRules" xml:space="preserve">
+    <value>Password rules
+
+At least 8 letters
+At least 1 number
+At least 1 simbol
+At least 1 capital letter</value>
+  </data>
   <data name="txtChat" xml:space="preserve">
     <value>Write something...</value>
   </data>
   <data name="txtFriendMail" xml:space="preserve">
     <value>Friend mail</value>
+  </data>
+  <data name="txtSearchUser" xml:space="preserve">
+    <value>Write a name...</value>
   </data>
 </root>

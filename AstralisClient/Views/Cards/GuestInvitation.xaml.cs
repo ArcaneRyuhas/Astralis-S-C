@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Astralis.Views.Animations
+namespace Astralis.Views.Cards
 {
     public partial class GuestInvitation : Window
     {
@@ -12,9 +12,9 @@ namespace Astralis.Views.Animations
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnJoinClick(object sender, RoutedEventArgs e)
         {
-            string invitationCode = tbInvitationCode.Text;
+            string invitationCode = txtInvitationCode.Text;
 
             OnSubmit?.Invoke(this, invitationCode);
             this.Close();

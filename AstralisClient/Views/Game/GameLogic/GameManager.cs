@@ -15,6 +15,11 @@ namespace Astralis.Views.Game.GameLogic
         private const int COUNTDOWN_STARTING_VALUE = 20;
         private const int NO_MAGES = 0;
         private const int DRAW = 3;
+        private const int MINIMUN_HEALTH = 1;
+        private const int NO_WINNER = 0;
+        private const int MAXIMUM_CARD_POSITION = 5;
+        private const int MINIMUM_MAGE_COUNT = 0;
+        private const int TURN_INITIALIZER = 0;
 
         private GameBoard _gameBoard;
         private Dictionary<string, int> _usersTeam;
@@ -27,18 +32,29 @@ namespace Astralis.Views.Game.GameLogic
         private DispatcherTimer _timer;
         private ProgressBar _progressBarCounter;
         private bool _roundEnded = false;
-        private List<Card> _userHand = new List<Card>();
+        private readonly List<Card> _userHand = new List<Card>();
         private Team _userTeam;
         private Team _enemyTeam;
+        private readonly Grid _gdEnemySlots;
+        private readonly Grid _gdPlayerSlots;
 
-        
         public Queue<int> UserDeckQueue { get { return _userDeckQueue; } set { _userDeckQueue = value; } }
+
         public bool IsMyTurn { get { return _isMyTurn; } }
+
         public Team UserTeam { get { return _userTeam; } set { _userTeam = value; } }
+
         public Dictionary<string, int> UsersTeam { get { return _usersTeam; } set { _usersTeam = value; } }
+
         public string MyEnemy { get { return _myEnemy; } }
+
         public Team EnemyTeam { get { return _enemyTeam; } set { _enemyTeam = value; } }
-        public GameManager() { }
+
+        public GameManager(Grid gdEnemySlots, Grid gdPlayerSlots) 
+        {
+            _gdEnemySlots = gdEnemySlots;
+            _gdPlayerSlots = gdPlayerSlots;
+        }
 
         public void SetGameBoard(GameBoard gameBoard)
         {
@@ -97,7 +113,6 @@ namespace Astralis.Views.Game.GameLogic
         {
             if (!_roundEnded && _isMyTurn)
             {
-                _gameBoard.lblUserTurn.Content = "You have ended your turn";// MODIFICAR DESPUES
                 _roundEnded = true;
                 _endTurnCounter++;
 
@@ -119,7 +134,7 @@ namespace Astralis.Views.Game.GameLogic
             }
         }
 
-        public void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn, Grid gdEnemySlots, Grid gdPlayerSlots)
+        public void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn)
         {
             string myNickname = UserSession.Instance().Nickname;
 
@@ -129,11 +144,11 @@ namespace Astralis.Views.Game.GameLogic
 
                 if (_usersTeam[player] != _usersTeam[myNickname])
                 {
-                    AddCardsToBoard(player, gdEnemySlots, boardAfterTurn);
+                    AddCardsToBoard(player, _gdEnemySlots, boardAfterTurn);
                 }
                 else
                 {
-                    AddCardsToBoard(player, gdPlayerSlots, boardAfterTurn);
+                    AddCardsToBoard(player, _gdPlayerSlots, boardAfterTurn);
                 }
 
                 TurnCounter();
@@ -176,12 +191,12 @@ namespace Astralis.Views.Game.GameLogic
                     if (myNickname != _firstPlayers.Item1 && myNickname != _firstPlayers.Item2)
                     {
                         _isMyTurn = true;
-                        _gameBoard.lblUserTurn.Content = "It's your turn";
+                        _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
                     }
                     else
                     {
                         _isMyTurn = false;
-                        _gameBoard.lblUserTurn.Content = " Your turn has ended";
+                        _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnFalse;
                     }
                     StartCountdown();
                     break;
@@ -193,7 +208,7 @@ namespace Astralis.Views.Game.GameLogic
                     if (myNickname == _firstPlayers.Item1 || myNickname == _firstPlayers.Item2)
                     {
                         _isMyTurn = true;
-                        _gameBoard.lblUserTurn.Content = "It's your turn";
+                        _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
                     }
 
                     ReviewEndGame();
@@ -204,7 +219,7 @@ namespace Astralis.Views.Game.GameLogic
         private void ReviewEndGame()
         {
             StartCountdown();
-            _endTurnCounter = 0;
+            _endTurnCounter = TURN_INITIALIZER;
 
             _userTeam.RoundMana++;
             _userTeam.Mana = _userTeam.RoundMana;
@@ -218,26 +233,27 @@ namespace Astralis.Views.Game.GameLogic
             }
         }
 
+
         private bool HasGameEnded()
         {
             string myNickname = UserSession.Instance().Nickname;
-            int winnerTeam = 0;
+            int winnerTeam = NO_WINNER;
             bool gameEnded = false;
 
-            if(_enemyTeam.Health < 1 || _userTeam.Health < 1)
+            if(_enemyTeam.Health < MINIMUN_HEALTH || _userTeam.Health < MINIMUN_HEALTH)
             {
                 gameEnded = true;
 
-                if (_enemyTeam.Health < 1 && _userTeam.Health < 1)
+                if (_enemyTeam.Health < MINIMUN_HEALTH && _userTeam.Health < MINIMUN_HEALTH)
                 {
                     winnerTeam = DRAW;
                 }
-                else if (_enemyTeam.Health < 1)
+                else if (_enemyTeam.Health < MINIMUN_HEALTH)
                 {
                     winnerTeam = _usersTeam[myNickname];
 
                 }
-                else if (_userTeam.Health < 1)
+                else if (_userTeam.Health < MINIMUN_HEALTH)
                 {
                     winnerTeam = _usersTeam[_myEnemy];
                 }
@@ -247,25 +263,21 @@ namespace Astralis.Views.Game.GameLogic
             return gameEnded;
         }
 
-
         private void AttackPhase()
         {
             GraphicCard[] teamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdPlayerSlots);
             GraphicCard[] enemyTeamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdEnemySlots);
 
-            int allyMagesCount = GetMagesCount(teamBoard);
-            int enemyMagesCount = GetMagesCount(enemyTeamBoard);
-
-            for(int cardsPosition = 0; cardsPosition < 5; cardsPosition++)
+            for(int cardsPosition = 0; cardsPosition < MAXIMUM_CARD_POSITION; cardsPosition++)
             {
                 WarriorAttack(teamBoard[cardsPosition], enemyTeamBoard[cardsPosition]);
-                OtherTypeAttack(teamBoard[cardsPosition], enemyTeamBoard[cardsPosition], allyMagesCount, enemyMagesCount);
+                OtherTypeAttack(teamBoard[cardsPosition], enemyTeamBoard[cardsPosition]);
             }
         }
 
         private int GetMagesCount(GraphicCard[] board)
         {
-            int magesCount = 0;
+            int magesCount = MINIMUM_MAGE_COUNT;
 
             foreach(GraphicCard graphicCard in board)
             {
@@ -310,8 +322,14 @@ namespace Astralis.Views.Game.GameLogic
             KillCards(allyGraphicCard, enemyGraphicCard);
         }
 
-        private void OtherTypeAttack(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard, int allyMagesCount, int enemyMagesCount)
+        private void OtherTypeAttack(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard)
         {
+            GraphicCard[] teamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdPlayerSlots);
+            GraphicCard[] enemyTeamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdEnemySlots);
+
+            int allyMagesCount = GetMagesCount(teamBoard);
+            int enemyMagesCount = GetMagesCount(enemyTeamBoard);
+
             Card allyCard = allyGraphicCard.Card;
             Card enemyCard = enemyGraphicCard.Card;
 
@@ -343,13 +361,13 @@ namespace Astralis.Views.Game.GameLogic
 
         private void KillCards(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard)
         {
-            if (allyGraphicCard.Card.Health < 1)
+            if (allyGraphicCard.Card.Health <= Constants.DEAD_DAMAGE)
             {
                 _gameBoard.DeleteGraphicCard(allyGraphicCard);
                 allyGraphicCard.Card.Attack = Constants.DEAD_DAMAGE;
             }
 
-            if(enemyGraphicCard.Card.Health < 1) 
+            if(enemyGraphicCard.Card.Health <= Constants.DEAD_DAMAGE) 
             {
                 _gameBoard.DeleteGraphicCard(enemyGraphicCard);
                 enemyGraphicCard.Card.Attack = Constants.DEAD_DAMAGE;
@@ -371,13 +389,13 @@ namespace Astralis.Views.Game.GameLogic
             if (firstPlayers.Item1 == myNickname)
             {
                 _isMyTurn = true;
-                _gameBoard.lblUserTurn.Content = "It's your turn";
+                _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
                 _myEnemy = firstPlayers.Item2;
             }
             else if (firstPlayers.Item2 == myNickname)
             {
                 _isMyTurn = true;
-                _gameBoard.lblUserTurn.Content = "It's your turn";
+                _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
                 _myEnemy = firstPlayers.Item1;
             }
             else
