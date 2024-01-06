@@ -93,9 +93,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Plays_Game">
-          <End Role="Game" Type="Self.Game" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
           <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Game">
@@ -107,9 +105,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Plays_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -382,9 +378,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Plays_Game">
-          <End Role="Game" Type="Self.Game" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
           <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Game">
@@ -396,9 +390,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Plays_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">

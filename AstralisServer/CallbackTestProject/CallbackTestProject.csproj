@@ -47,22 +47,71 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\AstralisServer\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="LobbyCallbackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Connected Services\AstralisServer\CallbackTestProject.AstralisServer.GamesWonInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AstralisServer\CallbackTestProject.AstralisServer.User.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AstralisServer\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AstralisServer\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AstralisServer\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AstralisServer\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AstralisServer\item4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\AstralisServer\UserManager.wsdl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MessageService\MessageService.csproj">
-      <Project>{c86159ef-cf95-4596-8bf9-b0123627e93b}</Project>
-      <Name>MessageService</Name>
+    <ProjectReference Include="..\Host\Host.csproj">
+      <Project>{5f161a1e-56e8-4622-9feb-06ccd8b0477d}</Project>
+      <Name>Host</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\AstralisServer\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AstralisServer\item.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AstralisServer\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AstralisServer\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AstralisServer\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
