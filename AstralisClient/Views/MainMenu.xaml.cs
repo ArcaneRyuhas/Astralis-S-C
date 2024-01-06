@@ -25,6 +25,7 @@ namespace Astralis.Views
 
             _gameWindow = gameWindow;
             _friendWindow = new FriendWindow(MAIN_MENU_WINDOW);
+            _friendWindow.Visibility = Visibility.Hidden;
 
             _friendWindow.SetFriendWindow();
             gridFriendsWindow.Children.Add(_friendWindow);

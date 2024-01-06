@@ -10,7 +10,7 @@
         WindowState="Normal"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="GameWindow" Height="920" Width="1280"
+        Title="GameWindow" Height="820" Width="1280"
         Background="Black"
         Icon="Game/InGameAssets/AstralisIcon.png">
     
