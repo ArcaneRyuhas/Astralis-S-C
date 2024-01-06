@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows;
-
+using System.ServiceModel;
 
 namespace Astralis.Views.Pages
 {
@@ -24,10 +24,18 @@ namespace Astralis.Views.Pages
 
         private void SetLeaderBoard()
         {
-            LeaderboardManagerClient client = new LeaderboardManagerClient();
-            List<GamesWonInfo> gamesWonInfos = new List<GamesWonInfo> (client.GetLeaderboardInfo());
+            try
+            {
+                LeaderboardManagerClient client = new LeaderboardManagerClient();
+                List<GamesWonInfo> gamesWonInfos = new List<GamesWonInfo>(client.GetLeaderboardInfo());
 
-            SetUserList(gamesWonInfos);
+                SetUserList(gamesWonInfos);
+            }
+            catch (EndpointNotFoundException) 
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
         }
 
         private void SetUserList(List<GamesWonInfo> usersAndWins)
@@ -56,12 +64,11 @@ namespace Astralis.Views.Pages
         {
             Label lblText = new Label
             {
-                Content = textToAdd
+                Content = textToAdd,
+                FontSize = 22,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center
             };
-
-            lblText.FontSize = 22;
-            lblText.VerticalContentAlignment = VerticalAlignment.Center;
-            lblText.HorizontalContentAlignment = HorizontalAlignment.Center;
 
             return lblText;
         }

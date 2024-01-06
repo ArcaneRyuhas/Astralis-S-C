@@ -419,6 +419,12 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameIsNotFull", ReplyAction="http://tempuri.org/ILobbyManager/GameIsNotFullResponse")]
         System.Threading.Tasks.Task<bool> GameIsNotFullAsync(string gameId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/IsBanned", ReplyAction="http://tempuri.org/ILobbyManager/IsBannedResponse")]
+        bool IsBanned(string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/IsBanned", ReplyAction="http://tempuri.org/ILobbyManager/IsBannedResponse")]
+        System.Threading.Tasks.Task<bool> IsBannedAsync(string nickname);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/SendFriendInvitation", ReplyAction="http://tempuri.org/ILobbyManager/SendFriendInvitationResponse")]
         string SendFriendInvitation(string gameId, string userToSend);
         
@@ -545,6 +551,14 @@ namespace Astralis.UserManager {
         
         public System.Threading.Tasks.Task<bool> GameIsNotFullAsync(string gameId) {
             return base.Channel.GameIsNotFullAsync(gameId);
+        }
+        
+        public bool IsBanned(string nickname) {
+            return base.Channel.IsBanned(nickname);
+        }
+        
+        public System.Threading.Tasks.Task<bool> IsBannedAsync(string nickname) {
+            return base.Channel.IsBannedAsync(nickname);
         }
         
         public string SendFriendInvitation(string gameId, string userToSend) {

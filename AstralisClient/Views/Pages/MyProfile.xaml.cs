@@ -1,6 +1,6 @@
 ﻿using Astralis.Logic;
 using Astralis.UserManager;
-using Astralis.Views.Animations;
+using Astralis.Views.Cards;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,8 @@ namespace Astralis.Views.Pages
         private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^&*_-]).{6,40})\S$";
         private const int MAX_FIELDS_LENGHT = 39;
         private const int MAX_GRID_COLUMN = 3;
-        private FriendWindow _friendWindow;
+
+        private readonly FriendWindow _friendWindow;
 
         public MyProfile(FriendWindow friendWindow)
         {
@@ -207,6 +208,8 @@ namespace Astralis.Views.Pages
             {
                 e.Handled = true;
             }
+
+            HideErrorLabels();
         }
 
         private void TextLimeterForPassword(object sender, TextCompositionEventArgs e)
@@ -218,6 +221,8 @@ namespace Astralis.Views.Pages
             {
                 e.Handled = true;
             }
+
+            HideErrorLabels();
         }
 
         private string CreateSha2(string password)

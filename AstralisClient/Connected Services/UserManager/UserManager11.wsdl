@@ -123,6 +123,12 @@
   <wsdl:message name="ILobbyManager_GameIsNotFull_OutputMessage">
     <wsdl:part name="parameters" element="tns:GameIsNotFullResponse" />
   </wsdl:message>
+  <wsdl:message name="ILobbyManager_IsBanned_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsBanned" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_IsBanned_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsBannedResponse" />
+  </wsdl:message>
   <wsdl:message name="ILobbyManager_SendFriendInvitation_InputMessage">
     <wsdl:part name="parameters" element="tns:SendFriendInvitation" />
   </wsdl:message>
@@ -370,6 +376,10 @@
     <wsdl:operation name="GameIsNotFull">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFull" message="tns:ILobbyManager_GameIsNotFull_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFullResponse" message="tns:ILobbyManager_GameIsNotFull_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsBanned">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/IsBanned" message="tns:ILobbyManager_IsBanned_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/IsBannedResponse" message="tns:ILobbyManager_IsBanned_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SendFriendInvitation">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/SendFriendInvitation" message="tns:ILobbyManager_SendFriendInvitation_InputMessage" />
@@ -628,6 +638,15 @@
     </wsdl:operation>
     <wsdl:operation name="GameIsNotFull">
       <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GameIsNotFull" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsBanned">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/IsBanned" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

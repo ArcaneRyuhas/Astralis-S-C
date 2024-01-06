@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 namespace Astralis.Views.Game.GameLogic
 {
-
     public interface ICardPrototype
     {
         Card Clone();
@@ -15,18 +14,19 @@ namespace Astralis.Views.Game.GameLogic
         private int _mana;
         private int _attack;
         private int _health;
-        private string _type;
+        private readonly string _type;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Card() { }
 
+        //Due to the attributes of the card it is easy to understand the parameters and necessary to add all its attributes at the same time.
         public Card(int mana, int attack, int health, string type)
         {
             Mana = mana;
             Attack = attack;
             Health = health;
-            this._type = type;
+            _type = type;
         }
 
         public Card Clone()

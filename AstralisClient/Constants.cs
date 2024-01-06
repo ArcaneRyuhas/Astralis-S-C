@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-
+﻿
 namespace Astralis
 {
     public static class Constants

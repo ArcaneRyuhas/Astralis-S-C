@@ -1,5 +1,5 @@
 ﻿using Astralis.Logic;
-using Astralis.Views.Animations;
+using Astralis.Views.Cards;
 using Astralis.Views.Pages;
 using System;
 using System.Windows;
@@ -10,85 +10,97 @@ namespace Astralis.Views
 {
     public partial class MainMenu : Page
     {
-       
         public delegate void CloseWindowEventHandler(object sender, EventArgs e);
         public event CloseWindowEventHandler CloseWindowEvent;
 
         private const string IS_HOST = "host";
         private const string MAIN_MENU_WINDOW = "MAIN_MENU";
 
-        private FriendWindow friendWindow;
+        private FriendWindow _friendWindow;
         private GameWindow _gameWindow;
 
         public MainMenu(GameWindow gameWindow)
         {
-            _gameWindow = gameWindow;
             InitializeComponent();
-            friendWindow = new FriendWindow(MAIN_MENU_WINDOW);
-            friendWindow.SetFriendWindow();
-            gridFriendsWindow.Children.Add(friendWindow);
-            btnMyProfile.Content = UserSession.Instance().Nickname;
 
+            _gameWindow = gameWindow;
+            _friendWindow = new FriendWindow(MAIN_MENU_WINDOW);
+
+            _friendWindow.SetFriendWindow();
+            gridFriendsWindow.Children.Add(_friendWindow);
+
+            btnMyProfile.Content = UserSession.Instance().Nickname;
         }
 
-        private void btnCreateGame_Click(object sender, RoutedEventArgs e)
+        private void BtnCreateGameClick(object sender, RoutedEventArgs e)
         {
             Lobby lobby = new Lobby(_gameWindow);
 
-
-            if (lobby.SetLobby(IS_HOST))
+            if (lobby.CanPlay())
             {
-                NavigationService.Navigate(lobby);
+                if (lobby.SetLobby(IS_HOST))
+                {
+                    NavigationService.Navigate(lobby);
+                }
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.msgBanned, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void btnExit_Click(object sender, RoutedEventArgs e)
+        private void BtnExitClick(object sender, RoutedEventArgs e)
         {
-            friendWindow.Disconnect();
+            _friendWindow.Disconnect();
             CloseWindowEvent?.Invoke(this, EventArgs.Empty);
         }
 
-      
-
-        private void btnJoinGame_Click(object sender, RoutedEventArgs e)
+        private void BtnJoinGameClick(object sender, RoutedEventArgs e)
         {
             string code = txtJoinCode.Text;
 
             Lobby lobby = new Lobby(_gameWindow);
-            if (lobby.GameIsNotFull(code)  && lobby.SetLobby(code))
+
+            if (lobby.CanPlay())
             {
-                NavigationService.Navigate(lobby);
+                if (lobby.GameIsNotFull(code) && lobby.SetLobby(code))
+                {
+                    NavigationService.Navigate(lobby);
+                }
+                else
+                {
+                    MessageBox.Show(Properties.Resources.msgGameIsFullOrLobbyDoesntExist, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
             else
             {
-                MessageBox.Show("msgGameIsFullOrLobbyDoesntExist", "titleLobbyDoesntExist", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Properties.Resources.msgBanned, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void btnMyProfile_Click(object sender, RoutedEventArgs e)
+        private void BtnMyProfileClick(object sender, RoutedEventArgs e)
         {
-            MyProfile myProfile = new MyProfile(friendWindow);
+            MyProfile myProfile = new MyProfile(_friendWindow);
             NavigationService.Navigate(myProfile);
         }
 
 
-        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        private void BtnSettingsClick(object sender, RoutedEventArgs e)
         {
             Settings settings = new Settings();
             NavigationService.Navigate(settings);
         }
 
-        private void btnFriends_Click(object sender, RoutedEventArgs e)
+        private void BtnFriendsClick(object sender, RoutedEventArgs e)
         {
-            if (friendWindow.IsVisible == true)
+            if (_friendWindow.IsVisible == true)
             {
-                friendWindow.Visibility = Visibility.Hidden;
+                _friendWindow.Visibility = Visibility.Hidden;
             }
-
             else
             {
-                friendWindow.SetFriendWindow();
-                friendWindow.Visibility = Visibility.Visible;
+                _friendWindow.SetFriendWindow();
+                _friendWindow.Visibility = Visibility.Visible;
             }
         }
 

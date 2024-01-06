@@ -36,14 +36,14 @@ namespace Astralis.Views.Game
 
         public void SetGraphicCard(Card card)
         {
-            if (CardManager.Instance().GetCard(Constants.ENEMY_CARD) == card)
+            if (card.Mana == 0)
             {
                 HideCard();
             }
             else
             {
                 this._card = card;
-                this._card.PropertyChanged += Card_PropertyChanged;
+                this._card.PropertyChanged += CardPropertyChanged;
 
                 lblHealth.Content = card.Health.ToString();
                 lblAttack.Content = card.Attack.ToString();
@@ -55,7 +55,6 @@ namespace Astralis.Views.Game
         private void HideCard()
         {
             gdCard.Background = null;
-            gdCard.Background = Brushes.Beige;
 
             lblHealth.Visibility = Visibility.Collapsed;
             lblAttack.Visibility = Visibility.Collapsed;
@@ -63,7 +62,7 @@ namespace Astralis.Views.Game
             lblType.Visibility = Visibility.Collapsed;
         }
 
-        private void Card_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void CardPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -81,7 +80,7 @@ namespace Astralis.Views.Game
             }
         }
 
-        private void GraphicCardOnLeftClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void GraphicCardOnLeftClick(object sender, MouseButtonEventArgs e)
         {
             OnCardClicked?.Invoke(this, IS_LEFT_CLICKED);
         }

@@ -22,7 +22,6 @@ namespace Astralis.Views
         private const int VALIDATION_FAILURE = 0;
         private const int VALIDATION_SUCCES = 1;
 
-
         public SignUp()
         {
             InitializeComponent();
@@ -30,16 +29,16 @@ namespace Astralis.Views
             DataContext = viewModel;
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void BtnCancelClick(object sender, RoutedEventArgs e)
         {
             LogIn logIn = new LogIn();
             this.Close();
             logIn.Show();
         }
 
-        private void btnRegiter_Click(object sender, RoutedEventArgs e)
+        private void BtnRegiterClick(object sender, RoutedEventArgs e)
         {
-            UserManager.User user = new UserManager.User();
+            User user = new UserManager.User();
 
             HideErrorLabels();
             SetUserInformation(user);
@@ -47,7 +46,7 @@ namespace Astralis.Views
             if (ValidFields(user))
             {
                
-                UserManager.UserManagerClient client = new UserManager.UserManagerClient();
+                UserManagerClient client = new UserManager.UserManagerClient();
                 try
                 {
                     int findUserAnswer = client.FindUserByNickname(user.Nickname);

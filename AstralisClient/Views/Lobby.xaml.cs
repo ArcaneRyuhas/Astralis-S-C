@@ -6,12 +6,11 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using Astralis.Views.Animations;
-using Astralis.Views.Game.GameLogic;
+using Astralis.Views.Cards;
 
 namespace Astralis.Views
 {
-    public partial class Lobby : Page, UserManager.ILobbyManagerCallback
+    public partial class Lobby : Page, ILobbyManagerCallback
     {
         private const string HOST_CODE = "host";
         private const string ERROR_CODE_LOBBY = "error";
@@ -19,13 +18,14 @@ namespace Astralis.Views
         private const int TEAM_ONE = 1;
         private const int TEAM_TWO = 2;
         private const int MAX_TEAM_SIZE = 2;
+        private const string GUEST_NAME = "Guest";
+        private const string LOBBY_WINDOW = "LOBBY";
 
         private bool _isHost = false;
         private string _gameId;
         private Dictionary<int , bool> _freeSpaces;
         private Dictionary<int , LobbyUserCard> _userCards = new Dictionary<int, LobbyUserCard>();
         private LobbyManagerClient _client;
-        private const string LOBBY_WINDOW = "LOBBY";
         private FriendWindow _friendWindow;
         private GameWindow _gameWindow;
 
@@ -41,15 +41,43 @@ namespace Astralis.Views
                 {3, true },
             };
 
+            InitializeLobby(gameWindow);
+            
+        }
+
+        public bool CanPlay()
+        {
             InstanceContext context = new InstanceContext(this);
             _client = new LobbyManagerClient(context);
+            bool canPlay = true;
+
+            string nickname = UserSession.Instance().Nickname;
+
+            if (_client.IsBanned(nickname))
+            {
+                canPlay = false;
+            }
+
+            return canPlay;
+        }
+
+        private void InitializeLobby(GameWindow gameWindow)
+        {
+            InstanceContext context = new InstanceContext(this);
+            _client = new LobbyManagerClient(context);
+
             btnStartGame.IsEnabled = false;
-            _friendWindow = new FriendWindow(LOBBY_WINDOW);
 
-            _friendWindow.SetFriendWindow();
+            if(!UserSession.Instance().Nickname.StartsWith(GUEST_NAME))
+            {
+                _friendWindow = new FriendWindow(LOBBY_WINDOW);
 
-            _friendWindow.SendGameInvitation += SendGameInvitationEvent;
-            gridFriendsWindow.Children.Add(_friendWindow);
+                _friendWindow.SetFriendWindow();
+
+                _friendWindow.SendGameInvitation += SendGameInvitationEvent;
+
+                gridFriendsWindow.Children.Add(_friendWindow);
+            }
 
             _gameWindow = gameWindow;
         }
@@ -72,7 +100,6 @@ namespace Astralis.Views
                 else
                 {
                     MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
-
                 }
             }
             catch (CommunicationException)
@@ -373,7 +400,7 @@ namespace Astralis.Views
         private void BtnExitClick(object sender, RoutedEventArgs e)
         {
             InstanceContext context = new InstanceContext(this);
-            UserManager.LobbyManagerClient client = new UserManager.LobbyManagerClient(context);
+            LobbyManagerClient client = new LobbyManagerClient(context);
 
             User user = new User();
             user.Nickname = UserSession.Instance().Nickname;
@@ -393,7 +420,17 @@ namespace Astralis.Views
                 App.RestartApplication();
             }
 
-            NavigationService.GoBack();
+            if (!user.Nickname.StartsWith(GUEST_NAME))
+            {
+                NavigationService.GoBack();
+            }
+            else
+            {
+                LogIn logIn = new LogIn();
+
+                logIn.Show();
+                _gameWindow.Close();
+            }
         }
 
         private void BtnSendMessageClick(object sender, RoutedEventArgs e)
@@ -506,21 +543,34 @@ namespace Astralis.Views
         public void GetKicked()
         {           
             MessageBox.Show(Properties.Resources.msgKickedOut, Properties.Resources.titleKickedOut, MessageBoxButton.OK, MessageBoxImage.Information);
-            NavigationService.GoBack();
+            if (!UserSession.Instance().Nickname.StartsWith(GUEST_NAME))
+            {
+                NavigationService.GoBack();
+            }
+            else
+            {
+                LogIn logIn = new LogIn();
+
+                logIn.Show();
+                _gameWindow.Close();
+            }
         }
 
         private void BtnFriendWindowClick(object sender, RoutedEventArgs e)
         {
-            if (_friendWindow.IsVisible == true)
+            if(_friendWindow!= null)
             {
-                _friendWindow.Visibility = Visibility.Hidden;
+                if (_friendWindow.IsVisible == true)
+                {
+                    _friendWindow.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    _friendWindow.SetFriendWindow();
+                    _friendWindow.Visibility = Visibility.Visible;
+                }
             }
-
-            else
-            {
-                _friendWindow.SetFriendWindow();
-                _friendWindow.Visibility = Visibility.Visible;
-            }
+            
         }
     }
 }

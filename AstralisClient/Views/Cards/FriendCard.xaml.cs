@@ -1,24 +1,9 @@
-﻿using Astralis.Logic;
-using Astralis.UserManager;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Astralis.Views.Animations
+
+namespace Astralis.Views.Cards
 {
     /// <summary>
     /// Interaction logic for FriendCard.xaml
@@ -28,17 +13,17 @@ namespace Astralis.Views.Animations
         public event EventHandler<Tuple<string, bool>> ReplyToFriendRequestEvent;
         public event EventHandler<string> RemoveFriendEvent;
         public event EventHandler<string> SendGameInvitation;
-        private const int IS_PENDING_FRIEND = 2;
+
+        private bool _onlineStatus = false;
+
         private const int IS_FRIEND = 1;
-        private int friendStatus = 0;
-        private bool onlineStatus = false;
         private const bool ACCEPTED_FRIEND = true;
         private const bool DENIED_FRIEND = false;
+
         public FriendCard()
         {
             InitializeComponent();
         }
-
 
         public void SetLobbyCard(string nickname, bool onlineStatus, int friendStatus)
         {
@@ -72,11 +57,11 @@ namespace Astralis.Views.Animations
             }
         }
 
-        private void btnAcceptFriendRequest_Click(object sender, RoutedEventArgs e)
+        private void BtnAcceptFriendRequestClick(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
 
-            if (onlineStatus == true)
+            if (_onlineStatus == true)
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }
@@ -86,12 +71,12 @@ namespace Astralis.Views.Animations
             }
 
             btnAcceptFriendRequest.Visibility = Visibility.Hidden;
-            btnDenyFriendRequest.Visibility = Visibility.Hidden; //PREGUNTAR A MARIO POR ESTO
+            btnDenyFriendRequest.Visibility = Visibility.Hidden;
 
             ReplyToFriendRequestEvent?.Invoke(this, new Tuple<string, bool>(friendUsername, ACCEPTED_FRIEND));
         }
 
-        private void btnDeleteFriend_Click(object sender, RoutedEventArgs e)
+        private void BtnDeleteFriendClick(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
 
@@ -100,11 +85,11 @@ namespace Astralis.Views.Animations
             RemoveFriendEvent?.Invoke(this, friendUsername);
         }
 
-        private void btnDenyFriendRequest_Click(object sender, RoutedEventArgs e)
+        private void BtnDenyFriendRequestClick(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
 
-            if (onlineStatus == true)
+            if (_onlineStatus == true)
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }
@@ -119,7 +104,7 @@ namespace Astralis.Views.Animations
             ReplyToFriendRequestEvent?.Invoke(this, new Tuple<string, bool>(friendUsername, DENIED_FRIEND));
         }
 
-        private void btnSendGameInvitation_Click(object sender, RoutedEventArgs e)
+        private void BtnSendGameInvitationClick(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
 

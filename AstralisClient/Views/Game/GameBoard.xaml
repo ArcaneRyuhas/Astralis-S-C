@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p = "clr-namespace:Astralis.Properties"
         mc:Ignorable="d" 
       d:DesignHeight="920" d:DesignWidth="1280"
       Title="GameBoard">
@@ -30,7 +31,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid x:Name="gdPlayerSlots" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                <Grid x:Name="gdPlayerSlots" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="142"/>
                         <ColumnDefinition Width="12"/>
@@ -176,8 +177,8 @@
         <Grid Width="200" Height="200" HorizontalAlignment="Left">
             <Ellipse Width="100" Height="100" HorizontalAlignment="Right" Fill="Beige"/>
             <Label x:Name="lblTurnMana" Content="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="48" Width="100" HorizontalContentAlignment="Center" FontFamily="Bernard MT Condensed"/>
-            <Label x:Name="lblUserTurn" Content="It's not your turn" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="150" Height="50" FontSize="20"/>
-            <Label x:Name="lblUserTeam" Content="Team: " Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Height="50" FontSize="20"/>
+            <Label x:Name="lblUserTurn" Content="{x:Static p:Resources.lblUserTurnFalse}" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="150" Height="50" FontSize="20"/>
+            <Label x:Name="lblUserTeam" Content="{x:Static p:Resources.lblUserTeam}" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Height="50" FontSize="20"/>
         </Grid>
 
         <Grid Width="200" Height="200" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -197,8 +198,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
-            <ProgressBar Grid.Row="1" Width="150" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
             <Border Grid.Row="1" Width="100" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Border.Background>
                     <ImageBrush ImageSource="InGameAssets/Heart.png"/>

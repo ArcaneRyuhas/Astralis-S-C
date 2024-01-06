@@ -1,6 +1,6 @@
 ﻿using Astralis.Logic;
 using Astralis.UserManager;
-using Astralis.Views.Animations;
+using Astralis.Views.Cards;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,9 +14,13 @@ namespace Astralis.Views.Pages
     /// </summary>
     public partial class EndGame : Page, IEndGameCallback
     {
+        private EndGameClient _client;
+        private GameWindow _endGameWindow;
 
-        private EndGameClient client;
         private const int GAME_ABORTED = 0;
+        private const string GUEST_NAME = "Guest";
+
+        public GameWindow EndGameWindow {get { return _endGameWindow;} set { _endGameWindow = value; } }
 
         public EndGame(int winnerTeam, int myTeam)
         {
@@ -45,9 +49,9 @@ namespace Astralis.Views.Pages
         {
             string myNickname = UserSession.Instance().Nickname;
             InstanceContext context = new InstanceContext(this);
-            client = new EndGameClient(context);
+            _client = new EndGameClient(context);
 
-            client.GetUsersWithTeam(myNickname);
+            _client.GetUsersWithTeam(myNickname);
         }
 
         public void SetUsers(UserWithTeam[] usersWithTeams)
@@ -65,18 +69,29 @@ namespace Astralis.Views.Pages
         {
             EndGameUserCard endGameUserCard = new EndGameUserCard();
 
-            endGameUserCard.setCard(user, team);
+            endGameUserCard.SetCard(user, team);
             gridUsers.Children.Add(endGameUserCard);
             Grid.SetRow(endGameUserCard, gridRow);
         }
 
         private void BtnExitClick(object sender, RoutedEventArgs e)
         {
-            GameWindow gameWindow = new GameWindow();
-            MainMenu mainMenu = new MainMenu(gameWindow);
-            NavigationService.Navigate(mainMenu);
+            if (!UserSession.Instance().Nickname.StartsWith(GUEST_NAME))
+            {
+                GameWindow gameWindow = new GameWindow();
 
-            client.GameEnded(UserSession.Instance().Nickname);
+                gameWindow.Show();
+            }
+            else
+            {
+                LogIn logIn = new LogIn();
+
+                logIn.Show();
+
+            }
+
+            _endGameWindow.Close();
+            _client.GameEnded(UserSession.Instance().Nickname);
         }
     }
 }

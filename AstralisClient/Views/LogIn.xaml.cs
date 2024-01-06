@@ -4,7 +4,7 @@ using System.Windows.Input;
 using Astralis.Logic;
 using Astralis.UserManager;
 using System.Security.Cryptography;
-using Astralis.Views.Animations;
+using Astralis.Views.Cards;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.ServiceModel;
@@ -15,6 +15,7 @@ namespace Astralis.Views
     public partial class LogIn : Window
     {
         private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";
+        private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9\S]{0,40}$";
         private const int MAX_FIELDS_LENGHT = 39;
         private const int VALIDATION_FAILURE = 0;
         private const int VALIDATION_SUCCES = 1;
@@ -22,6 +23,7 @@ namespace Astralis.Views
         public LogIn()
         {
             InitializeComponent();
+            App.StartMusic();
         }
 
         private void BtnLogInClick(object sender, RoutedEventArgs e)
@@ -30,7 +32,7 @@ namespace Astralis.Views
             string nickname = tbNickname.Text;
             bool noEmptyFields = true;
 
-            UserManager.UserManagerClient client = new UserManager.UserManagerClient();
+            UserManagerClient client = new UserManagerClient();
 
             if (string.IsNullOrEmpty(password))
             {
@@ -44,15 +46,14 @@ namespace Astralis.Views
 
             if (noEmptyFields)
             {
-                bool userOnline = false;
                 try
                 {
-                    userOnline = client.UserOnline(nickname);
+                    bool userOnline = client.UserOnline(nickname);
                     int userConfirmed = client.ConfirmUser(nickname, password);
 
                     if (userOnline)
                     {
-                        MessageBox.Show(Astralis.Properties.Resources.msgUserOnline, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(Properties.Resources.msgUserOnline, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else if (userConfirmed == VALIDATION_SUCCES)
                     {
@@ -65,21 +66,21 @@ namespace Astralis.Views
                     }
                     else if(userConfirmed == VALIDATION_FAILURE)
                     {
-                        txbInvalidFields.Text = Astralis.Properties.Resources.txbInvalidFields;
+                        txbInvalidFields.Text = Properties.Resources.txbInvalidFields;
                         txbInvalidFields.Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 catch (CommunicationException)
                 {
-                    MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (TimeoutException)
                 {
-                    MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
@@ -127,7 +128,7 @@ namespace Astralis.Views
 
         private void GuestInvitationOnSubmit(object sender, string invitationCode)
         {
-            UserManager.UserManagerClient client = new UserManager.UserManagerClient();
+            UserManagerClient client = new UserManagerClient();
 
             try
             {
@@ -147,21 +148,21 @@ namespace Astralis.Views
                     }
                     else
                     {
-                        MessageBox.Show(Astralis.Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else
                 {
-                    MessageBox.Show(Astralis.Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -176,6 +177,16 @@ namespace Astralis.Views
             }
 
             if (textBox.Text.Length >= MAX_FIELDS_LENGHT)
+            {
+                e.Handled = true;
+            }
+        }
+        private void TextLimeterForPassword(object sender, TextCompositionEventArgs e)
+        {
+            PasswordBox passwordBox = (PasswordBox)sender;
+            String passwordString = passwordBox.Password;
+
+            if (!Regex.IsMatch(passwordString, DELIMITER_PASSWORD_REGEX))
             {
                 e.Handled = true;
             }

@@ -24,22 +24,22 @@ namespace Astralis.Views.Pages
         public Settings()
         {
             InitializeComponent();
-            ProgressBar_ValueChanged();
+            ProgressBarValueChanged();
         }
 
-        private void btnSpanish_Click(object sender, RoutedEventArgs e)
+        private void BtnSpanishClick(object sender, RoutedEventArgs e)
         {
             App.ChangeLenguage("es-MX");
             RestartWindow();
         }
 
-        private void btnEnglish_Click(object sender, RoutedEventArgs e)
+        private void BtnEnglishClick(object sender, RoutedEventArgs e)
         {
             App.ChangeLenguage("en");
             RestartWindow();
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void BtnCancelClick(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
@@ -53,9 +53,9 @@ namespace Astralis.Views.Pages
             currentWindow.Close();
         }
 
-        private void ProgressBar_ValueChanged()
+        private void ProgressBarValueChanged()
         {
-            progessBarVolume.Value = 50;
+            progessBarVolume.Value = 30;
         }
     }
 }
