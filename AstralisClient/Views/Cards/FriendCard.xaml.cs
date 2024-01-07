@@ -43,7 +43,7 @@ namespace Astralis.Views.Cards
             lblNickname.Content = nickname;
             if (friendStatus == IS_FRIEND)
             {
-                if (onlineStatus == true)
+                if (onlineStatus)
                 {
                     ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
                 }
@@ -61,7 +61,7 @@ namespace Astralis.Views.Cards
         {
             string friendUsername = lblNickname.Content.ToString();
 
-            if (_onlineStatus == true)
+            if (_onlineStatus)
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }
@@ -89,7 +89,7 @@ namespace Astralis.Views.Cards
         {
             string friendUsername = lblNickname.Content.ToString();
 
-            if (_onlineStatus == true)
+            if (_onlineStatus)
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }

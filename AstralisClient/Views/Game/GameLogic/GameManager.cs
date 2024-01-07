@@ -24,10 +24,8 @@ namespace Astralis.Views.Game.GameLogic
         private const int MAXIMUM_MANA = 10;
 
         private GameBoard _gameBoard;
-        private Dictionary<string, int> _usersTeam;
         private int _endTurnCounter = 0;
         private bool _isMyTurn = false;
-        private Queue<int> _userDeckQueue = new Queue<int>();
         private Tuple<string, string> _firstPlayers = Tuple.Create<string, string>("", "");
         private string _myEnemy;
         private int _countdownValue = COUNTDOWN_STARTING_VALUE;
@@ -37,22 +35,20 @@ namespace Astralis.Views.Game.GameLogic
         private ProgressBar _progressBarCounter;
         private bool _roundEnded = false;
         private readonly List<Card> _userHand = new List<Card>();
-        private Team _userTeam;
-        private Team _enemyTeam;
         private readonly Grid _gdEnemySlots;
         private readonly Grid _gdPlayerSlots;
 
-        public Queue<int> UserDeckQueue { get { return _userDeckQueue; } set { _userDeckQueue = value; } }
+        public Queue<int> UserDeckQueue { get; set; }
 
         public bool IsMyTurn { get { return _isMyTurn; } }
 
-        public Team UserTeam { get { return _userTeam; } set { _userTeam = value; } }
+        public Team UserTeam { get; set;}
 
-        public Dictionary<string, int> UsersTeam { get { return _usersTeam; } set { _usersTeam = value; } }
+        public Dictionary<string, int> UsersTeam { get; set; }
 
         public string MyEnemy { get { return _myEnemy; } }
 
-        public Team EnemyTeam { get { return _enemyTeam; } set { _enemyTeam = value; } }
+        public Team EnemyTeam { get; set; }
 
         public GameManager(Grid gdEnemySlots, Grid gdPlayerSlots) 
         {
@@ -161,7 +157,7 @@ namespace Astralis.Views.Game.GameLogic
             {
                 _endTurnCounter++;
 
-                if (_usersTeam[player] != _usersTeam[myNickname])
+                if (UsersTeam[player] != UsersTeam[myNickname])
                 {
                     AddCardsToBoard(player, _gdEnemySlots, boardAfterTurn);
                 }
@@ -194,7 +190,7 @@ namespace Astralis.Views.Game.GameLogic
 
                         graphicCard.SetGraphicCard(card);
                         innerGrid.Children.Add(graphicCard);
-                        _gameBoard.TakeCardOutOfHand(player, graphicCard, _usersTeam);
+                        _gameBoard.TakeCardOutOfHand(player, graphicCard, UsersTeam);
                     }
                 }
             }
@@ -221,7 +217,7 @@ namespace Astralis.Views.Game.GameLogic
                     break;
 
                 case 4:
-                    string[] secondPlayers = _usersTeam.Keys.Where(name => name != _firstPlayers.Item2 && name != _firstPlayers.Item1).ToArray();
+                    string[] secondPlayers = UsersTeam.Keys.Where(name => name != _firstPlayers.Item2 && name != _firstPlayers.Item1).ToArray();
                     _firstPlayers = Tuple.Create(secondPlayers[0], secondPlayers[1]);
 
                     if (myNickname == _firstPlayers.Item1 || myNickname == _firstPlayers.Item2)
@@ -240,11 +236,11 @@ namespace Astralis.Views.Game.GameLogic
             StartCountdown();
             _endTurnCounter = TURN_INITIALIZER;
 
-            if(_userTeam.RoundMana < MAXIMUM_MANA)
+            if(UserTeam.RoundMana < MAXIMUM_MANA)
             {
-                _userTeam.RoundMana++;
+                UserTeam.RoundMana++;
             }
-            _userTeam.Mana = _userTeam.RoundMana;
+            UserTeam.Mana = UserTeam.RoundMana;
             
             AttackPhase();
 
@@ -263,22 +259,22 @@ namespace Astralis.Views.Game.GameLogic
             int winnerTeam = NO_WINNER;
             bool gameEnded = false;
 
-            if(_enemyTeam.Health < MINIMUN_HEALTH || _userTeam.Health < MINIMUN_HEALTH)
+            if(EnemyTeam.Health < MINIMUN_HEALTH || UserTeam.Health < MINIMUN_HEALTH)
             {
                 gameEnded = true;
 
-                if (_enemyTeam.Health < MINIMUN_HEALTH && _userTeam.Health < MINIMUN_HEALTH)
+                if (EnemyTeam.Health < MINIMUN_HEALTH && UserTeam.Health < MINIMUN_HEALTH)
                 {
                     winnerTeam = DRAW;
                 }
-                else if (_enemyTeam.Health < MINIMUN_HEALTH)
+                else if (EnemyTeam.Health < MINIMUN_HEALTH)
                 {
-                    winnerTeam = _usersTeam[myNickname];
+                    winnerTeam = UsersTeam[myNickname];
 
                 }
-                else if (_userTeam.Health < MINIMUN_HEALTH)
+                else if (UserTeam.Health < MINIMUN_HEALTH)
                 {
-                    winnerTeam = _usersTeam[_myEnemy];
+                    winnerTeam = UsersTeam[_myEnemy];
                 }
                 _gameBoard.GameHasEnded(winnerTeam);
             }
@@ -326,7 +322,7 @@ namespace Astralis.Views.Game.GameLogic
                 }
                 else
                 {
-                    _enemyTeam.ReceiveDamage(allyCard.DealDamage(NO_MAGES));
+                    EnemyTeam.ReceiveDamage(allyCard.DealDamage(NO_MAGES));
                 }
             }
 
@@ -338,7 +334,7 @@ namespace Astralis.Views.Game.GameLogic
                 }
                 else
                 {
-                    _userTeam.ReceiveDamage(enemyCard.DealDamage(NO_MAGES));
+                    UserTeam.ReceiveDamage(enemyCard.DealDamage(NO_MAGES));
                 }
             }
 
@@ -364,7 +360,7 @@ namespace Astralis.Views.Game.GameLogic
                 }
                 else
                 {
-                    _enemyTeam.ReceiveDamage(allyCard.DealDamage(allyMagesCount));
+                    EnemyTeam.ReceiveDamage(allyCard.DealDamage(allyMagesCount));
                 }
             }
             if (enemyGraphicCard.Card.Type != Constants.WARRIOR && enemyGraphicCard.Card.Type != Constants.NO_CLASS)
@@ -375,7 +371,7 @@ namespace Astralis.Views.Game.GameLogic
                 }
                 else
                 {
-                    _userTeam.ReceiveDamage(enemyCard.DealDamage(enemyMagesCount));
+                    UserTeam.ReceiveDamage(enemyCard.DealDamage(enemyMagesCount));
                 }
             }
 
@@ -425,7 +421,7 @@ namespace Astralis.Views.Game.GameLogic
             }
             else
             {
-                foreach (string nickname in _usersTeam.Keys)
+                foreach (string nickname in UsersTeam.Keys)
                 {
                     if (firstPlayers.Item1 != nickname && firstPlayers.Item2 != nickname && nickname != myNickname)
                     {

@@ -13,7 +13,6 @@ namespace Astralis.Views.Pages
     /// </summary>
     public partial class LeaderBoard : Page
     {
-        private const int MAX_USER_LENGHT = 10;
         private const int INITIAL_LENGHT = 0;
 
         public LeaderBoard()
@@ -44,19 +43,16 @@ namespace Astralis.Views.Pages
 
             foreach (GamesWonInfo userAndWins in usersAndWins)
             {
-                if (rowNumber < MAX_USER_LENGHT)
-                {
-                    string nickname = userAndWins.Username;
-                    string wins = userAndWins.GamesWonCount.ToString();
+                string nickname = userAndWins.Username;
+                string wins = userAndWins.GamesWonCount.ToString();
 
-                    Label lblNickname = CreateTextBox(nickname);
-                    Label lblWins = CreateTextBox(wins);
+                Label lblNickname = CreateTextBox(nickname);
+                Label lblWins = CreateTextBox(wins);
 
-                    AddTextBoxToUserGrid(lblNickname, rowNumber);
-                    AddTextBoxToWinsGrid(lblWins, rowNumber);
+                AddTextBoxToUserGrid(lblNickname, rowNumber);
+                AddTextBoxToWinsGrid(lblWins, rowNumber);
 
-                    rowNumber++;
-                }
+                rowNumber++;
             }
         }
 

@@ -15,12 +15,10 @@ namespace Astralis.Views.Pages
     public partial class EndGame : Page, IEndGameCallback
     {
         private EndGameClient _client;
-        private GameWindow _endGameWindow;
-
         private const int GAME_ABORTED = 0;
         private const string GUEST_NAME = "Guest";
 
-        public GameWindow EndGameWindow {get { return _endGameWindow;} set { _endGameWindow = value; } }
+        public GameWindow EndGameWindow { get; set; }
 
         public EndGame(int winnerTeam, int myTeam)
         {
@@ -90,7 +88,7 @@ namespace Astralis.Views.Pages
 
             }
 
-            _endGameWindow.Close();
+            EndGameWindow.Close();
             _client.GameEnded(UserSession.Instance().Nickname);
         }
     }

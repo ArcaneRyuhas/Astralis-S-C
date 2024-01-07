@@ -927,7 +927,6 @@ namespace MessageService
                 }
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
-                    GameAccess gameAccess = new GameAccess();
                     gameAccess.BanUser(userInGame);
                     log.Error(communicationObjectAbortedException);
                     usersInGameContext.Remove(userInGame);

@@ -13,7 +13,6 @@ namespace Astralis.Views
     public partial class Lobby : Page, ILobbyManagerCallback
     {
         private const string HOST_CODE = "host";
-        private const string ERROR_CODE_LOBBY = "error";
         private const int NO_TEAM = 0;
         private const int TEAM_ONE = 1;
         private const int TEAM_TWO = 2;
@@ -233,7 +232,7 @@ namespace Astralis.Views
 
             for(int gridRow = 0; gridRow < 4; gridRow++)
             {
-                if (_freeSpaces[gridRow] == true && isAdded == false)
+                if (_freeSpaces[gridRow] && !isAdded)
                 {
                     gridUsers.Children.Add(lobbyUserCard);
                     Grid.SetRow(lobbyUserCard, gridRow);
@@ -270,14 +269,11 @@ namespace Astralis.Views
         {
             for (int gridRow = 0; gridRow < 4; gridRow++)
             {
-                if (_userCards.ContainsKey(gridRow))
+                if (_userCards.ContainsKey(gridRow) && _userCards[gridRow].UserNickname == user.Nickname)
                 {
-                    if (_userCards[gridRow].UserNickname == user.Nickname)
-                    {
-                        gridUsers.Children.Remove(_userCards[gridRow]);
-                        _userCards.Remove(gridRow);
-                        _freeSpaces[gridRow] = true;
-                    }
+                    gridUsers.Children.Remove(_userCards[gridRow]);
+                    _userCards.Remove(gridRow);
+                    _freeSpaces[gridRow] = true;
                 }  
 
             }
@@ -323,13 +319,10 @@ namespace Astralis.Views
         {
             for (int gridRow = 0; gridRow < 4; gridRow++)
             {
-                if (_userCards.ContainsKey(gridRow))
+                if (_userCards.ContainsKey(gridRow) && _userCards[gridRow].UserNickname == userNickname)
                 {
-                    if (_userCards[gridRow].UserNickname == userNickname)
-                    {
-                        _userCards[gridRow].ChangeTeam(team);
-                        break;
-                    }
+                    _userCards[gridRow].ChangeTeam(team);
+                    break;
                 }
 
             }
@@ -558,9 +551,9 @@ namespace Astralis.Views
 
         private void BtnFriendWindowClick(object sender, RoutedEventArgs e)
         {
-            if(_friendWindow!= null)
+            if(_friendWindow != null)
             {
-                if (_friendWindow.IsVisible == true)
+                if (_friendWindow.IsVisible)
                 {
                     _friendWindow.Visibility = Visibility.Hidden;
                 }

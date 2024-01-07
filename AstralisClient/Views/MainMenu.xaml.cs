@@ -94,7 +94,7 @@ namespace Astralis.Views
 
         private void BtnFriendsClick(object sender, RoutedEventArgs e)
         {
-            if (_friendWindow.IsVisible == true)
+            if (_friendWindow.IsVisible)
             {
                 _friendWindow.Visibility = Visibility.Hidden;
             }

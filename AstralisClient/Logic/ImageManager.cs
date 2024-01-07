@@ -10,7 +10,7 @@ namespace Astralis.Logic
     {
 
         private static ImageManager instance;
-        private Dictionary<int, Bitmap> _imageMap;
+        private readonly Dictionary<int, Bitmap> _imageMap;
 
         private ImageManager() 
         {

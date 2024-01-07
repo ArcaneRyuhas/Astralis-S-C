@@ -21,7 +21,7 @@ namespace Astralis.Views.Cards
         private const string LOBBY_WINDOW = "LOBBY";
 
         private int _cardsAddedRow = 0;
-        private string _typeFriendWindow = "";
+        private string _typeFriendWindow;
         private Dictionary<string, Tuple<bool, int>> _friendList = new Dictionary<string, Tuple<bool, int>>();
 
         public event EventHandler<string> SendGameInvitation;

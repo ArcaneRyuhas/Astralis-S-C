@@ -5,20 +5,19 @@ namespace Astralis.Views.Game.GameLogic
 {
     public class Team : INotifyPropertyChanged
     {
-        private int _roundMana;
         private int _mana;
         private int _health;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public int RoundMana { get; set; }
+
         public Team(int mana, int health)
         {
-            _roundMana = mana;
+            RoundMana = mana;
             Mana = mana;
             Health = health;
         }
-
-        public int RoundMana { get { return _roundMana; } set { _roundMana = value; } }
 
         public int Mana
         {
