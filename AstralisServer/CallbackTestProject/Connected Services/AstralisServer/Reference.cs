@@ -520,7 +520,7 @@ namespace CallbackTestProject.AstralisServer {
         public LobbyManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
-        
+
         public string CreateLobby(CallbackTestProject.AstralisServer.User user) {
             return base.Channel.CreateLobby(user);
         }

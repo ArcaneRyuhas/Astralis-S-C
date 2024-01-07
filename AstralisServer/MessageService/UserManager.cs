@@ -40,7 +40,7 @@ namespace MessageService
                     result = VALIDATION_SUCCESS;
                 }
             }
-            catch(EntityException entityException)
+            catch (EntityException entityException)
             {
                 log.Error(entityException);
                 result = ERROR;
@@ -68,7 +68,7 @@ namespace MessageService
                     {
                         result = VALIDATION_SUCCESS;
                     }
-                }  
+                }
             }
             catch (SqlException sqlException)
             {
@@ -130,7 +130,7 @@ namespace MessageService
                     isFound = VALIDATION_SUCCESS;
                 }
             }
-            catch(EntityException entityException)
+            catch (EntityException entityException)
             {
                 log.Error(entityException);
                 isFound = ERROR;
@@ -140,7 +140,7 @@ namespace MessageService
                 log.Error(sqlException);
                 isFound = ERROR;
             }
-             
+
             return isFound;
         }
 
@@ -148,7 +148,7 @@ namespace MessageService
         {
             User foundUser = new User();
             foundUser.Nickname = NICKNAME_ERROR;
-            
+
             UserAccess userAccess = new UserAccess();
             try
             {
@@ -180,7 +180,7 @@ namespace MessageService
                     }
                 }
             }
-            catch(SqlException sqlException)
+            catch (SqlException sqlException)
             {
                 log.Error(sqlException);
                 result = ERROR;

@@ -1,6 +1,7 @@
 ﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Ban.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IEndGame.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IGameManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\ILeaderboardManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\ILobbyManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IUserManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\DataAccess\DeckAccess.cs
@@ -16,9 +17,9 @@ C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessP
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\UserDeck.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\UserFriend.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\UserSession.cs
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\AstralisDB.Context.tt
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\AstralisDB.tt
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\AstralisDB.edmx
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Model1.Context.tt
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Model1.tt
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Model1.edmx
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\App.config
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\AstralisDB.edmx.diagram
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Model1.edmx.diagram
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\packages.config
