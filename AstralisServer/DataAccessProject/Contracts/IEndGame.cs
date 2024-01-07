@@ -18,6 +18,7 @@ namespace DataAccessProject.Contracts
         void GameEnded(string nickname);
     }
 
+    [ServiceContract]
     public interface IEndGameCallback
     {
         [OperationContract()]
@@ -27,22 +28,17 @@ namespace DataAccessProject.Contracts
     [DataContract]
     public class UserWithTeam
     {
-        private string nickname;
-        private int imageId;
-        private string mail;
-        private int team;
+        [DataMember]
+        public string Nickname { get; set; }
 
         [DataMember]
-        public string Nickname { get { return nickname; } set { nickname = value; } }
+        public int ImageId { get; set; }
 
         [DataMember]
-        public int ImageId { get { return imageId; } set { imageId = value; } }
+        public string Mail { get; set; }
 
         [DataMember]
-        public string Mail { get { return mail; } set { mail = value; } }
-
-        [DataMember]
-        public int Team { get { return team; } set { team = value; } }
+        public int Team { get; set; }
 
     }
 }
