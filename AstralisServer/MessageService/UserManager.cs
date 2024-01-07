@@ -239,49 +239,53 @@ namespace MessageService
 
         public void ConnectLobby(User user, string gameId)
         {
-            if (usersInLobby.ContainsValue(gameId))
+            lock (usersTeam)
             {
-                List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
-                List<Tuple<User, int>> users = new List<Tuple<User, int>>();
-
-                foreach (string nickname in usersNickname)
+                if (usersInLobby.ContainsValue(gameId))
                 {
-                    users.Add(new Tuple <User, int> (GetUserByNickname(nickname), usersTeam[nickname]));
-                }
+                    List<string> usersNickname = FindKeysByValue(usersInLobby, gameId);
+                    List<Tuple<User, int>> users = new List<Tuple<User, int>>();
 
-                ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
-
-                try
-                {
-                    currentUserCallbackChannel.ShowUsersInLobby(users);
-
-                    if (!usersContext.ContainsKey(user.Nickname))
+                    foreach (string nickname in usersNickname)
                     {
-                        usersContext.Add(user.Nickname, currentUserCallbackChannel);
-                        usersInLobby.Add(user.Nickname, gameId);
-                        usersTeam.Add(user.Nickname, NO_TEAM);
+                        users.Add(new Tuple<User, int>(GetUserByNickname(nickname), usersTeam[nickname]));
                     }
-                }
-                catch(CommunicationObjectAbortedException communicationObjectAbortedException)
-                {
-                    log.Error(communicationObjectAbortedException);
-                }
 
-                foreach (string userInTheLobby in usersNickname)
-                {
+                    ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
+
                     try
                     {
-                        usersContext[userInTheLobby].ShowConnectionInLobby(user);
+                        currentUserCallbackChannel.ShowUsersInLobby(users);
+
+                        if (!usersContext.ContainsKey(user.Nickname))
+                        {
+                            usersContext.Add(user.Nickname, currentUserCallbackChannel);
+                            usersInLobby.Add(user.Nickname, gameId);
+                            usersTeam.Add(user.Nickname, NO_TEAM);
+                        }
                     }
-                    catch(CommunicationObjectAbortedException communicationObjectAbortedException)
+                    catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                     {
-                        log.Error (communicationObjectAbortedException);
-                        User userToDisconnect = new User();
-                        userToDisconnect.Nickname = userInTheLobby;
-                        DisconnectLobby(userToDisconnect);
+                        log.Error(communicationObjectAbortedException);
+                    }
+
+                    foreach (string userInTheLobby in usersNickname)
+                    {
+                        try
+                        {
+                            usersContext[userInTheLobby].ShowConnectionInLobby(user);
+                        }
+                        catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                        {
+                            log.Error(communicationObjectAbortedException);
+                            User userToDisconnect = new User();
+                            userToDisconnect.Nickname = userInTheLobby;
+                            DisconnectLobby(userToDisconnect);
+                        }
                     }
                 }
             }
+            
         }
 
         public string CreateLobby(User user)
@@ -350,8 +354,6 @@ namespace MessageService
                 mailString = ERROR_STRING;
             }
 
-           
-
             return mailString;
         }
 
@@ -375,9 +377,16 @@ namespace MessageService
                             usersContext[userInTheLobby].ShowDisconnectionInLobby(user);
                         }
                     }
-                    catch(CommunicationObjectAbortedException communicationObjectAbortedException)
+                    catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                     {
                         log.Error(communicationObjectAbortedException);
+                        User userToDisconnect = new User();
+                        userToDisconnect.Nickname = userInTheLobby;
+                        DisconnectLobby(userToDisconnect);
+                    }
+                    catch (CommunicationException communicationException)
+                    {
+                        log.Error("User disconnected: " + userInTheLobby + "/n"+ communicationException);
                         User userToDisconnect = new User();
                         userToDisconnect.Nickname = userInTheLobby;
                         DisconnectLobby(userToDisconnect);
