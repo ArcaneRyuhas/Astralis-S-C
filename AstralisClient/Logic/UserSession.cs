@@ -5,9 +5,9 @@ namespace Astralis.Logic
     public class UserSession
     {
         private static UserSession _instance;
-        private readonly string _nickname = "";
-        private readonly string _mail = "";
-        private readonly int _imageId = 1;
+        private readonly string _nickname;
+        private readonly string _mail;
+        private readonly int _imageId;
 
         private UserSession(User user)
         {

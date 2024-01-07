@@ -173,14 +173,12 @@ namespace Astralis.Views
             }
         }
 
-        private User SetUserInformation(User user)
+        private void SetUserInformation(User user)
         {
             user.Nickname = txtNickname.Text;
             user.Password = CreateSha2(pbPassword.Password);
             user.ImageId = 1;
             user.Mail = txtMail.Text;
-
-            return user;
         }
 
         private string CreateSha2(string password)

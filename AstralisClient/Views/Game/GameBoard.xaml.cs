@@ -409,9 +409,9 @@ namespace Astralis.Views.Game
             this.Close();
         }
 
-        public void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn)
+        public void PlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn)
         {
-            _gameManager.PlayerEndedTurn(player, boardAfterTurn);
+            _gameManager.PlayerEndedTurn(nickname, boardAfterTurn);
         }
 
         public void TakeCardOutOfHand(string nickname, GraphicCard graphicCardToRemove, Dictionary<string, int> usersTeam)

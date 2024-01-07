@@ -119,5 +119,18 @@ namespace Astralis.Views.Game.GameLogic
                 && _health == otherCard._health
                 && _type == otherCard._type;
         }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + _mana.GetHashCode();
+                hash = hash * 23 + _attack.GetHashCode();
+                hash = hash * 23 + _health.GetHashCode();
+                hash = hash * 23 + (_type != null ? _type.GetHashCode() : 0);
+                return hash;
+            }
+        }
     }
 }

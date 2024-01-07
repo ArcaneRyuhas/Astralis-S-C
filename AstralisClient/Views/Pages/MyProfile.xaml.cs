@@ -117,7 +117,6 @@ namespace Astralis.Views.Pages
 
         private void BtnAcceptClick(object sender, RoutedEventArgs e)
         {
-            string mail = txtMail.Text;
 
             User user = new User();
             SetUserInformation(user);
@@ -157,7 +156,7 @@ namespace Astralis.Views.Pages
 
         }
 
-        private User SetUserInformation(User user)
+        private void SetUserInformation(User user)
         {
             user.Nickname = txtNickname.Text;
             user.Password = "";
@@ -168,8 +167,6 @@ namespace Astralis.Views.Pages
             {
                 user.Password = CreateSha2(pbPassword.Password);
             }
-
-            return user;
         }
 
 

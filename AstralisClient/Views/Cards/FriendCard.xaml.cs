@@ -28,12 +28,9 @@ namespace Astralis.Views.Cards
         public void SetLobbyCard(string nickname, bool onlineStatus, int friendStatus)
         {
             lblNickname.Content = nickname;
-            if (friendStatus == IS_FRIEND)
+            if (friendStatus == IS_FRIEND && onlineStatus)
             {
-                if (onlineStatus == true)
-                {
-                    ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
-                }
+                ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }
             btnSendGameInvitation.Visibility = Visibility.Visible;
         }

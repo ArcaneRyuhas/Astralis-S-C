@@ -87,19 +87,8 @@ namespace Astralis.Views
             {
                 string mailString = _client.SendFriendInvitation(_gameId, friendUsername);
 
-                if (mailString == Constants.USER_NOT_FOUND)
-                {
-                    MessageBox.Show(Properties.Resources.msgUserNotFound, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else if (mailString == Constants.ERROR_STRING)
-                {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    _friendWindow.Disconnect();
-                }
-                else
-                {
-                    MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                MailValidations(mailString);
+
             }
             catch (CommunicationException)
             {
@@ -301,11 +290,11 @@ namespace Astralis.Views
             RemoveCard(user);
         }
 
-        public void ShowUsersInLobby(Tuple<User,int>[] userList)
+        public void ShowUsersInLobby(Tuple<User,int>[] users)
         {
-            for (int i = 0; i < userList.Length; i++)
+            for (int i = 0; i < users.Length; i++)
             {
-                AddCard(userList[i].Item1, userList[i].Item2);
+                AddCard(users[i].Item1, users[i].Item2);
             }
 
             User user = new User();
@@ -357,7 +346,7 @@ namespace Astralis.Views
 
             foreach (var space in _freeSpaces)
             {
-                if (space.Value == true)
+                if (space.Value)
                 {
                     noFreeSpaces = false;
                     break;
@@ -483,26 +472,12 @@ namespace Astralis.Views
 
         private void BtnSendInvitationClick(object sender, RoutedEventArgs e)
         {
-            
             try
             {
                 string toSendMail = txtFriendMail.Text;
                 string mailString = _client.SendFriendInvitation(_gameId, toSendMail);
 
-                if (mailString == Constants.USER_NOT_FOUND)
-                {
-                    MessageBox.Show(Properties.Resources.msgUserNotFound, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else if (mailString == Constants.ERROR_STRING)
-                {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    _friendWindow.Disconnect();
-                }
-                else
-                {
-                    MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
-
-                }
+                MailValidations(mailString);
             }
             catch (CommunicationException)
             {
@@ -511,6 +486,25 @@ namespace Astralis.Views
             catch (TimeoutException)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void MailValidations(string mailString)
+        {
+
+            if (mailString == Constants.USER_NOT_FOUND)
+            {
+                MessageBox.Show(Properties.Resources.msgUserNotFound, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else if (mailString == Constants.ERROR_STRING)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                _friendWindow.Disconnect();
+            }
+            else
+            {
+                MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
         }
 
