@@ -20,7 +20,7 @@ namespace MessageService
         private const int GUEST_IMAGE_ID = 1;
         private const int VALIDATION_FAILURE = 0;
         private const int ERROR = -1;
-        private const int VALIDATION_SUCCES = 1;
+        private const int VALIDATION_SUCCESS = 1;
 
         private static readonly ILog log = LogManager.GetLogger(typeof(UserManager));
 
@@ -30,15 +30,14 @@ namespace MessageService
 
             try
             {
-                int findUserAnswer = FindUserByNickname(nickname);
-                if (findUserAnswer == VALIDATION_SUCCES)
+                if (FindUserByNickname(nickname) == VALIDATION_SUCCESS)
                 {
                     UserAccess userAccess = new UserAccess();
                     result = userAccess.ConfirmUser(nickname, password);
                 }
-                else if(findUserAnswer == ERROR)
+                if (result > VALIDATION_FAILURE)
                 {
-                    result = ERROR;
+                    result = VALIDATION_SUCCESS;
                 }
             }
             catch(EntityException entityException)
@@ -57,10 +56,19 @@ namespace MessageService
         public int AddUser(User user)
         {
             UserAccess userAccess = new UserAccess();
-            int result;
+            int result = VALIDATION_FAILURE;
+
             try
             {
-                result = userAccess.CreateUser(user);
+                if (FindUserByNickname(user.Nickname) != VALIDATION_SUCCESS)
+                {
+                    result = userAccess.CreateUser(user);
+
+                    if (result > VALIDATION_FAILURE)
+                    {
+                        result = VALIDATION_SUCCESS;
+                    }
+                }  
             }
             catch (SqlException sqlException)
             {
@@ -110,13 +118,17 @@ namespace MessageService
 
         public int FindUserByNickname(string nickname)
         {
-
-            int isFound;
+            int isFound = VALIDATION_FAILURE;
 
             UserAccess userAccess = new UserAccess();
             try
             {
                 isFound = userAccess.FindUserByNickname(nickname);
+
+                if (isFound > VALIDATION_FAILURE)
+                {
+                    isFound = VALIDATION_SUCCESS;
+                }
             }
             catch(EntityException entityException)
             {
@@ -145,6 +157,7 @@ namespace MessageService
             catch (SqlException sqlException)
             {
                 log.Error(sqlException);
+                foundUser.Nickname = NICKNAME_ERROR;
             }
 
             return foundUser;
@@ -157,7 +170,15 @@ namespace MessageService
             UserAccess userAccess = new UserAccess();
             try
             {
-                result = userAccess.UpdateUser(user);
+                if (FindUserByNickname(user.Nickname) == VALIDATION_SUCCESS)
+                {
+                    result = userAccess.UpdateUser(user);
+
+                    if (result > VALIDATION_FAILURE)
+                    {
+                        result = VALIDATION_SUCCESS;
+                    }
+                }
             }
             catch(SqlException sqlException)
             {
@@ -226,7 +247,13 @@ namespace MessageService
             GameAccess gameAccess = new GameAccess();
             try
             {
-               result = gameAccess.CanPlay(nickname);
+                result = gameAccess.CanPlay(nickname);
+               
+                if (result > VALIDATION_FAILURE) 
+                {
+                    result = VALIDATION_SUCCESS;
+                }
+
             }
             catch (EntityException entityException)
             {
@@ -647,12 +674,12 @@ namespace MessageService
             {
                 int findUserAnswer = FindUserByNickname(nicknameReciever);
 
-                if (findUserAnswer == VALIDATION_SUCCES)
+                if (findUserAnswer == VALIDATION_SUCCESS)
                 {
                     FriendAccess friendAccess = new FriendAccess();
                     if (friendAccess.SendFriendRequest(nicknameSender, nicknameReciever))
                     {
-                        isSucceded = VALIDATION_SUCCES;
+                        isSucceded = VALIDATION_SUCCESS;
                         if (onlineUsers.ContainsKey(nicknameReciever))
                         {
                             onlineUsers[nicknameReciever].ShowFriendRequest(nicknameSender);
@@ -691,13 +718,13 @@ namespace MessageService
             {
                 int findUserAnswer = FindUserByNickname(nicknameReciever);
 
-                if (findUserAnswer == VALIDATION_SUCCES)
+                if (findUserAnswer == VALIDATION_SUCCESS)
                 {
                     FriendAccess friendAccess = new FriendAccess();
 
                     if (friendAccess.ReplyFriendRequest(nicknameReciever, nicknameSender, answer) > IS_SUCCEDED)
                     {
-                        isSucceded = VALIDATION_SUCCES;
+                        isSucceded = VALIDATION_SUCCESS;
 
                         if (answer == ACCEPTED_FRIEND)
                         {
@@ -741,7 +768,7 @@ namespace MessageService
             {
                 if(friendAccess.RemoveFriend(nickname, nicknamefriendToRemove))
                 {
-                    isSucceded = VALIDATION_SUCCES;
+                    isSucceded = VALIDATION_SUCCESS;
                 }
             }
             catch (SqlException sqlException)
@@ -798,6 +825,8 @@ namespace MessageService
                 }
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
+                    GameAccess gameAccess = new GameAccess();
+                    gameAccess.BanUser(nickname);
                     log.Error(communicationObjectAbortedException);
                     EndGame(GAME_ABORTED, nickname);
                 }
@@ -812,6 +841,8 @@ namespace MessageService
                         }
                         catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                         {
+                            GameAccess gameAccess = new GameAccess();
+                            gameAccess.BanUser(userInGame);
                             log.Error("Error in ConnectGame " + communicationObjectAbortedException);
                             EndGame(GAME_ABORTED, nickname);
                         }
@@ -859,6 +890,8 @@ namespace MessageService
                     }
                     catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                     {
+                        GameAccess gameAccess = new GameAccess();
+                        gameAccess.BanUser(userInGame);
                         log.Error("Error in DrawCard " + communicationObjectAbortedException);
                         EndGame(GAME_ABORTED, nickname);
                     }
@@ -894,6 +927,8 @@ namespace MessageService
                 }
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
+                    GameAccess gameAccess = new GameAccess();
+                    gameAccess.BanUser(userInGame);
                     log.Error(communicationObjectAbortedException);
                     usersInGameContext.Remove(userInGame);
                 }
@@ -921,6 +956,8 @@ namespace MessageService
                         }
                         catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                         {
+                            GameAccess gameAccess = new GameAccess();
+                            gameAccess.BanUser(userInGame);
                             log.Error(communicationObjectAbortedException);
                             EndGame(GAME_ABORTED, nickname);
                         }
@@ -935,6 +972,8 @@ namespace MessageService
                     }
                     catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                     {
+                        GameAccess gameAccess = new GameAccess();
+                        gameAccess.BanUser(userInGame);
                         log.Error(communicationObjectAbortedException);
                         EndGame(GAME_ABORTED, nickname);
                     }
@@ -965,9 +1004,19 @@ namespace MessageService
 
             foreach (string userInGame in usersInTeam.Keys)
             {
-                if (usersInTeam[userInGame] == usersInTeam[nickname])
+                try
                 {
-                    usersInGameContext[userInGame].ReceiveMessageGame(message);
+                    if (usersInTeam[userInGame] == usersInTeam[nickname])
+                    {
+                        usersInGameContext[userInGame].ReceiveMessageGame(message);
+                    }
+                }
+                catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                {
+                    GameAccess gameAccess = new GameAccess();
+                    gameAccess.BanUser(userInGame);
+                    log.Error(communicationObjectAbortedException);
+                    EndGame(GAME_ABORTED, nickname);
                 }
             }
         }
@@ -1015,6 +1064,8 @@ namespace MessageService
                 }
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
+                    GameAccess gameAccess = new GameAccess();
+                    gameAccess.BanUser(userInGame);
                     log.Error(communicationObjectAbortedException);
                     EndGame(GAME_ABORTED, userInGame);
                 }
