@@ -14,15 +14,12 @@ namespace MessageService.Mail
     {
         private static Mail instance;
         private readonly ILog log = LogManager.GetLogger(typeof(UserManager));
-        private string configPath = Path.Combine(Directory.GetCurrentDirectory(), "Mail", "Resources", "MailConfiguration.json");
-        private readonly IConfiguration configuration;
+        private readonly string configPath = Path.Combine(Directory.GetCurrentDirectory(), "Mail", "Resources", "MailConfiguration.json");
         private const string MAIL_DISPLAY_NAME = "Astralis";
         private readonly string fromEmail;
-        private readonly string smtpHost;
         private readonly string password;
         private readonly int smtpPort;
         private readonly SmtpClient smtpClient;
-        private MailMessage mail = new MailMessage();
 
         public static Mail Instance()
         {
@@ -35,12 +32,12 @@ namespace MessageService.Mail
 
         public Mail() 
         {
-            configuration = new ConfigurationBuilder()
+             IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile(configPath)
             .Build();
 
             fromEmail = configuration["EmailSettings:Email"];
-            smtpHost = configuration["EmailSettings:SmtpHost"];
+            string smtpHost = configuration["EmailSettings:SmtpHost"];
             password = configuration["EmailSettings:Password"];
             smtpPort = configuration.GetSection("EmailSettings")["SmtpPort"] != null ? int.Parse(configuration.GetSection("EmailSettings")["SmtpPort"]) : 0;
             smtpClient = new SmtpClient(smtpHost, smtpPort)
@@ -51,7 +48,7 @@ namespace MessageService.Mail
 
         public string sendInvitationMail(string to, string gameId)
         {
-            mail = new MailMessage();
+            MailMessage mail = new MailMessage();
             string message = "Message could not be sent...";
             string htmlFilePath = "Mail/Resources/astralis.html";
             string body;

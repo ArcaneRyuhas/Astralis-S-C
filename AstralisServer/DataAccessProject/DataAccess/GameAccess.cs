@@ -12,6 +12,10 @@ namespace DataAccessProject.DataAccess
 {
     public class GameAccess
     {
+        private const int INT_VALIDATION_SUCCESS = 1;
+        private const int INT_VALIDATION_FAILURE = 0;
+        private const string GAME_MODE = "normal";
+
         public GameAccess() { }
 
         public bool CreateGame(string gameId)
@@ -32,9 +36,9 @@ namespace DataAccessProject.DataAccess
                         }
                     }
                 }
-                catch (SqlException sqlException)
+                catch (SqlException)
                 {
-                    throw sqlException;
+                    throw;
                 }
             };
 
@@ -64,9 +68,9 @@ namespace DataAccessProject.DataAccess
                         result = INT_VALIDATION_SUCCESS;
                     }
                 }
-                catch (SqlException sqlException)
+                catch (SqlException)
                 {
-                    throw sqlException;
+                    throw;
                 }
                 return result;
             }
@@ -89,18 +93,15 @@ namespace DataAccessProject.DataAccess
                         isRepeated = true;
                     }
                 }
-                catch (SqlException sqlException)
+                catch (SqlException)
                 {
-                    throw sqlException;
+                    throw;
                 }
             }
             return isRepeated;
         }
 
-        private const int INT_VALIDATION_SUCCESS = 1;
-        private const int INT_VALIDATION_FAILURE = 0;
-        private const int ERROR = -1;
-        private const string GAME_MODE = "normal";
+       
 
         public int EndGame(int winnerTeam, string gameId)
         {
@@ -126,9 +127,9 @@ namespace DataAccessProject.DataAccess
                         result = INT_VALIDATION_SUCCESS;
                     }
                 }
-                catch (SqlException sqlException)
+                catch (SqlException)
                 {
-                    throw sqlException;
+                    throw;
                 }
             }
 
@@ -166,10 +167,9 @@ namespace DataAccessProject.DataAccess
                         gameInfo.Add(gamesWonInfo);
                     }
                 }
-                catch (SqlException sqlException)
+                catch (SqlException)
                 {
-                    Console.WriteLine("Database error: " + sqlException.Message);
-                    throw sqlException;
+                    throw;
                 }
             }
 
@@ -210,9 +210,9 @@ namespace DataAccessProject.DataAccess
                         }
                     }
                 }
-                catch (EntityException entityException)
+                catch (SqlException)
                 {
-                    throw entityException;
+                    throw;
                 }
             }
                 return result;
@@ -239,10 +239,9 @@ namespace DataAccessProject.DataAccess
                         result = INT_VALIDATION_SUCCESS;
                     }
                 }
-                catch (EntityException entityException)
+                catch (SqlException)
                 {
-                    result = ERROR;
-                    throw entityException;
+                    throw;
                 }
             }
 
@@ -265,10 +264,9 @@ namespace DataAccessProject.DataAccess
                         result = INT_VALIDATION_SUCCESS;
                     }
                 }
-                catch (EntityException entityException)
+                catch (SqlException)
                 {
-                    result = ERROR;
-                    throw entityException;
+                    throw;
                 }
             }
             return result;
@@ -295,9 +293,9 @@ namespace DataAccessProject.DataAccess
                         }
                     }
                 }
-                catch (EntityException entityException)
+                catch (SqlException)
                 {
-                    throw entityException;
+                    throw;
                 }
             }
 

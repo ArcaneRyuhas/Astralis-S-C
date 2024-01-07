@@ -16,7 +16,7 @@ namespace DataAccessProject.DataAccess
         private const bool ACCEPTED_FRIEND = true;
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
-        private UserAccess userAccess = new UserAccess();
+        private readonly UserAccess userAccess = new UserAccess();
 
         public FriendAccess() { }  
 
@@ -43,9 +43,9 @@ namespace DataAccessProject.DataAccess
                         IsSucceded = true;
                     }
                 }
-                catch(SqlException sqlException) 
+                catch (SqlException)
                 {
-                    throw sqlException;
+                    throw;
                 }
             }
             return IsSucceded;
@@ -82,9 +82,9 @@ namespace DataAccessProject.DataAccess
                         isSucceded = true;
                     }
                 }
-                catch (SqlException sqlException)
+                catch (SqlException)
                 {
-                    throw sqlException;
+                    throw;
                 }
             }
             return isSucceded;
@@ -125,9 +125,9 @@ namespace DataAccessProject.DataAccess
                         }
                     }
                 }
-                catch (SqlException sqlException)
+                catch (SqlException)
                 {
-                    throw sqlException;
+                    throw;
                 }
             }
             return result;
@@ -149,18 +149,18 @@ namespace DataAccessProject.DataAccess
 
                         var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname || f.Nickname1 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
 
-                        AddPendingRequests(pendingRequests, nickname, friendList);
+                        AddPendingRequests(pendingRequests, friendList);
                     }
                 }
-                catch (SqlException sqlException)
+                catch (SqlException)
                 {
-                    throw sqlException;
-                } 
+                    throw;
+                }
             }
             return friendList;
         }
 
-        private void AddPendingRequests(List<UserFriend> pendingRequests, string nickname, Dictionary<string, Tuple<bool, int>> friendList)
+        private void AddPendingRequests(List<UserFriend> pendingRequests, Dictionary<string, Tuple<bool, int>> friendList)
         {
             Tuple<bool, int> friendTuple;
 

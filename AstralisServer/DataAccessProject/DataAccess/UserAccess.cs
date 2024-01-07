@@ -16,10 +16,7 @@ namespace DataAccessProject.DataAccess
     {
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
-        private const int ERROR = -1;
         private const string USER_NICKNAME_ERROR = "Error";
-        private const bool BOOL_VALIDATION_SUCCESS = true;
-        private const bool BOOL_VALIDATION_FAILURE = false;
         private const string USER_NOT_FOUND = "UserNotFound";
 
         public UserAccess() { }
@@ -63,12 +60,11 @@ namespace DataAccessProject.DataAccess
                     return maxGuestNumber;
                 }
             }
-            catch (EntityException entityException)
+            catch (SqlException)
             {
-                maxGuestNumber = ERROR;
-                throw entityException;
+                throw;
             }
-           
+
         }
         public int CreateGuest(Contracts.User user)
         {
@@ -88,7 +84,7 @@ namespace DataAccessProject.DataAccess
                         databaseUser.imageId = (short)user.ImageId;
                         databaseUser.mail = user.Mail;
 
-                        var newUser = context.User.Add(databaseUser);
+                        context.User.Add(databaseUser);
 
                         result = context.SaveChanges();
 
@@ -101,10 +97,9 @@ namespace DataAccessProject.DataAccess
                         }
                     }
                 }
-                catch (EntityException entityException)
+                catch (SqlException)
                 {
-                    result = ERROR;
-                    throw entityException;
+                    throw;
                 }
             }
             return result;
@@ -155,10 +150,9 @@ namespace DataAccessProject.DataAccess
                         result = INT_VALIDATION_FAILURE;
                     }
                 }
-                catch (EntityException entityException)
+                catch (SqlException)
                 {
-                    result = ERROR;
-                    throw entityException;
+                    throw;
                 }
             };
 
@@ -202,10 +196,9 @@ namespace DataAccessProject.DataAccess
                     }
                 }
             }
-            catch (EntityException entityException)
+            catch (SqlException)
             {
-                result = ERROR;
-                throw entityException;
+                throw;
             }
 
 
@@ -235,10 +228,9 @@ namespace DataAccessProject.DataAccess
                         foundUser.Nickname = USER_NOT_FOUND;
                     }
                 }
-                catch (EntityException entityException)
+                catch (SqlException)
                 {
-                    foundUser.Nickname = USER_NICKNAME_ERROR;
-                    throw entityException;
+                    throw;
                 }
             }
             return foundUser;
@@ -261,10 +253,9 @@ namespace DataAccessProject.DataAccess
                         isFound = INT_VALIDATION_SUCCESS;
                     }
                 }
-                catch (EntityException entityException)
+                catch (SqlException)
                 {
-                    isFound = ERROR;
-                    throw entityException;
+                    throw;
                 }
             }
             return isFound;
@@ -290,10 +281,9 @@ namespace DataAccessProject.DataAccess
                             result = INT_VALIDATION_SUCCESS;
                         }
                     }
-                    catch (EntityException entityException)
+                    catch (SqlException)
                     {
-                        result = ERROR;
-                        throw entityException;
+                        throw;
                     }
                 }
             }
@@ -320,10 +310,9 @@ namespace DataAccessProject.DataAccess
                             result = context.SaveChanges();
                         }
                     }
-                    catch (EntityException entityException)
+                    catch (SqlException)
                     {
-                        result = ERROR;
-                        throw entityException;
+                        throw;
                     }
                 }
             }
