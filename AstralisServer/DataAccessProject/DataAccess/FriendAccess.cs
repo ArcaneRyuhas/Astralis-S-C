@@ -26,26 +26,19 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
 
-                    var friendRelationship = context.UserFriend
-                        .FirstOrDefault(f =>
-                            (f.Nickname1 == nickname && f.Nickname2 == nicknamefriendToRemove) ||
-                            (f.Nickname1 == nicknamefriendToRemove && f.Nickname2 == nickname) &&
-                            f.FriendStatusId == IS_FRIEND);
+                var friendRelationship = context.UserFriend
+                    .FirstOrDefault(f =>
+                        (f.Nickname1 == nickname && f.Nickname2 == nicknamefriendToRemove) ||
+                        (f.Nickname1 == nicknamefriendToRemove && f.Nickname2 == nickname) &&
+                        f.FriendStatusId == IS_FRIEND);
 
-                    if (friendRelationship != null)
-                    {
-                        context.UserFriend.Remove(friendRelationship);
-                        context.SaveChanges();
-                        IsSucceded = true;
-                    }
-                }
-                catch (SqlException)
+                if (friendRelationship != null)
                 {
-                    throw;
+                    context.UserFriend.Remove(friendRelationship);
+                    context.SaveChanges();
+                    IsSucceded = true;
                 }
             }
             return IsSucceded;
@@ -57,34 +50,27 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
+                context.Database.Log = Console.WriteLine;
+
+                var existingRequest = context.UserFriend
+                    .FirstOrDefault(f =>
+                        (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) ||
+                        (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) &&
+                        f.FriendStatusId == IS_PENDING_FRIEND);
+
+                if (existingRequest == null)
                 {
-                    context.Database.Log = Console.WriteLine;
-
-                    var existingRequest = context.UserFriend
-                        .FirstOrDefault(f =>
-                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) ||
-                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) &&
-                            f.FriendStatusId == IS_PENDING_FRIEND);
-
-                    if (existingRequest == null)
+                    var newFriendRequest = new UserFriend
                     {
-                        var newFriendRequest = new UserFriend
-                        {
-                            Nickname1 = nicknameSender,
-                            Nickname2 = nicknameReciever,
-                            FriendStatusId = IS_PENDING_FRIEND
-                        };
+                        Nickname1 = nicknameSender,
+                        Nickname2 = nicknameReciever,
+                        FriendStatusId = IS_PENDING_FRIEND
+                    };
 
-                        context.UserFriend.Add(newFriendRequest);
-                        context.SaveChanges();
+                    context.UserFriend.Add(newFriendRequest);
+                    context.SaveChanges();
 
-                        isSucceded = true;
-                    }
-                }
-                catch (SqlException)
-                {
-                    throw;
+                    isSucceded = true;
                 }
             }
             return isSucceded;
@@ -96,65 +82,52 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
+                context.Database.Log = Console.WriteLine;
+
+                var existingRequest = context.UserFriend
+                    .FirstOrDefault(f =>
+                        (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) ||
+                        (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) &&
+                        f.FriendStatusId == IS_PENDING_FRIEND);
+
+                if (existingRequest != null)
                 {
-                    context.Database.Log = Console.WriteLine;
-
-                    var existingRequest = context.UserFriend
-                        .FirstOrDefault(f =>
-                            (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) ||
-                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) &&
-                            f.FriendStatusId == IS_PENDING_FRIEND);
-
-                    if (existingRequest != null)
+                    if (answer == ACCEPTED_FRIEND)
                     {
-                        if (answer == ACCEPTED_FRIEND)
-                        {
-                            existingRequest.FriendStatusId = IS_FRIEND;
-                        }
-                        else
-                        {
-                            context.UserFriend.Remove(existingRequest);
-                        }
-
-                        result = context.SaveChanges();
-
-                        if (result !=  INT_VALIDATION_FAILURE)
-                        {
-                            result = INT_VALIDATION_SUCCESS;
-                        }
+                        existingRequest.FriendStatusId = IS_FRIEND;
                     }
-                }
-                catch (SqlException)
-                {
-                    throw;
+                    else
+                    {
+                        context.UserFriend.Remove(existingRequest);
+                    }
+
+                    result = context.SaveChanges();
+
+                    if (result != INT_VALIDATION_FAILURE)
+                    {
+                        result = INT_VALIDATION_SUCCESS;
+                    }
                 }
             }
             return result;
         }
 
-        public Dictionary<string, Tuple<bool, int>> GetFriendList(string nickname, List<string> onlineUsers) //REFACTORIZAR
+        public Dictionary<string, Tuple<bool, int>> GetFriendList(string nickname, List<string> onlineUsers)
         {
             Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
 
             using (var context = new AstralisDBEntities())
             {
-                try
+                if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
                 {
-                    if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS){
-                        context.Database.Log = Console.WriteLine;
-                        var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
+                    context.Database.Log = Console.WriteLine;
+                    var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
 
-                        friendList = AddFriendToDictionary(onlineUsers, databaseFriends, nickname);
+                    friendList = AddFriendToDictionary(onlineUsers, databaseFriends, nickname);
 
-                        var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname || f.Nickname1 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
+                    var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname || f.Nickname1 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
 
-                        AddPendingRequests(pendingRequests, friendList);
-                    }
-                }
-                catch (SqlException)
-                {
-                    throw;
+                    AddPendingRequests(pendingRequests, friendList);
                 }
             }
             return friendList;

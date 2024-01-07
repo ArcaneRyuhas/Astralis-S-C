@@ -24,22 +24,16 @@ namespace DataAccessProject.DataAccess
                 Card = DEFAULT_DECK
             };
 
-            try
-            {
-                context.Deck.Add(deck);
-                result = context.SaveChanges();
+            context.Deck.Add(deck);
+            result = context.SaveChanges();
 
-                CreateRelationUserDeck(context, deck.DeckId, nickname);
+            result += CreateRelationUserDeck(context, deck.DeckId, nickname);
 
-                if (result > INT_VALIDATION_FAILURE)
-                {
-                    result = INT_VALIDATION_SUCCESS;
-                }
-            }
-            catch (SqlException)
+            if (result > INT_VALIDATION_FAILURE)
             {
-                throw;
+                result = INT_VALIDATION_SUCCESS;
             }
+
             return result;
         }
 
@@ -47,25 +41,17 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            try
+            UserDeck userDeck = new UserDeck();
+            userDeck.Nickname = nickname;
+            userDeck.DeckId = deckId;
+
+            context.UserDeck.Add(userDeck);
+
+            result = context.SaveChanges();
+
+            if (result > INT_VALIDATION_FAILURE)
             {
-                UserDeck userDeck = new UserDeck();
-                userDeck.Nickname = nickname;
-                userDeck.DeckId = deckId;
-
-                context.UserDeck.Add(userDeck);
-
-                result = context.SaveChanges();
-
-                if (result > INT_VALIDATION_FAILURE)
-                {
-                    result = INT_VALIDATION_SUCCESS;
-                }
-
-            }
-            catch (SqlException)
-            {
-                throw;
+                result = INT_VALIDATION_SUCCESS;
             }
 
             return result;
@@ -74,23 +60,16 @@ namespace DataAccessProject.DataAccess
         
         public List<int> GetDeckByNickname(string nickname)
         {
-            List<int> cardList = new List<int>();
+            List<int> cardList;
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    UserDeck userDeck = new UserDeck();
-                    
-                    userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
+                UserDeck userDeck = new UserDeck();
 
-                    Deck deck = context.Deck.Find(userDeck.DeckId);
-                    cardList = deck.Card.Split(',').Select(int.Parse).ToList();
-                }
-                catch (SqlException)
-                {
-                    throw;
-                }
+                userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
+
+                Deck deck = context.Deck.Find(userDeck.DeckId);
+                cardList = deck.Card.Split(',').Select(int.Parse).ToList();
             }
 
             return cardList;

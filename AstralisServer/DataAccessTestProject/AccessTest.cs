@@ -1,16 +1,10 @@
 ﻿using DataAccessProject.DataAccess;
-using DataAccessProject.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Data.Entity.Core;
-using System.Data.SqlClient;
-using System.ComponentModel;
 using DataAccessProject;
 using User = DataAccessProject.Contracts.User;
 using System.Collections.Generic;
-using System.Linq;
-using System.Globalization;
-using System.Runtime.Remoting.Contexts;
+
 
 namespace DataAccessTestProject
 {
@@ -274,7 +268,6 @@ namespace DataAccessTestProject
     [TestClass]
     public class UserAccessTestExceptions
     {
-        private const string USER_NICKNAME_ERROR = "Error";
         private static UserAccess userAccess = new UserAccess();
 
 

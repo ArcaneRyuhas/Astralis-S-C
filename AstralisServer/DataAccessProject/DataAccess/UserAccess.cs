@@ -25,47 +25,40 @@ namespace DataAccessProject.DataAccess
         {
             int maxGuestNumber = 0;
 
-            try
+            using (var context = new AstralisDBEntities())
             {
-                using (var context = new AstralisDBEntities())
+                context.Database.Log = Console.WriteLine;
+
+                var guestUsers = context.User
+                .Where(user => user.nickName.StartsWith("Guest"))
+                .Select(databaseUser => new Contracts.User
                 {
-                    context.Database.Log = Console.WriteLine;
+                    Nickname = databaseUser.nickName,
+                    Mail = databaseUser.mail,
+                    ImageId = databaseUser.imageId
+                })
+                .ToList();
 
-                    var guestUsers = context.User
-                    .Where(user => user.nickName.StartsWith("Guest"))
-                    .Select(databaseUser => new Contracts.User
+                if (guestUsers.Any())
+                {
+                    maxGuestNumber = guestUsers.Max(user =>
                     {
-                        Nickname = databaseUser.nickName,
-                        Mail = databaseUser.mail,
-                        ImageId = databaseUser.imageId
-                    })
-                    .ToList();
-
-                    if (guestUsers.Any())
-                    {
-                        maxGuestNumber = guestUsers.Max(user =>
+                        int number = 0;
+                        if (int.TryParse(user.Nickname.Substring("Guest".Length), out number))
                         {
-                            int number = 0;
-                            if (int.TryParse(user.Nickname.Substring("Guest".Length), out number))
-                            {
-                                return number;
-                            }
                             return number;
-                        });
-                    }
-                    else
-                    {
-                        maxGuestNumber = INT_VALIDATION_FAILURE;
-                    }
-                    return maxGuestNumber;
+                        }
+                        return number;
+                    });
                 }
+                else
+                {
+                    maxGuestNumber = INT_VALIDATION_FAILURE;
+                }
+                return maxGuestNumber;
             }
-            catch (SqlException)
-            {
-                throw;
-            }
-
         }
+
         public int CreateGuest(Contracts.User user)
         {
             int result = INT_VALIDATION_FAILURE;
@@ -73,8 +66,7 @@ namespace DataAccessProject.DataAccess
            
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
+
                     if (FindUserByNickname(user.Nickname) == INT_VALIDATION_FAILURE)
                     {
                         context.Database.Log = Console.WriteLine;
@@ -96,11 +88,7 @@ namespace DataAccessProject.DataAccess
                             result = INT_VALIDATION_SUCCESS;
                         }
                     }
-                }
-                catch (SqlException)
-                {
-                    throw;
-                }
+                
             }
             return result;
         }
@@ -111,48 +99,41 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
+                if (FindUserByNickname(user.Nickname) == INT_VALIDATION_FAILURE)
                 {
-                    if(FindUserByNickname(user.Nickname) == INT_VALIDATION_FAILURE)
+                    using (var transactionContext = context.Database.BeginTransaction())
                     {
-                        using (var transactionContext = context.Database.BeginTransaction())
+                        context.Database.Log = Console.WriteLine;
+
+                        string cleanedPassword = user.Password.Trim();
+
+                        var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
+
+                        User databaseUser = new User();
+                        databaseUser.nickName = user.Nickname;
+                        databaseUser.mail = user.Mail;
+                        databaseUser.imageId = (short)user.ImageId;
+                        databaseUser.userSessionFk = newSession.userSessionId;
+                        databaseUser.UserSession = newSession;
+
+                        context.User.Add(databaseUser);
+
+                        result = context.SaveChanges();
+
+                        DeckAccess deckAccess = new DeckAccess();
+                        deckAccess.CreateDefaultDeck(context, user.Nickname);
+
+                        transactionContext.Commit();
+
+                        if (result > INT_VALIDATION_FAILURE)
                         {
-                            context.Database.Log = Console.WriteLine;
-
-                            string cleanedPassword = user.Password.Trim();
-
-                            var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
-
-                            User databaseUser = new User();
-                            databaseUser.nickName = user.Nickname;
-                            databaseUser.mail = user.Mail;
-                            databaseUser.imageId = (short)user.ImageId;
-                            databaseUser.userSessionFk = newSession.userSessionId;
-                            databaseUser.UserSession = newSession;
-
-                            var newUser = context.User.Add(databaseUser);
-
-                            result = context.SaveChanges();
-
-                            DeckAccess deckAccess = new DeckAccess();
-                            deckAccess.CreateDefaultDeck(context, user.Nickname);
-
-                            transactionContext.Commit();
-
-                            if (result > INT_VALIDATION_FAILURE)
-                            {
-                                result = INT_VALIDATION_SUCCESS;
-                            }
+                            result = INT_VALIDATION_SUCCESS;
                         }
                     }
-                    else
-                    {
-                        result = INT_VALIDATION_FAILURE;
-                    }
                 }
-                catch (SqlException)
+                else
                 {
-                    throw;
+                    result = INT_VALIDATION_FAILURE;
                 }
             };
 
@@ -163,42 +144,32 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            try
+            if (FindUserByNickname(user.Nickname) == INT_VALIDATION_SUCCESS)
             {
-                if(FindUserByNickname(user.Nickname) == INT_VALIDATION_SUCCESS)
+                using (var context = new AstralisDBEntities())
                 {
-                    using (var context = new AstralisDBEntities())
+                    context.Database.Log = Console.WriteLine;
+                    var databaseUser = context.User.Find(user.Nickname);
+
+                    if (databaseUser != null)
                     {
-                        context.Database.Log = Console.WriteLine;
-                        var databaseUser = context.User.Find(user.Nickname);
+                        databaseUser.mail = user.Mail;
+                        databaseUser.imageId = (short)user.ImageId;
 
-                        if (databaseUser != null)
+                        var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
+
+                        if (databaseUserSession != null && !string.IsNullOrEmpty(user.Password))
                         {
-                            databaseUser.mail = user.Mail;
-                            databaseUser.imageId = (short)user.ImageId;
-
-                            var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
-
-                            if (databaseUserSession != null)
-                            {
-                                if (!string.IsNullOrEmpty(user.Password))
-                                {
-                                    databaseUserSession.password = user.Password;
-                                }
-                            }
-
-                            result = context.SaveChanges();
+                            databaseUserSession.password = user.Password;
                         }
-                        if (result > INT_VALIDATION_FAILURE)
-                        {
-                            result = INT_VALIDATION_SUCCESS;
-                        }
+
+                        result = context.SaveChanges();
+                    }
+                    if (result > INT_VALIDATION_FAILURE)
+                    {
+                        result = INT_VALIDATION_SUCCESS;
                     }
                 }
-            }
-            catch (SqlException)
-            {
-                throw;
             }
 
 
@@ -212,25 +183,18 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
-                    var databaseUser = context.User.Find(nickname);
+                context.Database.Log = Console.WriteLine;
+                var databaseUser = context.User.Find(nickname);
 
-                    if (databaseUser != null)
-                    {
-                        foundUser.Nickname = databaseUser.nickName;
-                        foundUser.Mail = databaseUser.mail;
-                        foundUser.ImageId = databaseUser.imageId;
-                    }
-                    else
-                    {
-                        foundUser.Nickname = USER_NOT_FOUND;
-                    }
-                }
-                catch (SqlException)
+                if (databaseUser != null)
                 {
-                    throw;
+                    foundUser.Nickname = databaseUser.nickName;
+                    foundUser.Mail = databaseUser.mail;
+                    foundUser.ImageId = databaseUser.imageId;
+                }
+                else
+                {
+                    foundUser.Nickname = USER_NOT_FOUND;
                 }
             }
             return foundUser;
@@ -242,20 +206,13 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
 
-                    var databaseUser = context.User.Find(nickname);
+                var databaseUser = context.User.Find(nickname);
 
-                    if (databaseUser != null)
-                    {
-                        isFound = INT_VALIDATION_SUCCESS;
-                    }
-                }
-                catch (SqlException)
+                if (databaseUser != null)
                 {
-                    throw;
+                    isFound = INT_VALIDATION_SUCCESS;
                 }
             }
             return isFound;
@@ -269,22 +226,16 @@ namespace DataAccessProject.DataAccess
             {
                 if (FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
                 {
-                    try
-                    {
-                        context.Database.Log = Console.WriteLine;
+                    context.Database.Log = Console.WriteLine;
 
-                        var databaseUser = context.User.Find(nickname);
-                        var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
+                    var databaseUser = context.User.Find(nickname);
+                    var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
 
-                        if (databaseUsersession != null && databaseUsersession.password == password)
-                        {
-                            result = INT_VALIDATION_SUCCESS;
-                        }
-                    }
-                    catch (SqlException)
+                    if (databaseUsersession != null && databaseUsersession.password == password)
                     {
-                        throw;
+                        result = INT_VALIDATION_SUCCESS;
                     }
+
                 }
             }
 
@@ -300,19 +251,12 @@ namespace DataAccessProject.DataAccess
             {
                 if (FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
                 {
-                    try
-                    {
-                        var userToDelete = context.User.FirstOrDefault(u => u.nickName == nickname);
+                    var userToDelete = context.User.FirstOrDefault(u => u.nickName == nickname);
 
-                        if (userToDelete != null)
-                        {
-                            context.User.Remove(userToDelete);
-                            result = context.SaveChanges();
-                        }
-                    }
-                    catch (SqlException)
+                    if (userToDelete != null)
                     {
-                        throw;
+                        context.User.Remove(userToDelete);
+                        result = context.SaveChanges();
                     }
                 }
             }

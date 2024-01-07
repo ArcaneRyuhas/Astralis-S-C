@@ -12,41 +12,40 @@ namespace MessageService.Mail
 {
     public class Mail
     {
-        private static Mail instance;
-        private readonly ILog log = LogManager.GetLogger(typeof(UserManager));
-        private readonly string configPath = Path.Combine(Directory.GetCurrentDirectory(), "Mail", "Resources", "MailConfiguration.json");
+        private static Mail _instance;
+        private readonly ILog _log = LogManager.GetLogger(typeof(UserManager));
+        private readonly string _configPath = Path.Combine(Directory.GetCurrentDirectory(), "Mail", "Resources", "MailConfiguration.json");
         private const string MAIL_DISPLAY_NAME = "Astralis";
-        private readonly string fromEmail;
-        private readonly string password;
-        private readonly int smtpPort;
+        private readonly string _fromEmail;
+        private readonly string _password;
         private readonly SmtpClient smtpClient;
 
         public static Mail Instance()
         {
-            if(instance == null)
+            if(_instance == null)
             {
-                instance = new Mail();
+                _instance = new Mail();
             }
-            return instance;
+            return _instance;
         }
 
         public Mail() 
         {
              IConfiguration configuration = new ConfigurationBuilder()
-            .AddJsonFile(configPath)
+            .AddJsonFile(_configPath)
             .Build();
 
-            fromEmail = configuration["EmailSettings:Email"];
+            _fromEmail = configuration["EmailSettings:Email"];
             string smtpHost = configuration["EmailSettings:SmtpHost"];
-            password = configuration["EmailSettings:Password"];
-            smtpPort = configuration.GetSection("EmailSettings")["SmtpPort"] != null ? int.Parse(configuration.GetSection("EmailSettings")["SmtpPort"]) : 0;
-            smtpClient = new SmtpClient(smtpHost, smtpPort)
+            _password = configuration["EmailSettings:Password"];
+            int _smtpPort = configuration.GetSection("EmailSettings")["SmtpPort"] != null ? int.Parse(configuration.GetSection("EmailSettings")["SmtpPort"]) : 0;
+            smtpClient = new SmtpClient(smtpHost, _smtpPort)
             {
                 EnableSsl = true,
             };
         }
 
-        public string sendInvitationMail(string to, string gameId)
+        public string SendInvitationMail(string to, string gameId)
         {
             MailMessage mail = new MailMessage();
             string message = "Message could not be sent...";
@@ -61,14 +60,14 @@ namespace MessageService.Mail
                 }
 
                 body = body.Replace("[field id = \"gameCode\"]", gameId);
-                mail.From = new MailAddress(fromEmail, MAIL_DISPLAY_NAME);
+                mail.From = new MailAddress(_fromEmail, MAIL_DISPLAY_NAME);
                 mail.To.Add(to);
 
                 mail.Subject = "You are invited, use this code: " + gameId + "!";
                 mail.Body = body;
                 mail.IsBodyHtml = true;
 
-                smtpClient.Credentials = new NetworkCredential(fromEmail, Decrypt(password));
+                smtpClient.Credentials = new NetworkCredential(_fromEmail, Decrypt(_password));
 
                 smtpClient.Send(mail);
                 message = "Mail was succesfully sent";
@@ -76,20 +75,20 @@ namespace MessageService.Mail
             catch (SmtpException smtpException)
             {
                 message += "SMTP error: " + smtpException.Message;
-                log.Error(message);
+                _log.Error(message);
             }
             catch (InvalidOperationException invalidOperationException)
             {
                 message += "Invalid operation: " + invalidOperationException.Message;
-                log.Error(message);
+                _log.Error(message);
             }
             catch (FileNotFoundException fileNotFoundException)
             {
-                log.Error("HTML file not found: " + fileNotFoundException.Message);
+                _log.Error("HTML file not found: " + fileNotFoundException.Message);
             }
             catch (IOException iOException)
             {
-                log.Error("Error reading HTML file: " + iOException.Message);
+                _log.Error("Error reading HTML file: " + iOException.Message);
             }
 
             return message;

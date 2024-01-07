@@ -77,24 +77,20 @@ namespace DataAccessProject.Contracts
 
 
     [DataContract]
-    public class User
+    public partial class User
     {
-        private string nickname;
-        private int imageId;
-        private string mail;
-        private string password;
 
         [DataMember]
-        public string Nickname { get { return nickname; } set { nickname = value; } }
+        public string Nickname { get; set; }
 
         [DataMember]
-        public int ImageId { get { return imageId; } set { imageId = value; } }
+        public int ImageId { get; set; }
 
         [DataMember]
-        public string Mail { get { return mail; } set { mail = value; } }
+        public string Mail { get; set; }
 
         [DataMember]
-        public string Password { get { return password; } set { password = value; } }
+        public string Password { get; set; }
 
     }
 
