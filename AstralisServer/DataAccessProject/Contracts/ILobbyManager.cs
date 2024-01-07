@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessProject.Contracts
 {
@@ -15,10 +11,19 @@ namespace DataAccessProject.Contracts
         string CreateLobby(User user);
 
         [OperationContract()]
+        int CanPlay(string nickname);
+
+        [OperationContract()]
         bool GameExist(string gameId);
 
         [OperationContract()]
         bool GameIsNotFull(string gameId);
+
+        [OperationContract()]
+        bool IsBanned(string nickname);
+
+        [OperationContract()]
+        string SendFriendInvitation(string gameId, string userToSend);
 
         [OperationContract(IsOneWay = true)]
         void ConnectLobby(User user, string gameId);
@@ -34,6 +39,9 @@ namespace DataAccessProject.Contracts
 
         [OperationContract(IsOneWay = true)]
         void StartGame(string gameId);
+
+        [OperationContract(IsOneWay = true)]
+        void KickUser(string userNickname);
 
     }
 
@@ -53,12 +61,12 @@ namespace DataAccessProject.Contracts
         void UpdateLobbyUserTeam(string userNickname, int team);
 
         [OperationContract]
-        void GiveLobbyId(string gameId);
-
-        [OperationContract]
         void ReceiveMessage(string message);
 
         [OperationContract]
         void StartClientGame();
+
+        [OperationContract]
+        void GetKicked();
     }
 }

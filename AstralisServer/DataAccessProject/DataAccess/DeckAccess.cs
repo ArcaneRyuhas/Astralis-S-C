@@ -11,13 +11,15 @@ namespace DataAccessProject.DataAccess
     public class DeckAccess
     {
         private const string DEFAULT_DECK = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30";
+        private const int ERROR = 0;
+        private const int INT_VALIDATION_SUCCESS = 1;
+        private const int INT_VALIDATION_FAILURE = 0;
 
         public DeckAccess() { }
 
         public int CreateDefaultDeck(AstralisDBEntities context, string nickname)
         {
-            int result = 0;
-
+            int result = INT_VALIDATION_FAILURE;
             Deck deck = new Deck
             {
                 Card = DEFAULT_DECK
@@ -29,18 +31,22 @@ namespace DataAccessProject.DataAccess
                 result = context.SaveChanges();
 
                 CreateRelationUserDeck(context, deck.DeckId, nickname);
-            }
-            catch (EntityException entityException)
-            {
-                throw entityException;
-            }
 
+                if (result > INT_VALIDATION_FAILURE)
+                {
+                    result = INT_VALIDATION_SUCCESS;
+                }
+            }
+            catch (SqlException sqlException)
+            {
+                throw sqlException;
+            }
             return result;
         }
 
         private int CreateRelationUserDeck(AstralisDBEntities context, int deckId, string nickname)
         {
-            int result = 0;
+            int result = INT_VALIDATION_FAILURE;
 
             try
             {
@@ -50,11 +56,17 @@ namespace DataAccessProject.DataAccess
 
                 context.UserDeck.Add(userDeck);
 
-                context.SaveChanges();
+                result = context.SaveChanges();
+
+                if (result > INT_VALIDATION_FAILURE)
+                {
+                    result = INT_VALIDATION_SUCCESS;
+                }
+
             }
-            catch (EntityException entityException)
+            catch (SqlException sqlException)
             {
-                throw entityException;
+                throw sqlException;
             }
 
             return result;
@@ -67,16 +79,21 @@ namespace DataAccessProject.DataAccess
 
             using (var context = new AstralisDBEntities())
             {
-                UserDeck userDeck = new UserDeck();
-                userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
+                try
+                {
+                    UserDeck userDeck = new UserDeck();
+                    userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
 
-                Deck deck = context.Deck.Find(userDeck.DeckId);
-                cardList = deck.Card.Split(',').Select(int.Parse).ToList();
-
+                    Deck deck = context.Deck.Find(userDeck.DeckId);
+                    cardList = deck.Card.Split(',').Select(int.Parse).ToList();
+                }
+                catch (SqlException sqlException)
+                {
+                    throw sqlException;
+                }
             }
 
             return cardList;
-            
         }
         
     }

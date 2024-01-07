@@ -1,0 +1,1067 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="UserManager" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IUserManager_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_ILobbyManager_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IOnlineUserManager_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IGameManager_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IEndGame_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_ILeaderboardManager_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://192.168.100.38:8082/?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IUserManager_AddUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_AddUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_AddGuest_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddGuest" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_AddGuest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddGuestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_ConfirmUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_ConfirmUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_FindUserByNickname_InputMessage">
+    <wsdl:part name="parameters" element="tns:FindUserByNickname" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_FindUserByNickname_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FindUserByNicknameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_GetUserByNickname_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserByNickname" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_GetUserByNickname_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserByNicknameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_UpdateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_UpdateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_UserOnline_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserOnline" />
+  </wsdl:message>
+  <wsdl:message name="IUserManager_UserOnline_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserOnlineResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_CreateLobby_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateLobby" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_CreateLobby_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateLobbyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_CanPlay_InputMessage">
+    <wsdl:part name="parameters" element="tns:CanPlay" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_CanPlay_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CanPlayResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GameExist_InputMessage">
+    <wsdl:part name="parameters" element="tns:GameExist" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GameExist_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GameExistResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GameIsNotFull_InputMessage">
+    <wsdl:part name="parameters" element="tns:GameIsNotFull" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GameIsNotFull_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GameIsNotFullResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_IsBanned_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsBanned" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_IsBanned_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsBannedResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_SendFriendInvitation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendInvitation" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_SendFriendInvitation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendInvitationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ConnectLobby_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectLobby" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_DisconnectLobby_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisconnectLobby" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ChangeLobbyUserTeam_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeLobbyUserTeam" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_SendMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessage" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_StartGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartGame" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_KickUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:KickUser" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ShowConnectionInLobby_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowConnectionInLobby" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ShowConnectionInLobby_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowConnectionInLobbyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ShowUsersInLobby_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUsersInLobby" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ShowUsersInLobby_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUsersInLobbyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ShowDisconnectionInLobby_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowDisconnectionInLobby" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ShowDisconnectionInLobby_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowDisconnectionInLobbyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_UpdateLobbyUserTeam_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UpdateLobbyUserTeam" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_UpdateLobbyUserTeam_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UpdateLobbyUserTeamResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ReceiveMessage_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessage" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_ReceiveMessage_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_StartClientGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartClientGame" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_StartClientGame_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartClientGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GetKicked_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetKicked" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyManager_GetKicked_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetKickedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ConectUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConectUser" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_DisconectUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisconectUser" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_SendFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_SendFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ReplyFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReplyFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ReplyFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReplyFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_RemoveFriend_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriend" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_RemoveFriend_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUserConected_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserConected" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUserConected_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserConectedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUserDisconected_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserDisconected" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowUserDisconected_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserDisconectedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowOnlineFriends_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowOnlineFriends" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowOnlineFriends_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowOnlineFriendsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowFriendRequest_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowFriendRequest_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowFriendAccepted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowFriendAccepted" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowFriendAcceptedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_FriendDeleted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:FriendDeleted" />
+  </wsdl:message>
+  <wsdl:message name="IOnlineUserManager_FriendDeleted_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:FriendDeletedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ConnectGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DispenseCards_InputMessage">
+    <wsdl:part name="parameters" element="tns:DispenseCards" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DispenseCards_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DispenseCardsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DrawCard_InputMessage">
+    <wsdl:part name="parameters" element="tns:DrawCard" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:EndGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndGameTurn_InputMessage">
+    <wsdl:part name="parameters" element="tns:EndGameTurn" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_StartFirstPhase_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartFirstPhase" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_SendMessageGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessageGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ShowUserConnectedGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserConnectedGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ShowUserConnectedGame_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUserConnectedGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ShowUsersInGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUsersInGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ShowUsersInGame_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowUsersInGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DrawCardClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:DrawCardClient" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_DrawCardClient_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:DrawCardClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_PlayerEndedTurn_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerEndedTurn" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_PlayerEndedTurn_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerEndedTurnResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_StartFirstPhaseClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartFirstPhaseClient" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_StartFirstPhaseClient_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:StartFirstPhaseClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndGameClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:EndGameClient" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_EndGameClient_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:EndGameClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ReceiveMessageGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessageGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_ReceiveMessageGame_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessageGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEndGame_GetUsersWithTeam_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUsersWithTeam" />
+  </wsdl:message>
+  <wsdl:message name="IEndGame_GameEnded_InputMessage">
+    <wsdl:part name="parameters" element="tns:GameEnded" />
+  </wsdl:message>
+  <wsdl:message name="IEndGame_SetUsers_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:SetUsers" />
+  </wsdl:message>
+  <wsdl:message name="IEndGame_SetUsers_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:SetUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILeaderboardManager_GetLeaderboardInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLeaderboardInfo" />
+  </wsdl:message>
+  <wsdl:message name="ILeaderboardManager_GetLeaderboardInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLeaderboardInfoResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IUserManager">
+    <wsdl:operation name="AddUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddUser" message="tns:IUserManager_AddUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/AddUserResponse" message="tns:IUserManager_AddUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddGuest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddGuest" message="tns:IUserManager_AddGuest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/AddGuestResponse" message="tns:IUserManager_AddGuest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/ConfirmUser" message="tns:IUserManager_ConfirmUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/ConfirmUserResponse" message="tns:IUserManager_ConfirmUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FindUserByNickname">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/FindUserByNickname" message="tns:IUserManager_FindUserByNickname_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/FindUserByNicknameResponse" message="tns:IUserManager_FindUserByNickname_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserByNickname">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/GetUserByNickname" message="tns:IUserManager_GetUserByNickname_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/GetUserByNicknameResponse" message="tns:IUserManager_GetUserByNickname_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/UpdateUser" message="tns:IUserManager_UpdateUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/UpdateUserResponse" message="tns:IUserManager_UpdateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserOnline">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/UserOnline" message="tns:IUserManager_UserOnline_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/UserOnlineResponse" message="tns:IUserManager_UserOnline_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ILobbyManager">
+    <wsdl:operation name="CreateLobby">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/CreateLobby" message="tns:ILobbyManager_CreateLobby_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/CreateLobbyResponse" message="tns:ILobbyManager_CreateLobby_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CanPlay">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/CanPlay" message="tns:ILobbyManager_CanPlay_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/CanPlayResponse" message="tns:ILobbyManager_CanPlay_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GameExist">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GameExist" message="tns:ILobbyManager_GameExist_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GameExistResponse" message="tns:ILobbyManager_GameExist_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GameIsNotFull">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFull" message="tns:ILobbyManager_GameIsNotFull_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GameIsNotFullResponse" message="tns:ILobbyManager_GameIsNotFull_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsBanned">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/IsBanned" message="tns:ILobbyManager_IsBanned_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/IsBannedResponse" message="tns:ILobbyManager_IsBanned_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendFriendInvitation">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/SendFriendInvitation" message="tns:ILobbyManager_SendFriendInvitation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/SendFriendInvitationResponse" message="tns:ILobbyManager_SendFriendInvitation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConnectLobby">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ConnectLobby" message="tns:ILobbyManager_ConnectLobby_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisconnectLobby">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/DisconnectLobby" message="tns:ILobbyManager_DisconnectLobby_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeLobbyUserTeam">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam" message="tns:ILobbyManager_ChangeLobbyUserTeam_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/SendMessage" message="tns:ILobbyManager_SendMessage_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/StartGame" message="tns:ILobbyManager_StartGame_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="KickUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/KickUser" message="tns:ILobbyManager_KickUser_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowConnectionInLobby">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobby" message="tns:ILobbyManager_ShowConnectionInLobby_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobbyResponse" message="tns:ILobbyManager_ShowConnectionInLobby_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowUsersInLobby">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ShowUsersInLobby" message="tns:ILobbyManager_ShowUsersInLobby_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ShowUsersInLobbyResponse" message="tns:ILobbyManager_ShowUsersInLobby_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowDisconnectionInLobby">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobby" message="tns:ILobbyManager_ShowDisconnectionInLobby_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobbyResponse" message="tns:ILobbyManager_ShowDisconnectionInLobby_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateLobbyUserTeam">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam" message="tns:ILobbyManager_UpdateLobbyUserTeam_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeamResponse" message="tns:ILobbyManager_UpdateLobbyUserTeam_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessage">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessage" message="tns:ILobbyManager_ReceiveMessage_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/ReceiveMessageResponse" message="tns:ILobbyManager_ReceiveMessage_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartClientGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/StartClientGame" message="tns:ILobbyManager_StartClientGame_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/StartClientGameResponse" message="tns:ILobbyManager_StartClientGame_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetKicked">
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyManager/GetKicked" message="tns:ILobbyManager_GetKicked_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyManager/GetKickedResponse" message="tns:ILobbyManager_GetKicked_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IOnlineUserManager">
+    <wsdl:operation name="ConectUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ConectUser" message="tns:IOnlineUserManager_ConectUser_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisconectUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/DisconectUser" message="tns:IOnlineUserManager_DisconectUser_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/SendFriendRequest" message="tns:IOnlineUserManager_SendFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/SendFriendRequestResponse" message="tns:IOnlineUserManager_SendFriendRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplyFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest" message="tns:IOnlineUserManager_ReplyFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequestResponse" message="tns:IOnlineUserManager_ReplyFriendRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/RemoveFriend" message="tns:IOnlineUserManager_RemoveFriend_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/RemoveFriendResponse" message="tns:IOnlineUserManager_RemoveFriend_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserConected">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserConected" message="tns:IOnlineUserManager_ShowUserConected_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserConectedResponse" message="tns:IOnlineUserManager_ShowUserConected_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserDisconected">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserDisconected" message="tns:IOnlineUserManager_ShowUserDisconected_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowUserDisconectedResponse" message="tns:IOnlineUserManager_ShowUserDisconected_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowOnlineFriends">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowOnlineFriends" message="tns:IOnlineUserManager_ShowOnlineFriends_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowOnlineFriendsResponse" message="tns:IOnlineUserManager_ShowOnlineFriends_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowFriendRequest">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendRequest" message="tns:IOnlineUserManager_ShowFriendRequest_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendRequestResponse" message="tns:IOnlineUserManager_ShowFriendRequest_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowFriendAccepted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted" message="tns:IOnlineUserManager_ShowFriendAccepted_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/ShowFriendAcceptedResponse" message="tns:IOnlineUserManager_ShowFriendAccepted_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FriendDeleted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IOnlineUserManager/FriendDeleted" message="tns:IOnlineUserManager_FriendDeleted_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IOnlineUserManager/FriendDeletedResponse" message="tns:IOnlineUserManager_FriendDeleted_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IGameManager">
+    <wsdl:operation name="ConnectGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ConnectGame" message="tns:IGameManager_ConnectGame_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DispenseCards">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/DispenseCards" message="tns:IGameManager_DispenseCards_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/DispenseCardsResponse" message="tns:IGameManager_DispenseCards_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DrawCard">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/DrawCard" message="tns:IGameManager_DrawCard_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGame" message="tns:IGameManager_EndGame_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndGameTurn">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGameTurn" message="tns:IGameManager_EndGameTurn_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartFirstPhase">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhase" message="tns:IGameManager_StartFirstPhase_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/SendMessageGame" message="tns:IGameManager_SendMessageGame_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserConnectedGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ShowUserConnectedGame" message="tns:IGameManager_ShowUserConnectedGame_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ShowUserConnectedGameResponse" message="tns:IGameManager_ShowUserConnectedGame_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowUsersInGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ShowUsersInGame" message="tns:IGameManager_ShowUsersInGame_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ShowUsersInGameResponse" message="tns:IGameManager_ShowUsersInGame_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DrawCardClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/DrawCardClient" message="tns:IGameManager_DrawCardClient_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/DrawCardClientResponse" message="tns:IGameManager_DrawCardClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PlayerEndedTurn">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/PlayerEndedTurn" message="tns:IGameManager_PlayerEndedTurn_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/PlayerEndedTurnResponse" message="tns:IGameManager_PlayerEndedTurn_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartFirstPhaseClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhaseClient" message="tns:IGameManager_StartFirstPhaseClient_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/StartFirstPhaseClientResponse" message="tns:IGameManager_StartFirstPhaseClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndGameClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/EndGameClient" message="tns:IGameManager_EndGameClient_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGameClientResponse" message="tns:IGameManager_EndGameClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessageGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ReceiveMessageGame" message="tns:IGameManager_ReceiveMessageGame_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ReceiveMessageGameResponse" message="tns:IGameManager_ReceiveMessageGame_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IEndGame">
+    <wsdl:operation name="GetUsersWithTeam">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEndGame/GetUsersWithTeam" message="tns:IEndGame_GetUsersWithTeam_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GameEnded">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEndGame/GameEnded" message="tns:IEndGame_GameEnded_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetUsers">
+      <wsdl:output wsaw:Action="http://tempuri.org/IEndGame/SetUsers" message="tns:IEndGame_SetUsers_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEndGame/SetUsersResponse" message="tns:IEndGame_SetUsers_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ILeaderboardManager">
+    <wsdl:operation name="GetLeaderboardInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILeaderboardManager/GetLeaderboardInfo" message="tns:ILeaderboardManager_GetLeaderboardInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILeaderboardManager/GetLeaderboardInfoResponse" message="tns:ILeaderboardManager_GetLeaderboardInfo_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IUserManager" type="tns:IUserManager">
+    <wsp:PolicyReference URI="#NetTcpBinding_IUserManager_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="AddUser">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/AddUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddGuest">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/AddGuest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmUser">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/ConfirmUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FindUserByNickname">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/FindUserByNickname" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserByNickname">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/GetUserByNickname" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUser">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/UpdateUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserOnline">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/UserOnline" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_ILobbyManager" type="tns:ILobbyManager">
+    <wsp:PolicyReference URI="#NetTcpBinding_ILobbyManager_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="CreateLobby">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/CreateLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CanPlay">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/CanPlay" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GameExist">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GameExist" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GameIsNotFull">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GameIsNotFull" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsBanned">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/IsBanned" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendFriendInvitation">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/SendFriendInvitation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConnectLobby">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ConnectLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="DisconnectLobby">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/DisconnectLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeLobbyUserTeam">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/SendMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="StartGame">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/StartGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="KickUser">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/KickUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ShowConnectionInLobby">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ShowConnectionInLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowUsersInLobby">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ShowUsersInLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowDisconnectionInLobby">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateLobbyUserTeam">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessage">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/ReceiveMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartClientGame">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/StartClientGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetKicked">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyManager/GetKicked" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IOnlineUserManager" type="tns:IOnlineUserManager">
+    <wsp:PolicyReference URI="#NetTcpBinding_IOnlineUserManager_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="ConectUser">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ConectUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="DisconectUser">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/DisconectUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/SendFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplyFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/RemoveFriend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserConected">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowUserConected" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserDisconected">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowUserDisconected" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowOnlineFriends">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowOnlineFriends" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowFriendAccepted">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FriendDeleted">
+      <soap12:operation soapAction="http://tempuri.org/IOnlineUserManager/FriendDeleted" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IGameManager" type="tns:IGameManager">
+    <wsp:PolicyReference URI="#NetTcpBinding_IGameManager_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="ConnectGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/ConnectGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="DispenseCards">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/DispenseCards" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DrawCard">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/DrawCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="EndGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/EndGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="EndGameTurn">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/EndGameTurn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="StartFirstPhase">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/StartFirstPhase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/SendMessageGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ShowUserConnectedGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/ShowUserConnectedGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowUsersInGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/ShowUsersInGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DrawCardClient">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/DrawCardClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerEndedTurn">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/PlayerEndedTurn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartFirstPhaseClient">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/StartFirstPhaseClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EndGameClient">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/EndGameClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessageGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/ReceiveMessageGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IEndGame" type="tns:IEndGame">
+    <wsp:PolicyReference URI="#NetTcpBinding_IEndGame_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetUsersWithTeam">
+      <soap12:operation soapAction="http://tempuri.org/IEndGame/GetUsersWithTeam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GameEnded">
+      <soap12:operation soapAction="http://tempuri.org/IEndGame/GameEnded" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SetUsers">
+      <soap12:operation soapAction="http://tempuri.org/IEndGame/SetUsers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_ILeaderboardManager" type="tns:ILeaderboardManager">
+    <wsp:PolicyReference URI="#NetTcpBinding_ILeaderboardManager_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetLeaderboardInfo">
+      <soap12:operation soapAction="http://tempuri.org/ILeaderboardManager/GetLeaderboardInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserManager">
+    <wsdl:port name="NetTcpBinding_IUserManager" binding="tns:NetTcpBinding_IUserManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_ILobbyManager" binding="tns:NetTcpBinding_ILobbyManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IOnlineUserManager" binding="tns:NetTcpBinding_IOnlineUserManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IGameManager" binding="tns:NetTcpBinding_IGameManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IEndGame" binding="tns:NetTcpBinding_IEndGame">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_ILeaderboardManager" binding="tns:NetTcpBinding_ILeaderboardManager">
+      <soap12:address location="net.tcp://192.168.100.38:8081/MessageService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.100.38:8081/MessageService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

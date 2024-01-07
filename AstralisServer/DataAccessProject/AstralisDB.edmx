@@ -131,7 +131,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserDeck_Deck">
-          <End Role="Deck" Type="Self.Deck" Multiplicity="1" />
+          <End Role="Deck" Type="Self.Deck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserDeck" Type="Self.UserDeck" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Deck">
@@ -143,7 +145,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserDeck_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserDeck" Type="Self.UserDeck" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -348,7 +352,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserDeck_Deck">
-          <End Role="Deck" Type="Self.Deck" Multiplicity="1" />
+          <End Role="Deck" Type="Self.Deck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserDeck" Type="Self.UserDeck" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Deck">
@@ -410,7 +416,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserDeck_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserDeck" Type="Self.UserDeck" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">

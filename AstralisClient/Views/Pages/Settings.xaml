@@ -30,8 +30,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="btnSpanish" Content="{x:Static p:Resources.btnSpanish}" Grid.Column="0" HorizontalAlignment="Center" FontSize="36" Click="btnSpanish_Click"/>
-                <Button x:Name="btnEnglish" Content="{x:Static p:Resources.btnEnglish}" Grid.Column="1" HorizontalAlignment="Center" FontSize="36" Height="45" VerticalAlignment="Top" Click="btnEnglish_Click"/>
+                <Button x:Name="btnSpanish" Content="{x:Static p:Resources.btnSpanish}" Grid.Column="0" HorizontalAlignment="Center" FontSize="36" Click="BtnSpanishClick"/>
+                <Button x:Name="btnEnglish" Content="{x:Static p:Resources.btnEnglish}" Grid.Column="1" HorizontalAlignment="Center" FontSize="36" Height="45" VerticalAlignment="Top" Click="BtnEnglishClick"/>
             </Grid>
 
             <Label x:Name="lblVolume" Content="{x:Static p:Resources.lblVolume}" Grid.Row="3" HorizontalAlignment="Center" FontSize="48"/>
@@ -44,7 +44,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button x:Name="btnAccept" Content="{x:Static p:Resources.btnAccept}" Grid.Column="0" HorizontalAlignment="Center" FontSize="36"/>
-                <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" Grid.Column="1" HorizontalAlignment="Center" FontSize="36" Click="btnCancel_Click"/>
+                <Button x:Name="btnCancel" Content="{x:Static p:Resources.btnCancel}" Grid.Column="1" HorizontalAlignment="Center" FontSize="36" Click="BtnCancelClick"/>
             </Grid>
             
 

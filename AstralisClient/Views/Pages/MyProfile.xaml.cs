@@ -1,9 +1,11 @@
 ﻿using Astralis.Logic;
 using Astralis.UserManager;
+using Astralis.Views.Cards;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.ServiceModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -30,8 +32,11 @@ namespace Astralis.Views.Pages
         private const int MAX_FIELDS_LENGHT = 39;
         private const int MAX_GRID_COLUMN = 3;
 
-        public MyProfile()
+        private readonly FriendWindow _friendWindow;
+
+        public MyProfile(FriendWindow friendWindow)
         {
+            _friendWindow = friendWindow;
             InitializeComponent();
             SetGraphicElements();
         }
@@ -89,7 +94,7 @@ namespace Astralis.Views.Pages
             }
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void BtnCancelClick(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
@@ -110,7 +115,7 @@ namespace Astralis.Views.Pages
             return imageId;
         }
 
-        private void btnAccept_Click(object sender, RoutedEventArgs e)
+        private void BtnAcceptClick(object sender, RoutedEventArgs e)
         {
             string mail = txtMail.Text;
 
@@ -120,7 +125,30 @@ namespace Astralis.Views.Pages
             if (ValidFields(user))
             {
                 UserManager.UserManagerClient client = new UserManager.UserManagerClient();
-                if (client.UpdateUser(user) > 0)
+                try
+                {
+                    int userUpdated =  client.UpdateUser(user);
+
+                    if (userUpdated == Constants.VALIDATION_SUCCESS) 
+                    {
+                        MessageBox.Show(Properties.Resources.msgUserUpdated, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+
+                    _friendWindow.Disconnect();
+                }
+                catch (CommunicationException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (TimeoutException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                finally
                 {
                     App.RestartApplication();
                 }
@@ -180,6 +208,8 @@ namespace Astralis.Views.Pages
             {
                 e.Handled = true;
             }
+
+            HideErrorLabels();
         }
 
         private void TextLimeterForPassword(object sender, TextCompositionEventArgs e)
@@ -191,6 +221,8 @@ namespace Astralis.Views.Pages
             {
                 e.Handled = true;
             }
+
+            HideErrorLabels();
         }
 
         private string CreateSha2(string password)

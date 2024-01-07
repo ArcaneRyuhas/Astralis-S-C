@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DataAccessProject.Contracts
 {
@@ -16,16 +13,22 @@ namespace DataAccessProject.Contracts
         int AddUser(User user);
 
         [OperationContract]
+        User AddGuest();
+
+        [OperationContract]
         int ConfirmUser(string nickname, string password);
 
         [OperationContract]
-        bool FindUserByNickname(string nickname);
+        int FindUserByNickname(string nickname);
 
         [OperationContract]
         User GetUserByNickname(string nickname);
 
         [OperationContract]
         int UpdateUser(User user);
+
+        [OperationContract]
+        bool UserOnline(string nickname);
 
     }
 
@@ -39,13 +42,14 @@ namespace DataAccessProject.Contracts
         void DisconectUser(string nickname);
 
         [OperationContract]
-        bool SendFriendRequest(string nickname, string nicknameFriend);
+        int SendFriendRequest(string nickname, string nicknameFriend);
 
         [OperationContract]
-        bool ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
+        int ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
 
         [OperationContract]
-        bool RemoveFriend(string nickname, string nicknamefriendToRemove);
+        int RemoveFriend(string nickname, string nicknamefriendToRemove);
+
 
     }
 
@@ -66,6 +70,9 @@ namespace DataAccessProject.Contracts
 
         [OperationContract]
         void ShowFriendAccepted(string nickname);
+
+        [OperationContract]
+        void FriendDeleted(string nickname);
     }
 
 

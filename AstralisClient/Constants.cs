@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Astralis
 {
     public static class Constants
@@ -12,7 +6,15 @@ namespace Astralis
         public const string TANK = "Tank";
         public const string MAGE = "Mage";
         public const string WARRIOR = "Warrior";
-
+        public const string NO_CLASS = "error";
+        public const int DEAD_DAMAGE = 0;
+        public const int ENEMY_CARD = -1;
+        public const int VALIDATION_SUCCESS = 1;
+        public const int VALIDATION_FAILURE = 0;
+        public const int ERROR = -1;
+        public const string USER_NOT_FOUND = "UserNotFound";
+        public const string ERROR_STRING = "ERROR";
+        public const string VALIDATION_FAILURE_STRING = "FAILURE";
     }
 
 }

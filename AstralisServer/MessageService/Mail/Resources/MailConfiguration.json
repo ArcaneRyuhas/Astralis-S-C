@@ -1,0 +1,8 @@
+{
+  "EmailSettings": {
+    "SmtpHost": "smtp.office365.com",
+    "SmtpPort": 587,
+    "Email": "astralis13@hotmail.com",
+    "Password": "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAKHiuZJ977UifIb6HlG+UPwAAAAACAAAAAAAQZgAAAAEAACAAAACXp68YeGaF1GDm/FEhfojlWPtvM1BwImMDPT1GPZPpvQAAAAAOgAAAAAIAACAAAAD6a7Tl20PlBhhp3/xgUW9AxLmBBgLkXbvkluozs9hfayAAAACdcGWiwjTJsJnmBL4N++u649AKCpIo9ry65zUgg5qNb0AAAADxB57Uqz0dIzNmgBSvnkhjcIR1QdvqAFnHYJd7TfXeEzboWkSTMdFStBdfovxiLHVXDjtiXk2yd6++QjYph13e"
+  }
+}

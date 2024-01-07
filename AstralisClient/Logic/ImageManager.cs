@@ -1,12 +1,7 @@
-﻿using Astralis.UserManager;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace Astralis.Logic
@@ -15,15 +10,23 @@ namespace Astralis.Logic
     {
 
         private static ImageManager instance;
-        private Dictionary<int, Bitmap> imageMap;
+        private Dictionary<int, Bitmap> _imageMap;
 
         private ImageManager() 
         {
-            imageMap = new Dictionary<int, Bitmap>()
+            _imageMap = new Dictionary<int, Bitmap>()
             {
                 {1, ImageResource.Window},
                 {2, ImageResource.Piranhas},
                 {3, ImageResource.Pumpkin},
+                {4, ImageResource.Falling},
+                {5, ImageResource.Fox},
+                {6, ImageResource.Eye },
+                {7, ImageResource.Gangster},
+                {8, ImageResource.Duck},
+                {9, ImageResource.Mondongo},
+                {10, ImageResource.DogeCoin},
+                {11, ImageResource.Patrick}
             };
         }
 
@@ -39,12 +42,12 @@ namespace Astralis.Logic
 
         public int GetImageCount()
         {
-            return imageMap.Count;
+            return _imageMap.Count;
         }
 
         public BitmapImage GetImage(int imageId)
         {
-            Bitmap image = imageMap[imageId];
+            Bitmap image = _imageMap[imageId];
             return ConvertBitmapToBitmapImage(image);
         }
 

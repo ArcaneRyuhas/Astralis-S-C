@@ -71,16 +71,20 @@
     </Compile>
     <Compile Include="Logic\ImageManager.cs" />
     <Compile Include="Logic\UserSession.cs" />
-    <Compile Include="Views\Animations\FriendCard.xaml.cs">
+    <Compile Include="Validations\UserValidationRule.cs" />
+    <Compile Include="Views\Cards\EndGameUserCard.xaml.cs">
+      <DependentUpon>EndGameUserCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cards\FriendCard.xaml.cs">
       <DependentUpon>FriendCard.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Animations\FriendWindow.xaml.cs">
+    <Compile Include="Views\Cards\FriendWindow.xaml.cs">
       <DependentUpon>FriendWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Animations\LeftLineAnimation.xaml.cs">
-      <DependentUpon>LeftLineAnimation.xaml</DependentUpon>
+    <Compile Include="Views\Cards\GuestInvitation.xaml.cs">
+      <DependentUpon>GuestInvitation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Animations\LobbyUserCard.xaml.cs">
+    <Compile Include="Views\Cards\LobbyUserCard.xaml.cs">
       <DependentUpon>LobbyUserCard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AstralisAnimation.xaml.cs">
@@ -89,7 +93,6 @@
     <Compile Include="Views\GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Validations\UserValidationRule.cs" />
     <Compile Include="Views\Game\GameBoard.xaml.cs">
       <DependentUpon>GameBoard.xaml</DependentUpon>
     </Compile>
@@ -100,6 +103,7 @@
       <DependentUpon>CardImageResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\Game\GameLogic\CardManager.cs" />
+    <Compile Include="Views\Game\GameLogic\GameManager.cs" />
     <Compile Include="Views\Game\GameLogic\Team.cs" />
     <Compile Include="Views\Game\GraphicCard.xaml.cs">
       <DependentUpon>GraphicCard.xaml</DependentUpon>
@@ -110,19 +114,23 @@
     <Compile Include="Views\LogIn.xaml.cs">
       <DependentUpon>LogIn.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\Animations\FriendCard.xaml">
+    <Page Include="Views\Cards\EndGameUserCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Animations\FriendWindow.xaml">
+    <Page Include="Views\Cards\FriendCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Animations\LeftLineAnimation.xaml">
+    <Page Include="Views\Cards\FriendWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Animations\LobbyUserCard.xaml">
+    <Page Include="Views\Cards\GuestInvitation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Cards\LobbyUserCard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,6 +158,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Pages\EndGame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\LeaderBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Pages\MyProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -168,6 +184,12 @@
     </Compile>
     <Compile Include="Views\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\EndGame.xaml.cs">
+      <DependentUpon>EndGame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\LeaderBoard.xaml.cs">
+      <DependentUpon>LeaderBoard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\MyProfile.xaml.cs">
       <DependentUpon>MyProfile.xaml</DependentUpon>
@@ -230,25 +252,28 @@
       <LastGenOutput>CardImageResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Fonts\PixelFont.ttf" />
+    <None Include="Connected Services\UserManager\Astralis.UserManager.GamesWonInfo1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\UserManager\Astralis.UserManager.User.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\UserManager\item.xsd">
+    <None Include="Connected Services\UserManager\item2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\item1.xsd">
+    <None Include="Connected Services\UserManager\item5.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\item3.xsd">
+    <None Include="Connected Services\UserManager\item6.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\item31.xsd">
+    <None Include="Connected Services\UserManager\item7.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\item32.xsd">
+    <None Include="Connected Services\UserManager\item8.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\UserManager1.wsdl" />
+    <None Include="Connected Services\UserManager\UserManager11.wsdl" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -259,9 +284,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\UserManager\item1.disco" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\UserManager\" />
@@ -288,9 +310,6 @@
     <None Include="Resources\Pumpkin.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Views\Game\InGameAssets\AstralisBoard.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Views\Game\InGameAssets\AstralisIcon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +317,56 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Game\InGameAssets\Card.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\Heart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\CardSlot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\falling.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Fox.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eye.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Gangster.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Duck.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mondongo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DogeCoin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Patrick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\UserManager\item11.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\CardBack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Cards\FriendWindowImages\trash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Cards\FriendWindowImages\check.png" />
+    <Resource Include="Views\Cards\FriendWindowImages\cross.png" />
+    <Resource Include="Views\Cards\FriendWindowImages\message.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\eye.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Game\InGameAssets\chat.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

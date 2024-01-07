@@ -3,16 +3,136 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p = "clr-namespace:Astralis.Properties"
         mc:Ignorable="d" 
       d:DesignHeight="920" d:DesignWidth="1280"
       Title="GameBoard">
 
-    <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="InGameAssets/AstralisBoard.png"/>
-        </Grid.Background>
+    <Grid Background="#FF716D67">
 
-        <Grid  Width="804" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,720,0,0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="250"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="gdPlayerSlots" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="142"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="142"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="144"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="143"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="143"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                    <Grid Grid.Column="2" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                    <Grid Grid.Column="4" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                    <Grid Grid.Column="6" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                    <Grid Grid.Column="8" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                </Grid>
+
+                <Grid x:Name="gdEnemySlots" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="142"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="142"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="144"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="143"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="143"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Width="130" Height="200">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                    <Grid Grid.Column="2" Width="130" Height="200">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                    <Grid Grid.Column="4" Width="130" Height="200">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                    <Grid Grid.Column="6" Width="130" Height="200">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                    <Grid Grid.Column="8" Width="130" Height="200">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
+                        </Grid.Background>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <ProgressBar x:Name="progressBarCounter" Grid.Column="0"  Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Height="21" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White" Margin="-145,0,0,0" >
+                <ProgressBar.RenderTransform>
+                    <RotateTransform Angle="270"/>
+                </ProgressBar.RenderTransform>
+                <ProgressBar.RenderTransformOrigin>
+                    <Point X=".5" Y=".5"/>
+                </ProgressBar.RenderTransformOrigin>
+            </ProgressBar>
+
+            <Grid x:Name="gdChat" Width="400" Height="250" Background="#FF313131" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Hidden">
+                <ScrollViewer Style="{DynamicResource ScrollViewerTemplatNormal}" VerticalAlignment="Top" Grid.Row="1" Height="230" Width="400">
+                    <Grid Background="Black" Height="220" Width="400">
+                        <TextBlock x:Name="tbChat" TextWrapping="Wrap" Foreground="#FFC32525"/>
+                    </Grid>
+                </ScrollViewer>
+                <TextBox x:Name="txtChat"  HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" Text="{x:Static p:Resources.txtChat}" VerticalAlignment="Bottom" Width="280" FontSize="16" Height="20"/>
+                <Button x:Name="btnSendMessage" Content="{x:Static p:Resources.btnSendMessage}" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Click="BtnSendMessageClick" FontSize="20" Width="100" Template="{DynamicResource ButtonTemplateNormal}"/>
+            </Grid>
+        </Grid>
+
+        <Grid  Width="800" Height="200" HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -23,52 +143,79 @@
             <Grid Grid.Column="1" x:Name="gdAllyHand" Visibility="Hidden"/>
         </Grid>
 
-
-
-        <Grid x:Name="gdEnemyHand" Width="700" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <Grid  Width="800" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1" x:Name="gdEnemyHand"/>
+            <Grid Grid.Column="1" x:Name="gdEnemyAllyHand" Visibility="Hidden"/>
         </Grid>
 
-        <Border Width="165" Height="230" Margin="83,692,1032,-2">
-            <Border.RenderTransform>
-                <RotateTransform Angle="30"/>
-            </Border.RenderTransform>
-        </Border>
+        <Grid Width="240" Height="290" HorizontalAlignment="Left" VerticalAlignment="Bottom">
 
-        <Border x:Name="bdPlayerDeck" Width="160" Height="220" Margin="73,692,1042,-2">
-            <Border.Background>
-                <ImageBrush ImageSource="InGameAssets/Deck.png"/>
-            </Border.Background>
-            <Border.RenderTransform>
-                <RotateTransform Angle="30"/>
-            </Border.RenderTransform>
-        </Border>
+            <Border x:Name="bdPlayerDeck" Width="160" Height="220" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Border.Background>
+                    <ImageBrush ImageSource="InGameAssets/Deck.png"/>
+                </Border.Background>
+                <Border.RenderTransform>
+                    <RotateTransform Angle="30"/>
+                </Border.RenderTransform>
+            </Border>
 
-        <Border Width="165" Height="230" Margin="1136,-91,-21,781">
-            <Border.RenderTransform>
-                <RotateTransform Angle="30"/>
-            </Border.RenderTransform>
-        </Border>
+        </Grid>
 
-        <Border x:Name="bdEnemyDeck" Width="160" Height="220" Margin="1130,-100,-15,790">
-            <Border.Background>
-                <ImageBrush ImageSource="InGameAssets/Deck.png"/>
-            </Border.Background>
-            <Border.RenderTransform>
-                <RotateTransform Angle="-330"/>
-            </Border.RenderTransform>
-        </Border>
+        <Grid Width="240" Height="290" HorizontalAlignment="Right" VerticalAlignment="Top">
 
-        <Label x:Name="lblEnemyMana" Content="0" HorizontalAlignment="Left" Margin="116,300,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
-        <Label x:Name="lblPlayerMana" Content="0" HorizontalAlignment="Left" Margin="116,520,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
-        <Label x:Name="lblEnemyHealth" Content="20" HorizontalAlignment="Left" Margin="42,45,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
-        <Label x:Name="lblPlayerHealth" Content="20" HorizontalAlignment="Left" Margin="1185,800,0,0" VerticalAlignment="Top" FontSize="48" Width="68" HorizontalContentAlignment="Center"/>
+            <Border x:Name="bdEnemyDeck" Width="160" Height="220" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Border.Background>
+                    <ImageBrush ImageSource="InGameAssets/Deck.png"/>
+                </Border.Background>
+                <Border.RenderTransform>
+                    <RotateTransform Angle="210"/>
+                </Border.RenderTransform>
+                <Border.RenderTransformOrigin>
+                    <Point X=".5" Y="0.5"/>
+                </Border.RenderTransformOrigin>
+            </Border>
 
+        </Grid>
 
-        <Button x:Name="btnMenu" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Click="btnMenu_Click">
+        <Grid Width="200" Height="200" HorizontalAlignment="Left">
+            <Ellipse Width="100" Height="100" HorizontalAlignment="Right" Fill="Beige"/>
+            <Label x:Name="lblTurnMana" Content="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="48" Width="100" HorizontalContentAlignment="Center" FontFamily="Bernard MT Condensed"/>
+            <Label x:Name="lblUserTurn" Content="{x:Static p:Resources.lblUserTurnFalse}" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="150" Height="50" FontSize="20"/>
+            <Label x:Name="lblUserTeam" Content="{x:Static p:Resources.lblUserTeam}" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Width="150" Height="50" FontSize="20"/>
+        </Grid>
+
+        <Grid Width="200" Height="200" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Label x:Name="lblMyNickname" Content="hola" VerticalAlignment="Top" FontSize="20" FontFamily="Arial" Foreground="Wheat"/>
+            <Border Width="100" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Border.Background>
+                    <ImageBrush ImageSource="InGameAssets/Heart.png"/>
+                </Border.Background>
+            </Border>
+            <Label x:Name="lblEnemyHealth" Content="20" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Width="68" HorizontalContentAlignment="Center" Foreground="Black"  FontFamily="Bahnschrift Condensed"/>
+        </Grid>
+
+        <Grid Width="300" Height="200" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="1" Width="100" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Border.Background>
+                    <ImageBrush ImageSource="InGameAssets/Heart.png"/>
+                </Border.Background>
+            </Border>
+            <Label Grid.Row="1" x:Name="lblPlayerHealth" Content="20" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Width="68" Foreground="Black" HorizontalContentAlignment="Center" FontFamily="Bahnschrift Condensed"/>
+        </Grid>
+
+        <Button x:Name="btnMenu" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Click="BtnMenuClick">
             <Grid>
                 <Ellipse HorizontalAlignment="Left" Height="48" Stroke="White" VerticalAlignment="Center" Width="86" Fill="#FF1D0505"/>
 
@@ -80,69 +227,30 @@
             </Grid>
         </Button>
 
-        <Button x:Name="btnChangeView" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,400,0,0" Click="btnChangeView_Click">
+        <Button x:Name="btnChangeView" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,400,0,0" Click="BtnChangeViewClick">
+            
             <Grid>
                 <Ellipse HorizontalAlignment="Left" Height="48" Stroke="White" VerticalAlignment="Center" Width="86" Fill="#FF1D0505">
                 </Ellipse>
+                <Grid Height="20" Width="30">
+                    <Grid.Background>
+                        <ImageBrush ImageSource="InGameAssets/eye.png"/>
+                    </Grid.Background>
+                </Grid>
             </Grid>
+            
         </Button>
 
-        <Button Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,0,0,150">
+        <Button x:Name="btnOpenChat" Width="50" Height="50" HorizontalAlignment="Right" FontSize="60" Margin="0,0,0,150" Click="BtnOpenChatClick">
             <Grid>
                 <Ellipse HorizontalAlignment="Left" Height="48" Stroke="White" VerticalAlignment="Center" Width="86" Fill="#FF1D0505"/>
+                <Grid Height="20" Width="30">
+                    <Grid.Background>
+                        <ImageBrush ImageSource="InGameAssets/chat.png"/>
+                    </Grid.Background>
+                </Grid>
             </Grid>
         </Button>
-
-        <Grid x:Name="gdPlayerSlots" Margin="283,447,233,267">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="142"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="142"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="144"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="143"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="143"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="0" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
-            <Grid Grid.Column="2" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
-            <Grid Grid.Column="4" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
-            <Grid Grid.Column="6" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
-            <Grid Grid.Column="8" Width="130" Height="200" Background="#FF676767" MouseLeftButtonDown="PlaceCardInSlot"/>
-        </Grid>
-
-        <Grid x:Name="gdEnemySlots" Margin="283,224,233,490">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="142"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="142"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="144"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="143"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="143"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
-
-        <ProgressBar x:Name="progressBarCounter" HorizontalAlignment="Left" Height="21" Margin="24,595,0,0" VerticalAlignment="Top" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White">
-            <ProgressBar.RenderTransform>
-                <RotateTransform Angle="270"/>
-            </ProgressBar.RenderTransform>
-        </ProgressBar>
-
-        <ProgressBar HorizontalAlignment="Left" Height="13" Margin="990,885,0,0" VerticalAlignment="Top" Width="270" Background="Black" Foreground="#FF9A0B0B"/>
-
-        <ProgressBar HorizontalAlignment="Left" Height="13" Margin="30,15,0,0" VerticalAlignment="Top" Width="270" Background="Black" Foreground="#FF9A0B0B"/>
-        <Grid x:Name="gdEnemyHand_Copy" Width="700" Height="200" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-200,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-        </Grid>
-
 
     </Grid>
 </Window>

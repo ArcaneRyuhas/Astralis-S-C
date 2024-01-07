@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Media;
 using System.Windows;
+using System.IO;
 
 namespace Astralis
 {
@@ -15,6 +17,15 @@ namespace Astralis
     /// </summary>
     public partial class App : Application
     {
+        public static void StartMusic()
+        {
+            string baseDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string relativePath = Path.Combine(baseDirectory, "Music", "ritual.wav");
+
+            
+            SoundPlayer player = new SoundPlayer(relativePath);
+            player.PlayLooping();
+        }
 
         public static void ChangeLenguage(string language)
         {

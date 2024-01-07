@@ -123,6 +123,9 @@
   <data name="btnCancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="btnCopyToClipboard" xml:space="preserve">
+    <value>Copiar código</value>
+  </data>
   <data name="btnCreateGame" xml:space="preserve">
     <value>CREAR PARTIDA</value>
   </data>
@@ -137,6 +140,12 @@
   </data>
   <data name="btnFriends" xml:space="preserve">
     <value>Amigos</value>
+  </data>
+  <data name="btnJoin" xml:space="preserve">
+    <value>Unirse</value>
+  </data>
+  <data name="btnJoinAsGuest" xml:space="preserve">
+    <value>Unirse como invitado</value>
   </data>
   <data name="btnJoinGame" xml:space="preserve">
     <value>UNIRSE A PARTIDA</value>
@@ -156,6 +165,9 @@
   <data name="btnRegister" xml:space="preserve">
     <value>Registro</value>
   </data>
+  <data name="btnSendInvitation" xml:space="preserve">
+    <value>Enviar invitación</value>
+  </data>
   <data name="btnSendMessage" xml:space="preserve">
     <value>Enviar</value>
   </data>
@@ -173,6 +185,9 @@
   </data>
   <data name="cbxTeamTwo" xml:space="preserve">
     <value>Equipo 2</value>
+  </data>
+  <data name="lblCodeInvitation" xml:space="preserve">
+    <value>Código:</value>
   </data>
   <data name="lblConfirmPassword" xml:space="preserve">
     <value>Confirmar contraseña</value>
@@ -192,6 +207,15 @@
   <data name="lblErrorPasswordsNoMatch" xml:space="preserve">
     <value>Las contraseñas no coinciden</value>
   </data>
+  <data name="lblGameAborted" xml:space="preserve">
+    <value>Juego abortado, no hay ganadores</value>
+  </data>
+  <data name="lblGameCode" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="lblGamesWon" xml:space="preserve">
+    <value>Partidas ganadas</value>
+  </data>
   <data name="lblInviteFriend" xml:space="preserve">
     <value>Invitar amigo</value>
   </data>
@@ -201,8 +225,14 @@
   <data name="lblLanguage" xml:space="preserve">
     <value>Idioma</value>
   </data>
+  <data name="lblLeaderboard" xml:space="preserve">
+    <value>TABLERO</value>
+  </data>
   <data name="lblLobby" xml:space="preserve">
     <value>Sala</value>
+  </data>
+  <data name="lblLoserTeam" xml:space="preserve">
+    <value>You have lost :c</value>
   </data>
   <data name="lblMail" xml:space="preserve">
     <value>Correo</value>
@@ -219,6 +249,9 @@
   <data name="lblPasswordHelp" xml:space="preserve">
     <value>Si necesitas ayuda pon el cursor aqui</value>
   </data>
+  <data name="lblPlayer" xml:space="preserve">
+    <value>Jugadores</value>
+  </data>
   <data name="lblPlayersConecteds" xml:space="preserve">
     <value>Jugadores Conectados</value>
   </data>
@@ -231,14 +264,92 @@
   <data name="lblTitle" xml:space="preserve">
     <value>ASTRALIS</value>
   </data>
+  <data name="lblUserTeam" xml:space="preserve">
+    <value>Equipo: </value>
+  </data>
+  <data name="lblUserTurnFalse" xml:space="preserve">
+    <value>No es tu turno</value>
+  </data>
+  <data name="lblUserTurnTrue" xml:space="preserve">
+    <value>Es tu turno</value>
+  </data>
   <data name="lblVolume" xml:space="preserve">
     <value>Volumen</value>
+  </data>
+  <data name="lblWinnerTeam" xml:space="preserve">
+    <value>Has ganado!!</value>
+  </data>
+  <data name="msgBanned" xml:space="preserve">
+    <value>Estas baneado, intenta mas tarde.</value>
+  </data>
+  <data name="msgConnectionError" xml:space="preserve">
+    <value>Error al conectarse con el servidor</value>
+  </data>
+  <data name="msgCopyToClipboard" xml:space="preserve">
+    <value>Ha sido copiado el texto:</value>
+  </data>
+  <data name="msgErrorCreateLobby" xml:space="preserve">
+    <value>No se pudo crear el lobby</value>
+  </data>
+  <data name="msgFriendRemoved" xml:space="preserve">
+    <value>Amigo eliminado exitosamente</value>
+  </data>
+  <data name="msgFriendRequestAccepted" xml:space="preserve">
+    <value>Solicitud de amistad aceptada con éxito</value>
+  </data>
+  <data name="msgFriendRequestDeclined" xml:space="preserve">
+    <value>Solicitud de amistad rechazada con éxito</value>
+  </data>
+  <data name="msgFriendRequestSuccessful" xml:space="preserve">
+    <value>Solicitud de amistar enviada con éxito</value>
+  </data>
+  <data name="msgGameIsFullOrLobbyDoesntExist" xml:space="preserve">
+    <value>El lobby esta lleno o no existe</value>
+  </data>
+  <data name="msgKickedOut" xml:space="preserve">
+    <value>Has sido expulsado del lobby.</value>
+  </data>
+  <data name="msgLobbyError" xml:space="preserve">
+    <value>La lobby esta llena o hay un problema con el servidor</value>
+  </data>
+  <data name="msgNoGameFound" xml:space="preserve">
+    <value>No se encontro el lobby</value>
+  </data>
+  <data name="msgUnableToSendFriendRequest" xml:space="preserve">
+    <value>No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente.</value>
   </data>
   <data name="msgUserAddedSucceed" xml:space="preserve">
     <value>¡Registro exitoso!</value>
   </data>
+  <data name="msgUsernameMissing" xml:space="preserve">
+    <value>Por favor, ingresa un nombre de usuario.</value>
+  </data>
+  <data name="msgUserNotFound" xml:space="preserve">
+    <value>El usuario no fue encontrado</value>
+  </data>
+  <data name="msgUserOnline" xml:space="preserve">
+    <value>No se pudo iniciar sesión debido a que el usuario está en línea</value>
+  </data>
+  <data name="msgUserUpdated" xml:space="preserve">
+    <value>El usuario se ha actualizado correctamen, se reinicará la aplicación</value>
+  </data>
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>
+  </data>
+  <data name="titleCopyToClipboard" xml:space="preserve">
+    <value>Copiado</value>
+  </data>
+  <data name="titleError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="titleKickedOut" xml:space="preserve">
+    <value>Expulsado</value>
+  </data>
+  <data name="titleMail" xml:space="preserve">
+    <value>Correo</value>
+  </data>
+  <data name="titleNoGameFound" xml:space="preserve">
+    <value>No se encontro</value>
   </data>
   <data name="titleUserAdded" xml:space="preserve">
     <value>Registro</value>
@@ -252,22 +363,27 @@
   <data name="tpNicknameLenghtHelp" xml:space="preserve">
     <value>El nombre de usuario debe tener mas de 2 y menos de 30 caracteres</value>
   </data>
-  <data name="tpPasswordHelp" xml:space="preserve">
-    <value>Reglas de la contraseña</value>
-  </data>
-  <data name="tpPasswordRules" xml:space="preserve">
-    <value>Al menos 8 caracteres
-Al menos 1 número
-Al menos 1 simbolo
-Al menos 1 mayuscula</value>
-  </data>
   <data name="txbEmptyFieldError" xml:space="preserve">
     <value>Este campo no puede estar vacío</value>
   </data>
   <data name="txbInvalidFields" xml:space="preserve">
     <value>Credenciales invalidas, favor de introducir un usuario valido</value>
   </data>
+  <data name="txbPasswordRules" xml:space="preserve">
+    <value>Reglas de la contraseña:
+
+Al menos 8 caracteres
+Al menos 1 número
+Al menos 1 simbolo
+Al menos 1 mayuscula</value>
+  </data>
   <data name="txtChat" xml:space="preserve">
     <value>Escribe algo...</value>
+  </data>
+  <data name="txtFriendMail" xml:space="preserve">
+    <value>Correo de amigo</value>
+  </data>
+  <data name="txtSearchUser" xml:space="preserve">
+    <value>Escribe un nombre...</value>
   </data>
 </root>

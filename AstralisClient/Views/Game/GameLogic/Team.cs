@@ -1,33 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Astralis.Views.Game.GameLogic
 {
     public class Team : INotifyPropertyChanged
     {
-        private int mana;
-        private int health;
+        private int _roundMana;
+        private int _mana;
+        private int _health;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Team(int mana, int health)
         {
+            _roundMana = mana;
             Mana = mana;
             Health = health;
         }
 
+        public int RoundMana { get { return _roundMana; } set { _roundMana = value; } }
+
         public int Mana
         {
-            get { return mana; }
+            get { return _mana; }
             set
             {
-                if (mana != value)
+                if (_mana != value)
                 {
-                    mana = value;
+                    _mana = value;
                     OnPropertyChanged(nameof(Mana));
                 }
             }
@@ -35,12 +35,12 @@ namespace Astralis.Views.Game.GameLogic
 
         public int Health
         {
-            get { return health; }
+            get { return _health; }
             set
             {
-                if (health != value)
+                if (_health != value)
                 {
-                    health = value;
+                    _health = value;
                     OnPropertyChanged(nameof(Health));
                 }
             }

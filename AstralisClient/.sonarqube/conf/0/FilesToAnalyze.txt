@@ -1,8 +1,10 @@
 ﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Constants.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Logic\ImageManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Logic\UserSession.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\EndGameUserCard.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\FriendCard.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\FriendWindow.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\GuestInvitation.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\LeftLineAnimation.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Animations\LobbyUserCard.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\AstralisAnimation.xaml.cs
@@ -11,11 +13,14 @@ C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Validations
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameBoard.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameLogic\Card.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameLogic\CardManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameLogic\GameManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GameLogic\Team.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Game\GraphicCard.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Lobby.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\LogIn.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\App.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\MainMenu.xaml.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Pages\EndGame.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Pages\MyProfile.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\Pages\Settings.xaml.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Views\SignUp.xaml.cs
@@ -41,3 +46,11 @@ C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Connected S
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Window.png
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Piranhas.jpg
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Pumpkin.jpg
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\falling.jpg
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Fox.jpg
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Eye.jpg
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Gangster.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Duck.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Mondongo.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\DogeCoin.png
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\Resources\Patrick.png

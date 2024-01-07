@@ -4,35 +4,35 @@ namespace Astralis.Logic
 {
     public class UserSession
     {
-        private static UserSession instance;
-        private string nickname = "";
-        private string mail = "";
-        private int imageId = 1;
+        private static UserSession _instance;
+        private string _nickname = "";
+        private string _mail = "";
+        private int _imageId = 1;
 
         private UserSession(User user)
         {
-            nickname = user.Nickname;
-            mail = user.Mail;
-            imageId = user.ImageId;
+            _nickname = user.Nickname;
+            _mail = user.Mail;
+            _imageId = user.ImageId;
         }
 
         public static UserSession Instance (User user)
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new UserSession (user);
+                _instance = new UserSession (user);
             }
 
-            return instance;
+            return _instance;
         }
 
         public static UserSession Instance()
         {
-             return instance;
+             return _instance;
         }
 
-        public string Nickname { get { return nickname; } }
-        public string Mail { get { return mail; } }
-        public int ImageId { get {  return imageId; } }
+        public string Nickname { get { return _nickname; } }
+        public string Mail { get { return _mail; } }
+        public int ImageId { get {  return _imageId; } }
     }
 }
