@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Data.Entity.Core;
 using DataAccessProject;
 using System.Runtime.CompilerServices;
+using System.Data.Entity.Infrastructure;
 
 namespace MessageService
 {
@@ -691,9 +692,9 @@ namespace MessageService
                     isSucceded = ERROR;
                 }
             }
-            catch (SqlException sqlException)
+            catch (DbUpdateException dbUpdateException)
             {
-                log.Error(sqlException);
+                log.Error(dbUpdateException);
                 isSucceded = ERROR;
             }
             catch (EntityException entityException)
@@ -982,9 +983,9 @@ namespace MessageService
                 log.Error(communicationObjectAbortedException);
                 EndGame(GAME_ABORTED, nickname);
             }
-            catch (FaultException faultException)
+            catch(CommunicationException communicationException)
             {
-                log.Error(faultException);
+                log.Error(communicationException);
                 EndGame(GAME_ABORTED, nickname);
             }
         }

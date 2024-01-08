@@ -125,7 +125,7 @@ namespace DataAccessProject.DataAccess
 
                     friendList = AddFriendToDictionary(onlineUsers, databaseFriends, nickname);
 
-                    var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname || f.Nickname1 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
+                    var pendingRequests = context.UserFriend.Where(f => f.Nickname2 == nickname && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
 
                     AddPendingRequests(pendingRequests, friendList);
                 }
