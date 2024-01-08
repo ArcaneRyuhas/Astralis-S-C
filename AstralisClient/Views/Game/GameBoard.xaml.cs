@@ -62,14 +62,19 @@ namespace Astralis.Views.Game
             {
                 _client.ConnectGame(UserSession.Instance().Nickname);
             }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -104,14 +109,19 @@ namespace Astralis.Views.Game
             {
                 _client.DrawCard(myNickname, drawnCard);
             }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -125,14 +135,19 @@ namespace Astralis.Views.Game
             {
                 _client.DrawCard(myNickname, drawnCard);
             }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -153,14 +168,19 @@ namespace Astralis.Views.Game
             {
                 _client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
             }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -382,14 +402,19 @@ namespace Astralis.Views.Game
                 {
                     _client.EndGame(winnerTeam, myNickname);
                 }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
+                }
                 catch (CommunicationException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.RestartApplication();
                 }
                 catch (TimeoutException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.RestartApplication();
                 }
             }
@@ -496,14 +521,19 @@ namespace Astralis.Views.Game
                     {
                         _client.StartFirstPhase(UserSession.Instance().Nickname);
                     }
+                    catch (CommunicationObjectFaultedException)
+                    {
+                        MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
+                    }
                     catch (CommunicationException)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                         App.RestartApplication();
                     }
                     catch (TimeoutException)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                         App.RestartApplication();
                     }
                 }
@@ -560,6 +590,11 @@ namespace Astralis.Views.Game
             try
             {
                 _client.SendMessageGame(message, nickname);
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
             catch (CommunicationException)
             {

@@ -56,17 +56,22 @@ namespace Astralis.Views.Pages
 
                 _client.GetUsersWithTeam(myNickname);
             }
-            catch(CommunicationException)
+            catch (CommunicationObjectFaultedException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
-           
+
         }
 
         public void SetUsers(UserWithTeam[] usersWithTeams)

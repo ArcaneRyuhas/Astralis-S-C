@@ -315,6 +315,12 @@
   <data name="msgNoGameFound" xml:space="preserve">
     <value>Can't found lobby</value>
   </data>
+  <data name="msgPreviousConnectioLost" xml:space="preserve">
+    <value>Previous conection has been lost</value>
+  </data>
+  <data name="msgUnableToAnswer" xml:space="preserve">
+    <value>Your request couldn´t be procesed</value>
+  </data>
   <data name="msgUnableToSendFriendRequest" xml:space="preserve">
     <value>Unable to send the friend reques. Verify that the user exists or that there´s no pending requests</value>
   </data>

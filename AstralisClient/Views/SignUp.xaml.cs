@@ -54,7 +54,7 @@ namespace Astralis.Views
                     if (findUserAnswer == VALIDATION_FAILURE)
                     {
                         int userAdded = client.AddUser(user);
-                        if (userAdded >= VALIDATION_FAILURE)
+                        if (userAdded == VALIDATION_SUCCES)
                         {
                             MessageBox.Show(Properties.Resources.msgUserAddedSucceed, Properties.Resources.titleUserAdded, MessageBoxButton.OK, MessageBoxImage.Information);
                             LogIn logIn = new LogIn();
@@ -63,7 +63,10 @@ namespace Astralis.Views
                         }
                         else
                         {
-                            MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                            MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                            LogIn logIn = new LogIn();
+                            this.Close();
+                            logIn.Show();
                         }
                     }
                     else if(findUserAnswer == VALIDATION_SUCCES)
@@ -73,8 +76,18 @@ namespace Astralis.Views
                     }
                     else
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                        LogIn logIn = new LogIn();
+                        this.Close();
+                        logIn.Show();
                     }
+                }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    LogIn logIn = new LogIn();
+                    this.Close();
+                    logIn.Show();
                 }
                 catch (CommunicationException)
                 {

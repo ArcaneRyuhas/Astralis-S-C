@@ -30,9 +30,19 @@ namespace Astralis.Views.Pages
 
                 SetUserList(gamesWonInfos);
             }
-            catch (EndpointNotFoundException) 
+            catch (CommunicationObjectFaultedException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }

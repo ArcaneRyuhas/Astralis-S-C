@@ -132,20 +132,25 @@ namespace Astralis.Views.Pages
                     {
                         MessageBox.Show(Properties.Resources.msgUserUpdated, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-                    else
+                    else if (userUpdated == Constants.ERROR)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
                     }
 
                     _friendWindow.Disconnect();
                 }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 catch (CommunicationException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch (TimeoutException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
                 {

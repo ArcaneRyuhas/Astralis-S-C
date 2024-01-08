@@ -47,7 +47,17 @@ namespace Astralis.Views.Cards
             {
                 client.ConectUser(UserSession.Instance().Nickname);
             }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                App.RestartApplication();
+            }
             catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
@@ -63,7 +73,17 @@ namespace Astralis.Views.Cards
             {
                 client.DisconectUser(UserSession.Instance().Nickname);
             }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                App.RestartApplication();
+            }
             catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
@@ -238,10 +258,15 @@ namespace Astralis.Views.Cards
                     }
                     else if (requestReply == Constants.ERROR)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                         Disconnect();
                         App.RestartApplication();
                     }
+                }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
                 }
                 catch (CommunicationException)
                 {
@@ -275,10 +300,15 @@ namespace Astralis.Views.Cards
                     }
                     else if (removedFriendAnswer == Constants.ERROR)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                         Disconnect();
                         App.RestartApplication();
                     }
+                }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
                 }
                 catch (CommunicationException)
                 {
@@ -341,7 +371,7 @@ namespace Astralis.Views.Cards
                         }
                         else if (requestSent == Constants.ERROR)
                         {
-                            MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                             Disconnect();
                             App.RestartApplication();
                         }
@@ -349,6 +379,11 @@ namespace Astralis.Views.Cards
                         {
                             MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
+                    }
+                    catch (CommunicationObjectFaultedException)
+                    {
+                        MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
                     }
                     catch (CommunicationException)
                     {

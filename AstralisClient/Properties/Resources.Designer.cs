@@ -655,6 +655,24 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Se ha perdido la conexión previa.
+        /// </summary>
+        public static string msgPreviousConnectioLost {
+            get {
+                return ResourceManager.GetString("msgPreviousConnectioLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No se pudo procesar tu solicitud..
+        /// </summary>
+        public static string msgUnableToAnswer {
+            get {
+                return ResourceManager.GetString("msgUnableToAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente..
         /// </summary>
         public static string msgUnableToSendFriendRequest {

@@ -315,6 +315,12 @@
   <data name="msgNoGameFound" xml:space="preserve">
     <value>No se encontro el lobby</value>
   </data>
+  <data name="msgPreviousConnectioLost" xml:space="preserve">
+    <value>Se ha perdido la conexión previa</value>
+  </data>
+  <data name="msgUnableToAnswer" xml:space="preserve">
+    <value>No se pudo procesar tu solicitud.</value>
+  </data>
   <data name="msgUnableToSendFriendRequest" xml:space="preserve">
     <value>No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente.</value>
   </data>

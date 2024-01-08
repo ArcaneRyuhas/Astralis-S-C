@@ -71,8 +71,12 @@ namespace Astralis.Views
                     }
                     else
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
+                }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (CommunicationException)
                 {
@@ -155,6 +159,10 @@ namespace Astralis.Views
                 {
                     MessageBox.Show(Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (CommunicationException)
             {
