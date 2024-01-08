@@ -18,25 +18,21 @@ namespace DataAccessProject.DataAccess
 
         public int CreateDefaultDeck(AstralisDBEntities context, string nickname)
         {
-            UserAccess userAccess = new UserAccess();
             int result = INT_VALIDATION_FAILURE;
 
-            if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
+            Deck deck = new Deck
             {
-                Deck deck = new Deck
-                {
-                    Card = DEFAULT_DECK
-                };
+                Card = DEFAULT_DECK
+            };
 
-                context.Deck.Add(deck);
-                result = context.SaveChanges();
+            context.Deck.Add(deck);
+            result = context.SaveChanges();
 
-                result += CreateRelationUserDeck(context, deck.DeckId, nickname);
+            result += CreateRelationUserDeck(context, deck.DeckId, nickname);
 
-                if (result > INT_VALIDATION_FAILURE)
-                {
-                    result = INT_VALIDATION_SUCCESS;
-                }
+            if (result > INT_VALIDATION_FAILURE)
+            {
+                result = INT_VALIDATION_SUCCESS;
             }
 
             return result;
