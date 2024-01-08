@@ -4,10 +4,13 @@ using System.Data.Entity.Core;
 using DataAccessProject;
 using User = DataAccessProject.Contracts.User;
 using System.Collections.Generic;
-
+using System;
+using System.Configuration;
+using System.ServiceModel;
 
 namespace DataAccessTestProject
 {
+
     [TestClass]
     public class UserAccessTest
     {

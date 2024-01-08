@@ -18,20 +18,25 @@ namespace DataAccessProject.DataAccess
 
         public int CreateDefaultDeck(AstralisDBEntities context, string nickname)
         {
+            UserAccess userAccess = new UserAccess();
             int result = INT_VALIDATION_FAILURE;
-            Deck deck = new Deck
+
+            if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
             {
-                Card = DEFAULT_DECK
-            };
+                Deck deck = new Deck
+                {
+                    Card = DEFAULT_DECK
+                };
 
-            context.Deck.Add(deck);
-            result = context.SaveChanges();
+                context.Deck.Add(deck);
+                result = context.SaveChanges();
 
-            result += CreateRelationUserDeck(context, deck.DeckId, nickname);
+                result += CreateRelationUserDeck(context, deck.DeckId, nickname);
 
-            if (result > INT_VALIDATION_FAILURE)
-            {
-                result = INT_VALIDATION_SUCCESS;
+                if (result > INT_VALIDATION_FAILURE)
+                {
+                    result = INT_VALIDATION_SUCCESS;
+                }
             }
 
             return result;
@@ -60,18 +65,22 @@ namespace DataAccessProject.DataAccess
         
         public List<int> GetDeckByNickname(string nickname)
         {
-            List<int> cardList;
+            List<int> cardList = null;
+            UserAccess userAccess = new UserAccess();
 
-            using (var context = new AstralisDBEntities())
+            if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
             {
-                UserDeck userDeck = new UserDeck();
+                using (var context = new AstralisDBEntities())
+                {
+                    UserDeck userDeck = new UserDeck();
 
-                userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
+                    userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
 
-                Deck deck = context.Deck.Find(userDeck.DeckId);
-                cardList = deck.Card.Split(',').Select(int.Parse).ToList();
+                    Deck deck = context.Deck.Find(userDeck.DeckId);
+                    cardList = deck.Card.Split(',').Select(int.Parse).ToList();
+                }
             }
-
+            
             return cardList;
         }
         

@@ -29,12 +29,12 @@ namespace MessageService
         public int ConfirmUser(string nickname, string password)
         {
             int result = VALIDATION_FAILURE;
+            UserAccess userAccess = new UserAccess();
 
             try
             {
-                if (FindUserByNickname(nickname) == VALIDATION_SUCCESS)
+                if (userAccess.FindUserByNickname(nickname) == VALIDATION_SUCCESS)
                 {
-                    UserAccess userAccess = new UserAccess();
                     result = userAccess.ConfirmUser(nickname, password);
                 }
                 if (result > VALIDATION_FAILURE)
@@ -161,6 +161,11 @@ namespace MessageService
                 log.Error(sqlException);
                 foundUser.Nickname = NICKNAME_ERROR;
             }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                foundUser.Nickname = NICKNAME_ERROR;
+            }
 
             return foundUser;
         }
@@ -172,7 +177,7 @@ namespace MessageService
             UserAccess userAccess = new UserAccess();
             try
             {
-                if (FindUserByNickname(user.Nickname) == VALIDATION_SUCCESS)
+                if (userAccess.FindUserByNickname(user.Nickname) == VALIDATION_SUCCESS)
                 {
                     result = userAccess.UpdateUser(user);
 
