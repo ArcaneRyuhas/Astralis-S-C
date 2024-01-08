@@ -8,6 +8,7 @@
   <SonarQubeHostUrl>http://localhost:9000</SonarQubeHostUrl>
   <SonarQubeVersion>10.3.0.82913</SonarQubeVersion>
   <SonarProjectKey>FAE04EC0-301F-11D3-BF4B-00C04F79EFBC</SonarProjectKey>
+  <SonarProjectVersion>4</SonarProjectVersion>
   <AdditionalConfig>
     <ConfigSetting Id="BuildUri" />
     <ConfigSetting Id="TfsUri" />
@@ -129,7 +130,7 @@
     <Property Name="sonaranalyzer-vbnet.pluginKey">vbnet</Property>
     <Property Name="sonar.updatecenter.url">https://update.sonarsource.org/update-center.properties</Property>
     <Property Name="sonar.core.id">147B411E-AYveLh9bsogWqVCL7a9e</Property>
-    <Property Name="sonar.core.startTime">06/01/2024 10:40:01 p. m.</Property>
+    <Property Name="sonar.core.startTime">08/01/2024 03:10:46 p. m.</Property>
   </ServerSettings>
   <LocalSettings />
   <AnalyzersSettings>

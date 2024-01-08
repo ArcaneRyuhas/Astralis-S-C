@@ -24,7 +24,7 @@ namespace Astralis
 
             
             SoundPlayer player = new SoundPlayer(relativePath);
-            player.PlayLooping();
+           // player.PlayLooping();
         }
 
         public static void ChangeLenguage(string language)

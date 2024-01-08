@@ -48,22 +48,16 @@ namespace DataAccessProject.DataAccess
         {
             using (var context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
 
-                    var existingRequest = context.UserFriend
-                        .FirstOrDefault(f =>
-                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReceiver) ||
-                            (f.Nickname1 == nicknameReceiver && f.Nickname2 == nicknameSender) &&
-                            f.FriendStatusId == IS_PENDING_FRIEND);
+                var existingRequest = context.UserFriend
+                    .FirstOrDefault(f =>
+                        (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReceiver) ||
+                        (f.Nickname1 == nicknameReceiver && f.Nickname2 == nicknameSender) &&
+                        f.FriendStatusId == IS_PENDING_FRIEND);
 
-                    return existingRequest != null;
-                }
-                catch (SqlException)
-                {
-                    throw;
-                }
+                return existingRequest != null;
+
             }
         }
 

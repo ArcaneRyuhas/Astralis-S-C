@@ -53,6 +53,7 @@ namespace Astralis.Views.Game
             _gameManager.SetCounter(progressBarCounter);
             _gameManager.UserTeam = _userTeam;
             _gameManager.EnemyTeam = _enemyTeam;
+            _gameManager.StartExitTimer();
         }
 
         private void Connect()
@@ -606,6 +607,11 @@ namespace Astralis.Views.Game
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
+        }
+
+        private void progressBarCounter_ValueChanged(object sender, RoutedPropertyChangedEventArgs<T> e)
+        {
+
         }
     }
 }

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:p = "clr-namespace:Astralis.Properties"
         mc:Ignorable="d" 
-      d:DesignHeight="920" d:DesignWidth="1280"
+      d:DesignHeight="900" d:DesignWidth="1180"
+      ResizeMode="NoResize"
       Title="GameBoard">
 
     <Grid Background="#FF716D67">
@@ -112,7 +113,7 @@
                 </Grid>
             </Grid>
 
-            <ProgressBar x:Name="progressBarCounter" Grid.Column="0"  Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Height="21" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White" Margin="-145,0,0,0" >
+            <ProgressBar x:Name="progressBarCounter" Grid.Column="0"  Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Height="21" Width="370" Background="Black" Foreground="DarkRed" BorderBrush="White" Margin="-145,0,0,0" ValueChanged="progressBarCounter_ValueChanged" >
                 <ProgressBar.RenderTransform>
                     <RotateTransform Angle="270"/>
                 </ProgressBar.RenderTransform>

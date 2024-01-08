@@ -437,5 +437,12 @@ namespace Astralis.Views.Game.GameLogic
 
             _roundEnded = false;
         }
+
+        public void StartExitTimer()
+        {
+            _exitCountdown = EXIT_COUNTDOWN_STARTING_VALUE;
+
+            _exitTimer.Start();
+        }
     }
 }
