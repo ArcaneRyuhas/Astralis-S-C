@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -127,75 +128,73 @@ namespace DataAccessProject.DataAccess
         public Dictionary<string, Tuple<bool, int>> GetFriendList(string nickname, List<string> onlineUsers)
         {
             Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
+            Tuple<bool, int> friendTuple;
+
+            AddFriends(nickname, onlineUsers, friendList);
 
             using (var context = new AstralisDBEntities())
             {
-                if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
+                var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
+
+                foreach (var request in pendingRequests)
                 {
-                    context.Database.Log = Console.WriteLine;
-                    var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
-
-                    friendList = AddFriendToDictionary(onlineUsers, databaseFriends, nickname);
-
-                    var pendingRequests = context.UserFriend.Where(f => f.Nickname2 == nickname && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
-
-                    AddPendingRequests(pendingRequests, friendList);
+                    if (onlineUsers.Contains(request.Nickname1))
+                    {
+                        friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
+                        friendList.Add(request.Nickname1, friendTuple);
+                    }
+                    else
+                    {
+                        friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
+                        friendList.Add(request.Nickname1, friendTuple);
+                    }
                 }
             }
             return friendList;
         }
 
-        private void AddPendingRequests(List<UserFriend> pendingRequests, Dictionary<string, Tuple<bool, int>> friendList)
+
+        private void AddFriends(string nickname, List<string> onlineUsers, Dictionary<string, Tuple<bool, int>> friendList)
         {
             Tuple<bool, int> friendTuple;
 
-            foreach (var request in pendingRequests)
+            using (var context = new AstralisDBEntities())
             {
-                if (!friendList.ContainsKey(request.Nickname1))
-                {
-                    friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
-                    friendList.Add(request.Nickname1, friendTuple);
-                }
-            }
-        }
+                context.Database.Log = Console.WriteLine;
+                var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
 
-        private Dictionary<string, Tuple<bool, int>> AddFriendToDictionary(List<string> onlineUsers, List<UserFriend> databaseFriends, string nickname)
-        {
-            Dictionary<string, Tuple<bool, int>> friendList = new Dictionary<string, Tuple<bool, int>>();
-            Tuple<bool, int> friendTuple;
-
-            foreach (var friend in databaseFriends)
-            {
-                if (friend.Nickname1 != nickname)
+                foreach (var friend in databaseFriends)
                 {
-                    if (onlineUsers.Contains(friend.Nickname1))
+                    if (friend.Nickname1 != nickname)
                     {
-                        friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
-                        friendList.Add(friend.Nickname1, friendTuple);
+                        if (onlineUsers.Contains(friend.Nickname1))
+                        {
+                            friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname1, friendTuple);
+                        }
+                        else
+                        {
+                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname1, friendTuple);
+                        }
+
                     }
                     else
                     {
-                        friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
-                        friendList.Add(friend.Nickname1, friendTuple);
+                        if (onlineUsers.Contains(friend.Nickname2))
+                        {
+                            friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname2, friendTuple);
+                        }
+                        else
+                        {
+                            friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+                            friendList.Add(friend.Nickname2, friendTuple);
+                        }
                     }
                 }
-                else
-                {
-                    if (onlineUsers.Contains(friend.Nickname2))
-                    {
-                        friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
-                        friendList.Add(friend.Nickname2, friendTuple);
-                    }
-                    else
-                    {
-                        friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
-                        friendList.Add(friend.Nickname2, friendTuple);
-                    }
-                }
-
             }
-
-            return friendList;
+           
         }
     }
 }

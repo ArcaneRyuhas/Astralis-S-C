@@ -734,17 +734,17 @@ namespace MessageService
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
                     log.Error(communicationObjectAbortedException);
-                    DisconectUser(nickname);
+                    DisconectUser(user.Key);
                 }
                 catch (CommunicationException communicationException)
                 {
                     log.Error(communicationException);
-                    DisconectUser(nickname);
+                    DisconectUser(user.Key);
                 }
                 catch (TimeoutException timeoutException)
                 {
                     log.Error(timeoutException);
-                    DisconectUser(nickname);
+                    DisconectUser(user.Key);
                 }
             }
         }
@@ -767,17 +767,17 @@ namespace MessageService
                             catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                             {
                                 log.Error(communicationObjectAbortedException);
-                                DisconectUser(nickname);
+                                DisconectUser(user.Key);
                             }
                             catch (CommunicationException communicationException)
                             {
                                 log.Error(communicationException);
-                                DisconectUser(nickname);
+                                DisconectUser(user.Key);
                             }
                             catch (TimeoutException timeoutException)
                             {
                                 log.Error(timeoutException);
-                                DisconectUser(nickname);
+                                DisconectUser(user.Key);
                             }
                         }
                     }
@@ -824,17 +824,17 @@ namespace MessageService
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
                     log.Error(communicationObjectAbortedException);
-                    DisconectUser(nickname);
+                    DisconectUser(nicknameFriend);
                 }
                 catch (CommunicationException communicationException)
                 {
                     log.Error(communicationException);
-                    DisconectUser(nickname);
+                    DisconectUser(nicknameFriend);
                 }
                 catch (TimeoutException timeoutException)
                 {
                     log.Error(timeoutException);
-                    DisconectUser(nickname);
+                    DisconectUser(nicknameFriend);
                 }
             }
             return isSucceded;
@@ -875,17 +875,17 @@ namespace MessageService
             catch (CommunicationObjectAbortedException communicationObjectAbortedException)
             {
                 log.Error(communicationObjectAbortedException);
-                DisconectUser(nickname);
+                DisconectUser(nicknameRequest);
             }
             catch (CommunicationException communicationException)
             {
                 log.Error(communicationException);
-                DisconectUser(nickname);
+                DisconectUser(nicknameRequest);
             }
             catch (TimeoutException timeoutException)
             {
                 log.Error(timeoutException);
-                DisconectUser(nickname);
+                DisconectUser(nicknameRequest);
             }
 
             return isSucceded;
@@ -918,17 +918,17 @@ namespace MessageService
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
                     log.Error(communicationObjectAbortedException);
-                    DisconectUser(nickname);
+                    DisconectUser(nicknamefriendToRemove);
                 }
                 catch (CommunicationException communicationException)
                 {
                     log.Error(communicationException);
-                    DisconectUser(nickname);
+                    DisconectUser(nicknamefriendToRemove);
                 }
                 catch (TimeoutException timeoutException)
                 {
                     log.Error(timeoutException);
-                    DisconectUser(nickname);
+                    DisconectUser(nicknamefriendToRemove);
                 }
             }
 
@@ -1271,24 +1271,18 @@ namespace MessageService
                 }
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                 {
-                    GameAccess gameAccess = new GameAccess();
-                    gameAccess.BanUser(userInGame);
+                    CommunicationEndedException(hostNickname, userInGame);
                     log.Error(communicationObjectAbortedException);
-                    EndGame(GAME_ABORTED, userInGame);
                 }
                 catch (CommunicationException communicationException)
                 {
-                    GameAccess gameAccess = new GameAccess();
-                    gameAccess.BanUser(userInGame);
+                    CommunicationEndedException(hostNickname, userInGame);
                     log.Error(communicationException);
-                    EndGame(GAME_ABORTED, userInGame);
                 }
                 catch (TimeoutException timeoutException)
                 {
-                    GameAccess gameAccess = new GameAccess();
-                    gameAccess.BanUser(userInGame);
+                    CommunicationEndedException(hostNickname, userInGame);
                     log.Error(timeoutException);
-                    EndGame(GAME_ABORTED, userInGame);
                 }
 
             }
