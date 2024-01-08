@@ -113,7 +113,7 @@
                 </Grid>
             </Grid>
 
-            <ProgressBar x:Name="progressBarCounter" Grid.Column="0"  Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Height="21" Width="370" Background="Black" Foreground="DarkRed" BorderBrush="White" Margin="-145,0,0,0" ValueChanged="progressBarCounter_ValueChanged" >
+            <ProgressBar x:Name="progressBarCounter" Grid.Column="0"  Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Height="21" Width="370" Background="Black" Foreground="DarkRed" BorderBrush="White" Margin="-145,0,0,0" >
                 <ProgressBar.RenderTransform>
                     <RotateTransform Angle="270"/>
                 </ProgressBar.RenderTransform>
