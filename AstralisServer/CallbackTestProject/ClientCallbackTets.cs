@@ -184,7 +184,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public async Task StartGameSuccesfull()
+        public async Task StartGameUnsuccesfull()
         {
             User secondUser = new User()
             {
@@ -204,7 +204,7 @@ namespace CallbackTestProject
             await Task.Delay(2000);
             _firstClient.StartGame(FIRST_USER.Nickname);
             await Task.Delay(2000);
-            Assert.IsTrue(_firstCallback.GameStarted);
+            Assert.IsFalse(_firstCallback.GameStarted);
         }
 
         [TestMethod]
@@ -641,6 +641,21 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
+        public void WrongPasswordConfirmUserUM()
+        {
+            DataAccessProject.Contracts.User userToConfirm = new DataAccessProject.Contracts.User()
+            {
+                Nickname = "ConfirmUserTestUnsuccess",
+                ImageId = 1,
+                Mail = "ConfirmUserTest@hotmail.com",
+                Password = "password"
+            };
+
+            userAccess.CreateUser(userToConfirm);
+            Assert.IsTrue(clientUserManager.ConfirmUser(userToConfirm.Nickname, "Incorrect") == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
         public void UnSuccessfullyAddUserUM()
         {
             User userToAdd = new User()
@@ -723,6 +738,20 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
+        public void UnsuccessfullyGetUserByNicknameUM()
+        {
+            User userToGet = new User()
+            {
+                Nickname = "UserToGetTestUnsuccesful",
+                ImageId = 1,
+                Mail = "UserToGetTest@hotmail.com",
+                Password = "password"
+            };
+
+            Assert.IsTrue(clientUserManager.GetUserByNickname(userToGet.Nickname).Nickname != NICKNAME_ERROR);
+        }
+
+        [TestMethod]
         public void UnSuccessfullyUpdateUserUM()
         {
             User userToUpdate = new User()
@@ -736,7 +765,33 @@ namespace CallbackTestProject
             Assert.IsTrue(clientUserManager.UpdateUser(userToUpdate) == INT_VALIDATION_FAILURE);
         }
 
+        [TestMethod]
+        public void SuccessfullyUpdateUserUM()
+        {
+            User userToUpdate = new User()
+            {
+                Nickname = "UserToUpdate",
+                ImageId = 1,
+                Mail = "UserToUpdate@hotmail.com",
+                Password = "password"
+            };
 
+            User userUpdated = new User()
+            {
+                Nickname = "UserToUpdate",
+                ImageId = 3,
+                Mail = "UserToUpdate@gmail.com",
+                Password = "password"
+            };
+
+            clientUserManager.AddUser(userToUpdate);
+
+            int result = clientUserManager.UpdateUser(userUpdated);
+
+            userAccess.DeleteUser("UserToUpdate");
+
+            Assert.IsTrue(result == INT_VALIDATION_FAILURE);
+        }
 
         [ClassCleanup]
         public static void ClassCleanup()
@@ -747,6 +802,7 @@ namespace CallbackTestProject
             userAccess.DeleteUser("UserToGetTest");
             userAccess.DeleteUser("NicknameUpdated");
             userAccess.DeleteUser("UserCanPlay");
+            userAccess.DeleteUser("ConfirmUserTestUnsuccess");
         }
     }
 

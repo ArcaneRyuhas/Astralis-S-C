@@ -64,9 +64,12 @@ namespace Astralis.Views
 
             if (lobby.CanPlay())
             {
-                if (lobby.GameIsNotFull(code) && lobby.SetLobby(code))
+                if (lobby.GameIsNotFull(code))
                 {
-                    NavigationService.Navigate(lobby);
+                    if (lobby.SetLobby(code))
+                    {
+                        NavigationService.Navigate(lobby);
+                    }
                 }
                 else
                 {

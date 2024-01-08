@@ -696,6 +696,22 @@ namespace DataAccessTestProject
         }
 
         [TestMethod]
+        public void UnsuccessfullyCreateDefaultDeck()
+        {
+            User userDefaultDeck = new User()
+            {
+                Nickname = "UserDefaultDeck",
+                ImageId = 1,
+                Mail = "UserDefaultDeck@hotmail.com",
+                Password = "password"
+            };
+
+            var context = new AstralisDBEntities();
+
+            Assert.IsFalse(deckAccess.CreateDefaultDeck(context, userDefaultDeck.Nickname) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
         public void SuccessfullyGetDeckByNickname()
         {
             User user = new User()
@@ -715,6 +731,26 @@ namespace DataAccessTestProject
 
             Assert.IsNotNull(cardList);
             Assert.AreEqual(STARTING_CARD_COUNT, cardList.Count);
+        }
+
+        [TestMethod]
+        public void UnsuccessfullyGetDeckByNickname()
+        {
+            User user = new User()
+            {
+                Nickname = "TestUser",
+                ImageId = 1,
+                Mail = "testuser@example.com",
+                Password = "password"
+            };
+
+            userAccess.CreateUser(user);
+
+            var context = new AstralisDBEntities();
+
+            List<int> cardList = deckAccess.GetDeckByNickname(user.Nickname);
+
+            Assert.IsNull(cardList);
         }
 
 

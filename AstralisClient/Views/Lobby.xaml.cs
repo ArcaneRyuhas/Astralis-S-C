@@ -93,10 +93,12 @@ namespace Astralis.Views
             catch (CommunicationException)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
             catch (TimeoutException)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
         }
 
@@ -482,10 +484,12 @@ namespace Astralis.Views
             catch (CommunicationException)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
             catch (TimeoutException)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
         }
 
@@ -504,7 +508,6 @@ namespace Astralis.Views
             else
             {
                 MessageBox.Show(mailString, Properties.Resources.titleMail, MessageBoxButton.OK, MessageBoxImage.Information);
-
             }
         }
 

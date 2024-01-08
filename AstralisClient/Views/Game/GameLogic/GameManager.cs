@@ -246,10 +246,14 @@ namespace Astralis.Views.Game.GameLogic
 
             if (!HasGameEnded())
             {
-                _exitTimer.Stop();
                 _gameBoard.DrawCard();
                 _roundEnded = false;
             }
+        }
+
+        public void EndExitTimer()
+        {
+            _exitTimer.Stop();
         }
 
 

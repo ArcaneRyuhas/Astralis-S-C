@@ -1,6 +1,7 @@
 ﻿using Astralis.Logic;
 using Astralis.UserManager;
 using Astralis.Views.Cards;
+using System;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,9 +48,25 @@ namespace Astralis.Views.Pages
         {
             string myNickname = UserSession.Instance().Nickname;
             InstanceContext context = new InstanceContext(this);
-            _client = new EndGameClient(context);
+            
 
-            _client.GetUsersWithTeam(myNickname);
+            try
+            {
+                _client = new EndGameClient(context);
+
+                _client.GetUsersWithTeam(myNickname);
+            }
+            catch(CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+           
         }
 
         public void SetUsers(UserWithTeam[] usersWithTeams)

@@ -399,6 +399,7 @@ namespace Astralis.Views.Game
         {
             string myNickname = UserSession.Instance().Nickname;
             EndGame endGame = new EndGame(winnerTeam, _gameManager.UsersTeam[myNickname]);
+            _gameManager.EndExitTimer();
 
             GameWindow gameWindow = new GameWindow();
 

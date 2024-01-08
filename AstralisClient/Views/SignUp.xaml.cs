@@ -17,7 +17,7 @@ namespace Astralis.Views
         private const string NICKNAME_REGEX = @"^[a-zA-Z0-9]{2,30}$";
         private const string MAIL_REGEX = @"^.+@[^\.].*\.[a-z]{2,}$";
         private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9\S]{0,40}$";
-        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^&*_-]).{6,40})\S$";
+        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^?&*_-]).{6,40})\S$";
         private const int MAX_FIELDS_LENGHT = 39;
         private const int VALIDATION_FAILURE = 0;
         private const int VALIDATION_SUCCES = 1;
@@ -124,6 +124,7 @@ namespace Astralis.Views
             {
                 lblErrorPassword.Visibility = Visibility.Visible;
                 lblErrorPassword.Content = Properties.Resources.lblErrorPasswordsNoMatch;
+                band = false;
             }
 
             return band;
