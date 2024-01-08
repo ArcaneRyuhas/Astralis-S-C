@@ -608,10 +608,5 @@ namespace Astralis.Views.Game
                 App.RestartApplication();
             }
         }
-
-        private void progressBarCounter_ValueChanged(object sender, RoutedPropertyChangedEventArgs<T> e)
-        {
-
-        }
     }
 }
