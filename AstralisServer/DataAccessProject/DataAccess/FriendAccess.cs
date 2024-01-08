@@ -44,36 +44,54 @@ namespace DataAccessProject.DataAccess
             return IsSucceded;
         }
 
-        public bool SendFriendRequest(string nicknameSender, string nicknameReciever)
+        public bool FriendRequestExists(string nicknameSender, string nicknameReceiver)
         {
-            bool isSucceded = false;
-
             using (var context = new AstralisDBEntities())
             {
-                context.Database.Log = Console.WriteLine;
-
-                var existingRequest = context.UserFriend
-                    .FirstOrDefault(f =>
-                        (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) ||
-                        (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) &&
-                        f.FriendStatusId == IS_PENDING_FRIEND);
-
-                if (existingRequest == null)
+                try
                 {
+                    context.Database.Log = Console.WriteLine;
+
+                    var existingRequest = context.UserFriend
+                        .FirstOrDefault(f =>
+                            (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReceiver) ||
+                            (f.Nickname1 == nicknameReceiver && f.Nickname2 == nicknameSender) &&
+                            f.FriendStatusId == IS_PENDING_FRIEND);
+
+                    return existingRequest != null;
+                }
+                catch (SqlException)
+                {
+                    throw;
+                }
+            }
+        }
+
+        public bool SendFriendRequest(string nicknameSender, string nicknameReceiver)
+        {
+            bool isSucceeded = false;
+
+            if (!FriendRequestExists(nicknameSender, nicknameReceiver))
+            {
+                using (var context = new AstralisDBEntities())
+                {
+                    context.Database.Log = Console.WriteLine;
+
                     var newFriendRequest = new UserFriend
                     {
                         Nickname1 = nicknameSender,
-                        Nickname2 = nicknameReciever,
+                        Nickname2 = nicknameReceiver,
                         FriendStatusId = IS_PENDING_FRIEND
                     };
 
                     context.UserFriend.Add(newFriendRequest);
                     context.SaveChanges();
 
-                    isSucceded = true;
+                    isSucceeded = true;
                 }
             }
-            return isSucceded;
+
+            return isSucceeded;
         }
 
         public int ReplyFriendRequest(string nicknameReciever, string nicknameSender, bool answer)

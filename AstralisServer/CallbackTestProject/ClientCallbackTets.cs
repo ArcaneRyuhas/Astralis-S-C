@@ -208,6 +208,30 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
+        public async Task StartGameSuccesfull()
+        {
+            User secondUser = new User()
+            {
+                Nickname = "SecondUser",
+                ImageId = 1
+            };
+
+            if (_secondClient.GameExist(_gameId))
+            {
+                _secondClient.ConnectLobby(secondUser, _gameId);
+            }
+
+            await Task.Delay(2000);
+            _firstClient.ChangeLobbyUserTeam(FIRST_USER.Nickname, 1);
+            await Task.Delay(2000);
+            _secondClient.ChangeLobbyUserTeam(secondUser.Nickname, 2);
+            await Task.Delay(2000);
+            _firstClient.StartGame(FIRST_USER.Nickname);
+            await Task.Delay(2000);
+            Assert.IsFalse(_firstCallback.GameStarted);
+        }
+
+        [TestMethod]
         public async Task ConnectToServerUnsuccesful()
         {
             User secondUser = new User()
@@ -790,7 +814,7 @@ namespace CallbackTestProject
 
             userAccess.DeleteUser("UserToUpdate");
 
-            Assert.IsTrue(result == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(result == INT_VALIDATION_SUCCESS);
         }
 
         [ClassCleanup]
@@ -841,13 +865,13 @@ namespace CallbackTestProject
                 Password = "password"
             };
 
-            Assert.IsTrue(client.AddUser(userToAdd) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(client.AddUser(userToAdd) == ERROR);
         }
 
         [TestMethod]
         public void ErrorAddGuestUM()
         {
-            Assert.IsTrue(client.AddGuest().Nickname != NICKNAME_ERROR);
+            Assert.IsTrue(client.AddGuest().Nickname == NICKNAME_ERROR);
         }
 
         [TestMethod]

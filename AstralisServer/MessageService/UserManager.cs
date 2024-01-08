@@ -29,12 +29,12 @@ namespace MessageService
         public int ConfirmUser(string nickname, string password)
         {
             int result = VALIDATION_FAILURE;
+            UserAccess userAccess = new UserAccess();
 
             try
             {
-                if (FindUserByNickname(nickname) == VALIDATION_SUCCESS)
+                if (userAccess.FindUserByNickname(nickname) == VALIDATION_SUCCESS)
                 {
-                    UserAccess userAccess = new UserAccess();
                     result = userAccess.ConfirmUser(nickname, password);
                 }
                 if (result > VALIDATION_FAILURE)
@@ -161,6 +161,11 @@ namespace MessageService
                 log.Error(sqlException);
                 foundUser.Nickname = NICKNAME_ERROR;
             }
+            catch (EntityException entityException)
+            {
+                log.Error(entityException);
+                foundUser.Nickname = NICKNAME_ERROR;
+            }
 
             return foundUser;
         }
@@ -172,7 +177,7 @@ namespace MessageService
             UserAccess userAccess = new UserAccess();
             try
             {
-                if (FindUserByNickname(user.Nickname) == VALIDATION_SUCCESS)
+                if (userAccess.FindUserByNickname(user.Nickname) == VALIDATION_SUCCESS)
                 {
                     result = userAccess.UpdateUser(user);
 
@@ -493,9 +498,9 @@ namespace MessageService
                         _usersContext[userInTheLobby].StartClientGame();
                         _usersContext.Remove(userInTheLobby);
                     }
-                    catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                    catch (CommunicationException communicationException)
                     {
-                        log.Error(communicationObjectAbortedException);
+                        log.Error(communicationException);
                         User userToDisconnect = new User();
                         userToDisconnect.Nickname = userInTheLobby;
                         DisconnectLobby(userToDisconnect);
@@ -585,6 +590,7 @@ namespace MessageService
         private static Dictionary<string, IOnlineUserManagerCallback> _onlineUsers = new Dictionary<string, IOnlineUserManagerCallback>();
         private const int IS_SUCCEDED = 0;
         private const bool ACCEPTED_FRIEND = true;
+        private static Object _lock = new Object();
 
         [OperationBehavior]
         public void ConectUser(string nickname)
@@ -671,43 +677,48 @@ namespace MessageService
         {
             int isSucceded = VALIDATION_FAILURE;
 
-            try
+            lock (_lock)
             {
-                int findUserAnswer = FindUserByNickname(nicknameFriend);
-
-                if (findUserAnswer == VALIDATION_SUCCESS)
+                try
                 {
-                    FriendAccess friendAccess = new FriendAccess();
-                    if (friendAccess.SendFriendRequest(nickname, nicknameFriend))
+                    int findUserAnswer = FindUserByNickname(nicknameFriend);
+
+                    if (findUserAnswer == VALIDATION_SUCCESS)
                     {
-                        isSucceded = VALIDATION_SUCCESS;
-                        if (_onlineUsers.ContainsKey(nicknameFriend))
+                        FriendAccess friendAccess = new FriendAccess();
+                        if (!friendAccess.FriendRequestExists(nickname, nicknameFriend))
                         {
-                            _onlineUsers[nicknameFriend].ShowFriendRequest(nickname);
+                            if (friendAccess.SendFriendRequest(nickname, nicknameFriend))
+                            {
+                                isSucceded = VALIDATION_SUCCESS;
+                                if (_onlineUsers.ContainsKey(nicknameFriend))
+                                {
+                                    _onlineUsers[nicknameFriend].ShowFriendRequest(nickname);
+                                }
+                            }
                         }
                     }
+                    else if (findUserAnswer == ERROR)
+                    {
+                        isSucceded = ERROR;
+                    }
                 }
-                else if(findUserAnswer == ERROR)
+                catch (SqlException sqlException)
                 {
+                    log.Error(sqlException);
                     isSucceded = ERROR;
                 }
+                catch (EntityException entityException)
+                {
+                    log.Error(entityException);
+                    isSucceded = ERROR;
+                }
+                catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                {
+                    log.Error(communicationObjectAbortedException);
+                    DisconectUser(nicknameFriend);
+                }
             }
-            catch (DbUpdateException dbUpdateException)
-            {
-                log.Error(dbUpdateException);
-                isSucceded = ERROR;
-            }
-            catch (EntityException entityException)
-            {
-                log.Error(entityException);
-                isSucceded = ERROR;
-            }
-            catch (CommunicationObjectAbortedException communicationObjectAbortedException)
-            {
-                log.Error(communicationObjectAbortedException);
-                DisconectUser(nicknameFriend);
-            }
-            
             return isSucceded;
         }
 
