@@ -36,17 +36,22 @@ namespace Astralis.Views
         private void BtnCreateGameClick(object sender, RoutedEventArgs e)
         {
             Lobby lobby = new Lobby(_gameWindow);
+            int canPlay = lobby.CanPlay();
 
-            if (lobby.CanPlay())
+            if (canPlay == Constants.VALIDATION_SUCCESS)
             {
                 if (lobby.SetLobby(IS_HOST))
                 {
                     NavigationService.Navigate(lobby);
                 }
             }
-            else
+            else if (canPlay == Constants.VALIDATION_FAILURE)
             {
                 MessageBox.Show(Properties.Resources.msgBanned, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -62,7 +67,7 @@ namespace Astralis.Views
 
             Lobby lobby = new Lobby(_gameWindow);
 
-            if (lobby.CanPlay())
+            if (lobby.CanPlay() == Constants.VALIDATION_SUCCESS)
             {
                 if (lobby.GameIsNotFull(code))
                 {

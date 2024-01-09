@@ -44,20 +44,15 @@ namespace Astralis.Views
             
         }
 
-        public bool CanPlay()
+        public int CanPlay()
         {
             InstanceContext context = new InstanceContext(this);
+
             _client = new LobbyManagerClient(context);
-            bool canPlay = true;
-
             string nickname = UserSession.Instance().Nickname;
+            int canPlayResult = _client.CanPlay(nickname);
 
-            if (_client.IsBanned(nickname))
-            {
-                canPlay = false;
-            }
-
-            return canPlay;
+            return canPlayResult;
         }
 
         private void InitializeLobby(GameWindow gameWindow)
