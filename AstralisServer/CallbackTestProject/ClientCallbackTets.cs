@@ -151,7 +151,7 @@ namespace CallbackTestProject
                 _secondClient.ConnectLobby(secondUser, _gameId);
             }
 
-            string message = "Message";
+            string message = "Seconduser: Message";
 
             await Task.Delay(2000);
 
@@ -312,7 +312,7 @@ namespace CallbackTestProject
                 _thirdClient.ConnectLobby(thirdUser, _otherGameId);
             }
 
-            string message = "MessageError";
+            string message = "ThirdUser: MessageError";
 
             await Task.Delay(2000);
 

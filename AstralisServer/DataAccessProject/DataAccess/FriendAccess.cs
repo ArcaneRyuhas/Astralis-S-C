@@ -17,7 +17,6 @@ namespace DataAccessProject.DataAccess
         private const bool ACCEPTED_FRIEND = true;
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
-        private readonly UserAccess userAccess = new UserAccess();
 
         public FriendAccess() { }  
 

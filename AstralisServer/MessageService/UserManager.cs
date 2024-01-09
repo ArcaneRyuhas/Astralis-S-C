@@ -709,9 +709,9 @@ namespace MessageService
                         _onlineUsers[nickname] = currentUserCallbackChannel;
                     }
                 }
-                catch (SqlException sqlException)
+                catch (EntityException entityException)
                 {
-                    log.Error(sqlException);
+                    log.Error(entityException);
                 }
                 catch (InvalidOperationException invalidOperationException)
                 {
@@ -1076,9 +1076,16 @@ namespace MessageService
         public void EndGame(int winnerTeam, string nickname)
         {
             Dictionary<string, int> usersInGame = GetUsersPerTeam(nickname);
-
-            GameAccess gameAccess = new GameAccess();
-            gameAccess.EndGame(winnerTeam, _usersInLobby[nickname]);
+            try
+            {
+                GameAccess gameAccess = new GameAccess();
+                gameAccess.EndGame(winnerTeam, _usersInLobby[nickname]);
+            }
+            catch(EntityException entityException)
+            {
+                log.Error(entityException);
+                HandleEntityExceptionInGame(usersInGame);
+            }
 
             foreach (string userInGame in usersInGame.Keys)
             {
@@ -1111,6 +1118,14 @@ namespace MessageService
 
             } 
             
+        }
+
+        private void HandleEntityExceptionInGame(Dictionary<string, int> usersInGame)
+        {
+            foreach(string userInGame in usersInGame.Keys)
+            {
+                RemoveUser(userInGame);
+            }
         }
 
         public void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn)
@@ -1379,10 +1394,6 @@ namespace MessageService
             try
             {
                 listOfGamers = gameAccess.GetTopGamesWon();
-            }
-            catch (SqlException sqlException)
-            {
-                log.Error(sqlException);
             }
             catch (EntityException entityException)
             {
