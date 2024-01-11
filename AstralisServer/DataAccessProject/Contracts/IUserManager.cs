@@ -13,7 +13,7 @@ namespace DataAccessProject.Contracts
         int AddUser(User user);
 
         [OperationContract]
-        User AddGuest();
+        User AddGuestUser();
 
         [OperationContract]
         int ConfirmUser(string nickname, string password);
@@ -28,51 +28,8 @@ namespace DataAccessProject.Contracts
         int UpdateUser(User user);
 
         [OperationContract]
-        bool UserOnline(string nickname);
+        bool IsUserOnline(string nickname);
 
-    }
-
-    [ServiceContract(CallbackContract = typeof(IOnlineUserManagerCallback))]
-    public interface IOnlineUserManager
-    {
-        [OperationContract(IsOneWay = true)]
-        void ConectUser(string nickname);
-
-        [OperationContract(IsOneWay = true)]
-        void DisconectUser(string nickname);
-
-        [OperationContract]
-        int SendFriendRequest(string nickname, string nicknameFriend);
-
-        [OperationContract]
-        int ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
-
-        [OperationContract]
-        int RemoveFriend(string nickname, string nicknamefriendToRemove);
-
-
-    }
-
-    [ServiceContract]
-    public interface IOnlineUserManagerCallback 
-    {
-        [OperationContract]
-        void ShowUserConected(string nickname);
-        
-        [OperationContract]
-        void ShowUserDisconected(string nickname);
-
-        [OperationContract]
-        void ShowOnlineFriends(Dictionary<string, Tuple<bool, int>> onlineFriends);
-
-        [OperationContract]
-        void ShowFriendRequest(string nickname);
-
-        [OperationContract]
-        void ShowFriendAccepted(string nickname);
-
-        [OperationContract]
-        void FriendDeleted(string nickname);
     }
 
 

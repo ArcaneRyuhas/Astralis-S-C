@@ -12,7 +12,7 @@ namespace DataAccessProject.Contracts
     public interface IEndGame
     {
         [OperationContract(IsOneWay = true)]
-        void GetUsersWithTeam(string nickname);
+        void GetEndGameUsers(string nickname);
 
         [OperationContract(IsOneWay = true)]
         void GameEnded(string nickname);
@@ -22,7 +22,7 @@ namespace DataAccessProject.Contracts
     public interface IEndGameCallback
     {
         [OperationContract()]
-        void SetUsers(List<UserWithTeam> usersWithTeams);
+        void ShowEndGameUsers(List<UserWithTeam> usersWithTeams);
     }
 
     [DataContract]

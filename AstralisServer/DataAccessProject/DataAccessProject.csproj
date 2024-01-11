@@ -66,6 +66,8 @@
     <Compile Include="Contracts\IGameManager.cs" />
     <Compile Include="Contracts\ILeaderboardManager.cs" />
     <Compile Include="Contracts\ILobbyManager.cs" />
+    <Compile Include="Contracts\IFriendManager.cs" />
+    <Compile Include="Contracts\IMessageManager.cs" />
     <Compile Include="Contracts\IUserManager.cs" />
     <Compile Include="DataAccess\DeckAccess.cs" />
     <Compile Include="DataAccess\FriendAccess.cs" />
