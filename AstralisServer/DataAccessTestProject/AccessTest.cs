@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.Configuration;
 using System.ServiceModel;
+using System.Globalization;
 
 namespace DataAccessTestProject
 {
@@ -19,6 +20,74 @@ namespace DataAccessTestProject
         private const int ERROR = -1;
         private const string USER_NOT_FOUND = "UserNotFound";
         private static UserAccess userAccess = new UserAccess();
+        private const int GUEST_CREATED_FOR_TEST = 1;
+
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
+        {
+            User userToAdd = new User()
+            {
+                Nickname = "UserRepeated",
+                ImageId = 1,
+                Mail = "userRepeated@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userToAdd);
+
+            User guestToAdd = new User()
+            {
+                Nickname = "CreateGuestReapetedTest",
+                ImageId = 1,
+                Mail = "GuestTest@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateGuest(guestToAdd);
+
+            User userToUpdate = new User()
+            {
+                Nickname = "UpdateUserTest",
+                ImageId = 1,
+                Mail = "UpdateUserTest@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userToUpdate);
+
+            User userToGet = new User()
+            {
+                Nickname = "GetUserTest",
+                ImageId = 1,
+                Mail = "GetUserTest@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userToGet);
+
+            User userToFind = new User()
+            {
+                Nickname = "FindUserTest",
+                ImageId = 1,
+                Mail = "FindUserTest@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userToFind);
+
+            User userToConfirm = new User()
+            {
+                Nickname = "ConfirmUserTest",
+                ImageId = 1,
+                Mail = "ConfirmUserTest@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userToConfirm);
+
+            User userToDelete = new User()
+            {
+                Nickname = "DeleteUserTest",
+                ImageId = 1,
+                Mail = "DeleteUserTest@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userToDelete);
+        }
 
         [TestMethod]
         public void SuccesfullyCreateUser()
@@ -44,8 +113,6 @@ namespace DataAccessTestProject
                 Mail = "userRepeated@hotmail.com",
                 Password = "password"
             };
-
-            userAccess.CreateUser(userToAdd);
 
             Assert.IsTrue(userAccess.CreateUser(userToAdd) == INT_VALIDATION_FAILURE);
         }
@@ -75,15 +142,13 @@ namespace DataAccessTestProject
                 Password = "password"
             };
 
-            userAccess.CreateGuest(guestToAdd);
-
             Assert.IsTrue(userAccess.CreateGuest(guestToAdd) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccesfullyGetHigherGuest()
         {
-            Assert.IsTrue(userAccess.GetHigherGuests() > INT_VALIDATION_FAILURE);
+            Assert.IsTrue(userAccess.GetHigherGuests() > GUEST_CREATED_FOR_TEST);
         }
 
         [TestMethod]
@@ -92,15 +157,10 @@ namespace DataAccessTestProject
             User userToUpdate = new User()
             {
                 Nickname = "UpdateUserTest",
-                ImageId = 1,
-                Mail = "UpdateUserTest@hotmail.com",
-                Password = "password"
+                ImageId = 2,
+                Mail = "EmailUpdated@hotmail.com",
+                Password = "passwordUpdated"
             };
-
-            userAccess.CreateUser(userToUpdate);
-
-            userToUpdate.Mail = "EmailUpdated@hotmail.com";
-            userToUpdate.Password = "passwordUpdated";
 
             Assert.IsTrue(userAccess.UpdateUser(userToUpdate) == INT_VALIDATION_SUCCESS);
         }
@@ -122,133 +182,67 @@ namespace DataAccessTestProject
         [TestMethod]
         public void SuccesfullyGetUserByNickname()
         {
-            User userToGet = new User()
-            {
-                Nickname = "GetUserTest",
-                ImageId = 1,
-                Mail = "GetUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "GetUserTest";
 
-            userAccess.CreateUser(userToGet);
-
-            Assert.IsTrue(userAccess.GetUserByNickname(userToGet.Nickname).Nickname == userToGet.Nickname);
+            Assert.IsTrue(userAccess.GetUserByNickname(nickname).Nickname == nickname);
         }
 
         [TestMethod]
         public void UnSuccesfullyGetUserByNickname()
         {
-            User userToGet = new User()
-            {
-                Nickname = "GetUserUnsuccessTest",
-                ImageId = 1,
-                Mail = "GetUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "NewNickname";
 
-            userAccess.CreateUser(userToGet);
-
-            userToGet.Nickname = "NewNickname";
-
-            Assert.IsTrue(userAccess.GetUserByNickname(userToGet.Nickname).Nickname == USER_NOT_FOUND);
+            Assert.IsTrue(userAccess.GetUserByNickname(nickname).Nickname == USER_NOT_FOUND);
         }
 
         [TestMethod]
         public void SuccesfullyFindUserByNickname()
         {
-            User userToFind = new User()
-            {
-                Nickname = "FindUserTest",
-                ImageId = 1,
-                Mail = "FindUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "FindUserTest";
 
-            userAccess.CreateUser(userToFind);
-
-            Assert.IsTrue(userAccess.FindUserByNickname(userToFind.Nickname) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccesfullyFindUserByNickname()
         {
-            User userToFind = new User()
-            {
-                Nickname = "FindUserUnsuccessTest",
-                ImageId = 1,
-                Mail = "FindUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "InvalidNickname";
 
-            userAccess.CreateUser(userToFind);
-
-            userToFind.Nickname = "NewNickname";
-
-            Assert.IsTrue(userAccess.FindUserByNickname(userToFind.Nickname) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(userAccess.FindUserByNickname(nickname) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccesfullyConfirmUser()
         {
-            User userToConfirm = new User()
-            {
-                Nickname = "ConfirmUserTest",
-                ImageId = 1,
-                Mail = "ConfirmUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "ConfirmUserTest";
+            string password = "password";
 
-            userAccess.CreateUser(userToConfirm);
-
-            Assert.IsTrue(userAccess.ConfirmUser(userToConfirm.Nickname, userToConfirm.Password) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(userAccess.ConfirmUser(nickname, password) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccesfullyConfirmUser()
         {
-            User userToConfirm = new User()
-            {
-                Nickname = "ConfirmUserUnsuccessTest",
-                ImageId = 1,
-                Mail = "ConfirmUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "ConfirmUserTest";
+            string password = "InvalidPassword";
 
-            userAccess.CreateUser(userToConfirm);
-
-            userToConfirm.Password = "newPassword";
-
-            Assert.IsTrue(userAccess.ConfirmUser(userToConfirm.Nickname, userToConfirm.Password) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(userAccess.ConfirmUser(nickname, password) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccesfullyDeleteUser()
         {
-            User userToDelete = new User()
-            {
-                Nickname = "DeleteUserTest",
-                ImageId = 1,
-                Mail = "DeleteUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "DeleteUserTest";
 
-            userAccess.CreateUser(userToDelete);
-
-            Assert.IsTrue(userAccess.DeleteUser(userToDelete.Nickname) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(userAccess.DeleteUser(nickname) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccesfullyDeleteUser()
         {
-            User userToDelete = new User()
-            {
-                Nickname = "DeleteUserTest",
-                ImageId = 1,
-                Mail = "DeleteUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "InvalidNickname";
 
-            Assert.IsTrue(userAccess.DeleteUser(userToDelete.Nickname) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(userAccess.DeleteUser(nickname) == INT_VALIDATION_FAILURE);
         }
 
         [ClassCleanup]
@@ -340,68 +334,46 @@ namespace DataAccessTestProject
         [TestMethod]
         public void GetUserByNicknameEntityException()
         {
-            User userToFind = new User()
-            {
-                Nickname = "FindUserTest",
-                ImageId = 1,
-                Mail = "GetUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "ExceptionNickname";
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                userAccess.FindUserByNickname(userToFind.Nickname);
+                userAccess.FindUserByNickname(nickname);
             });
         }
 
         [TestMethod]
         public void FindUserByNicknameEntityException()
         {
-            User userToGet = new User()
-            {
-                Nickname = "GetUserTest",
-                ImageId = 1,
-                Mail = "FindUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "ExceptionNickname";
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                userAccess.GetUserByNickname(userToGet.Nickname);
+                userAccess.GetUserByNickname(nickname);
             });
         }
 
         [TestMethod]
         public void ConfirmUserEntityException()
         {
-            User userToConfirm = new User()
-            {
-                Nickname = "ConfirmUserTest",
-                ImageId = 1,
-                Mail = "ConfirmUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "ExceptionNickname";
+            string password = "ExceptionPassword";
+
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                userAccess.ConfirmUser(userToConfirm.Nickname, userToConfirm.Password);
+                userAccess.ConfirmUser(nickname, password);
             });
         }
 
         [TestMethod]
         public void DeleteUserEntityException()
         {
-            User userToDelete = new User()
-            {
-                Nickname = "DeleteUserTest",
-                ImageId = 1,
-                Mail = "DeleteUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "ExceptionNickname";
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                userAccess.DeleteUser(userToDelete.Nickname);
+                userAccess.DeleteUser(nickname);
             });
         }
     }
@@ -413,157 +385,143 @@ namespace DataAccessTestProject
         private const int INT_VALIDATION_FAILURE = 0;
         private const bool BOOL_VALIDATION_SUCCESS = true;
         private const bool BOOL_VALIDATION_FAILURE = false;
+        private const bool ACCEPT_FRIEND_REQUEST = true;
         private static UserAccess userAccess = new UserAccess();
         private static FriendAccess friendAccess = new FriendAccess();
+        
 
-        [TestMethod]
-        public void SuccesfullySendFriendRequest()
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
         {
-            User user1 = new User()
+            User user1SuccessSendTest = new User()
             {
                 Nickname = "User1SuccessSendTest",
                 ImageId = 1,
                 Mail = "FrienAccesTestusr1@hotmail.com",
                 Password = "password"
             };
-
-            User user2 = new User()
+            User user2SuccessSendTest = new User()
             {
                 Nickname = "User2SuccessSendTest",
                 ImageId = 1,
                 Mail = "FrienAccesTestusr2@hotmail.com",
                 Password = "password"
             };
+            userAccess.CreateUser(user1SuccessSendTest);
+            userAccess.CreateUser(user2SuccessSendTest);
 
-            userAccess.CreateUser(user1);
-            userAccess.CreateUser(user2);
 
-            friendAccess.ReplyFriendRequest(user1.Nickname, user2.Nickname, false);
-
-            Assert.IsTrue(friendAccess.SendFriendRequest(user1.Nickname, user2.Nickname) == BOOL_VALIDATION_SUCCESS);
-        }
-
-        [TestMethod]
-        public void UnSuccesfullySendFriendRequest()
-        {
-            User user1 = new User()
+            User user1UnsuccessSendTest = new User()
             {
                 Nickname = "User1UnsuccessSendTest",
                 ImageId = 1,
                 Mail = "FrienAccesTestusr1@hotmail.com",
                 Password = "password"
             };
-
-            User user2 = new User()
+            User user2UnsuccessSendTest = new User()
             {
                 Nickname = "User2UnsuccessSendTest",
                 ImageId = 1,
                 Mail = "FrienAccesTestusr2@hotmail.com",
                 Password = "password"
             };
+            userAccess.CreateUser(user1UnsuccessSendTest);
+            userAccess.CreateUser(user2UnsuccessSendTest);
+            friendAccess.SendFriendRequest(user1UnsuccessSendTest.Nickname, user2UnsuccessSendTest.Nickname);
 
-            userAccess.CreateUser(user1);
-            userAccess.CreateUser(user2);
-            friendAccess.SendFriendRequest(user1.Nickname, user2.Nickname);
 
-            Assert.IsTrue(friendAccess.SendFriendRequest(user1.Nickname, user2.Nickname) == BOOL_VALIDATION_FAILURE);
-        }
-
-        [TestMethod]
-        public void SuccesfullyRemoveFriend()
-        {
-            User user1 = new User()
+            User user1SuccessRemoveTest = new User()
             {
                 Nickname = "User1SuccessRemoveTest",
                 ImageId = 1,
                 Mail = "FrienAccesTestusr1@hotmail.com",
                 Password = "password"
             };
-
-            User user2 = new User()
+            User user2SuccessRemoveTest = new User()
             {
                 Nickname = "User2SuccessRemoveTest",
                 ImageId = 1,
                 Mail = "FrienAccesTestusr2@hotmail.com",
                 Password = "password"
             };
+            userAccess.CreateUser(user1SuccessRemoveTest);
+            userAccess.CreateUser(user2SuccessRemoveTest);
+            friendAccess.SendFriendRequest(user1SuccessRemoveTest.Nickname, user2SuccessRemoveTest.Nickname);
+            friendAccess.ReplyFriendRequest(user1SuccessRemoveTest.Nickname, user2SuccessRemoveTest.Nickname, true);
 
-            userAccess.CreateUser(user1);
-            userAccess.CreateUser(user2);
-            friendAccess.SendFriendRequest(user1.Nickname, user2.Nickname);
-            friendAccess.ReplyFriendRequest(user1.Nickname, user2.Nickname, true);
 
-            Assert.IsTrue(friendAccess.RemoveFriend(user1.Nickname, user2.Nickname) == BOOL_VALIDATION_SUCCESS);
-        }
-
-        [TestMethod]
-        public void UnSuccesfullyRemoveFriend()
-        {
-            User user1 = new User()
-            {
-                Nickname = "User1UnsuccessRemoveTest",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr1@hotmail.com",
-                Password = "password"
-            };
-
-            User user2 = new User()
-            {
-                Nickname = "User2UnsuccessRemoveTest",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr2@hotmail.com",
-                Password = "password"
-            };
-
-            Assert.IsTrue(friendAccess.RemoveFriend(user1.Nickname, user2.Nickname) == BOOL_VALIDATION_FAILURE);
-        }
-
-        [TestMethod]
-        public void SuccesfullyReplyFriendRequest()
-        {
-            User user1 = new User()
+            User user1SuccessReplyTest = new User()
             {
                 Nickname = "User1SuccessReplyTest",
                 ImageId = 1,
                 Mail = "FrienAccesTestusr1@hotmail.com",
                 Password = "password"
             };
-
-            User user2 = new User()
+            User user2SuccessReplyTest = new User()
             {
                 Nickname = "User2SuccessReplyTest",
                 ImageId = 1,
                 Mail = "FrienAccesTestusr2@hotmail.com",
                 Password = "password"
             };
+            userAccess.CreateUser(user1SuccessReplyTest);
+            userAccess.CreateUser(user2SuccessReplyTest);
+            friendAccess.SendFriendRequest(user1SuccessReplyTest.Nickname, user2SuccessReplyTest.Nickname);
 
-            userAccess.CreateUser(user1);
-            userAccess.CreateUser(user2);
-            friendAccess.SendFriendRequest(user1.Nickname, user2.Nickname);
+        }
 
-            Assert.IsTrue(friendAccess.ReplyFriendRequest(user1.Nickname, user2.Nickname, true) == INT_VALIDATION_SUCCESS);
+        [TestMethod]
+        public void SuccesfullySendFriendRequest()
+        {
+            string nickname1 = "User1SuccessSendTest";
+            string nickname2 = "User2SuccessSendTest";
+
+            Assert.IsTrue(friendAccess.SendFriendRequest(nickname1, nickname2) == BOOL_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccesfullySendFriendRequest()
+        {
+            string nickname1 = "User1UnsuccessSendTest";
+            string nickname2 = "User2UnsuccessSendTest";
+
+            Assert.IsTrue(friendAccess.SendFriendRequest(nickname1, nickname2) == BOOL_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccesfullyRemoveFriend()
+        {
+            string nickname1 = "User1SuccessRemoveTest";
+            string nickname2 = "User2SuccessRemoveTest";
+
+            Assert.IsTrue(friendAccess.RemoveFriend(nickname1, nickname2) == BOOL_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccesfullyRemoveFriend()
+        {
+            string nickname1 = "User1UnsuccessRemoveTest";
+            string nickname2 = "User2UnsuccessRemoveTest";
+
+            Assert.IsTrue(friendAccess.RemoveFriend(nickname1, nickname2) == BOOL_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccesfullyReplyFriendRequest()
+        {
+            string nickname1 = "User1SuccessReplyTest";
+            string nickname2 = "User2SuccessReplyTest";
+
+            Assert.IsTrue(friendAccess.ReplyFriendRequest(nickname1, nickname2, ACCEPT_FRIEND_REQUEST) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccesfullyReplyFriendRequest()
         {
-            User user1 = new User()
-            {
-                Nickname = "User1UnSuccessReplyTest",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr1@hotmail.com",
-                Password = "password"
-            };
+            string nickname1 = "User1UnSuccessReplyTest";
+            string nickname2 = "User2UnSuccessReplyTest";
 
-            User user2 = new User()
-            {
-                Nickname = "User2UnSuccessReplyTest",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr2@hotmail.com",
-                Password = "password"
-            };
-
-            Assert.IsTrue(friendAccess.ReplyFriendRequest(user1.Nickname, user2.Nickname, true) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(friendAccess.ReplyFriendRequest(nickname1, nickname2, ACCEPT_FRIEND_REQUEST) == INT_VALIDATION_FAILURE);
         }
 
         [ClassCleanup]
@@ -589,32 +547,17 @@ namespace DataAccessTestProject
     {
 
         private static FriendAccess friendAccess = new FriendAccess();
-        private static UserAccess userAccess = new UserAccess();
-
+        private const bool ACCEPT_FRIEND_REQUEST = true;
 
         [TestMethod]
         public void SendFriendRequestEntityException()
         {
-            User user1 = new User()
-            {
-                Nickname = "User1",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr1@hotmail.com",
-                Password = "password"
-            };
-
-            User user2 = new User()
-            {
-                Nickname = "User2",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr2@hotmail.com",
-                Password = "password"
-            };
-
+            string nickname1 = "NicknameException1";
+            string nickname2 = "NicknameException2";
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                friendAccess.SendFriendRequest(user1.Nickname, user2.Nickname);
+                friendAccess.SendFriendRequest(nickname1, nickname2);
             });
         }
 
@@ -622,52 +565,24 @@ namespace DataAccessTestProject
         [TestMethod]
         public void RemoveFriendEntityException()
         {
-            User user1 = new User()
-            {
-                Nickname = "User1",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr1@hotmail.com",
-                Password = "password"
-            };
-
-            User user2 = new User()
-            {
-                Nickname = "User2",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr2@hotmail.com",
-                Password = "password"
-            };
-
+            string nickname1 = "NicknameException1";
+            string nickname2 = "NicknameException2";
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                friendAccess.RemoveFriend(user1.Nickname, user2.Nickname);
+                friendAccess.RemoveFriend(nickname1, nickname2);
             });
         }
 
         [TestMethod]
         public void ReplyFriendRequestEntityException()
         {
-            User user1 = new User()
-            {
-                Nickname = "User1",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr1@hotmail.com",
-                Password = "password"
-            };
-
-            User user2 = new User()
-            {
-                Nickname = "User2",
-                ImageId = 1,
-                Mail = "FrienAccesTestusr2@hotmail.com",
-                Password = "password"
-            };
-
+            string nickname1 = "NicknameException1";
+            string nickname2 = "NicknameException2";
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                friendAccess.ReplyFriendRequest(user1.Nickname, user2.Nickname, true);
+                friendAccess.ReplyFriendRequest(nickname1, nickname2, ACCEPT_FRIEND_REQUEST);
             });
         }
 
@@ -678,11 +593,13 @@ namespace DataAccessTestProject
     {
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int STARTING_CARD_COUNT = 30;
-        private static UserAccess userAccess = new UserAccess();
-        private static DeckAccess deckAccess = new DeckAccess();
+        private static UserAccess _userAccess = new UserAccess();
+        private static DeckAccess _deckAccess = new DeckAccess();
+        private static AstralisDBEntities _context = new AstralisDBEntities();
 
-        [TestMethod]
-        public void SuccessfullyCreateDefaultDeck()
+
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
         {
             User userDefaultDeck = new User()
             {
@@ -691,46 +608,40 @@ namespace DataAccessTestProject
                 Mail = "UserDefaultDeck@hotmail.com",
                 Password = "password"
             };
+            _userAccess.CreateUser(userDefaultDeck);
 
-            userAccess.CreateUser(userDefaultDeck);
-            var context = new AstralisDBEntities();
+            User userToGetDeck = new User()
+            {
+                Nickname = "UserToGetDeck",
+                ImageId = 1,
+                Mail = "testuser@example.com",
+                Password = "password"
+            };
+            _userAccess.CreateUser(userToGetDeck);
+            _deckAccess.CreateDefaultDeck(_context, userToGetDeck.Nickname);
+        }
 
-            Assert.IsTrue(deckAccess.CreateDefaultDeck(context, userDefaultDeck.Nickname) == INT_VALIDATION_SUCCESS);
+        [TestMethod]
+        public void SuccessfullyCreateDefaultDeck()
+        {
+            string nickname = "UserDefaultDeck";
+
+            Assert.IsTrue(_deckAccess.CreateDefaultDeck(_context, nickname) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnsuccessfullyCreateDefaultDeck()
         {
-            User userDefaultDeck = new User()
-            {
-                Nickname = "UserDefaultDeck",
-                ImageId = 1,
-                Mail = "UserDefaultDeck@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "InvalidNickname";
 
-            var context = new AstralisDBEntities();
-
-            Assert.IsFalse(deckAccess.CreateDefaultDeck(context, userDefaultDeck.Nickname) != INT_VALIDATION_SUCCESS);
+            Assert.IsFalse(_deckAccess.CreateDefaultDeck(_context, nickname) != INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void SuccessfullyGetDeckByNickname()
         {
-            User user = new User()
-            {
-                Nickname = "TestUser",
-                ImageId = 1,
-                Mail = "testuser@example.com",
-                Password = "password"
-            };
-
-            userAccess.CreateUser(user);
-
-            var context = new AstralisDBEntities();
-            deckAccess.CreateDefaultDeck(context, user.Nickname);
-
-            List<int> cardList = deckAccess.GetDeckByNickname(user.Nickname);
+            string nickname = "UserToGetDeck";
+            List<int> cardList = _deckAccess.GetDeckByNickname(nickname);
 
             Assert.IsNotNull(cardList);
             Assert.AreEqual(STARTING_CARD_COUNT, cardList.Count);
@@ -739,19 +650,9 @@ namespace DataAccessTestProject
         [TestMethod]
         public void UnsuccessfullyGetDeckByNickname()
         {
-            User user = new User()
-            {
-                Nickname = "TestUser",
-                ImageId = 1,
-                Mail = "testuser@example.com",
-                Password = "password"
-            };
+            string nickname = "InvalidNickname";
 
-            userAccess.CreateUser(user);
-
-            var context = new AstralisDBEntities();
-
-            List<int> cardList = deckAccess.GetDeckByNickname(user.Nickname);
+            List<int> cardList = _deckAccess.GetDeckByNickname(nickname);
 
             Assert.IsNotNull(cardList);
         }
@@ -760,9 +661,9 @@ namespace DataAccessTestProject
         [ClassCleanup]
         public static void ClassCleanup()
         {
-            userAccess.DeleteUser("UserDefaultDeck");
-            userAccess.DeleteUser("UserRelationDeck");
-            userAccess.DeleteUser("TestUser");
+            _userAccess.DeleteUser("UserDefaultDeck");
+            _userAccess.DeleteUser("UserRelationDeck");
+            _userAccess.DeleteUser("TestUser");
         }
     }
 
@@ -771,41 +672,29 @@ namespace DataAccessTestProject
     {
 
         private static DeckAccess deckAccess = new DeckAccess();
+        private static AstralisDBEntities _context = new AstralisDBEntities();
 
 
         [TestMethod]
         public void CreateDefaultDeckEntityException()
         {
-            User userDefaultDeck = new User()
-            {
-                Nickname = "UserDefaultDeck",
-                ImageId = 1,
-                Mail = "UserDefaultDeck@hotmail.com",
-                Password = "password"
-            };
-
-            var context = new AstralisDBEntities();
+            string nickname = "NicknameException";
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                deckAccess.CreateDefaultDeck(context, userDefaultDeck.Nickname);
+                deckAccess.CreateDefaultDeck(_context, nickname);
             });
         }
 
         [TestMethod]
         public void GetDeckByNicknameEntityException()
         {
-            User userDefaultDeck = new User()
-            {
-                Nickname = "UserDefaultDeck",
-                ImageId = 1,
-                Mail = "UserDefaultDeck@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "NicknameException";
+
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                deckAccess.GetDeckByNickname(userDefaultDeck.Nickname);
+                deckAccess.GetDeckByNickname(nickname);
             });
         }
 
@@ -820,32 +709,77 @@ namespace DataAccessTestProject
         private const bool BOOL_VALIDATION_FAILURE = false;
         private const string GAME_ID = "TestGameId"; 
         private const int WINNER_TEAM_TEST = 1;
-        private const string USER_NICKNAME = "TestUser";
         private static GameAccess gameAccess = new GameAccess();
         private static UserAccess userAccess = new UserAccess();
-        
 
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
+        {
+            gameAccess.CreateGame("GameId2");
+
+            gameAccess.CreateGame("GameId3");
+
+            gameAccess.CreateGame("GameId5");
+
+            User userToBan = new User()
+            {
+                Nickname = "UserToBan",
+                ImageId = 1,
+                Mail = "UserToBan@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userToBan);
+
+            User userCanPlay = new User()
+            {
+                Nickname = "UserCanPlay",
+                ImageId = 1,
+                Mail = "UserCanPlay@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userCanPlay);
+
+            User userCanPlayUnsuccessfully = new User()
+            {
+                Nickname = "UserCanPlayUnSuccess",
+                ImageId = 1,
+                Mail = "UserCanPlay@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userCanPlayUnsuccessfully);
+            gameAccess.BanUser(userCanPlayUnsuccessfully.Nickname);
+
+            gameAccess.CreateGame("GameId7");
+
+            User userBanToRemove = new User()
+            {
+                Nickname = "UserBanToRemove",
+                ImageId = 1,
+                Mail = "UserBanToRemove@hotmail.com",
+                Password = "password"
+            };
+            userAccess.CreateUser(userBanToRemove);
+            gameAccess.BanUser(userBanToRemove.Nickname);
+
+        }
 
         [TestMethod]
         public void SuccessfullyCreateGame()
         {
-            gameAccess.CleanupGame(GAME_ID);
-            Assert.IsTrue(gameAccess.CreateGame(GAME_ID));
+            string gameId = "GameId1";
+            Assert.IsTrue(gameAccess.CreateGame(gameId));
         }
 
         [TestMethod]
         public void UnSuccessfullyCreateGame()
         {
-            gameAccess.CleanupGame(GAME_ID);
-            gameAccess.CreateGame(GAME_ID);
-
-            Assert.IsTrue(gameAccess.CreateGame(GAME_ID) == BOOL_VALIDATION_FAILURE);
+            string gameId = "GameId2";
+            Assert.IsTrue(gameAccess.CreateGame(gameId) == BOOL_VALIDATION_FAILURE);
         }
 
-        [TestMethod]
+        [TestMethod] //Mario lo va a arreglar
         public void SuccessfullyCreatePlayRelation()
         {
-
             gameAccess.CreateGame("12345");
             Assert.IsTrue(true);
 
@@ -854,134 +788,97 @@ namespace DataAccessTestProject
         [TestMethod]
         public void SuccessfullyGameIdIsReapeted()
         {
-            gameAccess.CleanupGame(GAME_ID);
-            gameAccess.CreateGame(GAME_ID);
-            Assert.IsTrue(gameAccess.GameIdIsRepeated(GAME_ID));
+            string gameId = "GameId3";
+
+            Assert.IsTrue(gameAccess.GameIdIsRepeated(gameId));
         }
 
         [TestMethod]
         public void UnSuccessfullyGameIdIsReapeted()
         {
-            gameAccess.CleanupGame(GAME_ID);
-            Assert.IsTrue(gameAccess.GameIdIsRepeated(GAME_ID) == BOOL_VALIDATION_FAILURE);
+            string gameId = "GameId4";
+
+            Assert.IsTrue(gameAccess.GameIdIsRepeated(gameId) == BOOL_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccessfullyEndGame()
         {
-            gameAccess.CleanupGame(GAME_ID);
-            gameAccess.CreateGame(GAME_ID);
-            Assert.IsTrue(gameAccess.EndGame(WINNER_TEAM_TEST, GAME_ID) == INT_VALIDATION_SUCCESS);
+            string gameId = "GameId5";
+
+            Assert.IsTrue(gameAccess.EndGame(WINNER_TEAM_TEST, gameId) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccessfullyEndGame()
         {
-            gameAccess.CleanupGame(GAME_ID);
-            Assert.IsTrue(gameAccess.EndGame(WINNER_TEAM_TEST, "NotGameIdValid") == INT_VALIDATION_FAILURE);
+            string gameId = "gameId6";
+            Assert.IsTrue(gameAccess.EndGame(WINNER_TEAM_TEST, gameId) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccessfullyBanUser()
         {
-            User userToBan = new User()
-            {
-                Nickname = "UserToBan",
-                ImageId = 1,
-                Mail = "UserToBan@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "UserToBan";
 
-            userAccess.CreateUser(userToBan);
-
-            Assert.IsTrue(gameAccess.BanUser(userToBan.Nickname) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(gameAccess.BanUser(nickname) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccessfullyBanUser()
         {
-            Assert.IsTrue(gameAccess.BanUser("NotValidNickname") == INT_VALIDATION_FAILURE);
+            string nickname = "UserToBanUnsuccessfuly";
+
+            Assert.IsTrue(gameAccess.BanUser(nickname) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccessfullyCanPlay()
         {
-            User userCanPlay = new User()
-            {
-                Nickname = "UserCanPlay",
-                ImageId = 1,
-                Mail = "UserCanPlay@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "UserCanPlay";
 
-            userAccess.CreateUser(userCanPlay);
-
-            Assert.IsTrue(gameAccess.CanPlay(userCanPlay.Nickname) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(gameAccess.CanPlay(nickname) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccessfullyCanPlay()
         {
-            User userCanPlay = new User()
-            {
-                Nickname = "UserCanPlayUnSuccess",
-                ImageId = 1,
-                Mail = "UserCanPlay@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "UserCanPlayUnSuccess";
 
-            userAccess.CreateUser(userCanPlay);
-            gameAccess.BanUser(userCanPlay.Nickname);
-
-            Assert.IsTrue(gameAccess.CanPlay(userCanPlay.Nickname) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(gameAccess.CanPlay(nickname) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccessfullyCleanUpGame()
         {
-            gameAccess.CreateGame(GAME_ID);
+            string gameId = "GameId7"; 
 
-            Assert.IsTrue(gameAccess.CleanupGame(GAME_ID) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(gameAccess.CleanupGame(gameId) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccessfullyCleanUpGame()
         {
-            gameAccess.CleanupGame(GAME_ID);
-            Assert.IsTrue(gameAccess.CleanupGame(GAME_ID) == INT_VALIDATION_FAILURE);
+            string gameId = "GameId8";
+
+            Assert.IsTrue(gameAccess.CleanupGame(gameId) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccessfullyRemoveBan()
         {
+            string nickname = "UserBanToRemove";
 
-            User userBanToRemove = new User()
-            {
-                Nickname = "UserBanToRemove",
-                ImageId = 1,
-                Mail = "UserBanToRemove@hotmail.com",
-                Password = "password"
-            };
-
-            userAccess.CreateUser(userBanToRemove);
-            gameAccess.BanUser(userBanToRemove.Nickname);
-
-            Assert.IsTrue(gameAccess.RemoveBan(userBanToRemove.Nickname) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(gameAccess.RemoveBan(nickname) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
         public void UnSuccessfullyRemoveBan()
         {
 
-            User userBanToRemove = new User()
-            {
-                Nickname = "UserBanToRemove",
-                ImageId = 1,
-                Mail = "UserBanToRemove@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "InvalidNickname";
 
-            Assert.IsTrue(gameAccess.RemoveBan(userBanToRemove.Nickname) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(gameAccess.RemoveBan(nickname) == INT_VALIDATION_FAILURE);
         }
 
         [ClassCleanup]
@@ -995,89 +892,106 @@ namespace DataAccessTestProject
             userAccess.DeleteUser("UserCanPlay");
             userAccess.DeleteUser("UserCanPlayUnSuccess");
             userAccess.DeleteUser("UserBanToRemove");
-            gameAccess.CleanupGame("12345");
+            gameAccess.CleanupGame("GameId1");
+            gameAccess.CleanupGame("GameId2");
+            gameAccess.CleanupGame("GameId3");
+            gameAccess.CleanupGame("GameId5");
+            gameAccess.CleanupGame("GameId7");
         }
-
-
     }
 
     [TestClass]
     public class GamekAccessTestExceptions
     {
-        private const string GAME_ID = "TestGameId";
-        private const string USER_NICKNAME = "TestUser";
         private const int WINNER_TEAM_TEST = 1;
         private static GameAccess gameAccess = new GameAccess();
 
         [TestMethod]
         public void CreateGameEntityException()
         {
+            string gameId = "GameidException";
+
             Assert.ThrowsException<EntityException>(() =>
             {
-                gameAccess.CreateGame(GAME_ID);
+                gameAccess.CreateGame(gameId);
             });
         }
 
         [TestMethod]
         public void CreatePLayRelationEntityException()
         {
+            string nickname = "NicknameException";
+            string gameId = "GameidException";
+
             Assert.ThrowsException<EntityException>(() =>
             {
-                gameAccess.CreatePlaysRelation(USER_NICKNAME, GAME_ID, 1);
+                gameAccess.CreatePlaysRelation(nickname, gameId, 1);
             });
         }
 
         [TestMethod]
         public void GameIdIsReaetedEntityException()
         {
+            string gameId = "GameIdException";
+
             Assert.ThrowsException<EntityException>(() =>
             {
-                gameAccess.GameIdIsRepeated(GAME_ID);
+                gameAccess.GameIdIsRepeated(gameId);
             });
         }
 
         [TestMethod]
         public void EndGameEntityException()
         {
+            string gameId = "GameIdException";
+
             Assert.ThrowsException<EntityException>(() =>
             {
-                gameAccess.EndGame(WINNER_TEAM_TEST, GAME_ID);
+                gameAccess.EndGame(WINNER_TEAM_TEST, gameId);
             });
         }
 
         [TestMethod]
         public void BanUserEntityException()
         {
+            string nickname = "NicknameException";
+
             Assert.ThrowsException<EntityException>(() =>
             {
-                gameAccess.BanUser(USER_NICKNAME);
+                gameAccess.BanUser(nickname);
             });
         }
 
         [TestMethod]
         public void CanPlayEntityException()
         {
+            string nickname = "NicknameException";
+
             Assert.ThrowsException<EntityException>(() =>
             {
-                gameAccess.CanPlay(USER_NICKNAME);
+                gameAccess.CanPlay(nickname);
             });
         }
 
         [TestMethod]
         public void CleanUpGameEntityException()
         {
+            string gameId = "GameIdException";
+
             Assert.ThrowsException<EntityException>(() =>
             {
-                gameAccess.CleanupGame(GAME_ID);
+                gameAccess.CleanupGame(gameId);
             });
         }
 
         [TestMethod]
         public void RemoveBanEntityException()
         {
+            string nickname = "NicknameException";
+
             Assert.ThrowsException<EntityException>(() =>
             {
-                gameAccess.RemoveBan(USER_NICKNAME);
+                gameAccess.RemoveBan(nickname);
             });
         }
     }
