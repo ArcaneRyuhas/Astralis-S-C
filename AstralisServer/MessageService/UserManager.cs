@@ -303,6 +303,14 @@ namespace MessageService
                     {
                         log.Error(communicationObjectAbortedException);
                     }
+                    catch (CommunicationException communicationException)
+                    {
+                        log.Error(communicationException);
+                    }
+                    catch (TimeoutException timeoutException)
+                    {
+                        log.Error(timeoutException);
+                    }
 
                     ShowConnectionInLobby(usersNickname, user);
                 }
@@ -661,23 +669,6 @@ namespace MessageService
                     DisconnectLobby(userToDisconnect);
                 }
             }
-        }
-
-        public bool IsBanned(string nickname)
-        {
-            GameAccess gameAccess = new GameAccess();
-            bool banned = false;
-
-            if (gameAccess.CanPlay(nickname) == VALIDATION_FAILURE)
-            {
-                 banned = true;
-            }
-            else
-            {
-                gameAccess.RemoveBan(nickname);
-            }
-
-            return banned;
         }
     }
 
@@ -1397,6 +1388,7 @@ namespace MessageService
             }
             catch (EntityException entityException)
             {
+                listOfGamers = null;
                 log.Error(entityException);
             }
 

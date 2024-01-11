@@ -66,6 +66,7 @@ namespace Astralis.Views
             string code = txtJoinCode.Text;
 
             Lobby lobby = new Lobby(_gameWindow);
+            int canPlay = lobby.CanPlay();
 
             if (lobby.CanPlay() == Constants.VALIDATION_SUCCESS)
             {
@@ -81,9 +82,13 @@ namespace Astralis.Views
                     MessageBox.Show(Properties.Resources.msgGameIsFullOrLobbyDoesntExist, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-            else
+            else if (canPlay == Constants.VALIDATION_FAILURE)
             {
                 MessageBox.Show(Properties.Resources.msgBanned, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

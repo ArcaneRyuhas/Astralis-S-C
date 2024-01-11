@@ -428,8 +428,8 @@ namespace Astralis.Views.Game
             _gameManager.EndExitTimer();
 
             GameWindow gameWindow = new GameWindow();
-
             endGame.EndGameWindow = gameWindow;
+
             gameWindow.ChangePage(endGame);
             gameWindow.Visibility = Visibility.Visible;
             
@@ -459,6 +459,7 @@ namespace Astralis.Views.Game
 
         private void RemoveCardFromHand(Grid gridToModify, GraphicCard graphicCardToRemove)
         {
+            //The fact of using a foreach is to find the first graphicCard in the grid and theres no other found to do it succesufully.
             foreach (GraphicCard graphicCard in gridToModify.Children)
             {
                 if (graphicCardToRemove.Card != null && graphicCard.Card != null && graphicCard.Card.Equals(graphicCardToRemove.Card))
@@ -499,7 +500,7 @@ namespace Astralis.Views.Game
             Card card = CardManager.Instance().GetCard(ENEMY_CARD);
             GraphicCard graphicCardOne = new GraphicCard();
 
-           graphicCardOne.SetGraphicCard(card);
+            graphicCardOne.SetGraphicCard(card);
 
             GraphicCard graphicCardTwo = new GraphicCard();
 

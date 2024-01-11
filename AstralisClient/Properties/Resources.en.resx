@@ -319,10 +319,10 @@
     <value>Previous conection has been lost</value>
   </data>
   <data name="msgUnableToAnswer" xml:space="preserve">
-    <value>Your request couldn´t be procesed</value>
+    <value>Can't reach the database.</value>
   </data>
   <data name="msgUnableToSendFriendRequest" xml:space="preserve">
-    <value>Unable to send the friend reques. Verify that the user exists or that there´s no pending requests</value>
+    <value>Unable to send the friend request. Verify that the user exists or that there´s no pending requests</value>
   </data>
   <data name="msgUserAddedSucceed" xml:space="preserve">
     <value>Sign up successful!</value>
