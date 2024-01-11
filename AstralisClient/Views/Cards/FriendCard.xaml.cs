@@ -5,9 +5,6 @@ using System.Windows.Controls;
 
 namespace Astralis.Views.Cards
 {
-    /// <summary>
-    /// Interaction logic for FriendCard.xaml
-    /// </summary>
     public partial class FriendCard : UserControl
     {
         public event EventHandler<Tuple<string, bool>> ReplyToFriendRequestEvent;
@@ -28,11 +25,12 @@ namespace Astralis.Views.Cards
         public void SetLobbyCard(string nickname, bool onlineStatus, int friendStatus)
         {
             lblNickname.Content = nickname;
+            btnSendGameInvitation.Visibility = Visibility.Visible;
+
             if (friendStatus == IS_FRIEND && onlineStatus)
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }
-            btnSendGameInvitation.Visibility = Visibility.Visible;
         }
 
         public void SetMainMenuCard(string nickname, bool onlineStatus, int friendStatus)
@@ -44,6 +42,7 @@ namespace Astralis.Views.Cards
                 {
                     ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
                 }
+
                 btnDeleteFriend.Visibility = Visibility.Visible;
             }
             else

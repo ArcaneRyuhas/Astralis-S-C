@@ -5,14 +5,11 @@ using System;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 
 
 namespace Astralis.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for EndGame.xaml
-    /// </summary>
+
     public partial class EndGame : Page, IEndGameCallback
     {
         private EndGameClient _client;
@@ -24,7 +21,7 @@ namespace Astralis.Views.Pages
         public EndGame(int winnerTeam, int myTeam)
         {
             InitializeComponent();
-            SetPlayersCard();
+            GetEndGameUsers();
             SetWinnerTeam(winnerTeam, myTeam);
         }
 
@@ -44,17 +41,16 @@ namespace Astralis.Views.Pages
             }
         }
 
-        private void SetPlayersCard()
+        private void GetEndGameUsers()
         {
             string myNickname = UserSession.Instance().Nickname;
             InstanceContext context = new InstanceContext(this);
-            
 
             try
             {
                 _client = new EndGameClient(context);
 
-                _client.GetUsersWithTeam(myNickname);
+                _client.GetEndGameUsers(myNickname);
             }
             catch (CommunicationObjectFaultedException)
             {
@@ -74,7 +70,7 @@ namespace Astralis.Views.Pages
 
         }
 
-        public void SetUsers(UserWithTeam[] usersWithTeams)
+        public void ShowEndGameUsers(UserWithTeam[] usersWithTeams)
         {
             int gridRow = 0;
 
@@ -96,7 +92,16 @@ namespace Astralis.Views.Pages
 
         private void BtnExitClick(object sender, RoutedEventArgs e)
         {
-            if (!UserSession.Instance().Nickname.StartsWith(GUEST_NAME))
+            string nickname = UserSession.Instance().Nickname;
+
+            ExitByUser(nickname);
+            EndGameWindow.Close();
+            _client.GameEnded(nickname);
+        }
+
+        private void ExitByUser(string nickname)
+        {
+            if (!nickname.StartsWith(GUEST_NAME))
             {
                 GameWindow gameWindow = new GameWindow();
 
@@ -107,11 +112,7 @@ namespace Astralis.Views.Pages
                 LogIn logIn = new LogIn();
 
                 logIn.Show();
-
             }
-
-            EndGameWindow.Close();
-            _client.GameEnded(UserSession.Instance().Nickname);
         }
     }
 }

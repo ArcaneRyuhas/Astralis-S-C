@@ -61,7 +61,7 @@ namespace Astralis.Views.Game.GameLogic
             this._gameBoard = gameBoard;
         }
 
-        public void SetCounter(ProgressBar progressBarCounter)
+        public void SetCounters(ProgressBar progressBarCounter)
         {
             this._progressBarCounter = progressBarCounter;
 
@@ -131,46 +131,50 @@ namespace Astralis.Views.Game.GameLogic
                 _roundEnded = true;
                 _endTurnCounter++;
 
-                List<Card> removedCards = new List<Card>();
-
-                foreach (Card playedCard in _gameBoard.PlayedCards)
-                {
-                    _userHand.Remove(playedCard);
-                    removedCards.Add(playedCard);
-                }
-
-                foreach (Card cardToRemove in removedCards)
-                {
-                    _gameBoard.PlayedCards.Remove(cardToRemove);
-                }
-
+                RemovePlayedCards();
                 _gameBoard.EndGameTurn();
                 TurnCounter();
             }
         }
 
-        public void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn)
+        private void RemovePlayedCards()
+        {
+            List<Card> removedCards = new List<Card>();
+
+            foreach (Card playedCard in _gameBoard.PlayedCards)
+            {
+                _userHand.Remove(playedCard);
+                removedCards.Add(playedCard);
+            }
+
+            foreach (Card cardToRemove in removedCards)
+            {
+                _gameBoard.PlayedCards.Remove(cardToRemove);
+            }
+        }
+
+        public void PlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn)
         {
             string myNickname = UserSession.Instance().Nickname;
 
-            if(player != myNickname)
+            if(nickname != myNickname)
             {
                 _endTurnCounter++;
 
-                if (UsersTeam[player] != UsersTeam[myNickname])
+                if (UsersTeam[nickname] != UsersTeam[myNickname])
                 {
-                    AddCardsToBoard(player, _gdEnemySlots, boardAfterTurn);
+                    AddCardsToBoard(nickname, _gdEnemySlots, boardAfterTurn);
                 }
                 else
                 {
-                    AddCardsToBoard(player, _gdPlayerSlots, boardAfterTurn);
+                    AddCardsToBoard(nickname, _gdPlayerSlots, boardAfterTurn);
                 }
 
                 TurnCounter();
             }
         }
 
-        public void AddCardsToBoard(string player, Grid gdSlots, Dictionary<int,int> boardAfterTurn)
+        public void AddCardsToBoard(string nickname, Grid gdSlots, Dictionary<int,int> boardAfterTurn)
         {
             int counter = 0;
 
@@ -190,7 +194,7 @@ namespace Astralis.Views.Game.GameLogic
 
                         graphicCard.SetGraphicCard(card);
                         innerGrid.Children.Add(graphicCard);
-                        _gameBoard.TakeCardOutOfHand(player, graphicCard, UsersTeam);
+                        _gameBoard.TakeCardOutOfHand(nickname, graphicCard, UsersTeam);
                     }
                 }
             }
@@ -198,52 +202,71 @@ namespace Astralis.Views.Game.GameLogic
 
         private void TurnCounter()
         {
-            string myNickname = UserSession.Instance().Nickname;
 
             switch (_endTurnCounter)
             {
                 case 2:
-                    if (myNickname != _firstPlayers.Item1 && myNickname != _firstPlayers.Item2)
-                    {
-                        _isMyTurn = true;
-                        _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
-                    }
-                    else
-                    {
-                        _isMyTurn = false;
-                        _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnFalse;
-                    }
+                    HalfPhaseLogic();
                     StartCountdown();
                     break;
 
                 case 4:
-                    string[] secondPlayers = UsersTeam.Keys.Where(name => name != _firstPlayers.Item2 && name != _firstPlayers.Item1).ToArray();
-                    _firstPlayers = Tuple.Create(secondPlayers[0], secondPlayers[1]);
 
-                    if (myNickname == _firstPlayers.Item1 || myNickname == _firstPlayers.Item2)
-                    {
-                        _isMyTurn = true;
-                        _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
-                    }
-
+                    EndPhaseLogic();
                     ReviewEndGame();
                     break;
             }
         }
 
-        private void ReviewEndGame()
+        private void HalfPhaseLogic()
         {
-            StartCountdown();
-            _endTurnCounter = TURN_INITIALIZER;
+            string myNickname = UserSession.Instance().Nickname;
 
-            if(UserTeam.RoundMana < MAXIMUM_MANA)
+            if (myNickname != _firstPlayers.Item1 && myNickname != _firstPlayers.Item2)
+            {
+                _isMyTurn = true;
+                _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
+            }
+            else
+            {
+                _isMyTurn = false;
+                _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnFalse;
+            }
+        }
+
+        private void EndPhaseLogic()
+        {
+            _endTurnCounter = TURN_INITIALIZER;
+            ChangeTurnOrder();
+            StartCountdown();
+            AddMana();
+            AttackPhase();
+        }
+
+        private void ChangeTurnOrder()
+        {
+            string myNickname = UserSession.Instance().Nickname;
+            string[] secondPlayers = UsersTeam.Keys.Where(name => name != _firstPlayers.Item2 && name != _firstPlayers.Item1).ToArray();
+            _firstPlayers = Tuple.Create(secondPlayers[0], secondPlayers[1]);
+
+            if (myNickname == _firstPlayers.Item1 || myNickname == _firstPlayers.Item2)
+            {
+                _isMyTurn = true;
+                _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
+            }
+        }
+
+        private void AddMana()
+        {
+            if (UserTeam.RoundMana < MAXIMUM_MANA)
             {
                 UserTeam.RoundMana++;
             }
             UserTeam.Mana = UserTeam.RoundMana;
-            
-            AttackPhase();
+        }
 
+        private void ReviewEndGame()
+        {
             if (!HasGameEnded())
             {
                 _gameBoard.DrawCard();
@@ -255,7 +278,6 @@ namespace Astralis.Views.Game.GameLogic
         {
             _exitTimer.Stop();
         }
-
 
         private bool HasGameEnded()
         {
@@ -347,18 +369,24 @@ namespace Astralis.Views.Game.GameLogic
 
         private void OtherTypeAttack(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard)
         {
+            
+            AllyCardAttack(allyGraphicCard, enemyGraphicCard);
+            EnemyCardAttack(allyGraphicCard, enemyGraphicCard);
+            KillCards(allyGraphicCard, enemyGraphicCard);
+        }
+
+        private void AllyCardAttack(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard)
+        {
             GraphicCard[] teamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdPlayerSlots);
-            GraphicCard[] enemyTeamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdEnemySlots);
 
             int allyMagesCount = GetMagesCount(teamBoard);
-            int enemyMagesCount = GetMagesCount(enemyTeamBoard);
 
             Card allyCard = allyGraphicCard.Card;
             Card enemyCard = enemyGraphicCard.Card;
 
             if (allyGraphicCard.Card.Type != Constants.WARRIOR && allyGraphicCard.Card.Type != Constants.NO_CLASS)
             {
-                if(enemyCard.Type != Constants.NO_CLASS)
+                if (enemyCard.Type != Constants.NO_CLASS)
                 {
                     enemyGraphicCard.Card.TakeDamage(allyCard.DealDamage(allyMagesCount));
                 }
@@ -367,6 +395,15 @@ namespace Astralis.Views.Game.GameLogic
                     EnemyTeam.ReceiveDamage(allyCard.DealDamage(allyMagesCount));
                 }
             }
+        }
+
+        private void EnemyCardAttack(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard)
+        {
+            GraphicCard[] enemyTeamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdEnemySlots);
+            int enemyMagesCount = GetMagesCount(enemyTeamBoard);
+            Card enemyCard = enemyGraphicCard.Card;
+
+
             if (enemyGraphicCard.Card.Type != Constants.WARRIOR && enemyGraphicCard.Card.Type != Constants.NO_CLASS)
             {
                 if (allyGraphicCard.Card.Type != Constants.NO_CLASS)
@@ -378,8 +415,6 @@ namespace Astralis.Views.Game.GameLogic
                     UserTeam.ReceiveDamage(enemyCard.DealDamage(enemyMagesCount));
                 }
             }
-
-            KillCards(allyGraphicCard, enemyGraphicCard);
         }
 
         private void KillCards(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard)
@@ -408,34 +443,44 @@ namespace Astralis.Views.Game.GameLogic
 
         public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
         {
-            this._firstPlayers = firstPlayers;
+            _firstPlayers = firstPlayers;
             string myNickname = UserSession.Instance().Nickname;
 
             if (firstPlayers.Item1 == myNickname)
             {
-                _isMyTurn = true;
-                _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
-                _myEnemy = firstPlayers.Item2;
+                SetMyTurn(firstPlayers.Item2);
             }
             else if (firstPlayers.Item2 == myNickname)
             {
-                _isMyTurn = true;
-                _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
-                _myEnemy = firstPlayers.Item1;
+                SetMyTurn(firstPlayers.Item1);
             }
             else
             {
-                foreach (string nickname in UsersTeam.Keys)
-                {
-                    if (firstPlayers.Item1 != nickname && firstPlayers.Item2 != nickname && nickname != myNickname)
-                    {
-                        _isMyTurn = false;
-                        _myEnemy = nickname;
-                    }
-                }
+                SetMyEnemy(firstPlayers);
             }
 
             _roundEnded = false;
+        }
+
+        private void SetMyEnemy(Tuple<string, string> firstPlayers)
+        {
+            string myNickname = UserSession.Instance().Nickname;
+
+            foreach (string nickname in UsersTeam.Keys)
+            {
+                if (firstPlayers.Item1 != nickname && firstPlayers.Item2 != nickname && nickname != myNickname)
+                {
+                    _isMyTurn = false;
+                    _myEnemy = nickname;
+                }
+            }
+        }
+
+        private void SetMyTurn(string enemy)
+        {
+            _isMyTurn = true;
+            _gameBoard.lblUserTurn.Content = Properties.Resources.lblUserTurnTrue;
+            _myEnemy = enemy;
         }
 
         public void StartExitTimer()

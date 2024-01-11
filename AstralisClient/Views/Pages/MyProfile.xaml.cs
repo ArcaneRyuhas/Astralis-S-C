@@ -2,37 +2,29 @@
 using Astralis.UserManager;
 using Astralis.Views.Cards;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.ServiceModel;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace Astralis.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for MyProfile.xaml
-    /// </summary>
     public partial class MyProfile : Page
     {
         private const string MAIL_REGEX = @"^.+@[^\.].*\.[a-z]{2,}$";
         private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9\S]{0,40}$";
-        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^&*_-]).{6,40})\S$";
+        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^?.,><'¿¡&*_-]).{6,40})\S$";
         private const int MAX_FIELDS_LENGHT = 39;
         private const int MAX_GRID_COLUMN = 3;
 
         private readonly FriendWindow _friendWindow;
+        private int gridRow = 0;
+        private int gridColumn = 0;
 
         public MyProfile(FriendWindow friendWindow)
         {
@@ -53,32 +45,9 @@ namespace Astralis.Views.Pages
             int imageCount = ImageManager.Instance().GetImageCount();
             int imagesCreated = 1;
 
-            int gridRow = 0;
-            int gridColumn = 0;
-
             while (imagesCreated <= imageCount)
             {
-                RadioButton radioButton = new RadioButton();
-                radioButton.Content = imagesCreated.ToString();
-
-                if (imagesCreated == UserSession.Instance().ImageId)
-                {
-                    radioButton.IsChecked = true;
-                }
-
-                Image image = new Image();
-                image.Width = 100;
-                image.Height = 100;
-                image.Source = ImageManager.Instance().GetImage(imagesCreated);
-
-                Grid.SetRow(image, gridRow);
-                Grid.SetColumn(image, gridColumn);
-
-                Grid.SetRow(radioButton, gridRow);
-                Grid.SetColumn(radioButton, gridColumn);
-
-                gdImages.Children.Add(image);
-                gdImages.Children.Add(radioButton);
+                CreateImage(imagesCreated);
 
                 imagesCreated++;
 
@@ -92,6 +61,31 @@ namespace Astralis.Views.Pages
                     gridColumn++;
                 }
             }
+        }
+
+        private void CreateImage(int imagesCreated)
+        {
+            RadioButton radioButton = new RadioButton();
+            radioButton.Content = imagesCreated.ToString();
+
+            if (imagesCreated == UserSession.Instance().ImageId)
+            {
+                radioButton.IsChecked = true;
+            }
+
+            Image image = new Image();
+            image.Width = 100;
+            image.Height = 100;
+            image.Source = ImageManager.Instance().GetImage(imagesCreated);
+
+            Grid.SetRow(image, gridRow);
+            Grid.SetColumn(image, gridColumn);
+
+            Grid.SetRow(radioButton, gridRow);
+            Grid.SetColumn(radioButton, gridColumn);
+
+            gdImages.Children.Add(image);
+            gdImages.Children.Add(radioButton);
         }
 
         private void BtnCancelClick(object sender, RoutedEventArgs e)
@@ -123,7 +117,7 @@ namespace Astralis.Views.Pages
 
             if (ValidFields(user))
             {
-                UserManager.UserManagerClient client = new UserManager.UserManagerClient();
+                UserManagerClient client = new UserManagerClient();
                 try
                 {
                     int userUpdated =  client.UpdateUser(user);
@@ -135,9 +129,9 @@ namespace Astralis.Views.Pages
                     else if (userUpdated == Constants.ERROR)
                     {
                         MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        App.RestartApplication();
                     }
 
+                    client.Close();
                     _friendWindow.Disconnect();
                 }
                 catch (CommunicationObjectFaultedException)
@@ -157,14 +151,12 @@ namespace Astralis.Views.Pages
                     App.RestartApplication();
                 }
             }
-            
-
         }
 
         private void SetUserInformation(User user)
         {
             user.Nickname = txtNickname.Text;
-            user.Password = "";
+            user.Password = String.Empty;
             user.ImageId = GetChossenImage();
             user.Mail = txtMail.Text;
 
@@ -173,7 +165,6 @@ namespace Astralis.Views.Pages
                 user.Password = CreateSha2(pbPassword.Password);
             }
         }
-
 
         private bool ValidFields(User user)
         {

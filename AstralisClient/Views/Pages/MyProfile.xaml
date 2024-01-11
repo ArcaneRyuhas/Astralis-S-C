@@ -34,7 +34,7 @@
                 <Label Content="{x:Static p:Resources.lblProfileImage}" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Top" />
                 <Rectangle Width="400" Height="400" Margin="0,60,0,100" Stroke="Red" HorizontalAlignment="Center"/>
                 <Grid x:Name="gdImages" Width="400" Height="400" Margin="80,60,80,100">
-                    
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -48,7 +48,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    
+
                 </Grid>
 
                 <Grid Grid.Column="1">
@@ -62,20 +62,17 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
+
                     <Label Content="{x:Static p:Resources.lblNickname}" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0"/>
                     <Label Content="{x:Static p:Resources.lblMail}" Width="250" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2" Margin="0,40,0,0"/>
                     <Label x:Name="lblErrorMail" Content="{x:Static p:Resources.lblErrorMail}" Width="250" FontSize="15" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0,0,0,0" Visibility="Hidden"/>
                     <Label Content="{x:Static p:Resources.lblPassword}" Width="450" FontSize="30" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Margin="0,40,0,0"/>
                     <Label x:Name="lblErrorPassword" Content="{x:Static p:Resources.lblErrorPassword}" Width="250" FontSize="15" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="7" Margin="0,0,0,0" Visibility="Hidden"/>
                     <TextBox x:Name="txtNickname"  Width="280" Height="40" Grid.Row="1" Template="{DynamicResource TextBoxTemplateNormal}" Style="{StaticResource TextBoxValidations}" FontSize="18" IsReadOnly="True"/>
-                    <TextBox x:Name="txtMail" Width="280" Height="40" Grid.Row="3" FontSize="18"/>
-                    <PasswordBox x:Name="pbPassword" Width="280" Height="40" Grid.Row="6"/>
-
+                    <TextBox x:Name="txtMail" Width="280" Height="40" Grid.Row="3" FontSize="18" PreviewTextInput="TextLimiterForMail"/>
+                    <PasswordBox x:Name="pbPassword" Width="280" Height="40" Grid.Row="6" PreviewTextInput="TextLimeterForPassword"/>
                 </Grid>
             </Grid>
         </Grid>
-
-
     </Grid>
 </Page>

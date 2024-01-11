@@ -1,27 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Media;
 using System.Windows;
 using System.IO;
 
 namespace Astralis
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
+
     public partial class App : Application
     {
         public static void StartMusic()
         {
             string baseDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             string relativePath = Path.Combine(baseDirectory, "Music", "ritual.wav");
-
             
             SoundPlayer player = new SoundPlayer(relativePath);
             player.PlayLooping();

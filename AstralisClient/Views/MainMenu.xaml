@@ -32,7 +32,7 @@
             <Button x:Name="btnExit" Grid.Column="1" Content="{x:Static p:Resources.btnExit}" HorizontalAlignment="Center" Margin="0,232,0,68" Grid.Row="1" FontSize="36" Click="BtnExitClick" Template="{DynamicResource ButtonTemplateNormal}"  />
             <Button x:Name="btnMyProfile" Grid.Column="0" Content="{x:Static p:Resources.btnMyProfile}" HorizontalAlignment="Left"  Grid.Row="0" VerticalAlignment="Top" FontSize="36"  Margin="10,10,0,0" Click="BtnMyProfileClick" Template="{DynamicResource ButtonTemplateNormal}"/>
             <Button x:Name="btnFriends" Grid.Column="2" Content="{x:Static p:Resources.btnFriends}" HorizontalAlignment="Left"  Grid.Row="0" VerticalAlignment="Top" FontSize="36" Margin="213,10,0,0" Template="{DynamicResource ButtonTemplateNormal}" Click="BtnFriendsClick" />
-            <TextBox x:Name="txtJoinCode" Grid.Column="2" HorizontalAlignment="Left" Margin="107,67,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="txtJoinCode" PreviewTextInput="TextLimeterForCode" Grid.Column="2" HorizontalAlignment="Left" Margin="107,67,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <Grid x:Name="gridFriendsWindow" Grid.Column="2" Grid.RowSpan="2" Width="250" Height="350" Margin="0,60,0, 180" />
             <Label Grid.Column="2" Content="{x:Static p:Resources.lblCodeInvitation}" HorizontalAlignment="Left" Margin="10,60,0,0" Grid.Row="1" VerticalAlignment="Top" HorizontalContentAlignment="Left" Width="85" FontSize="20"/>
         </Grid>

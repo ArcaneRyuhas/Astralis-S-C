@@ -128,7 +128,7 @@
                         <TextBlock x:Name="tbChat" TextWrapping="Wrap" Foreground="#FFC32525"/>
                     </Grid>
                 </ScrollViewer>
-                <TextBox x:Name="txtChat"  HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" Text="{x:Static p:Resources.txtChat}" VerticalAlignment="Bottom" Width="280" FontSize="16" Height="20"/>
+                <TextBox x:Name="txtChat"  HorizontalAlignment="Left" PreviewTextInput="TextLimiterForChat"  Grid.Row="1" TextWrapping="Wrap" Text="{x:Static p:Resources.txtChat}" VerticalAlignment="Bottom" Width="280" FontSize="16" Height="20"/>
                 <Button x:Name="btnSendMessage" Content="{x:Static p:Resources.btnSendMessage}" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Click="BtnSendMessageClick" FontSize="20" Width="100" Template="{DynamicResource ButtonTemplateNormal}"/>
             </Grid>
         </Grid>

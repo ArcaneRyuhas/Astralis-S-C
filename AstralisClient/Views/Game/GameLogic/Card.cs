@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace Astralis.Views.Game.GameLogic
 {
@@ -36,7 +35,11 @@ namespace Astralis.Views.Game.GameLogic
 
         public int Mana 
         { 
-            get { return _mana; } 
+            get 
+            {
+                return _mana; 
+            } 
+
             set 
             { 
                 if (_mana != value) 
@@ -49,7 +52,11 @@ namespace Astralis.Views.Game.GameLogic
 
         public int Attack 
         { 
-            get { return _attack; } 
+            get 
+            { 
+                return _attack; 
+            }
+            
             set 
             { 
                 _attack = value; 
@@ -59,7 +66,10 @@ namespace Astralis.Views.Game.GameLogic
 
         public int Health 
         { 
-            get { return _health; } 
+            get 
+            { 
+                return _health; 
+            } 
 
             set 
             { 
@@ -105,14 +115,14 @@ namespace Astralis.Views.Game.GameLogic
             return dealtDamage;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object objectToCheck)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (objectToCheck == null || GetType() != objectToCheck.GetType())
             {
                 return false;
             }
 
-            Card otherCard = (Card)obj;
+            Card otherCard = (Card)objectToCheck;
 
             return _mana == otherCard._mana
                 && _attack == otherCard._attack

@@ -303,6 +303,9 @@
   <data name="msgFriendRequestSuccessful" xml:space="preserve">
     <value>Solicitud de amistar enviada con éxito</value>
   </data>
+  <data name="msgGameIsFull" xml:space="preserve">
+    <value>El juego esta lleno</value>
+  </data>
   <data name="msgGameIsFullOrLobbyDoesntExist" xml:space="preserve">
     <value>El lobby esta lleno o no existe</value>
   </data>
@@ -312,6 +315,9 @@
   <data name="msgLobbyError" xml:space="preserve">
     <value>La lobby esta llena o hay un problema con el servidor</value>
   </data>
+  <data name="msgMailIncorrect" xml:space="preserve">
+    <value>El correo no es valido.</value>
+  </data>
   <data name="msgNoGameFound" xml:space="preserve">
     <value>No se encontro el lobby</value>
   </data>
@@ -319,7 +325,7 @@
     <value>Se ha perdido la conexión previa</value>
   </data>
   <data name="msgUnableToAnswer" xml:space="preserve">
-    <value>No se pudo procesar tu solicitud.</value>
+    <value>No hay conexión con la base de datos.</value>
   </data>
   <data name="msgUnableToSendFriendRequest" xml:space="preserve">
     <value>No se pudo enviar la solicitud de amistad. Verifica que el usuario existe y no haya una solicitud pendiente.</value>

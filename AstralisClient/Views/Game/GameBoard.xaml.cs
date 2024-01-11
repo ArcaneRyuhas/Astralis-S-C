@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Astralis.UserManager;
+using System.Linq;
+using System.Windows.Input;
 
 namespace Astralis.Views.Game
 {
@@ -21,6 +23,7 @@ namespace Astralis.Views.Game
         private const int ERROR_CARD_ID = 0;
         private const int ENEMY_CARD = -1;
         private const int ALL_USERS_CONNECTED = 4;
+        private const int MAX_CHAT_LENGHT = 100;
 
         private GameManager _gameManager;
         private GameManagerClient _client;
@@ -33,8 +36,6 @@ namespace Astralis.Views.Game
 
         public List<Card> PlayedCards { get { return _playedCards; } }
 
-        public Label LblTurnMana { get { return lblTurnMana; } }
-
         public GameBoard()
         {
             InitializeComponent();
@@ -46,11 +47,15 @@ namespace Astralis.Views.Game
         {
             Connect();
             SetTeams();
-            _gameManager = new GameManager(gdEnemySlots, gdPlayerSlots);
+            SetGameManager();
             lblMyNickname.Content = UserSession.Instance().Nickname;
+        }
 
+        private void SetGameManager()
+        {
+            _gameManager = new GameManager(gdEnemySlots, gdPlayerSlots);
             _gameManager.SetGameBoard(this);
-            _gameManager.SetCounter(progressBarCounter);
+            _gameManager.SetCounters(progressBarCounter);
             _gameManager.UserTeam = _userTeam;
             _gameManager.EnemyTeam = _enemyTeam;
             _gameManager.StartExitTimer();
@@ -90,7 +95,7 @@ namespace Astralis.Views.Game
 
         private void GetUserDeck()
         {
-            int[] userDeck = _client.DispenseCards(UserSession.Instance().Nickname);
+            int[] userDeck = _client.DispenseGameCards(UserSession.Instance().Nickname);
             _gameManager.UserDeckQueue = new Queue<int>(userDeck);
         }
 
@@ -98,7 +103,6 @@ namespace Astralis.Views.Game
         private void DrawFourCards()
         {
             string myNickname = UserSession.Instance().Nickname;
-
             int[] drawnCard = new int[4];
 
             for (int cardsToDraw = 0; cardsToDraw < 4; cardsToDraw++)
@@ -108,7 +112,7 @@ namespace Astralis.Views.Game
 
             try
             {
-                _client.DrawCard(myNickname, drawnCard);
+                _client.DrawGameCard(myNickname, drawnCard);
             }
             catch (CommunicationObjectFaultedException)
             {
@@ -134,7 +138,7 @@ namespace Astralis.Views.Game
 
             try
             {
-                _client.DrawCard(myNickname, drawnCard);
+                _client.DrawGameCard(myNickname, drawnCard);
             }
             catch (CommunicationObjectFaultedException)
             {
@@ -193,25 +197,30 @@ namespace Astralis.Views.Game
 
             foreach (UIElement child in gdPlayerSlots.Children)
             {
-                if (child is Grid grid)
-                {
-                    counter++;
-
-                    Grid innerGrid = grid;
-                    int cardId = ERROR_CARD_ID;
-
-                    foreach (GraphicCard innerCard in innerGrid.Children)
-                    {
-                        innerCard.OnCardClicked -= GraphicCardClickedHandler;
-                        cardId = CardManager.Instance().GetCardId(innerCard.Card.Clone());
-                        break;
-                    }
-
-                    boardDictionary.Add(counter, cardId);
-                }
+                AddCardToBoardDictionary(child, ref counter, boardDictionary);
             }
 
             return boardDictionary;
+        }
+
+        private void AddCardToBoardDictionary(UIElement  child, ref int counter, Dictionary<int, int> boardDictionary)
+        {
+            if (child is Grid grid)
+            {
+                counter++;
+
+                Grid innerGrid = grid;
+                int cardId = ERROR_CARD_ID;
+
+                foreach (GraphicCard innerCard in innerGrid.Children)
+                {
+                    innerCard.OnCardClicked -= GraphicCardClickedHandler;
+                    cardId = CardManager.Instance().GetCardId(innerCard.Card.Clone());
+                    break;
+                }
+
+                boardDictionary.Add(counter, cardId);
+            }
         }
 
         public GraphicCard[] GetAttackBoard(Grid gdBoard)
@@ -221,23 +230,28 @@ namespace Astralis.Views.Game
 
             foreach (UIElement child in gdBoard.Children)
             {
-                if (child is Grid innerGrid)
-                {
-                    GraphicCard graphicCard = new GraphicCard();
-                    graphicCard.SetGraphicCard(CardManager.Instance().GetCard(ERROR_CARD_ID));
-
-                    foreach (GraphicCard innerCard in innerGrid.Children)
-                    {
-                        graphicCard = innerCard;
-                        break;
-                    }
-
-                    attackBoard[counter] = graphicCard;
-                    counter++;
-                }
+                AddCardToAttackList(attackBoard, ref counter, child);
             }
 
             return attackBoard;
+        }
+
+        private void AddCardToAttackList(GraphicCard[] attackBoard, ref int counter, UIElement child)
+        {
+            if (child is Grid innerGrid)
+            {
+                GraphicCard graphicCard = new GraphicCard();
+                graphicCard.SetGraphicCard(CardManager.Instance().GetCard(ERROR_CARD_ID));
+
+                foreach (GraphicCard innerCard in innerGrid.Children)
+                {
+                    graphicCard = innerCard;
+                    break;
+                }
+
+                attackBoard[counter] = graphicCard;
+                counter++;
+            }
         }
 
         private void UserTeamPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -293,27 +307,38 @@ namespace Astralis.Views.Game
 
                 if (leftClick)
                 {
-                    if (_selectedCard != null)
-                    {
-                        _selectedCard.IsSelected = false;
-                    }
-
-                    _selectedCard = clickedCard;
-                    _selectedCard.IsSelected = true;
+                    LeftClicOnCard(clickedCard);
                 }
                 else
                 {
-                    Grid currentCardParent = VisualTreeHelper.GetParent(clickedCard) as Grid;
-
-                    if (currentCardParent != null && currentCardParent != gdPlayerHand)
-                    {
-                        currentCardParent.Children.Remove(clickedCard);
-                        AddGraphicCardToGrid(clickedCard, gdPlayerHand);
-                        _playedCards.Remove(clickedCard.Card);
-
-                        _userTeam.Mana += clickedCard.Card.Mana;
-                    }
+                    RightClicOnCard(clickedCard);
+                    
                 }
+            }
+        }
+
+        private void LeftClicOnCard(GraphicCard clickedCard)
+        {
+            if (_selectedCard != null)
+            {
+                _selectedCard.IsSelected = false;
+            }
+
+            _selectedCard = clickedCard;
+            _selectedCard.IsSelected = true;
+        }
+
+        private void RightClicOnCard(GraphicCard clickedCard)
+        {
+            Grid currentCardParent = VisualTreeHelper.GetParent(clickedCard) as Grid;
+
+            if (currentCardParent != null && currentCardParent != gdPlayerHand)
+            {
+                currentCardParent.Children.Remove(clickedCard);
+                AddGraphicCardToGrid(clickedCard, gdPlayerHand);
+                _playedCards.Remove(clickedCard.Card);
+
+                _userTeam.Mana += clickedCard.Card.Mana;
             }
         }
 
@@ -334,34 +359,45 @@ namespace Astralis.Views.Game
             if (_gameManager.IsMyTurn && _selectedCard != null)
             {
                 Grid boardCardSlot = sender as Grid;
-                Grid currentCardParent = VisualTreeHelper.GetParent(_selectedCard) as Grid;
 
-                if (currentCardParent != boardCardSlot && currentCardParent != gdPlayerHand && boardCardSlot.Children.Count == 0)
-                {
-                    _selectedCard.IsSelected = false;
+                MoveCardFromBoardSlotToAnother(boardCardSlot);
+                MoveCardFromHandToBoard(boardCardSlot);
+            }
+        }
 
-                    currentCardParent.Children.Remove(_selectedCard);
-                    boardCardSlot.Children.Add(_selectedCard);
+        private void MoveCardFromHandToBoard(Grid boardCardSlot)
+        {
+            Grid currentCardParent = VisualTreeHelper.GetParent(_selectedCard) as Grid;
 
-                    _selectedCard.IsSelected = false;
-                    _selectedCard = null;
-                }
+            if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && _userTeam.UseMana(_selectedCard.Card.Mana))
+            {
+                _selectedCard.IsSelected = false;
 
-                if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && _userTeam.UseMana(_selectedCard.Card.Mana))
-                {
-                    _selectedCard.IsSelected = false;
+                int columnIndex = Grid.GetColumn(_selectedCard);
+                currentCardParent.Children.Remove(_selectedCard);
+                RemoveColumn(currentCardParent, columnIndex);
 
-                    int columnIndex = Grid.GetColumn(_selectedCard);
-                    currentCardParent.Children.Remove(_selectedCard);
-                    RemoveColumn(currentCardParent, columnIndex);
+                boardCardSlot.Children.Add(_selectedCard);
+                _playedCards.Add(_selectedCard.Card);
 
-                    boardCardSlot.Children.Add(_selectedCard);
-                    _playedCards.Add(_selectedCard.Card);
+                _selectedCard.IsSelected = false;
+                _selectedCard = null;
+            }
+        }
 
-                    _selectedCard.IsSelected = false;
-                    _selectedCard = null;
-                }
+        private void MoveCardFromBoardSlotToAnother(Grid boardCardSlot)
+        {
+            Grid currentCardParent = VisualTreeHelper.GetParent(_selectedCard) as Grid;
 
+            if (currentCardParent != boardCardSlot && currentCardParent != gdPlayerHand && boardCardSlot.Children.Count == 0)
+            {
+                _selectedCard.IsSelected = false;
+
+                currentCardParent.Children.Remove(_selectedCard);
+                boardCardSlot.Children.Add(_selectedCard);
+
+                _selectedCard.IsSelected = false;
+                _selectedCard = null;
             }
         }
 
@@ -381,7 +417,7 @@ namespace Astralis.Views.Game
             }
         }
 
-        public void DrawCardClient(string nickname, int [] cardId)
+        public void ShowGameDrawedCard(string nickname, int [] cardId)
         {
             foreach(int Id in cardId) 
             {
@@ -436,7 +472,7 @@ namespace Astralis.Views.Game
             this.Close();
         }
 
-        public void PlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn)
+        public void ShowGamePlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn)
         {
             _gameManager.PlayerEndedTurn(nickname, boardAfterTurn);
         }
@@ -449,11 +485,11 @@ namespace Astralis.Views.Game
             }
             else if (nickname == _gameManager.MyEnemy)
             {
-                RemoveCardFromHand(gdEnemyHand, graphicCardToRemove);
+                RemoveEnemyCardFromHand(gdEnemyHand);
             }
             else
             {
-                RemoveCardFromHand(gdEnemyAllyHand, graphicCardToRemove);
+                RemoveEnemyCardFromHand(gdEnemyAllyHand);
             }
         }
 
@@ -469,6 +505,19 @@ namespace Astralis.Views.Game
                         RemoveColumn(gdAllyHand, columnIndex);
                         break;
                 }
+            }
+        }
+
+        private void RemoveEnemyCardFromHand(Grid gdEnemyHand)
+        {
+            GraphicCard firstGraphicCard = gdEnemyHand.Children.OfType<GraphicCard>().FirstOrDefault();
+
+            if (firstGraphicCard != null)
+            {
+                int columnIndex = Grid.GetColumn(firstGraphicCard);
+
+                gdEnemyHand.Children.Remove(firstGraphicCard);
+                RemoveColumn(gdEnemyHand, columnIndex);
             }
         }
 
@@ -488,7 +537,7 @@ namespace Astralis.Views.Game
             _ = StartGameAsync();
         }
 
-        public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
+        public void StartFirstGamePhaseClient(Tuple<string, string> firstPlayers)
         {
             _gameManager.StartFirstPhaseClient(firstPlayers);
             DrawFourCards();
@@ -521,7 +570,7 @@ namespace Astralis.Views.Game
                 {
                     try
                     {
-                        _client.StartFirstPhase(UserSession.Instance().Nickname);
+                        _client.StartFirstGamePhase(UserSession.Instance().Nickname);
                     }
                     catch (CommunicationObjectFaultedException)
                     {
@@ -589,9 +638,10 @@ namespace Astralis.Views.Game
             string nickname = UserSession.Instance().Nickname;
             string message = nickname + ": " + txtChat.Text;
             txtChat.Text = Properties.Resources.txtChat;
+
             try
             {
-                _client.SendMessageGame(message, nickname);
+                _client.SendMessageToGame(message, nickname);
             }
             catch (CommunicationObjectFaultedException)
             {
@@ -607,6 +657,16 @@ namespace Astralis.Views.Game
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
+            }
+        }
+
+        private void TextLimiterForChat(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            if (textBox.Text.Length >= MAX_CHAT_LENGHT)
+            {
+                e.Handled = true;
             }
         }
     }

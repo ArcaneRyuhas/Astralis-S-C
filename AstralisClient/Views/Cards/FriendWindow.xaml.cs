@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Astralis.Views.Cards
 {
 
-    public partial class FriendWindow : UserControl, UserManager.IOnlineUserManagerCallback
+    public partial class FriendWindow : UserControl, IFriendManagerCallback
     {
         private const int IS_PENDING_FRIEND = 2;
         private const int IS_FRIEND = 1;
@@ -19,9 +20,13 @@ namespace Astralis.Views.Cards
         private const bool IS_OFFLINE = false;
         private const bool ACCEPTED_FRIEND = true;
         private const string LOBBY_WINDOW = "LOBBY";
+        private const int STARTING_VALUE_FOR_ROWS = 0;
+        private const int MAX_FIELDS_LENGHT = 30;
+
 
         private int _cardsAddedRow = 0;
-        private string _typeFriendWindow;
+        private readonly string _typeFriendWindow;
+        private FriendManagerClient _client;
         private Dictionary<string, Tuple<bool, int>> _friendList = new Dictionary<string, Tuple<bool, int>>();
 
         public event EventHandler<string> SendGameInvitation;
@@ -41,11 +46,11 @@ namespace Astralis.Views.Cards
         private void Connect()
         {
             InstanceContext context = new InstanceContext(this);
-            OnlineUserManagerClient client = new OnlineUserManagerClient(context);
+            _client = new FriendManagerClient(context);
 
             try
             {
-                client.ConectUser(UserSession.Instance().Nickname);
+                _client.SubscribeToFriendManager(UserSession.Instance().Nickname);
             }
             catch (CommunicationObjectFaultedException)
             {
@@ -66,12 +71,9 @@ namespace Astralis.Views.Cards
 
         public void Disconnect()
         {
-            InstanceContext context = new InstanceContext(this);
-            OnlineUserManagerClient client = new OnlineUserManagerClient(context);
-
             try
             {
-                client.DisconectUser(UserSession.Instance().Nickname);
+                _client.UnsubscribeToFriendManager(UserSession.Instance().Nickname);
             }
             catch (CommunicationObjectFaultedException)
             {
@@ -92,37 +94,35 @@ namespace Astralis.Views.Cards
 
         public void SetFriendWindow()
         {
-            _cardsAddedRow = 0;
+            _cardsAddedRow = STARTING_VALUE_FOR_ROWS;
             gdFriends.Children.Clear();
             gdFriends.RowDefinitions.Clear();
 
-            foreach (var friendEntry in _friendList)
+            foreach (KeyValuePair<string, Tuple<bool, int>> friendEntry in _friendList)
             {
                 if (friendEntry.Value.Item1 == IS_ONLINE && friendEntry.Value.Item2 == IS_FRIEND)
                 {
-                    AddFriendRow(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
+                    AddCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
                 }
             }
 
-            foreach (var friendEntry in _friendList)
+            foreach (KeyValuePair<string, Tuple<bool, int>> friendEntry in _friendList)
             {
                 if (friendEntry.Value.Item1 == IS_OFFLINE && friendEntry.Value.Item2 == IS_FRIEND)
                 {
-                    AddFriendRow(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
+                    AddCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
                 }
             }
 
-            foreach (var friendEntry in _friendList)
+            foreach (KeyValuePair<string, Tuple<bool, int>> friendEntry in _friendList)
             {
                 if (friendEntry.Value.Item2 == IS_PENDING_FRIEND)
                 {
-                    AddFriendRow(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
+                    AddCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
                 }
             }
 
-            RowDefinition lastRowDefinition = new RowDefinition();
-            lastRowDefinition.Height = new GridLength(1, GridUnitType.Star);
-            gdFriends.RowDefinitions.Add(lastRowDefinition);
+            CreateLastRow();
 
             if (_typeFriendWindow == LOBBY_WINDOW)
             {
@@ -130,13 +130,20 @@ namespace Astralis.Views.Cards
             }
         }
 
-        private void AddFriendRow(string friendOnlineKey, bool friendOnlineValue, int friendStatus)
+        private void CreateLastRow()
+        {
+            RowDefinition lastRowDefinition = new RowDefinition();
+            lastRowDefinition.Height = new GridLength(1, GridUnitType.Star);
+            gdFriends.RowDefinitions.Add(lastRowDefinition);
+        }
+
+        private void AddCard(string friendOnlineKey, bool friendOnlineValue, int friendStatus)
         {
             FriendCard card = new FriendCard();
             card.ReplyToFriendRequestEvent += ReplyToFriendRequestEvent;
             card.RemoveFriendEvent += RemoveFriendEvent;
             card.SendGameInvitation += SendGameInvitationEvent;
-            
+
             if (_typeFriendWindow == LOBBY_WINDOW)
             {
                 card.SetLobbyCard(friendOnlineKey, friendOnlineValue, friendStatus);
@@ -150,187 +157,118 @@ namespace Astralis.Views.Cards
             gdFriends.Children.Add(card);
             _cardsAddedRow++;
 
+            AddFriendRow();
+        }
+
+        private void AddFriendRow()
+        {
             RowDefinition rowDefinition = new RowDefinition();
             rowDefinition.Height = GridLength.Auto;
             gdFriends.RowDefinitions.Add(rowDefinition);
         }
 
-        public void ShowUserConected(string nickname)
+        private void ReplyToFriendRequestEvent(object sender, Tuple<string, bool> friendReply)
         {
-            if (_friendList.ContainsKey(nickname))
+            string friendUsername = friendReply.Item1;
+            bool reply = friendReply.Item2;
+
+            try
             {
+                int requestReply = _client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, reply);
 
-                if (_friendList[nickname].Item2 == IS_FRIEND)
-                {
-                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
-                    _friendList[nickname] = friendTuple;
-
-                    SetFriendWindow();
-
-                }
-                else
-                {
-                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
-                    _friendList[nickname] = friendTuple;
-
-                    SetFriendWindow();
-
-                }
+                ValidateRequest(requestReply, friendReply);
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
         }
 
-        public void ShowUserDisconected(string nickname)
+        private void ValidateRequest(int requestReply, Tuple<string, bool> friendReply)
         {
-            if (_friendList.ContainsKey(nickname))
+            string friendUsername = friendReply.Item1;
+            bool reply = friendReply.Item2;
+
+            if (requestReply == Constants.VALIDATION_SUCCESS)
             {
-
-                if (_friendList[nickname].Item2 == IS_FRIEND)
+                if (reply == ACCEPTED_FRIEND)
                 {
-                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
-                    _friendList[nickname] = friendTuple;
-
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
+                    _friendList[friendUsername] = friendTuple;
                     SetFriendWindow();
+
+                    MessageBox.Show(Properties.Resources.msgFriendRequestAccepted, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
-                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
-                    _friendList[nickname] = friendTuple;
-
-                    SetFriendWindow();
-
+                    RemoveFriendFromFriendList(friendUsername);
+                    MessageBox.Show(Properties.Resources.msgFriendRequestDeclined, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+
             }
-        }
-
-        public void ShowOnlineFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
-        {
-            _friendList = onlineFriends;
-            SetFriendWindow();
-        }
-
-        public void ShowFriendRequest(string nickname)
-        {
-            Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
-
-            _friendList.Add(nickname, friendTuple);
-
-            SetFriendWindow();
-        }
-
-        public void ShowFriendAccepted(string nickname)
-        {
-            Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
-
-            _friendList.Add(nickname, friendTuple);
-
-            SetFriendWindow();
-        }
-
-        private void ReplyToFriendRequestEvent(object sender, Tuple<string, bool> e)
-        {
-            string friendUsername = e.Item1;
-            bool reply = e.Item2;
-
-            InstanceContext context = new InstanceContext(this);
-
-            using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
+            else if (requestReply == Constants.ERROR)
             {
-                try
-                {
-                    int requestReply = client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, reply);
-
-                    if (requestReply == Constants.VALIDATION_SUCCESS)
-                    {
-                        if (reply == ACCEPTED_FRIEND)
-                        {
-                            Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
-                            _friendList[friendUsername] = friendTuple;
-                            SetFriendWindow();
-
-                            MessageBox.Show(Properties.Resources.msgFriendRequestAccepted, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            RemoveFriendFromFriendList(friendUsername);
-                            MessageBox.Show(Properties.Resources.msgFriendRequestDeclined, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-
-                    }
-                    else if (requestReply == Constants.ERROR)
-                    {
-                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        Disconnect();
-                        App.RestartApplication();
-                    }
-                }
-                catch (CommunicationObjectFaultedException)
-                {
-                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    App.RestartApplication();
-                }
-                catch (CommunicationException)
-                {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    App.RestartApplication();
-                }
-                catch (TimeoutException)
-                {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    App.RestartApplication();
-                }
-
-
+                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                Disconnect();
+                App.RestartApplication();
             }
         }
 
         private void RemoveFriendEvent(object sender, string friendUsername)
         {
-            InstanceContext context = new InstanceContext(this);
-
-            using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
+            try
             {
-                try
-                {
-                    int removedFriendAnswer = client.RemoveFriend(UserSession.Instance().Nickname, friendUsername);
+                int removedFriendAnswer = _client.RemoveFriend(UserSession.Instance().Nickname, friendUsername);
 
-                    if (removedFriendAnswer == Constants.VALIDATION_SUCCESS)
-                    {
-                        RemoveFriendFromFriendList(friendUsername);
-                        MessageBox.Show(Properties.Resources.msgFriendRemoved, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else if (removedFriendAnswer == Constants.ERROR)
-                    {
-                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        Disconnect();
-                        App.RestartApplication();
-                    }
-                }
-                catch (CommunicationObjectFaultedException)
-                {
-                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    App.RestartApplication();
-                }
-                catch (CommunicationException)
-                {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    App.RestartApplication();
-                }
-                catch (TimeoutException)
-                {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                    App.RestartApplication();
-                }
+                ValidateFriendRemoved(friendUsername, removedFriendAnswer);
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+
+        }
+
+        private void ValidateFriendRemoved(string friendUsername, int removedFriendAnswer)
+        {
+            if (removedFriendAnswer == Constants.VALIDATION_SUCCESS)
+            {
+                RemoveFriendFromFriendList(friendUsername);
+                MessageBox.Show(Properties.Resources.msgFriendRemoved, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else if (removedFriendAnswer == Constants.ERROR)
+            {
+                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                Disconnect();
+                App.RestartApplication();
             }
         }
 
         private void SendGameInvitationEvent(object sender, string friendUsername)
         {
             SendGameInvitation?.Invoke(this, friendUsername);
-        }
-
-        public void FriendDeleted(string nickname)
-        {
-           RemoveFriendFromFriendList(nickname);
         }
 
         private void RemoveFriendFromFriendList(string nickname)
@@ -357,49 +295,130 @@ namespace Astralis.Views.Cards
         {
             if (!string.IsNullOrEmpty(friendUsername))
             {
-                InstanceContext context = new InstanceContext(this);
-
-                using (OnlineUserManagerClient client = new OnlineUserManagerClient(context))
+                try
                 {
-                    try
-                    {
-                        int requestSent = client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
+                    int requestSent = _client.SendFriendRequest(UserSession.Instance().Nickname, friendUsername);
 
-                        if (requestSent == Constants.VALIDATION_SUCCESS)
-                        {
-                            MessageBox.Show(Properties.Resources.msgFriendRequestSuccessful, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else if (requestSent == Constants.ERROR)
-                        {
-                            MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                            Disconnect();
-                            App.RestartApplication();
-                        }
-                        else
-                        {
-                            MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                    catch (CommunicationObjectFaultedException)
-                    {
-                        MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        App.RestartApplication();
-                    }
-                    catch (CommunicationException)
-                    {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        App.RestartApplication();
-                    }
-                    catch (TimeoutException)
-                    {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                        App.RestartApplication();
-                    }
+                    ValidationRequestSent(requestSent);
+                }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
+                }
+                catch (CommunicationException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
+                }
+                catch (TimeoutException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
                 }
             }
             else
             {
                 MessageBox.Show(Properties.Resources.msgUsernameMissing, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void ValidationRequestSent(int requestSent)
+        {
+            if (requestSent == Constants.VALIDATION_SUCCESS)
+            {
+                MessageBox.Show(Properties.Resources.msgFriendRequestSuccessful, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else if (requestSent == Constants.ERROR)
+            {
+                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                Disconnect();
+                App.RestartApplication();
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.msgUnableToSendFriendRequest, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void ShowUserSubscribedToFriendManager(string nickname)
+        {
+            if (_friendList.ContainsKey(nickname))
+            {
+                if (_friendList[nickname].Item2 == IS_FRIEND)
+                {
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+                    _friendList[nickname] = friendTuple;
+
+                    SetFriendWindow();
+                }
+                else
+                {
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
+                    _friendList[nickname] = friendTuple;
+
+                    SetFriendWindow();
+                }
+            }
+        }
+
+        public void ShowUserUnsubscribedToFriendManager(string nickname)
+        {
+            if (_friendList.ContainsKey(nickname))
+            {
+                if (_friendList[nickname].Item2 == IS_FRIEND)
+                {
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+                    _friendList[nickname] = friendTuple;
+
+                    SetFriendWindow();
+                }
+                else
+                {
+                    Tuple<bool, int> friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
+                    _friendList[nickname] = friendTuple;
+
+                    SetFriendWindow();
+                }
+            }
+        }
+
+        public void ShowFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
+        {
+            _friendList = onlineFriends;
+            SetFriendWindow();
+        }
+
+        public void ShowFriendRequest(string nickname)
+        {
+            Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
+
+            _friendList.Add(nickname, friendTuple);
+
+            SetFriendWindow();
+        }
+
+        public void ShowFriendAccepted(string nickname)
+        {
+            Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+
+            _friendList.Add(nickname, friendTuple);
+
+            SetFriendWindow();
+        }
+
+        public void ShowFriendDeleted(string nickname)
+        {
+            RemoveFriendFromFriendList(nickname);
+        }
+
+        private void TextLimiterForNickname(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            if (textBox.Text.Length >= MAX_FIELDS_LENGHT)
+            {
+                e.Handled = true;
             }
         }
     }

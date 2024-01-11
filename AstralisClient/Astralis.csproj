@@ -97,11 +97,6 @@
       <DependentUpon>GameBoard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Game\GameLogic\Card.cs" />
-    <Compile Include="Views\Game\GameLogic\CardImageResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CardImageResource.resx</DependentUpon>
-    </Compile>
     <Compile Include="Views\Game\GameLogic\CardManager.cs" />
     <Compile Include="Views\Game\GameLogic\GameManager.cs" />
     <Compile Include="Views\Game\GameLogic\Team.cs" />
@@ -247,10 +242,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Game\GameLogic\CardImageResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>CardImageResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <Resource Include="Fonts\PixelFont.ttf" />
     <None Include="Connected Services\UserManager\Astralis.UserManager.GamesWonInfo1.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -273,7 +264,7 @@
     <None Include="Connected Services\UserManager\item8.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\UserManager\UserManager.wsdl" />
+    <None Include="Connected Services\UserManager\MessageService.wsdl" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -366,7 +357,7 @@
     <Resource Include="Views\Game\InGameAssets\chat.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\UserManager\item.disco" />
+    <None Include="Connected Services\UserManager\item11.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

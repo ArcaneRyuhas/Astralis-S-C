@@ -78,12 +78,12 @@ namespace Astralis.Views.Game.GameLogic
         {
             int cardId;
 
-            cardId = FindKeyByValue(card);
+            cardId = FindCardByKeyValue(card);
 
             return cardId;
         }
 
-        private int FindKeyByValue(Card value)
+        private int FindCardByKeyValue(Card value)
         {
             int cardId = ERROR_CARD_ID;
 

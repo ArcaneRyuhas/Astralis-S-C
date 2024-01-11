@@ -303,6 +303,9 @@
   <data name="msgFriendRequestSuccessful" xml:space="preserve">
     <value>Friend request sent successfully</value>
   </data>
+  <data name="msgGameIsFull" xml:space="preserve">
+    <value>Game is full</value>
+  </data>
   <data name="msgGameIsFullOrLobbyDoesntExist" xml:space="preserve">
     <value>Lobby is full or game doesnt exists</value>
   </data>
@@ -311,6 +314,9 @@
   </data>
   <data name="msgLobbyError" xml:space="preserve">
     <value>The lobby is full or there´s a problem with the server</value>
+  </data>
+  <data name="msgMailIncorrect" xml:space="preserve">
+    <value>Mail is invalid.</value>
   </data>
   <data name="msgNoGameFound" xml:space="preserve">
     <value>Can't found lobby</value>

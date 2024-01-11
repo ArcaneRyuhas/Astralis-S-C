@@ -619,6 +619,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El juego esta lleno.
+        /// </summary>
+        public static string msgGameIsFull {
+            get {
+                return ResourceManager.GetString("msgGameIsFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El lobby esta lleno o no existe.
         /// </summary>
         public static string msgGameIsFullOrLobbyDoesntExist {
@@ -646,6 +655,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El correo no es valido..
+        /// </summary>
+        public static string msgMailIncorrect {
+            get {
+                return ResourceManager.GetString("msgMailIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No se encontro el lobby.
         /// </summary>
         public static string msgNoGameFound {
@@ -664,7 +682,7 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No se pudo procesar tu solicitud..
+        ///   Looks up a localized string similar to No hay conexión con la base de datos..
         /// </summary>
         public static string msgUnableToAnswer {
             get {

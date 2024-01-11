@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using Astralis.Logic;
-using System.ServiceModel;
 
 namespace Astralis.Views.Cards
 {
@@ -14,7 +13,7 @@ namespace Astralis.Views.Cards
         private const int TEAM_ONE = 1;
         private const int TEAM_TWO = 2;
 
-        private List<string> _itemsList;
+        private readonly List<string> _itemsList;
         private string _userNickname;
         private int _team;
         public event EventHandler<Tuple<string, int>> TeamSelectionChanged;
@@ -23,7 +22,6 @@ namespace Astralis.Views.Cards
         public int Team {get { return _team; }}
 
         public event EventHandler<string> UserKicked;
-
 
         public LobbyUserCard()
         {

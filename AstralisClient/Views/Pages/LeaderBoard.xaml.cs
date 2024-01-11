@@ -1,16 +1,12 @@
 ﻿using Astralis.UserManager;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows;
 using System.ServiceModel;
 
 namespace Astralis.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for LeaderBoard.xaml
-    /// </summary>
     public partial class LeaderBoard : Page
     {
         private const int INITIAL_LENGHT = 0;
@@ -85,7 +81,6 @@ namespace Astralis.Views.Pages
 
             gdUsersName.Children.Add(lblNickname);
         }
-
 
         private void AddTextBoxToWinsGrid(Label lblWins, int rowNumber)
         {

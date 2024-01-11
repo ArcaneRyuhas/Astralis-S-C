@@ -4,6 +4,7 @@ using Astralis.Views.Pages;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace Astralis.Views
@@ -15,28 +16,36 @@ namespace Astralis.Views
 
         private const string IS_HOST = "host";
         private const string MAIN_MENU_WINDOW = "MAIN_MENU";
+        private const int MAX_FIELDS_LENGHT = 10;
 
         private FriendWindow _friendWindow;
-        private GameWindow _gameWindow;
+        private readonly GameWindow _gameWindow;
 
         public MainMenu(GameWindow gameWindow)
         {
             InitializeComponent();
+            AddFriendWindow();
 
             _gameWindow = gameWindow;
-            _friendWindow = new FriendWindow(MAIN_MENU_WINDOW);
-            _friendWindow.Visibility = Visibility.Hidden;
+            btnMyProfile.Content = UserSession.Instance().Nickname;
+
+        }
+
+        private void AddFriendWindow()
+        {
+            _friendWindow = new FriendWindow(MAIN_MENU_WINDOW)
+            {
+                Visibility = Visibility.Hidden
+            };
 
             _friendWindow.SetFriendWindow();
             gridFriendsWindow.Children.Add(_friendWindow);
-
-            btnMyProfile.Content = UserSession.Instance().Nickname;
         }
 
         private void BtnCreateGameClick(object sender, RoutedEventArgs e)
         {
             Lobby lobby = new Lobby(_gameWindow);
-            int canPlay = lobby.CanPlay();
+            int canPlay = lobby.CanAccessToLobby();
 
             if (canPlay == Constants.VALIDATION_SUCCESS)
             {
@@ -64,11 +73,10 @@ namespace Astralis.Views
         private void BtnJoinGameClick(object sender, RoutedEventArgs e)
         {
             string code = txtJoinCode.Text;
-
             Lobby lobby = new Lobby(_gameWindow);
-            int canPlay = lobby.CanPlay();
+            int canPlay = lobby.CanAccessToLobby();
 
-            if (lobby.CanPlay() == Constants.VALIDATION_SUCCESS)
+            if (lobby.CanAccessToLobby() == Constants.VALIDATION_SUCCESS)
             {
                 if (lobby.GameIsNotFull(code))
                 {
@@ -79,7 +87,7 @@ namespace Astralis.Views
                 }
                 else
                 {
-                    MessageBox.Show(Properties.Resources.msgGameIsFullOrLobbyDoesntExist, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.msgGameIsFull, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else if (canPlay == Constants.VALIDATION_FAILURE)
@@ -97,7 +105,6 @@ namespace Astralis.Views
             MyProfile myProfile = new MyProfile(_friendWindow);
             NavigationService.Navigate(myProfile);
         }
-
 
         private void BtnSettingsClick(object sender, RoutedEventArgs e)
         {
@@ -122,6 +129,16 @@ namespace Astralis.Views
         {
             LeaderBoard leaderboard = new LeaderBoard();
             NavigationService.Navigate(leaderboard);
+        }
+
+        private void TextLimeterForCode(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            if (textBox.Text.Length >= MAX_FIELDS_LENGHT)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

@@ -7,7 +7,6 @@ using System.Windows.Input;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.ServiceModel;
-using System.Runtime.CompilerServices;
 
 namespace Astralis.Views
 {
@@ -17,10 +16,8 @@ namespace Astralis.Views
         private const string NICKNAME_REGEX = @"^[a-zA-Z0-9]{2,30}$";
         private const string MAIL_REGEX = @"^.+@[^\.].*\.[a-z]{2,}$";
         private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9\S]{0,40}$";
-        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^?&*_-]).{6,40})\S$";
+        private const string PASSWORD_REGEX = @"^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[!@#$%^?.,><'¿¡&*_-]).{6,40})\S$";
         private const int MAX_FIELDS_LENGHT = 39;
-        private const int VALIDATION_FAILURE = 0;
-        private const int VALIDATION_SUCCES = 1;
 
         public SignUp()
         {
@@ -38,73 +35,66 @@ namespace Astralis.Views
 
         private void BtnRegiterClick(object sender, RoutedEventArgs e)
         {
-            User user = new UserManager.User();
+            User user = new User();
 
             HideErrorLabels();
             SetUserInformation(user);
 
             if (ValidFields(user))
             {
-               
-                UserManagerClient client = new UserManager.UserManagerClient();
                 try
                 {
-                    int findUserAnswer = client.FindUserByNickname(user.Nickname);
+                    UserManagerClient client = new UserManagerClient();
+                    int findUserResult = client.FindUserByNickname(user.Nickname);
 
-                    if (findUserAnswer == VALIDATION_FAILURE)
+                    if (findUserResult == Constants.VALIDATION_FAILURE)
                     {
-                        int userAdded = client.AddUser(user);
-                        if (userAdded == VALIDATION_SUCCES)
-                        {
-                            MessageBox.Show(Properties.Resources.msgUserAddedSucceed, Properties.Resources.titleUserAdded, MessageBoxButton.OK, MessageBoxImage.Information);
-                            LogIn logIn = new LogIn();
-                            this.Close();
-                            logIn.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                            LogIn logIn = new LogIn();
-                            this.Close();
-                            logIn.Show();
-                        }
+                        AddUser(user, client);
+                        
                     }
-                    else if(findUserAnswer == VALIDATION_SUCCES)
+                    else if(findUserResult == Constants.VALIDATION_SUCCESS)
                     {
                         lblErrorNickname.Visibility = Visibility.Visible;
                         lblErrorNickname.Content = Properties.Resources.lblErrorNicknameRepeated;
                     }
                     else
                     {
-                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LogIn logIn = new LogIn();
-                        this.Close();
-                        logIn.Show();
+                        MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
                     }
                 }
                 catch (CommunicationObjectFaultedException)
                 {
-                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                    LogIn logIn = new LogIn();
-                    this.Close();
-                    logIn.Show();
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
                 }
                 catch (CommunicationException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                    LogIn logIn = new LogIn();
-                    this.Close();
-                    logIn.Show();
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
                 }
                 catch (TimeoutException)
                 {
-                    MessageBox.Show(Astralis.Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                    LogIn logIn = new LogIn();
-                    this.Close();
-                    logIn.Show();
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    App.RestartApplication();
                 }
-               
+            }
+        }
 
+        private void AddUser(User user, UserManagerClient client)
+        {
+            int userAdded = client.AddUser(user);
+            if (userAdded == Constants.VALIDATION_SUCCESS)
+            {
+                MessageBox.Show(Properties.Resources.msgUserAddedSucceed, Properties.Resources.titleUserAdded, MessageBoxButton.OK, MessageBoxImage.Information);
+                LogIn logIn = new LogIn();
+                logIn.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
         }
 
