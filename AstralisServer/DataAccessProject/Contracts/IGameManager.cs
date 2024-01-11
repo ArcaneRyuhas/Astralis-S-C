@@ -27,6 +27,9 @@ namespace DataAccessProject.Contracts
 
         [OperationContract(IsOneWay = true)]
         void StartFirstGamePhase(string hostNickname);
+
+        [OperationContract(IsOneWay = true)]
+        void SendMessageToGame(string message, string nickname);
     }
 
     [ServiceContract]

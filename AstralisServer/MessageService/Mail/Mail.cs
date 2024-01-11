@@ -13,7 +13,7 @@ namespace MessageService.Mail
     public class Mail
     {
         private static Mail _instance;
-        private readonly ILog _log = LogManager.GetLogger(typeof(UserManager));
+        private readonly ILog _log = LogManager.GetLogger(typeof(MessageService));
         private readonly string _configPath = Path.Combine(Directory.GetCurrentDirectory(), "Mail", "Resources", "MailConfiguration.json");
         private const string MAIL_DISPLAY_NAME = "Astralis";
         private readonly string _fromEmail;

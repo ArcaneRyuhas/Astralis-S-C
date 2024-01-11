@@ -11,7 +11,7 @@ namespace Host
         {
             GetConnectionString();
 
-            using (ServiceHost host = new ServiceHost(typeof(MessageService.UserManager)))
+            using (ServiceHost host = new ServiceHost(typeof(MessageService.MessageService)))
             {
                 host.Open();
                 Console.WriteLine("Server is running");
