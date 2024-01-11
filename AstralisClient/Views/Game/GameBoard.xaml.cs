@@ -39,16 +39,11 @@ namespace Astralis.Views.Game
         public GameBoard()
         {
             InitializeComponent();
-            IsHost = false;
-            InitializeGame();
-        }
-
-        private void InitializeGame()
-        {
             Connect();
             SetTeams();
             SetGameManager();
             lblMyNickname.Content = UserSession.Instance().Nickname;
+            IsHost = false;
         }
 
         private void SetGameManager()
@@ -63,9 +58,10 @@ namespace Astralis.Views.Game
 
         private void Connect()
         {
-            _client = SetGameContext();
             try
             {
+                InstanceContext context = new InstanceContext(this);
+                GameManagerClient _client = new GameManagerClient(context);
                 _client.ConnectGame(UserSession.Instance().Nickname);
             }
             catch (CommunicationObjectFaultedException)
@@ -85,21 +81,18 @@ namespace Astralis.Views.Game
             }
         }
 
-        private GameManagerClient SetGameContext()
-        {
-            InstanceContext context = new InstanceContext(this);
-            GameManagerClient client = new GameManagerClient(context);
-
-            return client;
-        }
-
         private void GetUserDeck()
         {
             int[] userDeck = _client.DispenseGameCards(UserSession.Instance().Nickname);
             _gameManager.UserDeckQueue = new Queue<int>(userDeck);
         }
 
-        //We preferred to leave the DrawFourCards in this class because we need to make graphic cards for every card that is drawn.
+        /*
+         * We preferred to leave the DrawFourCards in this class because 
+         * we need to make graphic cards for every card that is drawn and 
+         * the communication between server and client.
+         */
+
         private void DrawFourCards()
         {
             string myNickname = UserSession.Instance().Nickname;
@@ -157,7 +150,7 @@ namespace Astralis.Views.Game
             }
         }
 
-        //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges in the graphic mannerjj.
+        //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges in the graphic manner.
         private void SetTeams()
         {
             _userTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
@@ -203,7 +196,7 @@ namespace Astralis.Views.Game
             return boardDictionary;
         }
 
-        private void AddCardToBoardDictionary(UIElement  child, ref int counter, Dictionary<int, int> boardDictionary)
+        private void AddCardToBoardDictionary(UIElement child, ref int counter, Dictionary<int, int> boardDictionary)
         {
             if (child is Grid grid)
             {
@@ -312,7 +305,6 @@ namespace Astralis.Views.Game
                 else
                 {
                     RightClicOnCard(clickedCard);
-                    
                 }
             }
         }
