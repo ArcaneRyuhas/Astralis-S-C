@@ -1,1 +1,1 @@
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\.sonarqube\out\1
+C:\Users\mario\Source\Repos\ArcaneRyuhas\Astralis-S-C\AstralisClient\.sonarqube\out\1

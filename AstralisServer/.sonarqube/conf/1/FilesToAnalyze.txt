@@ -1,6 +1,6 @@
 ﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Mail.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Properties\AssemblyInfo.cs
-C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\UserManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\MessageService.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\astralis.html
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\Beefree-logo.png
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\MessageService\Mail\Resources\facebook2x.png

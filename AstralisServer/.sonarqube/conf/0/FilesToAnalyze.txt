@@ -3,6 +3,8 @@ C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessP
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IGameManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\ILeaderboardManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\ILobbyManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IFriendManager.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IMessageManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\Contracts\IUserManager.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\DataAccess\DeckAccess.cs
 C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\DataAccessProject\DataAccess\FriendAccess.cs

@@ -27,11 +27,11 @@ namespace CallbackTestProject.AstralisService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddGuestUser", ReplyAction="http://tempuri.org/IUserManager/AddGuestUserResponse")]
         System.Threading.Tasks.Task<DataAccessProject.Contracts.User> AddGuestUserAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUser", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserResponse")]
-        int ConfirmUser(string nickname, string password);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUserCredentials", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserCredentialsResponse")]
+        int ConfirmUserCredentials(string nickname, string password);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUser", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserResponse")]
-        System.Threading.Tasks.Task<int> ConfirmUserAsync(string nickname, string password);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUserCredentials", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserCredentialsResponse")]
+        System.Threading.Tasks.Task<int> ConfirmUserCredentialsAsync(string nickname, string password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/FindUserByNickname", ReplyAction="http://tempuri.org/IUserManager/FindUserByNicknameResponse")]
         int FindUserByNickname(string nickname);
@@ -101,12 +101,12 @@ namespace CallbackTestProject.AstralisService {
             return base.Channel.AddGuestUserAsync();
         }
         
-        public int ConfirmUser(string nickname, string password) {
-            return base.Channel.ConfirmUser(nickname, password);
+        public int ConfirmUserCredentials(string nickname, string password) {
+            return base.Channel.ConfirmUserCredentials(nickname, password);
         }
         
-        public System.Threading.Tasks.Task<int> ConfirmUserAsync(string nickname, string password) {
-            return base.Channel.ConfirmUserAsync(nickname, password);
+        public System.Threading.Tasks.Task<int> ConfirmUserCredentialsAsync(string nickname, string password) {
+            return base.Channel.ConfirmUserCredentialsAsync(nickname, password);
         }
         
         public int FindUserByNickname(string nickname) {
@@ -537,8 +537,8 @@ namespace CallbackTestProject.AstralisService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowUsersInGame", ReplyAction="http://tempuri.org/IGameManager/ShowUsersInGameResponse")]
         void ShowUsersInGame(System.Collections.Generic.Dictionary<string, int> users);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowGameDrawedCard", ReplyAction="http://tempuri.org/IGameManager/ShowGameDrawedCardResponse")]
-        void ShowGameDrawedCard(string nickname, int[] cardId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowCardDrawedInGame", ReplyAction="http://tempuri.org/IGameManager/ShowCardDrawedInGameResponse")]
+        void ShowCardDrawedInGame(string nickname, int[] cardId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowGamePlayerEndedTurn", ReplyAction="http://tempuri.org/IGameManager/ShowGamePlayerEndedTurnResponse")]
         void ShowGamePlayerEndedTurn(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
@@ -548,6 +548,9 @@ namespace CallbackTestProject.AstralisService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/EndGameClient", ReplyAction="http://tempuri.org/IGameManager/EndGameClientResponse")]
         void EndGameClient(int winnerTeam);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/RecieveGameMessage", ReplyAction="http://tempuri.org/IGameManager/RecieveGameMessageResponse")]
+        void RecieveGameMessage(string message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

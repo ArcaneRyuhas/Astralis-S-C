@@ -115,14 +115,14 @@ namespace Astralis.Views.Game.GameLogic
             return dealtDamage;
         }
 
-        public override bool Equals(object objectToCheck)
+        public override bool Equals(object obj)
         {
-            if (objectToCheck == null || GetType() != objectToCheck.GetType())
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            Card otherCard = (Card)objectToCheck;
+            Card otherCard = (Card)obj;
 
             return _mana == otherCard._mana
                 && _attack == otherCard._attack

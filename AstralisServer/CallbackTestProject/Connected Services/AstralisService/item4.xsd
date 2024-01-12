@@ -29,7 +29,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ConfirmUser">
+  <xs:element name="ConfirmUserCredentials">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
@@ -37,10 +37,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ConfirmUserResponse">
+  <xs:element name="ConfirmUserCredentialsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="ConfirmUserResult" type="xs:int" />
+        <xs:element minOccurs="0" name="ConfirmUserCredentialsResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -514,7 +514,7 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowGameDrawedCard">
+  <xs:element name="ShowCardDrawedInGame">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
@@ -522,7 +522,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowGameDrawedCardResponse">
+  <xs:element name="ShowCardDrawedInGameResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -560,6 +560,18 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="EndGameClientResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RecieveGameMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RecieveGameMessageResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

@@ -268,7 +268,7 @@
     <value>Team: </value>
   </data>
   <data name="lblUserTurnFalse" xml:space="preserve">
-    <value>It's not your turn</value>
+    <value>Not your turn</value>
   </data>
   <data name="lblUserTurnTrue" xml:space="preserve">
     <value>It's your turn</value>

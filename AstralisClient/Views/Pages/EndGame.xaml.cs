@@ -110,9 +110,7 @@ namespace Astralis.Views.Pages
             }
             else
             {
-                LogIn logIn = new LogIn();
-
-                logIn.Show();
+                App.RestartApplication();
             }
         }
     }

@@ -33,7 +33,7 @@ namespace DataAccessProject.Contracts
     }
 
     [ServiceContract]
-    public interface IGameManagerCallback: IMessageManagerCallback
+    public interface IGameManagerCallback
     {
 
         [OperationContract]
@@ -54,6 +54,7 @@ namespace DataAccessProject.Contracts
         [OperationContract]
         void EndGameClient(int winnerTeam);
 
-        
+        [OperationContract]
+        void RecieveGameMessage(string message);
     }
 }
