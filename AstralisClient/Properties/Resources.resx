@@ -322,7 +322,7 @@
     <value>No se encontro el lobby</value>
   </data>
   <data name="msgPreviousConnectioLost" xml:space="preserve">
-    <value>Se ha perdido la conexión previa</value>
+    <value>Se ha perdido la conexión previa con el servidor</value>
   </data>
   <data name="msgUnableToAnswer" xml:space="preserve">
     <value>No hay conexión con la base de datos.</value>
@@ -343,7 +343,7 @@
     <value>No se pudo iniciar sesión debido a que el usuario está en línea</value>
   </data>
   <data name="msgUserUpdated" xml:space="preserve">
-    <value>El usuario se ha actualizado correctamen, se reinicará la aplicación</value>
+    <value>El usuario se ha actualizado correctamente, se reinicará la aplicación</value>
   </data>
   <data name="title" xml:space="preserve">
     <value>ASTRALIS</value>

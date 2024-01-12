@@ -23,8 +23,15 @@ namespace Astralis.Views.Pages
             {
                 LeaderboardManagerClient client = new LeaderboardManagerClient();
                 List<GamesWonInfo> gamesWonInfos = new List<GamesWonInfo>(client.GetLeaderboardInfo());
-
-                SetUserList(gamesWonInfos);
+                
+                if (gamesWonInfos != null)
+                {
+                    SetUserList(gamesWonInfos);
+                }
+                else
+                {
+                    MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch (CommunicationObjectFaultedException)
             {

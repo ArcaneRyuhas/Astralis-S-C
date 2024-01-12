@@ -60,7 +60,7 @@ namespace Astralis.Views
             }
             else
             {
-                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "Astralis", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -87,7 +87,7 @@ namespace Astralis.Views
                 }
                 else
                 {
-                    MessageBox.Show(Properties.Resources.msgGameIsFull, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.msgGameIsFull, "Astralis", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else if (canPlay == Constants.VALIDATION_FAILURE)

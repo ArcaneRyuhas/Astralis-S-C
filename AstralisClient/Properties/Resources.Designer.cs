@@ -673,7 +673,7 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Se ha perdido la conexión previa.
+        ///   Looks up a localized string similar to Se ha perdido la conexión previa con el servidor.
         /// </summary>
         public static string msgPreviousConnectioLost {
             get {
@@ -736,7 +736,7 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to El usuario se ha actualizado correctamen, se reinicará la aplicación.
+        ///   Looks up a localized string similar to El usuario se ha actualizado correctamente, se reinicará la aplicación.
         /// </summary>
         public static string msgUserUpdated {
             get {

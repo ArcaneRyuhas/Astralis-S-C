@@ -322,7 +322,7 @@
     <value>Can't found lobby</value>
   </data>
   <data name="msgPreviousConnectioLost" xml:space="preserve">
-    <value>Previous conection has been lost</value>
+    <value>Previous conection has been lost with the server</value>
   </data>
   <data name="msgUnableToAnswer" xml:space="preserve">
     <value>Can't reach the database.</value>
