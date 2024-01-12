@@ -10,6 +10,7 @@ namespace Astralis.Views.Pages
     public partial class LeaderBoard : Page
     {
         private const int INITIAL_LENGHT = 0;
+        private const int INVALID_GAMES_WON = 1;
 
         public LeaderBoard()
         {
@@ -24,7 +25,7 @@ namespace Astralis.Views.Pages
                 LeaderboardManagerClient client = new LeaderboardManagerClient();
                 List<GamesWonInfo> gamesWonInfos = new List<GamesWonInfo>(client.GetLeaderboardInfo());
                 
-                if (gamesWonInfos != null)
+                if (gamesWonInfos.Count != INVALID_GAMES_WON)
                 {
                     SetUserList(gamesWonInfos);
                 }
