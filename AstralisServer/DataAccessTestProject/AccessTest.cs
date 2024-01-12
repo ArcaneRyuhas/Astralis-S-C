@@ -589,99 +589,6 @@ namespace DataAccessTestProject
     }
 
     [TestClass]
-    public class DeckAccessTests
-    {
-        private const int INT_VALIDATION_SUCCESS = 1;
-        private const int STARTING_CARD_COUNT = 30;
-        private static UserAccess _userAccess = new UserAccess();
-        private static DeckAccess _deckAccess = new DeckAccess();
-        private static AstralisDBEntities _context = new AstralisDBEntities();
-
-
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
-        {
-            User userDefaultDeck = new User()
-            {
-                Nickname = "UserDefaultDeck",
-                ImageId = 1,
-                Mail = "UserDefaultDeck@hotmail.com",
-                Password = "password"
-            };
-            _userAccess.CreateUser(userDefaultDeck);
-
-            User userToGetDeck = new User()
-            {
-                Nickname = "UserToGetDeck",
-                ImageId = 1,
-                Mail = "testuser@example.com",
-                Password = "password"
-            };
-            _userAccess.CreateUser(userToGetDeck);
-            _deckAccess.CreateDefaultDeck(_context, userToGetDeck.Nickname);
-        }
-
-        [TestMethod]
-        public void SuccessfullyCreateDefaultDeck()
-        {
-            string nickname = "UserDefaultDeck";
-
-            Assert.IsTrue(_deckAccess.CreateDefaultDeck(_context, nickname) == INT_VALIDATION_SUCCESS);
-        }
-
-        [TestMethod]
-        public void SuccessfullyGetDeckByNickname()
-        {
-            string nickname = "UserToGetDeck";
-            List<int> cardList = _deckAccess.GetDeckByNickname(nickname);
-
-            Assert.IsNotNull(cardList);
-            Assert.AreEqual(STARTING_CARD_COUNT, cardList.Count);
-        }
-
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            _userAccess.DeleteUser("UserDefaultDeck");
-            _userAccess.DeleteUser("UserToGetDeck");
-        }
-    }
-
-    [TestClass]
-    public class DeckAccessTestExceptions
-    {
-
-        private static DeckAccess deckAccess = new DeckAccess();
-        private static AstralisDBEntities _context = new AstralisDBEntities();
-
-
-        [TestMethod]
-        public void CreateDefaultDeckEntityException()
-        {
-            string nickname = "NicknameException";
-
-            Assert.ThrowsException<EntityException>(() =>
-            {
-                deckAccess.CreateDefaultDeck(_context, nickname);
-            });
-        }
-
-        [TestMethod]
-        public void GetDeckByNicknameEntityException()
-        {
-            string nickname = "NicknameException";
-
-
-            Assert.ThrowsException<EntityException>(() =>
-            {
-                deckAccess.GetDeckByNickname(nickname);
-            });
-        }
-
-
-    }
-
-    [TestClass]
     public class GameAccessTest
     {
         private const int INT_VALIDATION_SUCCESS = 1;
@@ -970,6 +877,98 @@ namespace DataAccessTestProject
         }
     }
 
+    [TestClass]
+    public class DeckAccessTests
+    {
+        private const int INT_VALIDATION_SUCCESS = 1;
+        private const int STARTING_CARD_COUNT = 30;
+        private static UserAccess _userAccess = new UserAccess();
+        private static DeckAccess _deckAccess = new DeckAccess();
+        private static AstralisDBEntities _context = new AstralisDBEntities();
+
+
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
+        {
+            User userDefaultDeck = new User()
+            {
+                Nickname = "UserDefaultDeck",
+                ImageId = 1,
+                Mail = "UserDefaultDeck@hotmail.com",
+                Password = "password"
+            };
+            _userAccess.CreateUser(userDefaultDeck);
+
+            User userToGetDeck = new User()
+            {
+                Nickname = "UserToGetDeck",
+                ImageId = 1,
+                Mail = "testuser@example.com",
+                Password = "password"
+            };
+            _userAccess.CreateUser(userToGetDeck);
+            _deckAccess.CreateDefaultDeck(_context, userToGetDeck.Nickname);
+        }
+
+        [TestMethod]
+        public void SuccessfullyCreateDefaultDeck()
+        {
+            string nickname = "UserDefaultDeck";
+
+            Assert.IsTrue(_deckAccess.CreateDefaultDeck(_context, nickname) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void SuccessfullyGetDeckByNickname()
+        {
+            string nickname = "UserToGetDeck";
+            List<int> cardList = _deckAccess.GetDeckByNickname(nickname);
+
+            Assert.IsNotNull(cardList);
+            Assert.AreEqual(STARTING_CARD_COUNT, cardList.Count);
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            _userAccess.DeleteUser("UserDefaultDeck");
+            _userAccess.DeleteUser("UserToGetDeck");
+        }
+    }
+
+    [TestClass]
+    public class DeckAccessTestExceptions
+    {
+
+        private static DeckAccess deckAccess = new DeckAccess();
+        private static AstralisDBEntities _context = new AstralisDBEntities();
+
+
+        [TestMethod]
+        public void CreateDefaultDeckEntityException()
+        {
+            string nickname = "NicknameException";
+
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                deckAccess.CreateDefaultDeck(_context, nickname);
+            });
+        }
+
+        [TestMethod]
+        public void GetDeckByNicknameEntityException()
+        {
+            string nickname = "NicknameException";
+
+
+            Assert.ThrowsException<EntityException>(() =>
+            {
+                deckAccess.GetDeckByNickname(nickname);
+            });
+        }
+
+
+    }
 
 }
 

@@ -51,7 +51,7 @@ namespace CallbackTestProject
         };
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             _firstCallback = new LobbyCallbackImplementation();
             _firstClient = new LobbyManagerClient(new InstanceContext(_firstCallback));
@@ -61,11 +61,13 @@ namespace CallbackTestProject
             _secondCallback = new LobbyCallbackImplementation();
             _secondClient = new LobbyManagerClient(new InstanceContext(_secondCallback));
 
+            await Task.Delay(1000);
             _secondClient.ConnectToLobby(SECOND_USER, _gameId);
 
             _thirdCallback = new LobbyCallbackImplementation();
             _thirdClient = new LobbyManagerClient(new InstanceContext(_thirdCallback));
 
+            await Task.Delay(1000);
             _otherGameId = _thirdClient.CreateLobby(THIRD_USER);
 
             _fourthCallback = new LobbyCallbackImplementation();
@@ -444,10 +446,13 @@ namespace CallbackTestProject
         private static FriendManagerClient _firstClient;
         private static FriendManagerClient _secondClient;
         private static FriendManagerClient _thirdClient;
+        private static FriendManagerClient _fourthClient;
 
         private static FriendManagerCallbackImplementation _firstCallback;
         private static FriendManagerCallbackImplementation _secondCallback;
         private static FriendManagerCallbackImplementation _thirdCallback;
+        private static FriendManagerCallbackImplementation _fourthCallback;
+
         private static UserAccess userAccess = new UserAccess();
 
         private const int ERROR = 0;
@@ -476,125 +481,155 @@ namespace CallbackTestProject
             Mail = "A@a.com"
         };
 
+        private static User FOURTH_USER = new User()
+        {
+            Nickname = "FourthUser",
+            ImageId = 1,
+            Password = "password",
+            Mail = "A@a.com"
+        };
+
         [TestInitialize]
-        public static void Initialize(TestContext context)
+        public async Task Initialize()
         {
             userAccess.CreateUser(FIRST_USER);
             userAccess.CreateUser(SECOND_USER);
+            userAccess.CreateUser(FOURTH_USER);
 
             _firstCallback = new FriendManagerCallbackImplementation();
             _firstClient = new FriendManagerClient (new InstanceContext(_firstCallback));
 
+            await Task.Delay(1000);
+
+            _firstClient.SubscribeToFriendManager(FIRST_USER.Nickname);
+
             _secondCallback = new FriendManagerCallbackImplementation();
             _secondClient = new FriendManagerClient(new InstanceContext(_secondCallback));
 
+            await Task.Delay(1000);
+            _secondClient.SubscribeToFriendManager(SECOND_USER.Nickname);
+
             _thirdCallback = new FriendManagerCallbackImplementation();
             _thirdClient = new FriendManagerClient(new InstanceContext(_thirdCallback));
+
+            _fourthCallback = new FriendManagerCallbackImplementation();
+            _fourthClient = new FriendManagerClient(new InstanceContext(_fourthCallback));
+
+            await Task.Delay(1000);
+            _fourthClient.SubscribeToFriendManager(FOURTH_USER.Nickname);
+            await Task.Delay(1000);
+            _fourthClient.SendFriendRequest(FOURTH_USER.Nickname, SECOND_USER.Nickname);
+            await Task.Delay(1000);
+            _fourthClient.SendFriendRequest(FOURTH_USER.Nickname, FIRST_USER.Nickname);
+            await Task.Delay(1000);
+            _firstClient.ReplyFriendRequest(FIRST_USER.Nickname, FOURTH_USER.Nickname, true);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            _firstClient.UnsubscribeToFriendManager(FIRST_USER.Nickname);
+            _secondClient.UnsubscribeToFriendManager(SECOND_USER.Nickname);
+            _thirdClient.UnsubscribeToFriendManager(THIRD_USER.Nickname);
+            _fourthClient.UnsubscribeToFriendManager(FOURTH_USER.Nickname);
+
+            userAccess.DeleteUser(FIRST_USER.Nickname);
+            userAccess.DeleteUser(SECOND_USER.Nickname);
+            userAccess.DeleteUser(FOURTH_USER.Nickname);
         }
 
         [TestMethod]
         public async Task ShowConnectionToGameSuccesful()
         {
-            _secondClient.SubscribeToFriendManager(SECOND_USER);
-            await Task.Delay(2000);
+            _thirdClient.SubscribeToFriendManager(THIRD_USER.Nickname);
 
-            _secondClient.UnsubscribeToFriendManager(SECOND_USER);
-            Assert.AreEqual(SECOND_USER, _firstCallback.UserConnected);
+            await Task.Delay(2000);
+            Assert.AreEqual(THIRD_USER.Nickname, _firstCallback.UserConnected);
         }
 
         [TestMethod]
         public async Task ShowDisconnectionInGameSuccesful()
         {
-            _secondClient.ConectUser(SECOND_USER);
+            _secondClient.UnsubscribeToFriendManager(SECOND_USER.Nickname);
+
             await Task.Delay(2000);
-            _secondClient.DisconectUser(SECOND_USER);
-            await Task.Delay(2000);
-            Assert.AreEqual(SECOND_USER, _firstCallback.UserDisconnected);
+            Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.UserDisconnected);
         }
 
         [TestMethod]
         public async Task ShowFriendRequestSuccesful()
         {
-            _secondClient.ConectUser(SECOND_USER);
+            _secondClient.SendFriendRequest(SECOND_USER.Nickname, FIRST_USER.Nickname);
             await Task.Delay(2000);
 
-            _secondClient.SendFriendRequest(SECOND_USER, FIRST_USER);
-            await Task.Delay(2000);
-
-            _firstClient.ReplyFriendRequest(FIRST_USER, SECOND_USER, false);
-            Assert.AreEqual(SECOND_USER, _firstCallback.FriendRequest);
+            Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.FriendRequest);
         }
 
+        [TestMethod]
+        public async Task NoShowFriendRequestToOtherUser()
+        {
+            _secondClient.SendFriendRequest(SECOND_USER.Nickname, FIRST_USER.Nickname);
+            await Task.Delay(2000);
+
+            Assert.AreNotEqual(SECOND_USER.Nickname, _fourthCallback.FriendRequest);
+        }
 
         [TestMethod]
         public async Task ShowFriendRequestUnsuccesful()
         {
-            _secondClient.ConectUser(SECOND_USER);
-
-            await Task.Delay(2000);
-
-            Assert.AreEqual(ERROR, _secondClient.SendFriendRequest(SECOND_USER, THIRD_USER));
+            await Task.Delay(1000);
+            Assert.AreEqual(ERROR, _secondClient.SendFriendRequest(SECOND_USER.Nickname, THIRD_USER.Nickname));
             Assert.IsNull(_thirdCallback.FriendRequest);
         }
 
         [TestMethod]
         public async Task AcceptFriendRequestSuccesful()
         {
-            _secondClient.ConectUser(SECOND_USER);
-            _secondClient.SendFriendRequest(SECOND_USER, FIRST_USER);
-            await Task.Delay(2000);
+            _secondClient.ReplyFriendRequest(SECOND_USER.Nickname, FOURTH_USER.Nickname, true);
+            await Task.Delay(6000);
+            Assert.AreEqual(SECOND_USER.Nickname, _fourthCallback.FriendAccepted);
+        }
 
-            _firstClient.ReplyFriendRequest(FIRST_USER, SECOND_USER, true);
-            await Task.Delay(2000);
-
-            _firstClient.RemoveFriend(FIRST_USER, SECOND_USER);
-            Assert.AreEqual(FIRST_USER, _secondCallback.FriendAccepted);
+        [TestMethod]
+        public async Task NoShowAcceptFriendRequestToOtherUser()
+        {
+            _secondClient.ReplyFriendRequest(SECOND_USER.Nickname, FOURTH_USER.Nickname, true);
+            await Task.Delay(6000);
+            Assert.AreNotEqual(SECOND_USER.Nickname, _firstCallback.FriendAccepted);
         }
 
         [TestMethod]
         public async Task DenyFriendRequestSuccesful()
         {
-            _firstClient.ConectUser(FIRST_USER);
-            _firstClient.SendFriendRequest(FIRST_USER, SECOND_USER);
-
+            _secondClient.ReplyFriendRequest(SECOND_USER.Nickname, FOURTH_USER.Nickname, false);
             await Task.Delay(2000);
-
-            _secondClient.ReplyFriendRequest(SECOND_USER, FIRST_USER, false);
-
-            Assert.AreNotEqual(SECOND_USER, _firstCallback.FriendRequest);
+            Assert.AreNotEqual(SECOND_USER.Nickname, _fourthCallback.FriendRequest);
         }
 
         [TestMethod]
         public async Task RemoveFriendSuccesful()
         {
-            _secondClient.ConectUser(SECOND_USER);
+            _firstClient.RemoveFriend(FIRST_USER.Nickname, FOURTH_USER.Nickname);
             await Task.Delay(2000);
+            Assert.AreEqual(FIRST_USER.Nickname, _fourthCallback.FriendRemoved);
+        }
 
-            _secondClient.SendFriendRequest(SECOND_USER, FIRST_USER);
+        public async Task NoShowRemoveFriend()
+        {
+            _firstClient.RemoveFriend(FIRST_USER.Nickname, FOURTH_USER.Nickname);
             await Task.Delay(2000);
-
-            _firstClient.ReplyFriendRequest(FIRST_USER, SECOND_USER, false);
-            Assert.AreEqual(SECOND_USER, _firstCallback.FriendRequest);
+            Assert.AreEqual(FIRST_USER.Nickname, _secondCallback.FriendRemoved);
         }
 
         [TestMethod]
         public async Task ShowOnlineFriends()
         {
-            _secondClient.ConectUser(SECOND_USER);
+            _thirdClient.SubscribeToFriendManager(SECOND_USER.Nickname);
             await Task.Delay(2000);
 
             Assert.IsNotNull(_secondCallback.Friends);
         }
 
-
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            _firstClient.DisconectUser(FIRST_USER);
-
-            userAccess.DeleteUser(FIRST_USER);
-            userAccess.DeleteUser(SECOND_USER);
-        }
     }
 
     public class FriendManagerCallbackImplementation : IFriendManagerCallback
@@ -616,11 +651,6 @@ namespace CallbackTestProject
             UserDisconnected = string.Empty;
         }
 
-        public void FriendDeleted(string nickname)
-        {
-            FriendRemoved = nickname;
-        }
-
         public void ShowFriendAccepted(string nickname)
         {
             FriendAccepted = nickname;
@@ -631,39 +661,24 @@ namespace CallbackTestProject
             FriendRequest = nickname;
         }
 
-        public void ShowOnlineFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
-        {
-            Friends = onlineFriends;
-        }
-
-        public void ShowUserConected(string nickname)
+        public void ShowUserSubscribedToFriendManager(string nickname)
         {
             UserConnected = nickname;
         }
 
-        public void ShowUserDisconected(string nickname)
+        public void ShowUserUnsubscribedToFriendManager(string nickname)
         {
             UserDisconnected = nickname;
         }
 
-        public void ShowUserSubscribedToFriendManager(string nickname)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ShowUserUnsubscribedToFriendManager(string nickname)
-        {
-            throw new NotImplementedException();
-        }
-
         public void ShowFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
         {
-            throw new NotImplementedException();
+            Friends = onlineFriends;
         }
 
         public void ShowFriendDeleted(string nickname)
         {
-            throw new NotImplementedException();
+            FriendRemoved = nickname;
         }
     }
 
@@ -674,16 +689,14 @@ namespace CallbackTestProject
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
         private const string NICKNAME_ERROR = "ERROR";
-        private const int ERROR = -1;
-        private const string USER_NOT_FOUND = "UserNotFound";
 
-        private static UserManagerClient clientUserManager = new UserManagerClient();
+        private static UserManagerClient _clientUserManager = new UserManagerClient();
         private static UserAccess userAccess = new UserAccess();
 
-        [TestMethod]
-        public void SuccessfullyConfirmUserUM()
+        [ClassInitialize]
+        public static void InitializeClass(TestContext context)
         {
-            DataAccessProject.Contracts.User userToConfirm = new DataAccessProject.Contracts.User()
+            User userToConfirm = new User()
             {
                 Nickname = "ConfirmUserTest",
                 ImageId = 1,
@@ -692,42 +705,18 @@ namespace CallbackTestProject
             };
 
             userAccess.CreateUser(userToConfirm);
-            Assert.IsTrue(clientUserManager.ConfirmUser(userToConfirm.Nickname, userToConfirm.Password) == INT_VALIDATION_SUCCESS);
-        }
 
-        [TestMethod]
-        public void UnSuccessfullyConfirmUserUM()
-        {
-            DataAccessProject.Contracts.User userToConfirm = new DataAccessProject.Contracts.User()
+            User userToConfirmWrongPassword = new User()
             {
-                Nickname = "ConfirmUserTestUnsuccess",
+                Nickname = "ConfirmUserTestIncorrect",
                 ImageId = 1,
                 Mail = "ConfirmUserTest@hotmail.com",
                 Password = "password"
             };
 
-            Assert.IsTrue(clientUserManager.ConfirmUser(userToConfirm.Nickname, userToConfirm.Password) == INT_VALIDATION_FAILURE);
-        }
+            userAccess.CreateUser(userToConfirmWrongPassword);
 
-        [TestMethod]
-        public void WrongPasswordConfirmUserUM()
-        {
-            DataAccessProject.Contracts.User userToConfirm = new DataAccessProject.Contracts.User()
-            {
-                Nickname = "ConfirmUserTestUnsuccess",
-                ImageId = 1,
-                Mail = "ConfirmUserTest@hotmail.com",
-                Password = "password"
-            };
-
-            userAccess.CreateUser(userToConfirm);
-            Assert.IsTrue(clientUserManager.ConfirmUser(userToConfirm.Nickname, "Incorrect") == INT_VALIDATION_FAILURE);
-        }
-
-        [TestMethod]
-        public void UnSuccessfullyAddUserUM()
-        {
-            User userToAdd = new User()
+            User userToAddTest = new User()
             {
                 Nickname = "UserToAddTest",
                 ImageId = 1,
@@ -735,34 +724,8 @@ namespace CallbackTestProject
                 Password = "password"
             };
 
-            clientUserManager.AddUser(userToAdd);
+            _clientUserManager.AddUser(userToAddTest);
 
-            Assert.IsTrue(clientUserManager.AddUser(userToAdd) == INT_VALIDATION_FAILURE);
-        }
-
-        [TestMethod]
-        public void SuccessfullyAddUserUM()
-        {
-            User userToAdd = new User()
-            {
-                Nickname = "UserToAddTest",
-                ImageId = 1,
-                Mail = "UserToAddTest@hotmail.com",
-                Password = "password"
-            };
-
-            Assert.IsTrue(clientUserManager.AddUser(userToAdd) == INT_VALIDATION_SUCCESS);
-        }
-
-        [TestMethod]
-        public void SuccessfullyAddGuestUM()
-        {
-            Assert.IsTrue(clientUserManager.AddGuestUser().Nickname != NICKNAME_ERROR);
-        }
-
-        [TestMethod]
-        public void SuccessfullyFindUserByNicknameUM()
-        {
             User userToFind = new User()
             {
                 Nickname = "UserToFindTest",
@@ -771,28 +734,8 @@ namespace CallbackTestProject
                 Password = "password"
             };
 
-            clientUserManager.AddUser(userToFind);
+            _clientUserManager.AddUser(userToFind);
 
-            Assert.IsTrue(clientUserManager.FindUserByNickname(userToFind.Nickname) == INT_VALIDATION_SUCCESS);
-        }
-
-        [TestMethod]
-        public void UnSuccessfullyFindUserByNicknameUM()
-        {
-            User userToFind = new User()
-            {
-                Nickname = "UserToFindTestUnsuccess",
-                ImageId = 1,
-                Mail = "UserToFindTest@hotmail.com",
-                Password = "password"
-            };
-
-            Assert.IsTrue(clientUserManager.FindUserByNickname(userToFind.Nickname) == INT_VALIDATION_FAILURE);
-        }
-
-        [TestMethod]
-        public void SuccessfullyGetUserByNicknameUM()
-        {
             User userToGet = new User()
             {
                 Nickname = "UserToGetTest",
@@ -801,23 +744,111 @@ namespace CallbackTestProject
                 Password = "password"
             };
 
-            clientUserManager.AddUser(userToGet);
+            _clientUserManager.AddUser(userToGet);
 
-            Assert.IsTrue(clientUserManager.GetUserByNickname(userToGet.Nickname).Nickname != NICKNAME_ERROR);
+            User userToUpdate = new User()
+            {
+                Nickname = "UserToUpdate",
+                ImageId = 1,
+                Mail = "UserToUpdate@hotmail.com",
+                Password = "password"
+            };
+
+            _clientUserManager.AddUser(userToUpdate);
+        }
+
+        [TestMethod]
+        public void SuccessfullyConfirmUserUM()
+        {
+
+            string nickname = "ConfirmUserTest";
+            string password = "password";
+
+            Assert.IsTrue(_clientUserManager.ConfirmUser(nickname, password) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyConfirmUserUM()
+        {
+            string nickname = "ConfirmUserTestUnsuccess";
+            string password = "password";
+
+            Assert.IsTrue(_clientUserManager.ConfirmUser(nickname, password) == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void WrongPasswordConfirmUserUM()
+        {
+            string nickname = "ConfirmUserTestIncorrect";
+            string password = "incorrectPassword"; 
+
+            Assert.IsTrue(_clientUserManager.ConfirmUser(nickname, password) == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyAddUserUM()
+        {
+            User userToAddTest = new User()
+            {
+                Nickname = "UserToAddTest",
+                ImageId = 1,
+                Mail = "UserToAddTest@hotmail.com",
+                Password = "password"
+            };
+
+            Assert.IsTrue(_clientUserManager.AddUser(userToAddTest) == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccessfullyAddUserUM()
+        {
+            User userToAdd = new User()
+            {
+                Nickname = "UserToAddTestSuccesful",
+                ImageId = 1,
+                Mail = "UserToAddTest@hotmail.com",
+                Password = "password"
+            };
+
+            Assert.IsTrue(_clientUserManager.AddUser(userToAdd) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void SuccessfullyAddGuestUM()
+        {
+            Assert.IsTrue(_clientUserManager.AddGuestUser().Nickname != NICKNAME_ERROR);
+        }
+
+        [TestMethod]
+        public void SuccessfullyFindUserByNicknameUM()
+        {
+            string nickname = "UserToFindTest";
+
+            Assert.IsTrue(_clientUserManager.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS);
+        }
+
+        [TestMethod]
+        public void UnSuccessfullyFindUserByNicknameUM()
+        {
+            string nickname = "UserToFindTestUnsuccess";
+
+            Assert.IsTrue(_clientUserManager.FindUserByNickname(nickname) == INT_VALIDATION_FAILURE);
+        }
+
+        [TestMethod]
+        public void SuccessfullyGetUserByNicknameUM()
+        {
+            string nickname = "UserToGetTest";
+
+            Assert.IsTrue(_clientUserManager.GetUserByNickname(nickname).Nickname != NICKNAME_ERROR);
         }
 
         [TestMethod]
         public void UnsuccessfullyGetUserByNicknameUM()
         {
-            User userToGet = new User()
-            {
-                Nickname = "UserToGetTestUnsuccesful",
-                ImageId = 1,
-                Mail = "UserToGetTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "UserToGetTestUnsuccesful";
 
-            Assert.IsTrue(clientUserManager.GetUserByNickname(userToGet.Nickname).Nickname != NICKNAME_ERROR);
+            Assert.IsTrue(_clientUserManager.GetUserByNickname(nickname).Nickname != NICKNAME_ERROR);
         }
 
         [TestMethod]
@@ -825,26 +856,18 @@ namespace CallbackTestProject
         {
             User userToUpdate = new User()
             {
-                Nickname = "UserToUpdate",
+                Nickname = "UserToUpdateUnsuccesful",
                 ImageId = 1,
                 Mail = "UserToUpdate@hotmail.com",
                 Password = "password"
             };
 
-            Assert.IsTrue(clientUserManager.UpdateUser(userToUpdate) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(_clientUserManager.UpdateUser(userToUpdate) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
         public void SuccessfullyUpdateUserUM()
         {
-            User userToUpdate = new User()
-            {
-                Nickname = "UserToUpdate",
-                ImageId = 1,
-                Mail = "UserToUpdate@hotmail.com",
-                Password = "password"
-            };
-
             User userUpdated = new User()
             {
                 Nickname = "UserToUpdate",
@@ -853,11 +876,7 @@ namespace CallbackTestProject
                 Password = "password"
             };
 
-            clientUserManager.AddUser(userToUpdate);
-
-            int result = clientUserManager.UpdateUser(userUpdated);
-
-            userAccess.DeleteUser("UserToUpdate");
+            int result = _clientUserManager.UpdateUser(userUpdated);
 
             Assert.IsTrue(result == INT_VALIDATION_SUCCESS);
         }
@@ -868,18 +887,19 @@ namespace CallbackTestProject
             userAccess.DeleteUser("ConfirmUserTest");
             userAccess.DeleteUser("UserToAddTest");
             userAccess.DeleteUser("UserToFindTest");
+            userAccess.DeleteUser("UserToUpdate");
             userAccess.DeleteUser("UserToGetTest");
             userAccess.DeleteUser("NicknameUpdated");
             userAccess.DeleteUser("UserCanPlay");
             userAccess.DeleteUser("ConfirmUserTestUnsuccess");
+            userAccess.DeleteUser("ConfirmUserTestIncorrect");
+            userAccess.DeleteUser("UserToAddTestSuccesful");
         }
     }
 
     [TestClass]
     public class UserManagerTestExceptionErrors
     {
-        private const int INT_VALIDATION_SUCCESS = 1;
-        private const int INT_VALIDATION_FAILURE = 0;
         private const int ERROR = -1;
         private const string NICKNAME_ERROR = "ERROR";
 
@@ -888,15 +908,10 @@ namespace CallbackTestProject
         [TestMethod]
         public void ErrorConfirmUserUM()
         {
-            DataAccessProject.Contracts.User userToConfirm = new DataAccessProject.Contracts.User()
-            {
-                Nickname = "ConfirmUserTest",
-                ImageId = 1,
-                Mail = "ConfirmUserTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "UserToConfirmEntity";
+            string password = "password";
 
-            Assert.IsTrue(client.ConfirmUser(userToConfirm.Nickname, userToConfirm.Password) == ERROR);
+            Assert.IsTrue(client.ConfirmUser(nickname, password) == ERROR);
         }
 
         [TestMethod]
@@ -922,29 +937,17 @@ namespace CallbackTestProject
         [TestMethod]
         public void ErrorFindUserByNicknameUM()
         {
-            User userToFind = new User()
-            {
-                Nickname = "UserToFindTestERROR",
-                ImageId = 1,
-                Mail = "UserToFindTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "UserToFindTestERROR";
 
-            Assert.IsTrue(client.FindUserByNickname(userToFind.Nickname) == ERROR);
+            Assert.IsTrue(client.FindUserByNickname(nickname) == ERROR);
         }
 
         [TestMethod]
         public void ErrorGetUserByNicknameUM()
         {
-            User userToGet = new User()
-            {
-                Nickname = "UserToGetTest",
-                ImageId = 1,
-                Mail = "UserToGetTest@hotmail.com",
-                Password = "password"
-            };
+            string nickname = "UserToGetTestError";
 
-            Assert.IsTrue(client.GetUserByNickname(userToGet.Nickname).Nickname == NICKNAME_ERROR);
+            Assert.IsTrue(client.GetUserByNickname(nickname).Nickname == NICKNAME_ERROR);
         }
 
         [TestMethod]
