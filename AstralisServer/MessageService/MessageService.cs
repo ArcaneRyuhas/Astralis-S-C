@@ -9,6 +9,7 @@ using User = DataAccessProject.Contracts.User;
 using System.Data.SqlClient;
 using System.Data.Entity.Core;
 using System.Runtime.CompilerServices;
+using DataAccessProject;
 
 namespace MessageService
 {
@@ -671,6 +672,7 @@ namespace MessageService
                 try
                 {
                     currentUserCallbackChannel.ShowFriends(friendAccess.GetFriendList(nickname, _onlineUsers.Keys.ToList()));
+
                     if (!_onlineUsers.ContainsKey(nickname))
                     {
                         _onlineUsers.Add(nickname, currentUserCallbackChannel);
@@ -688,6 +690,18 @@ namespace MessageService
                 catch (InvalidOperationException invalidOperationException)
                 {
                     log.Error(invalidOperationException);
+                }
+                catch (CommunicationObjectAbortedException communicationObjectAbortedException)
+                {
+                    log.Error(communicationObjectAbortedException);
+                }
+                catch (CommunicationException communicationException)
+                {
+                    log.Error(communicationException);
+                }
+                catch (TimeoutException timeoutException)
+                {
+                    log.Error(timeoutException);
                 }
             }
         }
@@ -1211,7 +1225,7 @@ namespace MessageService
                 {
                     if (usersInTeam[userInGame] == usersInTeam[nickname])
                     {
-                        _usersInGameContext[userInGame].ReceiveMessage(message);
+                        _usersInGameContext[userInGame].RecieveGameMessage(message);
                     }
                 }
                 catch (CommunicationObjectAbortedException communicationObjectAbortedException)

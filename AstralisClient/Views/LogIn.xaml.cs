@@ -54,7 +54,7 @@ namespace Astralis.Views
         {
             UserManagerClient client = new UserManagerClient();
             bool userOnline = client.IsUserOnline(nickname);
-            int userConfirmed = client.ConfirmUser(nickname, password);
+            int userConfirmed = client.ConfirmUserCredentials(nickname, password);
 
             if (userOnline)
             {
@@ -188,10 +188,6 @@ namespace Astralis.Views
                 this.Close();
                 gameWindow.ChangePage(lobby);
                 gameWindow.Show();
-            }
-            else
-            {
-                MessageBox.Show(Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

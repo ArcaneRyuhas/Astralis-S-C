@@ -93,7 +93,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Plays_Game">
-          <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Game">
@@ -105,7 +107,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Plays_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -159,7 +163,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserFriend_FriendStatus">
-          <End Role="FriendStatus" Type="Self.FriendStatus" Multiplicity="1" />
+          <End Role="FriendStatus" Type="Self.FriendStatus" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserFriend" Type="Self.UserFriend" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="FriendStatus">
@@ -183,7 +189,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserFriend_User2">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserFriend" Type="Self.UserFriend" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -366,7 +374,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserFriend_FriendStatus">
-          <End Role="FriendStatus" Type="Self.FriendStatus" Multiplicity="1" />
+          <End Role="FriendStatus" Type="Self.FriendStatus" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserFriend" Type="Self.UserFriend" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="FriendStatus">
@@ -378,7 +388,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Plays_Game">
-          <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Game">
@@ -390,7 +402,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Plays_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Plays" Type="Self.Plays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -442,7 +456,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserFriend_User2">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserFriend" Type="Self.UserFriend" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">

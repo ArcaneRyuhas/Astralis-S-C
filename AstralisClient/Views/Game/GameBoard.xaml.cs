@@ -65,7 +65,7 @@ namespace Astralis.Views.Game
             try
             {
                 InstanceContext context = new InstanceContext(this);
-                GameManagerClient _client = new GameManagerClient(context);
+                _client = new GameManagerClient(context);
 
                 _client.ConnectGame(UserSession.Instance().Nickname);
             }
@@ -359,16 +359,15 @@ namespace Astralis.Views.Game
             if (_gameManager.IsMyTurn && _selectedCard != null)
             {
                 Grid boardCardSlot = sender as Grid;
+                Grid currentCardParent = VisualTreeHelper.GetParent(_selectedCard) as Grid;
 
-                MoveCardFromBoardSlotToAnother(boardCardSlot);
-                MoveCardFromHandToBoard(boardCardSlot);
+                MoveCardFromBoardSlotToAnother(boardCardSlot, currentCardParent);
+                MoveCardFromHandToBoard(boardCardSlot, currentCardParent);
             }
         }
 
-        private void MoveCardFromHandToBoard(Grid boardCardSlot)
+        private void MoveCardFromHandToBoard(Grid boardCardSlot, Grid currentCardParent)
         {
-            Grid currentCardParent = VisualTreeHelper.GetParent(_selectedCard) as Grid;
-
             if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && _userTeam.UseMana(_selectedCard.Card.Mana))
             {
                 _selectedCard.IsSelected = false;
@@ -384,10 +383,8 @@ namespace Astralis.Views.Game
             }
         }
 
-        private void MoveCardFromBoardSlotToAnother(Grid boardCardSlot)
+        private void MoveCardFromBoardSlotToAnother(Grid boardCardSlot, Grid currentCardParent)
         {
-            Grid currentCardParent = VisualTreeHelper.GetParent(_selectedCard) as Grid;
-
             if (currentCardParent != boardCardSlot && currentCardParent != gdPlayerHand && boardCardSlot.Children.Count == 0)
             {
                 _selectedCard.IsSelected = false;
@@ -418,7 +415,7 @@ namespace Astralis.Views.Game
             }
         }
 
-        public void ShowGameDrawedCard(string nickname, int [] cardId)
+        public void ShowCardDrawedInGame(string nickname, int [] cardId)
         {
             foreach(int Id in cardId) 
             {
@@ -592,7 +589,7 @@ namespace Astralis.Views.Game
             }
         }
 
-        public void ReceiveMessageGame(string message)
+        public void RecieveGameMessage(string message)
         {
             tbChat.Text = tbChat.Text + "\n" + message;
         }

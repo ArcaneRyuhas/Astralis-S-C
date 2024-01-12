@@ -69,11 +69,11 @@
   <wsdl:message name="IUserManager_AddGuestUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddGuestUserResponse" />
   </wsdl:message>
-  <wsdl:message name="IUserManager_ConfirmUser_InputMessage">
-    <wsdl:part name="parameters" element="tns:ConfirmUser" />
+  <wsdl:message name="IUserManager_ConfirmUserCredentials_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmUserCredentials" />
   </wsdl:message>
-  <wsdl:message name="IUserManager_ConfirmUser_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ConfirmUserResponse" />
+  <wsdl:message name="IUserManager_ConfirmUserCredentials_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmUserCredentialsResponse" />
   </wsdl:message>
   <wsdl:message name="IUserManager_FindUserByNickname_InputMessage">
     <wsdl:part name="parameters" element="tns:FindUserByNickname" />
@@ -285,11 +285,11 @@
   <wsdl:message name="IGameManager_ShowUsersInGame_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowUsersInGameResponse" />
   </wsdl:message>
-  <wsdl:message name="IGameManager_ShowGameDrawedCard_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:ShowGameDrawedCard" />
+  <wsdl:message name="IGameManager_ShowCardDrawedInGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowCardDrawedInGame" />
   </wsdl:message>
-  <wsdl:message name="IGameManager_ShowGameDrawedCard_InputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:ShowGameDrawedCardResponse" />
+  <wsdl:message name="IGameManager_ShowCardDrawedInGame_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowCardDrawedInGameResponse" />
   </wsdl:message>
   <wsdl:message name="IGameManager_ShowGamePlayerEndedTurn_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ShowGamePlayerEndedTurn" />
@@ -308,6 +308,12 @@
   </wsdl:message>
   <wsdl:message name="IGameManager_EndGameClient_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:EndGameClientResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_RecieveGameMessage_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RecieveGameMessage" />
+  </wsdl:message>
+  <wsdl:message name="IGameManager_RecieveGameMessage_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RecieveGameMessageResponse" />
   </wsdl:message>
   <wsdl:message name="IEndGame_GetEndGameUsers_InputMessage">
     <wsdl:part name="parameters" element="tns:GetEndGameUsers" />
@@ -336,9 +342,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/AddGuestUser" message="tns:IUserManager_AddGuestUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/AddGuestUserResponse" message="tns:IUserManager_AddGuestUser_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ConfirmUser">
-      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/ConfirmUser" message="tns:IUserManager_ConfirmUser_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/ConfirmUserResponse" message="tns:IUserManager_ConfirmUser_OutputMessage" />
+    <wsdl:operation name="ConfirmUserCredentials">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/ConfirmUserCredentials" message="tns:IUserManager_ConfirmUserCredentials_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserManager/ConfirmUserCredentialsResponse" message="tns:IUserManager_ConfirmUserCredentials_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="FindUserByNickname">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserManager/FindUserByNickname" message="tns:IUserManager_FindUserByNickname_InputMessage" />
@@ -500,9 +506,9 @@
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ShowUsersInGame" message="tns:IGameManager_ShowUsersInGame_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ShowUsersInGameResponse" message="tns:IGameManager_ShowUsersInGame_InputCallbackMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ShowGameDrawedCard">
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ShowGameDrawedCard" message="tns:IGameManager_ShowGameDrawedCard_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ShowGameDrawedCardResponse" message="tns:IGameManager_ShowGameDrawedCard_InputCallbackMessage" />
+    <wsdl:operation name="ShowCardDrawedInGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ShowCardDrawedInGame" message="tns:IGameManager_ShowCardDrawedInGame_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/ShowCardDrawedInGameResponse" message="tns:IGameManager_ShowCardDrawedInGame_InputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="ShowGamePlayerEndedTurn">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/ShowGamePlayerEndedTurn" message="tns:IGameManager_ShowGamePlayerEndedTurn_OutputCallbackMessage" />
@@ -515,6 +521,10 @@
     <wsdl:operation name="EndGameClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/EndGameClient" message="tns:IGameManager_EndGameClient_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/EndGameClientResponse" message="tns:IGameManager_EndGameClient_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RecieveGameMessage">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameManager/RecieveGameMessage" message="tns:IGameManager_RecieveGameMessage_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameManager/RecieveGameMessageResponse" message="tns:IGameManager_RecieveGameMessage_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEndGame">
@@ -556,8 +566,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ConfirmUser">
-      <soap12:operation soapAction="http://tempuri.org/IUserManager/ConfirmUser" style="document" />
+    <wsdl:operation name="ConfirmUserCredentials">
+      <soap12:operation soapAction="http://tempuri.org/IUserManager/ConfirmUserCredentials" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -913,8 +923,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ShowGameDrawedCard">
-      <soap12:operation soapAction="http://tempuri.org/IGameManager/ShowGameDrawedCard" style="document" />
+    <wsdl:operation name="ShowCardDrawedInGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/ShowCardDrawedInGame" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -942,6 +952,15 @@
     </wsdl:operation>
     <wsdl:operation name="EndGameClient">
       <soap12:operation soapAction="http://tempuri.org/IGameManager/EndGameClient" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecieveGameMessage">
+      <soap12:operation soapAction="http://tempuri.org/IGameManager/RecieveGameMessage" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
