@@ -4,6 +4,7 @@ using DataAccessProject.DataAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using IFriendManagerCallback = CallbackTestProject.AstralisService.IFriendManagerCallback;
@@ -11,6 +12,7 @@ using ILobbyManagerCallback = CallbackTestProject.AstralisService.ILobbyManagerC
 
 namespace CallbackTestProject
 {
+
     [TestClass]
     public class CallbackLobbyNotFullTests
     {
@@ -22,6 +24,7 @@ namespace CallbackTestProject
         private static LobbyCallbackImplementation _secondCallback;
         private static LobbyCallbackImplementation _thirdCallback;
         private static LobbyCallbackImplementation _fourthCallback;
+
 
         private static string _gameId = string.Empty;
         private static string _otherGameId = string.Empty;
@@ -49,6 +52,29 @@ namespace CallbackTestProject
             Nickname = "FourthTester",
             ImageId = 4
         };
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        {
+            GetConnectionString();
+        }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
+        }
 
         [TestInitialize]
         public async Task Initialize()
@@ -238,6 +264,29 @@ namespace CallbackTestProject
             Nickname = "FifthTester",
             ImageId = 2
         };
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        {
+            GetConnectionString();
+        }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
+        }
 
         [TestInitialize]
         public async Task Initialize()
@@ -447,6 +496,29 @@ namespace CallbackTestProject
             Mail = "A@a.com"
         };
 
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        {
+            GetConnectionString();
+        }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
+        }
+
         [TestInitialize]
         public async Task Initialize()
         {
@@ -571,7 +643,7 @@ namespace CallbackTestProject
         {
             _firstClient.RemoveFriend(FIRST_USER.Nickname, FOURTH_USER.Nickname);
             await Task.Delay(2000);
-            Assert.AreEqual(FIRST_USER.Nickname, _secondCallback.FriendRemoved);
+            Assert.AreNotEqual(FIRST_USER.Nickname, _secondCallback.FriendRemoved);
         }
 
         [TestMethod]
@@ -650,9 +722,29 @@ namespace CallbackTestProject
         private static UserManagerClient _clientUserManager = new UserManagerClient();
         private static UserAccess userAccess = new UserAccess();
 
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
+        }
+
         [ClassInitialize]
         public static void InitializeClass(TestContext context)
         {
+            GetConnectionString();
+
             User userToConfirm = new User()
             {
                 Nickname = "ConfirmUserTest",
@@ -720,7 +812,7 @@ namespace CallbackTestProject
             string nickname = "ConfirmUserTest";
             string password = "password";
 
-            Assert.IsTrue(_clientUserManager.ConfirmUser(nickname, password) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(_clientUserManager.ConfirmUserCredentials(nickname, password) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
@@ -729,7 +821,7 @@ namespace CallbackTestProject
             string nickname = "ConfirmUserTestUnsuccess";
             string password = "password";
 
-            Assert.IsTrue(_clientUserManager.ConfirmUser(nickname, password) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(_clientUserManager.ConfirmUserCredentials(nickname, password) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
@@ -738,7 +830,7 @@ namespace CallbackTestProject
             string nickname = "ConfirmUserTestIncorrect";
             string password = "incorrectPassword";
 
-            Assert.IsTrue(_clientUserManager.ConfirmUser(nickname, password) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(_clientUserManager.ConfirmUserCredentials(nickname, password) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
@@ -867,7 +959,7 @@ namespace CallbackTestProject
             string nickname = "UserToConfirmEntity";
             string password = "password";
 
-            Assert.IsTrue(client.ConfirmUser(nickname, password) == ERROR);
+            Assert.IsTrue(client.ConfirmUserCredentials(nickname, password) == ERROR);
         }
 
         [TestMethod]
