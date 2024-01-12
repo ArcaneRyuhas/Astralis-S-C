@@ -34,13 +34,13 @@ namespace CallbackTestProject
 
         private static User SECOND_USER = new User()
         {
-            Nickname = "SecondtTester",
+            Nickname = "SecondTester",
             ImageId = 2
         };
 
         private static User THIRD_USER = new User()
         {
-            Nickname = "LastTester",
+            Nickname = "ThirdTester",
             ImageId = 3
         };
 
@@ -81,6 +81,7 @@ namespace CallbackTestProject
             _secondClient.DisconnectFromLobby(SECOND_USER);
             _thirdClient.DisconnectFromLobby(THIRD_USER);
             _fourthClient.DisconnectFromLobby(FOURTH_USER);
+
             GameAccess gameAccess = new GameAccess();
 
             gameAccess.CleanupGame(_gameId);
@@ -88,10 +89,9 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public async Task ConnectToLobbySuccesful()
+        public async Task ShowConnectionToLobbySuccesful()
         {
             _fourthClient.ConnectToLobby(FOURTH_USER, _gameId);
-
             await Task.Delay(5000);
             Assert.AreEqual(FOURTH_USER.Nickname, _firstCallback.ConnectionInLobby);
             Assert.AreEqual(FOURTH_USER.Nickname, _secondCallback.ConnectionInLobby);
@@ -101,18 +101,17 @@ namespace CallbackTestProject
         public async Task ConnectToLobbyUnsuccesful()
         {
             string gameNotCreated = "gameNotCreated";
-            _fourthClient.ConnectToLobby(FOURTH_USER, gameNotCreated);
 
+            _fourthClient.ConnectToLobby(FOURTH_USER, gameNotCreated);
             await Task.Delay(5000);
             Assert.AreNotEqual(FOURTH_USER.Nickname, _firstCallback.ConnectionInLobby);
             Assert.AreNotEqual(FOURTH_USER.Nickname, _secondCallback.ConnectionInLobby);
         }
 
         [TestMethod]
-        public async Task ConnectToDifferentServer()
+        public async Task NoShowOfConnectionInDifferentLobby()
         {
             _fourthClient.ConnectToLobby(FOURTH_USER, _gameId);
-
             await Task.Delay(5000);
             Assert.AreNotEqual(FOURTH_USER.Nickname, _thirdCallback.ConnectionInLobby);
         }
@@ -121,7 +120,6 @@ namespace CallbackTestProject
         public async Task ShowUsersInLobbySuccessful()
         {
             _fourthClient.ConnectToLobby(FOURTH_USER, _gameId);
-
             await Task.Delay(2000);
             Assert.IsNotNull(_fourthCallback.ConnectedToLobby);
         }
@@ -130,16 +128,14 @@ namespace CallbackTestProject
         public async Task ShowUsersInLobbyInNewLobby()
         {
             _fourthClient.CreateLobby(FOURTH_USER);
-
             await Task.Delay(2000);
             Assert.IsNull(_fourthCallback.ConnectedToLobby);
         }
 
         [TestMethod]
-        public async Task DisconnectionFromLobbySuccesful()
+        public async Task ShowDisconnectionFromLobbySuccesful()
         {
             _secondClient.DisconnectFromLobby(SECOND_USER);
-
             await Task.Delay(2000);
             Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.DisconnectionInLobby);
         }
@@ -148,14 +144,13 @@ namespace CallbackTestProject
         public async Task DisconnectionFromLobbyUnsuccesful()
         {
             _fourthClient.DisconnectFromLobby(FOURTH_USER);
-
             await Task.Delay(2000);
             Assert.AreNotEqual(FOURTH_USER.Nickname, _firstCallback.DisconnectionInLobby);
             Assert.AreNotEqual(FOURTH_USER.Nickname, _secondCallback.DisconnectionInLobby);
         }
 
         [TestMethod]
-        public async Task DiscconnectionFromOtherLobby()
+        public async Task NoShowDisconnectionFromOtherLobby()
         {
             _thirdClient.DisconnectFromLobby(THIRD_USER);
 
@@ -166,10 +161,9 @@ namespace CallbackTestProject
 
 
         [TestMethod]
-        public async Task KickedSuccesfull()
+        public async Task KickedSuccesfullFromLobby()
         {
             _firstClient.KickUserFromLobby(SECOND_USER.Nickname);
-
             await Task.Delay(2000);
             Assert.IsTrue(_secondCallback.BeenKicked);
             Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.DisconnectionInLobby);
@@ -177,55 +171,25 @@ namespace CallbackTestProject
 
 
         [TestMethod]
-        public async Task KickedUnsuccesfull()
+        public async Task KickedUnsuccesfullFromLobby()
         {
 
             _firstClient.KickUserFromLobby(FOURTH_USER.Nickname);
-
             await Task.Delay(2000);
             Assert.IsFalse(_fourthCallback.BeenKicked);
         }
 
-        [TestMethod]
-        public async Task KickedFromOtherLobby()
-        {
-            _firstClient.KickUserFromLobby(SECOND_USER.Nickname);
-
-            await Task.Delay(2000);
-            Assert.IsTrue(_secondCallback.BeenKicked);
-            Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.DisconnectionInLobby);
-        }
-
-
-        [TestMethod]
-        public async Task DisconnectionUnsuccesful()
-        {
-            _fourthClient.DisconnectFromLobby(FOURTH_USER);
-
-            await Task.Delay(2000);
-            Assert.AreNotEqual(FOURTH_USER.Nickname, _firstCallback.DisconnectionInLobby);
-        }
-
-        [TestMethod]
-        public async Task DisconnectionFromDifferentLobby()
-        {
-            _secondClient.DisconnectFromLobby(SECOND_USER);
-
-            await Task.Delay(2000);
-            Assert.AreNotEqual(SECOND_USER.Nickname, _thirdCallback.DisconnectionInLobby);
-        }
 
         [TestMethod]
         public async Task SendUsersFromGameToLobbyUnsuccesful()
         {
             _firstClient.SendUsersFromLobbyToGame(FIRST_USER.Nickname);
-
             await Task.Delay(2000);
             Assert.IsFalse(_firstCallback.GameStarted);
         }
 
     }
- 
+
     [TestClass]
     public class CallbackFullLobbyTests
     {
@@ -241,7 +205,6 @@ namespace CallbackTestProject
         private static LobbyCallbackImplementation _fifthCallback;
 
         private const int FIRST_TEAM = 1;
-        private const int SECOND_TEAM = 2;
 
         private static string _gameId = string.Empty;
         private static string _otherGameId = string.Empty;
@@ -254,13 +217,13 @@ namespace CallbackTestProject
 
         private static User SECOND_USER = new User()
         {
-            Nickname = "SecondtTester",
+            Nickname = "SecondTester",
             ImageId = 2
         };
 
         private static User THIRD_USER = new User()
         {
-            Nickname = "LastTester",
+            Nickname = "ThirdTester",
             ImageId = 3
         };
 
@@ -297,7 +260,7 @@ namespace CallbackTestProject
             _fifthClient = new LobbyManagerClient(new InstanceContext(_fourthCallback));
 
             await Task.Delay(2000);
-            _secondClient.ConnectToLobby(SECOND_USER ,_gameId);
+            _secondClient.ConnectToLobby(SECOND_USER, _gameId);
             await Task.Delay(2000);
             _thirdClient.ConnectToLobby(THIRD_USER, _gameId);
             await Task.Delay(2000);
@@ -308,10 +271,9 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public async Task UpdateLobbyUserTeam()
+        public async Task ShowUpdateLobbyUserTeam()
         {
             _secondClient.ChangeLobbyUserTeam(SECOND_USER.Nickname, FIRST_TEAM);
-
             await Task.Delay(10000);
             Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.NicknameTeamChange);
             Assert.AreEqual(FIRST_TEAM, _firstCallback.TeamChanged);
@@ -322,24 +284,21 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public async Task UpdateLobbyUserTeamFromOtherGame()
+        public async Task NoShowUpdateLobbyUserTeamFromOtherGame()
         {
             await Task.Delay(2000);
-
             _secondClient.ChangeLobbyUserTeam(SECOND_USER.Nickname, FIRST_TEAM);
-
             await Task.Delay(4000);
             Assert.AreNotEqual(SECOND_USER.Nickname, _fifthCallback.NicknameTeamChange);
             Assert.AreNotEqual(FIRST_TEAM, _fifthCallback.TeamChanged);
         }
 
         [TestMethod]
-        public async Task SendMessageLobbySuccesfull()
+        public async Task ShowSendMessageToLobbySuccesfull()
         {
-            string message = "SecondUser: Message";
+            string message = "SecondTester: Message";
 
             _secondClient.SendMessage(message, SECOND_USER.Nickname);
-
             await Task.Delay(5000);
             Assert.AreEqual(message, _firstCallback.Message);
             Assert.AreEqual(message, _thirdCallback.Message);
@@ -347,12 +306,11 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public async Task SendMessageToOtherLobby()
+        public async Task NoShowSendMessageToOtherLobby()
         {
-            string message = "SecondUser: OtherLobbyMessage";
+            string message = "SecondTester: OtherLobbyMessage";
 
             _secondClient.SendMessage(message, SECOND_USER.Nickname);
-
             await Task.Delay(4000);
             Assert.AreNotEqual(message, _fifthCallback.Message);
         }
@@ -372,7 +330,7 @@ namespace CallbackTestProject
             gameAccess.CleanupGame(_otherGameId);
         }
     }
-    
+
     public class LobbyCallbackImplementation : ILobbyManagerCallback
     {
         public bool BeenKicked { get; set; }
@@ -439,7 +397,7 @@ namespace CallbackTestProject
             ConnectedToLobby = users;
         }
     }
-    
+
     [TestClass]
     public class CallbackOnlineUsersTests
     {
@@ -497,10 +455,9 @@ namespace CallbackTestProject
             userAccess.CreateUser(FOURTH_USER);
 
             _firstCallback = new FriendManagerCallbackImplementation();
-            _firstClient = new FriendManagerClient (new InstanceContext(_firstCallback));
+            _firstClient = new FriendManagerClient(new InstanceContext(_firstCallback));
 
             await Task.Delay(1000);
-
             _firstClient.SubscribeToFriendManager(FIRST_USER.Nickname);
 
             _secondCallback = new FriendManagerCallbackImplementation();
@@ -532,26 +489,23 @@ namespace CallbackTestProject
             _secondClient.UnsubscribeToFriendManager(SECOND_USER.Nickname);
             _thirdClient.UnsubscribeToFriendManager(THIRD_USER.Nickname);
             _fourthClient.UnsubscribeToFriendManager(FOURTH_USER.Nickname);
-
             userAccess.DeleteUser(FIRST_USER.Nickname);
             userAccess.DeleteUser(SECOND_USER.Nickname);
             userAccess.DeleteUser(FOURTH_USER.Nickname);
         }
 
         [TestMethod]
-        public async Task ShowConnectionToGameSuccesful()
+        public async Task ShowSubscriptionToFriendManagerSuccesful()
         {
             _thirdClient.SubscribeToFriendManager(THIRD_USER.Nickname);
-
             await Task.Delay(2000);
             Assert.AreEqual(THIRD_USER.Nickname, _firstCallback.UserConnected);
         }
 
         [TestMethod]
-        public async Task ShowDisconnectionInGameSuccesful()
+        public async Task ShowUnsubscriptionToFriendManagerSuccesful()
         {
             _secondClient.UnsubscribeToFriendManager(SECOND_USER.Nickname);
-
             await Task.Delay(2000);
             Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.UserDisconnected);
         }
@@ -561,7 +515,6 @@ namespace CallbackTestProject
         {
             _secondClient.SendFriendRequest(SECOND_USER.Nickname, FIRST_USER.Nickname);
             await Task.Delay(2000);
-
             Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.FriendRequest);
         }
 
@@ -570,7 +523,6 @@ namespace CallbackTestProject
         {
             _secondClient.SendFriendRequest(SECOND_USER.Nickname, FIRST_USER.Nickname);
             await Task.Delay(2000);
-
             Assert.AreNotEqual(SECOND_USER.Nickname, _fourthCallback.FriendRequest);
         }
 
@@ -583,7 +535,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public async Task AcceptFriendRequestSuccesful()
+        public async Task ShowAcceptFriendRequestSuccesful()
         {
             _secondClient.ReplyFriendRequest(SECOND_USER.Nickname, FOURTH_USER.Nickname, true);
             await Task.Delay(6000);
@@ -607,14 +559,15 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public async Task RemoveFriendSuccesful()
+        public async Task ShowRemoveFriendSuccesful()
         {
             _firstClient.RemoveFriend(FIRST_USER.Nickname, FOURTH_USER.Nickname);
             await Task.Delay(2000);
             Assert.AreEqual(FIRST_USER.Nickname, _fourthCallback.FriendRemoved);
         }
 
-        public async Task NoShowRemoveFriend()
+        [TestMethod]
+        public async Task NoShowElsesRemoveFriend()
         {
             _firstClient.RemoveFriend(FIRST_USER.Nickname, FOURTH_USER.Nickname);
             await Task.Delay(2000);
@@ -622,7 +575,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public async Task ShowOnlineFriends()
+        public async Task ShowFriends()
         {
             _thirdClient.SubscribeToFriendManager(SECOND_USER.Nickname);
             await Task.Delay(2000);
@@ -635,10 +588,15 @@ namespace CallbackTestProject
     public class FriendManagerCallbackImplementation : IFriendManagerCallback
     {
         public string FriendRemoved { get; set; }
+
         public string FriendAccepted { get; set; }
+
         public string FriendRequest { get; set; }
+
         public Dictionary<string, Tuple<bool, int>> Friends { get; set; }
+
         public string UserConnected { get; set; }
+
         public string UserDisconnected { get; set; }
 
         public FriendManagerCallbackImplementation()
@@ -685,7 +643,6 @@ namespace CallbackTestProject
     [TestClass]
     public class UserManagerTest
     {
-
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
         private const string NICKNAME_ERROR = "ERROR";
@@ -758,9 +715,8 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void SuccessfullyConfirmUserUM()
+        public void SuccessfullyConfirmUserMessageService()
         {
-
             string nickname = "ConfirmUserTest";
             string password = "password";
 
@@ -768,7 +724,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void UnSuccessfullyConfirmUserUM()
+        public void UnSuccessfullyConfirmUserMessageService()
         {
             string nickname = "ConfirmUserTestUnsuccess";
             string password = "password";
@@ -777,16 +733,16 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void WrongPasswordConfirmUserUM()
+        public void WrongPasswordConfirmUserMessageService()
         {
             string nickname = "ConfirmUserTestIncorrect";
-            string password = "incorrectPassword"; 
+            string password = "incorrectPassword";
 
             Assert.IsTrue(_clientUserManager.ConfirmUser(nickname, password) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
-        public void UnSuccessfullyAddUserUM()
+        public void UnSuccessfullyAddUserMessageService()
         {
             User userToAddTest = new User()
             {
@@ -800,7 +756,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void SuccessfullyAddUserUM()
+        public void SuccessfullyAddUserMessageService()
         {
             User userToAdd = new User()
             {
@@ -814,13 +770,13 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void SuccessfullyAddGuestUM()
+        public void SuccessfullyAddGuestMessageService()
         {
             Assert.IsTrue(_clientUserManager.AddGuestUser().Nickname != NICKNAME_ERROR);
         }
 
         [TestMethod]
-        public void SuccessfullyFindUserByNicknameUM()
+        public void SuccessfullyFindUserByNicknameMessageService()
         {
             string nickname = "UserToFindTest";
 
@@ -828,7 +784,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void UnSuccessfullyFindUserByNicknameUM()
+        public void UnSuccessfullyFindUserByNicknameMessageService()
         {
             string nickname = "UserToFindTestUnsuccess";
 
@@ -836,7 +792,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void SuccessfullyGetUserByNicknameUM()
+        public void SuccessfullyGetUserByNicknameMessageService()
         {
             string nickname = "UserToGetTest";
 
@@ -844,7 +800,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void UnsuccessfullyGetUserByNicknameUM()
+        public void UnsuccessfullyGetUserByNicknameMessageService()
         {
             string nickname = "UserToGetTestUnsuccesful";
 
@@ -852,7 +808,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void UnSuccessfullyUpdateUserUM()
+        public void UnSuccessfullyUpdateUserMessageService()
         {
             User userToUpdate = new User()
             {
@@ -866,7 +822,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void SuccessfullyUpdateUserUM()
+        public void SuccessfullyUpdateUserMessageService()
         {
             User userUpdated = new User()
             {
@@ -906,7 +862,7 @@ namespace CallbackTestProject
         private static UserManagerClient client = new UserManagerClient();
 
         [TestMethod]
-        public void ErrorConfirmUserUM()
+        public void ErrorConfirmUserMessageService()
         {
             string nickname = "UserToConfirmEntity";
             string password = "password";
@@ -915,7 +871,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void ErrorAddUserUM()
+        public void ErrorAddUserMessageService()
         {
             User userToAdd = new User()
             {
@@ -929,13 +885,13 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void ErrorAddGuestUM()
+        public void ErrorAddGuestMessageService()
         {
             Assert.IsTrue(client.AddGuestUser().Nickname == NICKNAME_ERROR);
         }
 
         [TestMethod]
-        public void ErrorFindUserByNicknameUM()
+        public void ErrorFindUserByNicknameMessageService()
         {
             string nickname = "UserToFindTestERROR";
 
@@ -943,7 +899,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void ErrorGetUserByNicknameUM()
+        public void ErrorGetUserByNicknameMessageService()
         {
             string nickname = "UserToGetTestError";
 
@@ -951,7 +907,7 @@ namespace CallbackTestProject
         }
 
         [TestMethod]
-        public void ErrorUpdateUserUM()
+        public void ErrorUpdateUserMessageService()
         {
             User userToUpdate = new User()
             {
