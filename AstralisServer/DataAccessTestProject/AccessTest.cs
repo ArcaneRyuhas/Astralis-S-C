@@ -22,9 +22,12 @@ namespace DataAccessTestProject
         private static UserAccess userAccess = new UserAccess();
         private const int GUEST_CREATED_FOR_TEST = 1;
 
+
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
+            GetConnectionString();
+
             User userToAdd = new User()
             {
                 Nickname = "UserRepeated",
@@ -87,6 +90,24 @@ namespace DataAccessTestProject
                 Password = "password"
             };
             userAccess.CreateUser(userToDelete);
+        }
+
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
         }
 
         [TestMethod]
@@ -267,6 +288,28 @@ namespace DataAccessTestProject
     {
         private static UserAccess userAccess = new UserAccess();
 
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        {
+            GetConnectionString();
+        }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
+        }
 
         [TestMethod]
         public void CreatUserEntityException()
@@ -393,6 +436,8 @@ namespace DataAccessTestProject
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
+            GetConnectionString();
+
             User user1SuccessSendTest = new User()
             {
                 Nickname = "User1SuccessSendTest",
@@ -407,6 +452,7 @@ namespace DataAccessTestProject
                 Mail = "FrienAccesTestusr2@hotmail.com",
                 Password = "password"
             };
+
             userAccess.CreateUser(user1SuccessSendTest);
             userAccess.CreateUser(user2SuccessSendTest);
 
@@ -425,6 +471,7 @@ namespace DataAccessTestProject
                 Mail = "FrienAccesTestusr2@hotmail.com",
                 Password = "password"
             };
+
             userAccess.CreateUser(user1UnsuccessSendTest);
             userAccess.CreateUser(user2UnsuccessSendTest);
             friendAccess.SendFriendRequest(user1UnsuccessSendTest.Nickname, user2UnsuccessSendTest.Nickname);
@@ -444,6 +491,7 @@ namespace DataAccessTestProject
                 Mail = "FrienAccesTestusr2@hotmail.com",
                 Password = "password"
             };
+
             userAccess.CreateUser(user1SuccessRemoveTest);
             userAccess.CreateUser(user2SuccessRemoveTest);
             friendAccess.SendFriendRequest(user1SuccessRemoveTest.Nickname, user2SuccessRemoveTest.Nickname);
@@ -464,10 +512,27 @@ namespace DataAccessTestProject
                 Mail = "FrienAccesTestusr2@hotmail.com",
                 Password = "password"
             };
+
             userAccess.CreateUser(user1SuccessReplyTest);
             userAccess.CreateUser(user2SuccessReplyTest);
             friendAccess.SendFriendRequest(user1SuccessReplyTest.Nickname, user2SuccessReplyTest.Nickname);
+        }
 
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
         }
 
         [TestMethod]
@@ -549,6 +614,29 @@ namespace DataAccessTestProject
         private static FriendAccess friendAccess = new FriendAccess();
         private const bool ACCEPT_FRIEND_REQUEST = true;
 
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        {
+            GetConnectionString();
+        }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
+        }
+
         [TestMethod]
         public void SendFriendRequestEntityException()
         {
@@ -594,7 +682,6 @@ namespace DataAccessTestProject
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
         private const bool BOOL_VALIDATION_FAILURE = false;
-        private const string GAME_ID = "TestGameId";
         private const int WINNER_TEAM_TEST = 1;
         private static GameAccess gameAccess = new GameAccess();
         private static UserAccess userAccess = new UserAccess();
@@ -602,12 +689,10 @@ namespace DataAccessTestProject
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
+            GetConnectionString();
             gameAccess.CreateGame("GameId2");
-
             gameAccess.CreateGame("GameId3");
-
             gameAccess.CreateGame("GameId5");
-
 
             User userToBan = new User()
             {
@@ -616,6 +701,7 @@ namespace DataAccessTestProject
                 Mail = "UserToBan@hotmail.com",
                 Password = "password"
             };
+
             userAccess.CreateUser(userToBan);
 
             User userCanPlay = new User()
@@ -625,6 +711,7 @@ namespace DataAccessTestProject
                 Mail = "UserCanPlay@hotmail.com",
                 Password = "password"
             };
+
             userAccess.CreateUser(userCanPlay);
 
             User userCanPlayUnsuccessfully = new User()
@@ -634,9 +721,9 @@ namespace DataAccessTestProject
                 Mail = "UserCanPlay@hotmail.com",
                 Password = "password"
             };
+
             userAccess.CreateUser(userCanPlayUnsuccessfully);
             gameAccess.BanUser(userCanPlayUnsuccessfully.Nickname);
-
             gameAccess.CreateGame("GameId7");
 
             User userBanToRemove = new User()
@@ -646,9 +733,26 @@ namespace DataAccessTestProject
                 Mail = "UserBanToRemove@hotmail.com",
                 Password = "password"
             };
+
             userAccess.CreateUser(userBanToRemove);
             gameAccess.BanUser(userBanToRemove.Nickname);
+        }
 
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
         }
 
         [TestMethod]
@@ -782,8 +886,31 @@ namespace DataAccessTestProject
     }
 
     [TestClass]
-    public class GamekAccessTestExceptions
+    public class GameAccessTestExceptions
     {
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        {
+            GetConnectionString();
+        }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
+        }
+
         private const int WINNER_TEAM_TEST = 1;
         private static GameAccess gameAccess = new GameAccess();
 
@@ -886,10 +1013,11 @@ namespace DataAccessTestProject
         private static DeckAccess _deckAccess = new DeckAccess();
         private static AstralisDBEntities _context = new AstralisDBEntities();
 
-
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
+            GetConnectionString();
+
             User userDefaultDeck = new User()
             {
                 Nickname = "UserDefaultDeck",
@@ -908,6 +1036,23 @@ namespace DataAccessTestProject
             };
             _userAccess.CreateUser(userToGetDeck);
             _deckAccess.CreateDefaultDeck(_context, userToGetDeck.Nickname);
+        }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
         }
 
         [TestMethod]
@@ -939,10 +1084,31 @@ namespace DataAccessTestProject
     [TestClass]
     public class DeckAccessTestExceptions
     {
-
         private static DeckAccess deckAccess = new DeckAccess();
         private static AstralisDBEntities _context = new AstralisDBEntities();
 
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        {
+            GetConnectionString();
+        }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+
+                ConfigurationManager.RefreshSection("connectionStrings");
+
+            }
+        }
 
         [TestMethod]
         public void CreateDefaultDeckEntityException()
