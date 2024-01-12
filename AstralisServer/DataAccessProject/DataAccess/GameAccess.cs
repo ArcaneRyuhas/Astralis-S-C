@@ -18,7 +18,7 @@ namespace DataAccessProject.DataAccess
         {
             bool isSuccesfullyCreated = false;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 if (!GameIdIsRepeated(gameId))
                 {
@@ -40,7 +40,7 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
 
@@ -53,7 +53,7 @@ namespace DataAccessProject.DataAccess
 
                 result = context.SaveChanges();
 
-                if (result == INT_VALIDATION_FAILURE)
+                if (result > INT_VALIDATION_FAILURE)
                 {
                     result = INT_VALIDATION_SUCCESS;
                 }
@@ -66,10 +66,10 @@ namespace DataAccessProject.DataAccess
         {
             bool isRepeated = false;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-                var databaseGameId = context.Game.Find(gameId);
+                Game databaseGameId = context.Game.Find(gameId);
 
                 if (databaseGameId != null)
                 {
@@ -84,10 +84,10 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-                var gameRow = context.Game.Find(gameId);
+                Game gameRow = context.Game.Find(gameId);
 
                 if (gameRow != null)
                 {
@@ -108,7 +108,8 @@ namespace DataAccessProject.DataAccess
         public List<GamesWonInfo> GetTopGamesWon()
         {
             List<GamesWonInfo> gameInfo = new List<GamesWonInfo>();
-            using (var context = new AstralisDBEntities())
+
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 var query = context.Database.SqlQuery<GamesWonInfo>(
                         @"SELECT TOP 10 p.Nickname AS Username, COUNT(*) AS GamesWonCount
@@ -119,9 +120,9 @@ namespace DataAccessProject.DataAccess
                           ORDER BY GamesWonCount DESC;"
                     );
 
-                var results = query.ToList();
+                List<GamesWonInfo> results = query.ToList();
 
-                foreach (var result in results)
+                foreach (GamesWonInfo result in results)
                 {
                     GamesWonInfo gamesWonInfo = new GamesWonInfo()
                     {
@@ -141,14 +142,13 @@ namespace DataAccessProject.DataAccess
             int result = INT_VALIDATION_FAILURE;
             UserAccess userAccess = new UserAccess();
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
                 {
                     TimeSpan banDuration = TimeSpan.FromMinutes(30);
                     DateTime currentDateTime = DateTime.Now;
                     DateTime banExpirationTime = currentDateTime.Add(banDuration);
-
                     Ban ban = new Ban()
                     {
                         Nickname = nickname,
@@ -174,7 +174,7 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 DateTime currentDateTime = DateTime.Now;
                 TimeSpan currentTimeSpan = currentDateTime.TimeOfDay.Duration();
@@ -192,13 +192,14 @@ namespace DataAccessProject.DataAccess
 
             return result;
         }
+
         public int CleanupGame(string gameId)
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                var existingGame = context.Game.Find(gameId);
+                Game existingGame = context.Game.Find(gameId);
 
                 if (existingGame != null)
                 {
@@ -216,7 +217,7 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 Ban existingBan = context.Ban.FirstOrDefault(b => b.Nickname == nickname);
 

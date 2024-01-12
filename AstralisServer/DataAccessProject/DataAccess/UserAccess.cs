@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataAccessProject.DataAccess
@@ -16,11 +17,11 @@ namespace DataAccessProject.DataAccess
         {
             int maxGuestNumber = 0;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
 
-                var guestUsers = context.User
+                List<Contracts.User> guestUsers = context.User
                 .Where(user => user.nickName.StartsWith("Guest"))
                 .Select(databaseUser => new Contracts.User
                 {
@@ -34,13 +35,14 @@ namespace DataAccessProject.DataAccess
                 {
                     maxGuestNumber = guestUsers.Max(user =>
                     {
-                        int number = 0;
+                        int result = 0;
 
-                        if (int.TryParse(user.Nickname.Substring("Guest".Length), out number))
+                        if (int.TryParse(user.Nickname.Substring("Guest".Length), out int number))
                         {
-                            return number;
+                            result = number;
                         }
-                        return number;
+
+                        return result;
                     });
                 }
                 else
@@ -56,15 +58,17 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 if (FindUserByNickname(user.Nickname) == INT_VALIDATION_FAILURE)
                 {
                     context.Database.Log = Console.WriteLine;
-                    User databaseUser = new User();
-                    databaseUser.nickName = user.Nickname;
-                    databaseUser.imageId = (short)user.ImageId;
-                    databaseUser.mail = user.Mail;
+                    User databaseUser = new User
+                    {
+                        nickName = user.Nickname,
+                        imageId = (short)user.ImageId,
+                        mail = user.Mail
+                    };
 
                     context.User.Add(databaseUser);
 
@@ -132,10 +136,10 @@ namespace DataAccessProject.DataAccess
 
             if (FindUserByNickname(user.Nickname) == INT_VALIDATION_SUCCESS)
             {
-                using (var context = new AstralisDBEntities())
+                using (AstralisDBEntities context = new AstralisDBEntities())
                 {
                     context.Database.Log = Console.WriteLine;
-                    var databaseUser = context.User.Find(user.Nickname);
+                    User databaseUser = context.User.Find(user.Nickname);
 
                     if (databaseUser != null)
                     {
@@ -157,7 +161,6 @@ namespace DataAccessProject.DataAccess
                 }
             }
 
-
             return result;
         }
 
@@ -166,10 +169,10 @@ namespace DataAccessProject.DataAccess
             Contracts.User foundUser = new Contracts.User();
             foundUser.Nickname = USER_NICKNAME_ERROR;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-                var databaseUser = context.User.Find(nickname);
+                User databaseUser = context.User.Find(nickname);
 
                 if (databaseUser != null)
                 {
@@ -190,17 +193,17 @@ namespace DataAccessProject.DataAccess
         {
             int isFound = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-
-                var databaseUser = context.User.Find(nickname);
+                User databaseUser = context.User.Find(nickname);
 
                 if (databaseUser != null)
                 {
                     isFound = INT_VALIDATION_SUCCESS;
                 }
             }
+
             return isFound;
         }
 
@@ -208,13 +211,13 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 if (FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
                 {
                     context.Database.Log = Console.WriteLine;
-                    var databaseUser = context.User.Find(nickname);
-                    var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
+                    User databaseUser = context.User.Find(nickname);
+                    UserSession databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
 
                     if (databaseUsersession != null && databaseUsersession.password == password)
                     {
@@ -230,11 +233,11 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 if (FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
                 {
-                    var userToDelete = context.User.FirstOrDefault(u => u.nickName == nickname);
+                    User userToDelete = context.User.FirstOrDefault(u => u.nickName == nickname);
 
                     if (userToDelete != null)
                     {

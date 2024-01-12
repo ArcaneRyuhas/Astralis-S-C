@@ -20,10 +20,10 @@ namespace DataAccessProject.DataAccess
         {
             bool IsSucceded = false;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-                var friendRelationship = context.UserFriend
+                UserFriend friendRelationship = context.UserFriend
                     .FirstOrDefault(f =>
                         (f.Nickname1 == nickname && f.Nickname2 == nicknamefriendToRemove) ||
                         (f.Nickname1 == nicknamefriendToRemove && f.Nickname2 == nickname) &&
@@ -43,17 +43,16 @@ namespace DataAccessProject.DataAccess
 
         public bool FriendRequestExists(string nicknameSender, string nicknameReceiver)
         {
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-                var existingRequest = context.UserFriend
+                UserFriend existingRequest = context.UserFriend
                     .FirstOrDefault(f =>
                         (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReceiver) ||
                         (f.Nickname1 == nicknameReceiver && f.Nickname2 == nicknameSender) &&
                         f.FriendStatusId == IS_PENDING_FRIEND);
 
                 return existingRequest != null;
-
             }
         }
 
@@ -63,10 +62,10 @@ namespace DataAccessProject.DataAccess
 
             if (!FriendRequestExists(nicknameSender, nicknameReceiver))
             {
-                using (var context = new AstralisDBEntities())
+                using (AstralisDBEntities context = new AstralisDBEntities())
                 {
                     context.Database.Log = Console.WriteLine;
-                    var newFriendRequest = new UserFriend
+                    UserFriend newFriendRequest = new UserFriend
                     {
                         Nickname1 = nicknameSender,
                         Nickname2 = nicknameReceiver,
@@ -87,10 +86,10 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-                var existingRequest = context.UserFriend
+                UserFriend existingRequest = context.UserFriend
                     .FirstOrDefault(f =>
                         (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) ||
                         (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReciever) &&
@@ -126,11 +125,11 @@ namespace DataAccessProject.DataAccess
 
             AddFriends(nickname, onlineUsers, friendList);
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                var pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
+                List<UserFriend> pendingRequests = context.UserFriend.Where(f => (f.Nickname2 == nickname) && f.FriendStatusId == IS_PENDING_FRIEND).ToList();
 
-                foreach (var request in pendingRequests)
+                foreach (UserFriend request in pendingRequests)
                 {
                     if (onlineUsers.Contains(request.Nickname1))
                     {
@@ -155,12 +154,12 @@ namespace DataAccessProject.DataAccess
         {
             Tuple<bool, int> friendTuple;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-                var databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
+                List<UserFriend> databaseFriends = context.UserFriend.Where(databaseFriend => (databaseFriend.Nickname1 == nickname || databaseFriend.Nickname2 == nickname) && databaseFriend.FriendStatusId == IS_FRIEND).ToList();
 
-                foreach (var friend in databaseFriends)
+                foreach (UserFriend friend in databaseFriends)
                 {
                     if (friend.Nickname1 != nickname)
                     {

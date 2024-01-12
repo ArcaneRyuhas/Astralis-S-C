@@ -26,6 +26,7 @@ namespace MessageService.Mail
             {
                 _instance = new Mail();
             }
+
             return _instance;
         }
 
@@ -61,15 +62,16 @@ namespace MessageService.Mail
 
                 body = body.Replace("[field id = \"gameCode\"]", gameId);
                 mail.From = new MailAddress(_fromEmail, MAIL_DISPLAY_NAME);
+
                 mail.To.Add(to);
 
                 mail.Subject = "You are invited, use this code: " + gameId + "!";
                 mail.Body = body;
                 mail.IsBodyHtml = true;
-
                 smtpClient.Credentials = new NetworkCredential(_fromEmail, Decrypt(_password));
 
                 smtpClient.Send(mail);
+
                 message = "Mail was succesfully sent";
             }
             catch (SmtpException smtpException)
@@ -97,7 +99,6 @@ namespace MessageService.Mail
         private static string Decrypt(string encryptedText)
         {
             byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
-
             byte[] decryptedBytes = ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.CurrentUser);
 
             return Encoding.UTF8.GetString(decryptedBytes);

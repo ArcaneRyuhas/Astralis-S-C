@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DataAccessProject.DataAccess
 {
@@ -19,7 +15,6 @@ namespace DataAccessProject.DataAccess
         public int CreateDefaultDeck(AstralisDBEntities context, string nickname)
         {
             int result;
-
             Deck deck = new Deck
             {
                 Card = DEFAULT_DECK
@@ -56,7 +51,6 @@ namespace DataAccessProject.DataAccess
 
             return result;
         }
-
         
         public List<int> GetDeckByNickname(string nickname)
         {
@@ -65,7 +59,7 @@ namespace DataAccessProject.DataAccess
 
             if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
             {
-                using (var context = new AstralisDBEntities())
+                using (AstralisDBEntities context = new AstralisDBEntities())
                 {
                     UserDeck userDeck = new UserDeck();
                     userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
@@ -76,6 +70,5 @@ namespace DataAccessProject.DataAccess
             
             return cardList;
         }
-        
     }
 }

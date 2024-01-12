@@ -8,13 +8,11 @@ using DataAccessProject.DataAccess;
 using User = DataAccessProject.Contracts.User;
 using System.Data.SqlClient;
 using System.Data.Entity.Core;
-using System.Runtime.CompilerServices;
-using DataAccessProject;
+
 
 namespace MessageService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-
     public partial class MessageService : IUserManager
     {
         private const string NICKNAME_ERROR = "ERROR";
@@ -51,6 +49,7 @@ namespace MessageService
                 log.Error(sqlException);
                 result = ERROR;
             }
+
             return result;
         }
 
@@ -89,7 +88,6 @@ namespace MessageService
                 int maxGuestNumber = userAccess.GetHigherGuests();
                 int nextGuestNumber = maxGuestNumber + 1;
                 string guestNickname = $"Guest{nextGuestNumber}";
-
                 guestUser.Nickname = guestNickname;
                 guestUser.Password = guestNickname;
                 guestUser.ImageId = GUEST_IMAGE_ID;
@@ -138,7 +136,6 @@ namespace MessageService
         {
             UserAccess userAccess = new UserAccess();
             User foundUser = new User();
-
             foundUser.Nickname = NICKNAME_ERROR;
 
             try
@@ -183,7 +180,6 @@ namespace MessageService
             }
 
             return result;
-
         }
 
         public bool IsUserOnline(string nickname)
@@ -202,7 +198,7 @@ namespace MessageService
         private const string USER_NOT_FOUND = "UserNotFound";
         private const string ERROR_STRING = "ERROR";
         private const string VALIDATION_FAILURE_STRING = "FAILURE";
-        private const int gameFull = 4;
+        private const int GAME_FULL = 4;
 
         private static Dictionary<string, string> _usersInLobby = new Dictionary<string, string>();
         private static Dictionary<string, ILobbyManagerCallback> _usersContext = new Dictionary<string, ILobbyManagerCallback>();
@@ -220,11 +216,10 @@ namespace MessageService
         {
             int usersInGame = 0;
             bool gameIsNotFull = true;
-
             var groupedKeys = _usersInLobby.Where(pair => pair.Value == gameId).Select(pair => pair.Key);
             usersInGame = groupedKeys.Count();
             
-            if(usersInGame == gameFull)
+            if(usersInGame == GAME_FULL)
             {
                 gameIsNotFull = false;
             }
@@ -275,7 +270,6 @@ namespace MessageService
                     {
                         currentUserCallbackChannel.ShowUsersInLobby(users);
                         AddUserToLobbyDictionaries(user, gameId, currentUserCallbackChannel);
-                        
                     }
                     catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                     {
@@ -335,6 +329,7 @@ namespace MessageService
         {
             User userToDisconnect = new User();
             userToDisconnect.Nickname = userInTheLobby;
+
             DisconnectFromLobby(userToDisconnect);
         }
 
@@ -353,6 +348,7 @@ namespace MessageService
                 if (gameAccess.CreateGame(gameId) == IS_SUCCESFULL)
                 {
                     ILobbyManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<ILobbyManagerCallback>();
+
                     AddUserToLobbyDictionaries(user, gameId, currentUserCallbackChannel);
                 }
                 else
@@ -507,7 +503,7 @@ namespace MessageService
                     {
                         result += gameAccess.CreatePlaysRelation(user, gameId, _usersTeam[user]);
                     }
-                    catch(SqlException sqlException)
+                    catch (SqlException sqlException)
                     {
                         log.Error(sqlException);
                     }
@@ -522,7 +518,6 @@ namespace MessageService
 
         private void TellUsersToGoFromLobbyToGame(int result, List<string> usersNickname)
         {
-
             if (result > VALIDATION_FAILURE)
             {
                 foreach (string userInTheLobby in usersNickname)
@@ -562,6 +557,7 @@ namespace MessageService
                 if (ContainsBadWords(message))
                 {
                     GameAccess gameAccess = new GameAccess();
+
                     gameAccess.BanUser(nickname);
                     KickUserFromLobby(nickname);
                 }
@@ -601,7 +597,6 @@ namespace MessageService
         static bool ContainsBadWords(string text)
         {
             List<string> badwords = new List<string> {"fucker", "Yeison", "fuck" ,"putito", "puto", "marica", "jodido", "negro"};
-
             text = text.ToLower();
 
             return badwords.Exists(groseria => text.Contains(groseria.ToLower()));
@@ -610,7 +605,6 @@ namespace MessageService
         private string GenerateGameId()
         {
             Guid guid = Guid.NewGuid();
-
             string base64Guid = Convert.ToBase64String(guid.ToByteArray());
             string uniqueID = base64Guid.Replace("=", "").Substring(0, 6);
 
@@ -649,6 +643,7 @@ namespace MessageService
                 {
                     User userToDisconnect = new User();
                     userToDisconnect.Nickname = userNickname;
+
                     DisconnectFromLobby(userToDisconnect);
                 }
             }
@@ -659,7 +654,7 @@ namespace MessageService
     {
         private static Dictionary<string, IFriendManagerCallback> _onlineUsers = new Dictionary<string, IFriendManagerCallback>();
         private const bool ACCEPTED_FRIEND = true;
-        private static Object _lock = new Object();
+        private static readonly Object _lock = new Object();
 
         [OperationBehavior]
         public void SubscribeToFriendManager(string nickname)
@@ -708,7 +703,7 @@ namespace MessageService
 
         private void ShowUserSubscribedToFriendManager(string nickname)
         {
-            foreach (var user in _onlineUsers)
+            foreach (KeyValuePair<string, IFriendManagerCallback> user in _onlineUsers)
             {
                 try
                 {
@@ -1024,7 +1019,7 @@ namespace MessageService
             {
                 userDeck = deckAccess.GetDeckByNickname(nickname);
             }
-            catch(EntityException entityException)
+            catch (EntityException entityException)
             {
                 log.Error(entityException);
             }
@@ -1078,6 +1073,7 @@ namespace MessageService
             try
             {
                 GameAccess gameAccess = new GameAccess();
+
                 gameAccess.EndGame(winnerTeam, _usersInLobby[nickname]);
             }
             catch(EntityException entityException)
@@ -1119,7 +1115,6 @@ namespace MessageService
                 {
                     log.Error(objectDisposedException);
                 }
-
             }
         }
 
@@ -1137,7 +1132,7 @@ namespace MessageService
 
             foreach (string userInGame in usersInGame.Keys)
             {
-                if((usersInGame[userInGame] == usersInGame[nickname]) && (userInGame != nickname))
+                if ((usersInGame[userInGame] == usersInGame[nickname]) && (userInGame != nickname))
                 {
                    AllyEndedTurn(nickname, boardAfterTurn, userInGame);
                 }
@@ -1183,12 +1178,12 @@ namespace MessageService
                 CommunicationEndedException(nickname, userInGame);
                 log.Error(communicationObjectAbortedException);
             }
-            catch(CommunicationException communicationException)
+            catch (CommunicationException communicationException)
             {
                 CommunicationEndedException(nickname, userInGame);
                 log.Error(communicationException);
             }
-            catch(TimeoutException timeoutException)
+            catch (TimeoutException timeoutException)
             {
                 CommunicationEndedException(nickname, userInGame);
                 log.Error(timeoutException);
@@ -1338,6 +1333,7 @@ namespace MessageService
             {
                 usersWithTeam.Add(AddUserWithTeam(userNickname, usersInGame));
             }
+
             try
             {
                 currentUserCallbackChannel.ShowEndGameUsers(usersWithTeam);
@@ -1363,7 +1359,6 @@ namespace MessageService
         {
             UserWithTeam userWithTeam = new UserWithTeam();
             User user = GetUserByNickname(userNickname);
-
             userWithTeam.Nickname = userNickname;
             userWithTeam.Mail = user.Mail;
             userWithTeam.ImageId = user.ImageId;
@@ -1401,7 +1396,6 @@ namespace MessageService
         public List<GamesWonInfo> GetLeaderboardInfo()
         {
             List<GamesWonInfo> listOfGamers;
-
             GameAccess gameAccess = new GameAccess();
 
             try

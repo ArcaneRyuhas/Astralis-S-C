@@ -6,7 +6,6 @@ namespace Host
 {
     public static class Program
     {
-
         static void Main(string[] args)
         {
             GetConnectionString();
@@ -17,7 +16,6 @@ namespace Host
                 Console.WriteLine("Server is running");
                 Console.ReadLine();
             }
-
         }
 
         public static void GetConnectionString()
@@ -31,13 +29,9 @@ namespace Host
                 connectionStringSection.ConnectionString = connectionString;
 
                 config.Save(ConfigurationSaveMode.Modified);
-
                 ConfigurationManager.RefreshSection("connectionStrings");
-
             }
         }
-
     }
-
 }
 
