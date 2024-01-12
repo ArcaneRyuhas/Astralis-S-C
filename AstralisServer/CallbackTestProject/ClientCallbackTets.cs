@@ -1,15 +1,15 @@
-﻿using CallbackTestProject.AstralisServer;
+﻿using CallbackTestProject.AstralisService;
+using DataAccessProject.Contracts;
 using DataAccessProject.DataAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using ILobbyManagerCallback = CallbackTestProject.AstralisService.ILobbyManagerCallback;
 
 namespace CallbackTestProject
 {
     [TestClass]
-    public class CallbackLobbyTests
+    public class CallbackLobbyNotFullTests
     {
         private static LobbyManagerClient _firstClient;
         private static LobbyManagerClient _secondClient;
@@ -29,14 +29,250 @@ namespace CallbackTestProject
             ImageId = 1
         };
 
-        private static User LAST_USER = new User()
+        private static User SECOND_USER = new User()
         {
-            Nickname = "Last_Tester",
+            Nickname = "SecondtTester",
             ImageId = 2
         };
 
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        private static User THIRD_USER = new User()
+        {
+            Nickname = "LastTester",
+            ImageId = 3
+        };
+
+        private static User FOURTH_USER = new User()
+        {
+            Nickname = "FourthTester",
+            ImageId = 4
+        };
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _firstCallback = new LobbyCallbackImplementation();
+            _firstClient = new LobbyManagerClient(new InstanceContext(_firstCallback));
+
+            _gameId = _firstClient.CreateLobby(FIRST_USER);
+
+            _secondCallback = new LobbyCallbackImplementation();
+            _secondClient = new LobbyManagerClient(new InstanceContext(_secondCallback));
+
+            _secondClient.ConnectToLobby(SECOND_USER, _gameId);
+
+            _thirdCallback = new LobbyCallbackImplementation();
+            _thirdClient = new LobbyManagerClient(new InstanceContext(_thirdCallback));
+
+            _otherGameId = _thirdClient.CreateLobby(THIRD_USER);
+
+            _fourthCallback = new LobbyCallbackImplementation();
+            _fourthClient = new LobbyManagerClient(new InstanceContext(_fourthCallback));
+        }
+
+        [TestCleanup]
+        public void TestCleaunp()
+        {
+            _firstClient.DisconnectFromLobby(FIRST_USER);
+            _secondClient.DisconnectFromLobby(SECOND_USER);
+            _thirdClient.DisconnectFromLobby(THIRD_USER);
+            _fourthClient.DisconnectFromLobby(FOURTH_USER);
+            GameAccess gameAccess = new GameAccess();
+
+            gameAccess.CleanupGame(_gameId);
+            gameAccess.CleanupGame(_otherGameId);
+        }
+
+        [TestMethod]
+        public async Task ConnectToLobbySuccesful()
+        {
+            _fourthClient.ConnectToLobby(FOURTH_USER, _gameId);
+
+            await Task.Delay(5000);
+            Assert.AreEqual(FOURTH_USER.Nickname, _firstCallback.ConnectionInLobby);
+            Assert.AreEqual(FOURTH_USER.Nickname, _secondCallback.ConnectionInLobby);
+        }
+
+        [TestMethod]
+        public async Task ConnectToLobbyUnsuccesful()
+        {
+            string gameNotCreated = "gameNotCreated";
+            _fourthClient.ConnectToLobby(FOURTH_USER, gameNotCreated);
+
+            await Task.Delay(5000);
+            Assert.AreNotEqual(FOURTH_USER.Nickname, _firstCallback.ConnectionInLobby);
+            Assert.AreNotEqual(FOURTH_USER.Nickname, _secondCallback.ConnectionInLobby);
+        }
+
+        [TestMethod]
+        public async Task ConnectToDifferentServer()
+        {
+            _fourthClient.ConnectToLobby(FOURTH_USER, _gameId);
+
+            await Task.Delay(5000);
+            Assert.AreNotEqual(FOURTH_USER.Nickname, _thirdCallback.ConnectionInLobby);
+        }
+
+        [TestMethod]
+        public async Task ShowUsersInLobbySuccessful()
+        {
+            _fourthClient.ConnectToLobby(FOURTH_USER, _gameId);
+
+            await Task.Delay(2000);
+            Assert.IsNotNull(_fourthCallback.ConnectedToLobby);
+        }
+
+        [TestMethod]
+        public async Task ShowUsersInLobbyInNewLobby()
+        {
+            _fourthClient.CreateLobby(FOURTH_USER);
+
+            await Task.Delay(2000);
+            Assert.IsNull(_fourthCallback.ConnectedToLobby);
+        }
+
+        [TestMethod]
+        public async Task DisconnectionFromLobbySuccesful()
+        {
+            _secondClient.DisconnectFromLobby(SECOND_USER);
+
+            await Task.Delay(2000);
+            Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.DisconnectionInLobby);
+        }
+
+        [TestMethod]
+        public async Task DisconnectionFromLobbyUnsuccesful()
+        {
+            _fourthClient.DisconnectFromLobby(FOURTH_USER);
+
+            await Task.Delay(2000);
+            Assert.AreNotEqual(FOURTH_USER.Nickname, _firstCallback.DisconnectionInLobby);
+            Assert.AreNotEqual(FOURTH_USER.Nickname, _secondCallback.DisconnectionInLobby);
+        }
+
+        [TestMethod]
+        public async Task DiscconnectionFromOtherLobby()
+        {
+            _thirdClient.DisconnectFromLobby(THIRD_USER);
+
+            await Task.Delay(2000);
+            Assert.AreNotEqual(THIRD_USER.Nickname, _firstCallback.DisconnectionInLobby);
+            Assert.AreNotEqual(THIRD_USER.Nickname, _secondCallback.DisconnectionInLobby);
+        }
+
+
+        [TestMethod]
+        public async Task KickedSuccesfull()
+        {
+            _firstClient.KickUserFromLobby(SECOND_USER.Nickname);
+
+            await Task.Delay(2000);
+            Assert.IsTrue(_secondCallback.BeenKicked);
+            Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.DisconnectionInLobby);
+        }
+
+
+        [TestMethod]
+        public async Task KickedUnsuccesfull()
+        {
+
+            _firstClient.KickUserFromLobby(FOURTH_USER.Nickname);
+
+            await Task.Delay(2000);
+            Assert.IsFalse(_fourthCallback.BeenKicked);
+        }
+
+        [TestMethod]
+        public async Task KickedFromOtherLobby()
+        {
+            _firstClient.KickUserFromLobby(SECOND_USER.Nickname);
+
+            await Task.Delay(2000);
+            Assert.IsTrue(_secondCallback.BeenKicked);
+            Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.DisconnectionInLobby);
+        }
+
+
+        [TestMethod]
+        public async Task DisconnectionUnsuccesful()
+        {
+            _fourthClient.DisconnectFromLobby(FOURTH_USER);
+
+            await Task.Delay(2000);
+            Assert.AreNotEqual(FOURTH_USER.Nickname, _firstCallback.DisconnectionInLobby);
+        }
+
+        [TestMethod]
+        public async Task DisconnectionFromDifferentLobby()
+        {
+            _secondClient.DisconnectFromLobby(SECOND_USER);
+
+            await Task.Delay(2000);
+            Assert.AreNotEqual(SECOND_USER.Nickname, _thirdCallback.DisconnectionInLobby);
+        }
+
+        [TestMethod]
+        public async Task SendUsersFromGameToLobbyUnsuccesful()
+        {
+            _firstClient.SendUsersFromLobbyToGame(FIRST_USER.Nickname);
+
+            await Task.Delay(2000);
+            Assert.IsFalse(_firstCallback.GameStarted);
+        }
+
+    }
+ 
+    [TestClass]
+    public class CallbackFullLobbyTests
+    {
+        private static LobbyManagerClient _firstClient;
+        private static LobbyManagerClient _secondClient;
+        private static LobbyManagerClient _thirdClient;
+        private static LobbyManagerClient _fourthClient;
+        private static LobbyManagerClient _fifthClient;
+        private static LobbyCallbackImplementation _firstCallback;
+        private static LobbyCallbackImplementation _secondCallback;
+        private static LobbyCallbackImplementation _thirdCallback;
+        private static LobbyCallbackImplementation _fourthCallback;
+        private static LobbyCallbackImplementation _fifthCallback;
+
+        private const int FIRST_TEAM = 1;
+        private const int SECOND_TEAM = 2;
+
+        private static string _gameId = string.Empty;
+        private static string _otherGameId = string.Empty;
+
+        private static User FIRST_USER = new User()
+        {
+            Nickname = "FirstTester",
+            ImageId = 1
+        };
+
+        private static User SECOND_USER = new User()
+        {
+            Nickname = "SecondtTester",
+            ImageId = 2
+        };
+
+        private static User THIRD_USER = new User()
+        {
+            Nickname = "LastTester",
+            ImageId = 3
+        };
+
+        private static User FOURTH_USER = new User()
+        {
+            Nickname = "FourthTester",
+            ImageId = 4
+        };
+
+        private static User FIFTH_USER = new User()
+        {
+            Nickname = "FifthTester",
+            ImageId = 2
+        };
+
+        [TestInitialize]
+        public async Task Initialize()
         {
             _firstCallback = new LobbyCallbackImplementation();
             _firstClient = new LobbyManagerClient(new InstanceContext(_firstCallback));
@@ -52,308 +288,91 @@ namespace CallbackTestProject
             _fourthCallback = new LobbyCallbackImplementation();
             _fourthClient = new LobbyManagerClient(new InstanceContext(_fourthCallback));
 
-            _otherGameId = _fourthClient.CreateLobby(LAST_USER);
-        }
-
-        [TestMethod]
-        public async Task ConnectToServerSuccesful()
-        {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
-
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
-
-            await Task.Delay(5000);
-            _secondClient.DisconnectLobby(secondUser);
-            Assert.AreEqual(secondUser.Nickname, _firstCallback.ConnectionInLobby);
-        }
-
-        [TestMethod]
-        public async Task ShowUsersInLobbySuccessful()
-        {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
-
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
+            _fifthCallback = new LobbyCallbackImplementation();
+            _fifthClient = new LobbyManagerClient(new InstanceContext(_fourthCallback));
 
             await Task.Delay(2000);
-            _secondClient.DisconnectLobby(secondUser);
-            Assert.IsNotNull(_secondCallback.ConnectedToLobby);
-        }
-
-        [TestMethod]
-        public async Task DisconnectionSuccesful()
-        {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
-
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
-
-            await Task.Delay(5000);
-            _secondClient.DisconnectLobby(secondUser);
-
+            _secondClient.ConnectToLobby(SECOND_USER ,_gameId);
             await Task.Delay(2000);
-            Assert.AreEqual(secondUser.Nickname, _firstCallback.DisconnectionInLobby);
+            _thirdClient.ConnectToLobby(THIRD_USER, _gameId);
+            await Task.Delay(2000);
+            _fourthClient.ConnectToLobby(FOURTH_USER, _gameId);
+            await Task.Delay(2000);
+
+            _otherGameId = _fourthClient.CreateLobby(FIFTH_USER);
         }
 
         [TestMethod]
         public async Task UpdateLobbyUserTeam()
         {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
+            _secondClient.ChangeLobbyUserTeam(SECOND_USER.Nickname, FIRST_TEAM);
 
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
+            await Task.Delay(10000);
+            Assert.AreEqual(SECOND_USER.Nickname, _firstCallback.NicknameTeamChange);
+            Assert.AreEqual(FIRST_TEAM, _firstCallback.TeamChanged);
+            Assert.AreEqual(SECOND_USER.Nickname, _thirdCallback.NicknameTeamChange);
+            Assert.AreEqual(FIRST_TEAM, _thirdCallback.TeamChanged);
+            Assert.AreEqual(SECOND_USER.Nickname, _fourthCallback.NicknameTeamChange);
+            Assert.AreEqual(FIRST_TEAM, _fourthCallback.TeamChanged);
+        }
 
+        [TestMethod]
+        public async Task UpdateLobbyUserTeamFromOtherGame()
+        {
             await Task.Delay(2000);
 
-            _secondClient.ChangeLobbyUserTeam(secondUser.Nickname, 1);
+            _secondClient.ChangeLobbyUserTeam(SECOND_USER.Nickname, FIRST_TEAM);
 
-            await Task.Delay(2000);
-            Assert.AreEqual(secondUser.Nickname, _firstCallback.NicknameTeamChange);
-            Assert.AreEqual(1, _firstCallback.TeamChanged);
+            await Task.Delay(4000);
+            Assert.AreNotEqual(SECOND_USER.Nickname, _fifthCallback.NicknameTeamChange);
+            Assert.AreNotEqual(FIRST_TEAM, _fifthCallback.TeamChanged);
         }
 
         [TestMethod]
         public async Task SendMessageLobbySuccesfull()
         {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
+            string message = "SecondUser: Message";
 
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
+            _secondClient.SendMessage(message, SECOND_USER.Nickname);
 
-            string message = "Seconduser: Message";
-
-            await Task.Delay(2000);
-
-            _secondClient.SendMessage(message, _gameId);
-
-            await Task.Delay(2000);
+            await Task.Delay(5000);
             Assert.AreEqual(message, _firstCallback.Message);
+            Assert.AreEqual(message, _thirdCallback.Message);
+            Assert.AreEqual(message, _fourthCallback.Message);
         }
 
         [TestMethod]
-        public async Task KickedSuccesfull()
+        public async Task SendMessageToOtherLobby()
         {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
+            string message = "SecondUser: OtherLobbyMessage";
 
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
+            _secondClient.SendMessage(message, SECOND_USER.Nickname);
 
-            await Task.Delay(2000);
-
-            _firstClient.KickUser(secondUser.Nickname);
-
-            await Task.Delay(2000);
-            Assert.IsTrue(_secondCallback.BeenKicked);
-        }
-
-        [TestMethod]
-        public async Task StartGameUnsuccesfull()
-        {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
-
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
-
-            await Task.Delay(2000);
-            _firstClient.ChangeLobbyUserTeam(FIRST_USER.Nickname, 1);
-            await Task.Delay(2000);
-            _secondClient.ChangeLobbyUserTeam(secondUser.Nickname, 2);
-            await Task.Delay(2000);
-            _firstClient.StartGame(FIRST_USER.Nickname);
-            await Task.Delay(2000);
-            Assert.IsFalse(_firstCallback.GameStarted);
-        }
-
-        [TestMethod]
-        public async Task StartGameSuccesfull()
-        {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
-
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
-
-            await Task.Delay(2000);
-            _firstClient.ChangeLobbyUserTeam(FIRST_USER.Nickname, 1);
-            await Task.Delay(2000);
-            _secondClient.ChangeLobbyUserTeam(secondUser.Nickname, 2);
-            await Task.Delay(2000);
-            _firstClient.StartGame(FIRST_USER.Nickname);
-            await Task.Delay(2000);
-            Assert.IsFalse(_firstCallback.GameStarted);
-        }
-
-        [TestMethod]
-        public async Task ConnectToServerUnsuccesful()
-        {
-            User secondUser = new User()
-            {
-                Nickname = "SecondUser",
-                ImageId = 1
-            };
-
-            if (_secondClient.GameExist(_gameId))
-            {
-                _secondClient.ConnectLobby(secondUser, _gameId);
-            }
-
-            await Task.Delay(5000);
-            _secondClient.DisconnectLobby(secondUser);
-            Assert.AreNotEqual(secondUser.Nickname, _fourthCallback.ConnectionInLobby);
-        }
-
-        [TestMethod]
-        public async Task DisconnectionUnsuccesful()
-        {
-            User thirdUser = new User()
-            {
-                Nickname = "ThirdUser",
-                ImageId = 1
-            };
-
-            if (_thirdClient.GameExist(_otherGameId))
-            {
-                _thirdClient.ConnectLobby(thirdUser, _otherGameId);
-            }
-
-            await Task.Delay(5000);
-            _thirdClient.DisconnectLobby(thirdUser);
-
-            await Task.Delay(2000);
-            Assert.AreNotEqual(thirdUser.Nickname, _firstCallback.DisconnectionInLobby);
-        }
-
-        [TestMethod]
-        public async Task UpdateLobbyUserTeamUnsuccesful()
-        {
-            User thirdUser = new User()
-            {
-                Nickname = "ThirdUser",
-                ImageId = 1
-            };
-
-            if (_thirdClient.GameExist(_otherGameId))
-            {
-                _thirdClient.ConnectLobby(thirdUser, _otherGameId);
-            }
-            await Task.Delay(2000);
-
-            _thirdClient.ChangeLobbyUserTeam(thirdUser.Nickname, 2);
-            await Task.Delay(2000);
-
-            _thirdClient.DisconnectLobby(thirdUser);
-            await Task.Delay(2000);
-
-            Assert.AreNotEqual(thirdUser.Nickname, _firstCallback.NicknameTeamChange);
-            Assert.AreNotEqual(2, _firstCallback.TeamChanged);
-
-
-        }
-
-        [TestMethod]
-        public async Task SendMessageLobbyUnsuccesfull()
-        {
-            User thirdUser = new User()
-            {
-                Nickname = "ThirdUser",
-                ImageId = 1
-            };
-
-            if (_thirdClient.GameExist(_otherGameId))
-            {
-                _thirdClient.ConnectLobby(thirdUser, _otherGameId);
-            }
-
-            string message = "ThirdUser: MessageError";
-
-            await Task.Delay(2000);
-
-            _thirdClient.SendMessage(message, _otherGameId);
-
-            await Task.Delay(2000);
-            _thirdClient.DisconnectLobby(thirdUser);
-
-            await Task.Delay(2000);
-            Assert.AreNotEqual(message, _firstCallback.Message);
-        }
-
-        [TestMethod]
-        public async Task KickedUnsuccesfull()
-        {
-            User thirdUser = new User()
-            {
-                Nickname = "ThirdUser",
-                ImageId = 1
-            };
-
-            _firstClient.KickUser(thirdUser.Nickname);
-
-            await Task.Delay(2000);
-            Assert.IsFalse(_thirdCallback.BeenKicked);
+            await Task.Delay(4000);
+            Assert.AreNotEqual(message, _fifthCallback.Message);
         }
 
 
-        [ClassCleanup]
-        public static void Cleanup()
+        [TestCleanup]
+        public void TestCleaunp()
         {
-            _firstClient.DisconnectLobby(FIRST_USER);
-            _fourthClient.DisconnectLobby(LAST_USER);
+            _firstClient.DisconnectFromLobby(FIRST_USER);
+            _secondClient.DisconnectFromLobby(SECOND_USER);
+            _thirdClient.DisconnectFromLobby(THIRD_USER);
+            _fourthClient.DisconnectFromLobby(FOURTH_USER);
+            _fifthClient.DisconnectFromLobby(FIFTH_USER);
+
+            GameAccess gameAccess = new GameAccess();
+            gameAccess.CleanupGame(_gameId);
+            gameAccess.CleanupGame(_otherGameId);
         }
     }
-
+    
     public class LobbyCallbackImplementation : ILobbyManagerCallback
     {
         public bool BeenKicked { get; set; }
 
-        public Tuple<User, int>[] ConnectedToLobby { get; set; }
+        public TupleOfUserintr8Y84bsT[] ConnectedToLobby { get; set; }
 
         public string ConnectionInLobby { get; set; }
 
@@ -384,11 +403,6 @@ namespace CallbackTestProject
             ConnectionInLobby = user.Nickname;
         }
 
-        public void ShowUsersInLobby(Tuple<User, int>[] users)
-        {
-            ConnectedToLobby = users;
-        }
-
         public void ShowDisconnectionInLobby(User user)
         {
             DisconnectionInLobby = user.Nickname;
@@ -405,17 +419,22 @@ namespace CallbackTestProject
             Message = message;
         }
 
-        public void StartClientGame()
+        public void SendUserFromLobbyToGame()
         {
             GameStarted = true;
         }
 
-        public void GetKicked()
+        public void GetKickedFromLobby()
         {
             BeenKicked = true;
         }
-    }
 
+        public void ShowUsersInLobby(TupleOfUserintr8Y84bsT[] users)
+        {
+            ConnectedToLobby = users;
+        }
+    }
+    /*
     [TestClass]
     public class CallbackOnlineUsersTests
     {
@@ -621,6 +640,7 @@ namespace CallbackTestProject
             UserDisconnected = nickname;
         }
     }
+    */
 
     [TestClass]
     public class UserManagerTest
@@ -712,7 +732,7 @@ namespace CallbackTestProject
         [TestMethod]
         public void SuccessfullyAddGuestUM()
         {
-            Assert.IsTrue(clientUserManager.AddGuest().Nickname != NICKNAME_ERROR);
+            Assert.IsTrue(clientUserManager.AddGuestUser().Nickname != NICKNAME_ERROR);
         }
 
         [TestMethod]
@@ -871,7 +891,7 @@ namespace CallbackTestProject
         [TestMethod]
         public void ErrorAddGuestUM()
         {
-            Assert.IsTrue(client.AddGuest().Nickname == NICKNAME_ERROR);
+            Assert.IsTrue(client.AddGuestUser().Nickname == NICKNAME_ERROR);
         }
 
         [TestMethod]

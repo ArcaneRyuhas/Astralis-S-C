@@ -599,7 +599,7 @@ namespace MessageService
 
         static bool ContainsBadWords(string text)
         {
-            List<string> badwords = new List<string> {"fucker", "Yeison", "fuck" ,"putito", "puto", "marica", "jodido", "revo", "negro"};
+            List<string> badwords = new List<string> {"fucker", "Yeison", "fuck" ,"putito", "puto", "marica", "jodido", "negro"};
 
             text = text.ToLower();
 

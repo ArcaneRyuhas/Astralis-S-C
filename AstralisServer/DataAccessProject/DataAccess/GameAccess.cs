@@ -188,7 +188,7 @@ namespace DataAccessProject.DataAccess
                 TimeSpan currentTimeSpan = currentDateTime.TimeOfDay.Duration();
                 Ban userBan = context.Ban.FirstOrDefault(b => b.Nickname == nickname);
 
-                if (userBan != null && userBan.BanTime > currentTimeSpan)
+                if (userBan != null && userBan.BanTime < currentTimeSpan)
                 {
                     result = INT_VALIDATION_FAILURE;
                 }
