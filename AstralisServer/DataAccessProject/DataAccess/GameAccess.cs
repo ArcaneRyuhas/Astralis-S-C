@@ -180,7 +180,7 @@ namespace DataAccessProject.DataAccess
 
         public int CanPlay(string nickname)
         {
-            int result = INT_VALIDATION_SUCCESS;
+            int result = INT_VALIDATION_FAILURE;
 
             using (var context = new AstralisDBEntities())
             {
@@ -188,7 +188,7 @@ namespace DataAccessProject.DataAccess
                 TimeSpan currentTimeSpan = currentDateTime.TimeOfDay.Duration();
                 Ban userBan = context.Ban.FirstOrDefault(b => b.Nickname == nickname);
 
-                if (userBan != null && userBan.BanTime < currentTimeSpan)
+                if (userBan != null && userBan.BanTime > currentTimeSpan)
                 {
                     result = INT_VALIDATION_FAILURE;
                 }

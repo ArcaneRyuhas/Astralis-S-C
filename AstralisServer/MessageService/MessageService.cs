@@ -60,7 +60,7 @@ namespace MessageService
 
             try
             {
-                if (FindUserByNickname(user.Nickname) == VALIDATION_FAILURE)
+                if (userAccess.FindUserByNickname(user.Nickname) == VALIDATION_FAILURE)
                 {
                     result = userAccess.CreateUser(user);
                 }
@@ -656,7 +656,7 @@ namespace MessageService
 
     public partial class MessageService : IFriendManager
     {
-        private static Dictionary<string, IOnlineUserManagerCallback> _onlineUsers = new Dictionary<string, IOnlineUserManagerCallback>();
+        private static Dictionary<string, IFriendManagerCallback> _onlineUsers = new Dictionary<string, IFriendManagerCallback>();
         private const int IS_SUCCEDED = 0;
         private const bool ACCEPTED_FRIEND = true;
         private static Object _lock = new Object();
@@ -666,7 +666,7 @@ namespace MessageService
         {
             lock (_onlineUsers)
             {
-                IOnlineUserManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IOnlineUserManagerCallback>();
+                IFriendManagerCallback currentUserCallbackChannel = OperationContext.Current.GetCallbackChannel<IFriendManagerCallback>();
                 FriendAccess friendAccess = new FriendAccess();
 
                 try
@@ -743,7 +743,7 @@ namespace MessageService
 
         private void ShowUserUnsubscribedToFriendManager(string nickname)
         {
-            foreach (KeyValuePair<string, IOnlineUserManagerCallback> user in _onlineUsers)
+            foreach (KeyValuePair<string, IFriendManagerCallback> user in _onlineUsers)
             {
                 try
                 {

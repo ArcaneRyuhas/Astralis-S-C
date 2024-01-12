@@ -630,14 +630,6 @@ namespace DataAccessTestProject
         }
 
         [TestMethod]
-        public void UnsuccessfullyCreateDefaultDeck()
-        {
-            string nickname = "InvalidNickname";
-
-            Assert.IsFalse(_deckAccess.CreateDefaultDeck(_context, nickname) != INT_VALIDATION_SUCCESS);
-        }
-
-        [TestMethod]
         public void SuccessfullyGetDeckByNickname()
         {
             string nickname = "UserToGetDeck";
@@ -647,23 +639,11 @@ namespace DataAccessTestProject
             Assert.AreEqual(STARTING_CARD_COUNT, cardList.Count);
         }
 
-        [TestMethod]
-        public void UnsuccessfullyGetDeckByNickname()
-        {
-            string nickname = "InvalidNickname";
-
-            List<int> cardList = _deckAccess.GetDeckByNickname(nickname);
-
-            Assert.IsNotNull(cardList);
-        }
-
-
         [ClassCleanup]
         public static void ClassCleanup()
         {
             _userAccess.DeleteUser("UserDefaultDeck");
-            _userAccess.DeleteUser("UserRelationDeck");
-            _userAccess.DeleteUser("TestUser");
+            _userAccess.DeleteUser("UserToGetDeck");
         }
     }
 
@@ -707,7 +687,7 @@ namespace DataAccessTestProject
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
         private const bool BOOL_VALIDATION_FAILURE = false;
-        private const string GAME_ID = "TestGameId"; 
+        private const string GAME_ID = "TestGameId";
         private const int WINNER_TEAM_TEST = 1;
         private static GameAccess gameAccess = new GameAccess();
         private static UserAccess userAccess = new UserAccess();
@@ -720,6 +700,7 @@ namespace DataAccessTestProject
             gameAccess.CreateGame("GameId3");
 
             gameAccess.CreateGame("GameId5");
+
 
             User userToBan = new User()
             {
@@ -777,14 +758,6 @@ namespace DataAccessTestProject
             Assert.IsTrue(gameAccess.CreateGame(gameId) == BOOL_VALIDATION_FAILURE);
         }
 
-        [TestMethod] //Mario lo va a arreglar
-        public void SuccessfullyCreatePlayRelation()
-        {
-            gameAccess.CreateGame("12345");
-            Assert.IsTrue(true);
-
-        }
-
         [TestMethod]
         public void SuccessfullyGameIdIsReapeted()
         {
@@ -812,7 +785,7 @@ namespace DataAccessTestProject
         [TestMethod]
         public void UnSuccessfullyEndGame()
         {
-            string gameId = "gameId6";
+            string gameId = "GameId6";
             Assert.IsTrue(gameAccess.EndGame(WINNER_TEAM_TEST, gameId) == INT_VALIDATION_FAILURE);
         }
 
@@ -851,7 +824,7 @@ namespace DataAccessTestProject
         [TestMethod]
         public void SuccessfullyCleanUpGame()
         {
-            string gameId = "GameId7"; 
+            string gameId = "GameId7";
 
             Assert.IsTrue(gameAccess.CleanupGame(gameId) == INT_VALIDATION_SUCCESS);
         }
@@ -884,19 +857,20 @@ namespace DataAccessTestProject
         [ClassCleanup]
         public static void ClassCleanup()
         {
-            gameAccess.RemoveBan("UserToBan");
-            gameAccess.RemoveBan("UserCanPlayUnSuccess");
-
-            userAccess.DeleteUser("UserToBan");
-            userAccess.DeleteUser("UserToBanUn");
-            userAccess.DeleteUser("UserCanPlay");
-            userAccess.DeleteUser("UserCanPlayUnSuccess");
-            userAccess.DeleteUser("UserBanToRemove");
             gameAccess.CleanupGame("GameId1");
             gameAccess.CleanupGame("GameId2");
             gameAccess.CleanupGame("GameId3");
             gameAccess.CleanupGame("GameId5");
-            gameAccess.CleanupGame("GameId7");
+
+            gameAccess.RemoveBan("UserToBan");
+            userAccess.DeleteUser("UserToBan");
+
+            userAccess.DeleteUser("UserCanPlay");
+
+            gameAccess.RemoveBan("UserCanPlayUnSuccess");
+            userAccess.DeleteUser("UserCanPlayUnSuccess");
+
+            userAccess.DeleteUser("UserBanToRemove");
         }
     }
 

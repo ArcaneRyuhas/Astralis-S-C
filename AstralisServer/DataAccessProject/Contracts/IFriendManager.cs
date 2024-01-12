@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessProject.Contracts
 {
-    [ServiceContract(CallbackContract = typeof(IOnlineUserManagerCallback))]
+    [ServiceContract(CallbackContract = typeof(IFriendManagerCallback))]
     public interface IFriendManager
     {
         [OperationContract(IsOneWay = true)]
@@ -30,7 +30,7 @@ namespace DataAccessProject.Contracts
     }
 
     [ServiceContract]
-    public interface IOnlineUserManagerCallback
+    public interface IFriendManagerCallback
     {
         [OperationContract]
         void ShowUserSubscribedToFriendManager(string nickname);

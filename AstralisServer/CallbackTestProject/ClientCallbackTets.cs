@@ -2,8 +2,11 @@
 using DataAccessProject.Contracts;
 using DataAccessProject.DataAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using IFriendManagerCallback = CallbackTestProject.AstralisService.IFriendManagerCallback;
 using ILobbyManagerCallback = CallbackTestProject.AstralisService.ILobbyManagerCallback;
 
 namespace CallbackTestProject
@@ -372,7 +375,7 @@ namespace CallbackTestProject
     {
         public bool BeenKicked { get; set; }
 
-        public TupleOfUserintr8Y84bsT[] ConnectedToLobby { get; set; }
+        public Tuple<User, int>[] ConnectedToLobby { get; set; }
 
         public string ConnectionInLobby { get; set; }
 
@@ -429,70 +432,73 @@ namespace CallbackTestProject
             BeenKicked = true;
         }
 
-        public void ShowUsersInLobby(TupleOfUserintr8Y84bsT[] users)
+        public void ShowUsersInLobby(Tuple<User, int>[] users)
         {
             ConnectedToLobby = users;
         }
     }
-    /*
+    
     [TestClass]
     public class CallbackOnlineUsersTests
     {
-        private static OnlineUserManagerClient _firstClient;
-        private static OnlineUserManagerClient _secondClient;
-        private static OnlineUserManagerClient _thirdClient;
-        private static OnlineUsersCallbackImplementation _firstCallback;
-        private static OnlineUsersCallbackImplementation _secondCallback;
-        private static OnlineUsersCallbackImplementation _thirdCallback;
+        private static FriendManagerClient _firstClient;
+        private static FriendManagerClient _secondClient;
+        private static FriendManagerClient _thirdClient;
+
+        private static FriendManagerCallbackImplementation _firstCallback;
+        private static FriendManagerCallbackImplementation _secondCallback;
+        private static FriendManagerCallbackImplementation _thirdCallback;
         private static UserAccess userAccess = new UserAccess();
 
-        private readonly static string FIRST_USER = "FirstUser";
-        private const string SECOND_USER = "SecondUser";
-        private const string THIRD_USER = "ThirdUser";
         private const int ERROR = 0;
 
-        [ClassInitialize]
+        private static User FIRST_USER = new User()
+        {
+            Nickname = "FirstUser",
+            ImageId = 1,
+            Password = "password",
+            Mail = "m@a.com"
+        };
+
+        private static User SECOND_USER = new User()
+        {
+            Nickname = "SecondUser",
+            ImageId = 1,
+            Password = "password",
+            Mail = "A@a.com"
+        };
+
+        private static User THIRD_USER = new User()
+        {
+            Nickname = "ThirdUser",
+            ImageId = 1,
+            Password = "password",
+            Mail = "A@a.com"
+        };
+
+        [TestInitialize]
         public static void Initialize(TestContext context)
         {
-            DataAccessProject.Contracts.User firstUser = new DataAccessProject.Contracts.User()
-            {
-                Nickname = FIRST_USER,
-                ImageId = 1,
-                Password = "password",
-                Mail = "m@a.com"
-            };
+            userAccess.CreateUser(FIRST_USER);
+            userAccess.CreateUser(SECOND_USER);
 
-            DataAccessProject.Contracts.User secondUser = new DataAccessProject.Contracts.User()
-            {
-                Nickname = SECOND_USER,
-                ImageId = 1,
-                Password = "password",
-                Mail = "A@a.com"
-            };
+            _firstCallback = new FriendManagerCallbackImplementation();
+            _firstClient = new FriendManagerClient (new InstanceContext(_firstCallback));
 
-            userAccess.CreateUser(firstUser);
+            _secondCallback = new FriendManagerCallbackImplementation();
+            _secondClient = new FriendManagerClient(new InstanceContext(_secondCallback));
 
-            userAccess.CreateUser(secondUser);
-
-            _firstCallback = new OnlineUsersCallbackImplementation();
-            _firstClient = new OnlineUserManagerClient(new InstanceContext(_firstCallback));
-
-            _firstClient.ConectUser(FIRST_USER);
-
-            _secondCallback = new OnlineUsersCallbackImplementation();
-            _secondClient = new OnlineUserManagerClient(new InstanceContext(_secondCallback));
-
-            _thirdCallback = new OnlineUsersCallbackImplementation();
-            _thirdClient = new OnlineUserManagerClient(new InstanceContext(_thirdCallback));
+            _thirdCallback = new FriendManagerCallbackImplementation();
+            _thirdClient = new FriendManagerClient(new InstanceContext(_thirdCallback));
         }
 
         [TestMethod]
         public async Task ShowConnectionToGameSuccesful()
         {
-            _secondClient.ConectUser(SECOND_USER);
+            _secondClient.SubscribeToFriendManager(SECOND_USER);
             await Task.Delay(2000);
 
-            _secondClient.DisconectUser(SECOND_USER);
+            _secondClient.UnsubscribeToFriendManager(SECOND_USER);
             Assert.AreEqual(SECOND_USER, _firstCallback.UserConnected);
         }
 
@@ -591,7 +597,7 @@ namespace CallbackTestProject
         }
     }
 
-    public class OnlineUsersCallbackImplementation : IOnlineUserManagerCallback
+    public class FriendManagerCallbackImplementation : IFriendManagerCallback
     {
         public string FriendRemoved { get; set; }
         public string FriendAccepted { get; set; }
@@ -600,7 +606,7 @@ namespace CallbackTestProject
         public string UserConnected { get; set; }
         public string UserDisconnected { get; set; }
 
-        public OnlineUsersCallbackImplementation()
+        public FriendManagerCallbackImplementation()
         {
             FriendRemoved = string.Empty;
             FriendAccepted = string.Empty;
@@ -639,8 +645,27 @@ namespace CallbackTestProject
         {
             UserDisconnected = nickname;
         }
+
+        public void ShowUserSubscribedToFriendManager(string nickname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowUserUnsubscribedToFriendManager(string nickname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowFriendDeleted(string nickname)
+        {
+            throw new NotImplementedException();
+        }
     }
-    */
 
     [TestClass]
     public class UserManagerTest

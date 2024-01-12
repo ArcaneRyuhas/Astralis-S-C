@@ -9,186 +9,7 @@
 //------------------------------------------------------------------------------
 
 namespace CallbackTestProject.AstralisService {
-    using System.Runtime.Serialization;
-    using System;
     
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TupleOfUserintr8Y84bsT", Namespace="http://schemas.datacontract.org/2004/07/System")]
-    [System.SerializableAttribute()]
-    public partial class TupleOfUserintr8Y84bsT : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        private DataAccessProject.Contracts.User m_Item1Field;
-        
-        private int m_Item2Field;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public DataAccessProject.Contracts.User m_Item1 {
-            get {
-                return this.m_Item1Field;
-            }
-            set {
-                if ((object.ReferenceEquals(this.m_Item1Field, value) != true)) {
-                    this.m_Item1Field = value;
-                    this.RaisePropertyChanged("m_Item1");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public int m_Item2 {
-            get {
-                return this.m_Item2Field;
-            }
-            set {
-                if ((this.m_Item2Field.Equals(value) != true)) {
-                    this.m_Item2Field = value;
-                    this.RaisePropertyChanged("m_Item2");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TupleOfbooleanint", Namespace="http://schemas.datacontract.org/2004/07/System")]
-    [System.SerializableAttribute()]
-    public partial class TupleOfbooleanint : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        private bool m_Item1Field;
-        
-        private int m_Item2Field;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public bool m_Item1 {
-            get {
-                return this.m_Item1Field;
-            }
-            set {
-                if ((this.m_Item1Field.Equals(value) != true)) {
-                    this.m_Item1Field = value;
-                    this.RaisePropertyChanged("m_Item1");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public int m_Item2 {
-            get {
-                return this.m_Item2Field;
-            }
-            set {
-                if ((this.m_Item2Field.Equals(value) != true)) {
-                    this.m_Item2Field = value;
-                    this.RaisePropertyChanged("m_Item2");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TupleOfstringstring", Namespace="http://schemas.datacontract.org/2004/07/System")]
-    [System.SerializableAttribute()]
-    public partial class TupleOfstringstring : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        private string m_Item1Field;
-        
-        private string m_Item2Field;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string m_Item1 {
-            get {
-                return this.m_Item1Field;
-            }
-            set {
-                if ((object.ReferenceEquals(this.m_Item1Field, value) != true)) {
-                    this.m_Item1Field = value;
-                    this.RaisePropertyChanged("m_Item1");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string m_Item2 {
-            get {
-                return this.m_Item2Field;
-            }
-            set {
-                if ((object.ReferenceEquals(this.m_Item2Field, value) != true)) {
-                    this.m_Item2Field = value;
-                    this.RaisePropertyChanged("m_Item2");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="AstralisService.IUserManager")]
@@ -402,7 +223,7 @@ namespace CallbackTestProject.AstralisService {
         void ShowConnectionInLobby(DataAccessProject.Contracts.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowUsersInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowUsersInLobbyResponse")]
-        void ShowUsersInLobby(CallbackTestProject.AstralisService.TupleOfUserintr8Y84bsT[] users);
+        void ShowUsersInLobby(System.Tuple<DataAccessProject.Contracts.User, int>[] users);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowDisconnectionInLobbyResponse")]
         void ShowDisconnectionInLobby(DataAccessProject.Contracts.User user);
@@ -579,7 +400,7 @@ namespace CallbackTestProject.AstralisService {
         void ShowUserUnsubscribedToFriendManager(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ShowFriends", ReplyAction="http://tempuri.org/IFriendManager/ShowFriendsResponse")]
-        void ShowFriends(System.Collections.Generic.Dictionary<string, CallbackTestProject.AstralisService.TupleOfbooleanint> onlineFriends);
+        void ShowFriends(System.Collections.Generic.Dictionary<string, System.Tuple<bool, int>> onlineFriends);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ShowFriendRequest", ReplyAction="http://tempuri.org/IFriendManager/ShowFriendRequestResponse")]
         void ShowFriendRequest(string nickname);
@@ -723,7 +544,7 @@ namespace CallbackTestProject.AstralisService {
         void ShowGamePlayerEndedTurn(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/StartFirstGamePhaseClient", ReplyAction="http://tempuri.org/IGameManager/StartFirstGamePhaseClientResponse")]
-        void StartFirstGamePhaseClient(CallbackTestProject.AstralisService.TupleOfstringstring firstPlayers);
+        void StartFirstGamePhaseClient(System.Tuple<string, string> firstPlayers);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/EndGameClient", ReplyAction="http://tempuri.org/IGameManager/EndGameClientResponse")]
         void EndGameClient(int winnerTeam);
