@@ -1395,7 +1395,7 @@ namespace MessageService
     {
         public List<GamesWonInfo> GetLeaderboardInfo()
         {
-            List<GamesWonInfo> listOfGamers;
+            List<GamesWonInfo> listOfGamers = new List<GamesWonInfo>();
             GameAccess gameAccess = new GameAccess();
 
             try
@@ -1404,7 +1404,11 @@ namespace MessageService
             }
             catch (EntityException entityException)
             {
-                listOfGamers = null;
+                GamesWonInfo gamesWonInfoError = new GamesWonInfo();
+                gamesWonInfoError.GamesWonCount = -1;
+                gamesWonInfoError.Username = ERROR_STRING;
+
+                listOfGamers.Add(gamesWonInfoError);
                 log.Error(entityException);
             }
 
