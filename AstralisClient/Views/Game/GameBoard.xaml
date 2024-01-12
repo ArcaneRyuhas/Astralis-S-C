@@ -45,27 +45,27 @@
                         <ColumnDefinition Width="143"/>
                     </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Column="0" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="0" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
                     </Grid>
-                    <Grid Grid.Column="2" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="2" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
                     </Grid>
-                    <Grid Grid.Column="4" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="4" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
                     </Grid>
-                    <Grid Grid.Column="6" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="6" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
                     </Grid>
-                    <Grid Grid.Column="8" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="8" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>

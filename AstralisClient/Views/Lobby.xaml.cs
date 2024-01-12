@@ -119,6 +119,7 @@ namespace Astralis.Views
                 else if (_client.LobbyExist(code))
                 {
                     ConnectToLobby(code);
+
                     _gameExist = true;
                 }
                 else
@@ -151,7 +152,7 @@ namespace Astralis.Views
             User user = CreateUser();
             _gameId = _client.CreateLobby(user);
 
-            CreateCard(user, NO_TEAM);
+            CreateLobbyUserCard(user, NO_TEAM);
             IsLobbyCreatedSuccesfully();
         }
 
@@ -164,7 +165,7 @@ namespace Astralis.Views
             else if (_gameId == Constants.ERROR_STRING)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, Properties.Resources.titleNoGameFound, MessageBoxButton.OK, MessageBoxImage.Information);
-                _friendWindow.Disconnect();
+                _friendWindow.UnsubscribeFromFriendManager();
                 App.RestartApplication();
             }
             else
@@ -172,7 +173,6 @@ namespace Astralis.Views
                 _gameExist = true;
                 lblGameCode.Content = _gameId;
             }
-
         }
 
         private User CreateUser()
@@ -191,6 +191,7 @@ namespace Astralis.Views
             try
             {
                 User user = CreateUser();
+
                 _client.ConnectToLobby(user, code);
 
                 _gameId = code;
@@ -240,20 +241,21 @@ namespace Astralis.Views
             return lobbyIsNotFull;
         }
 
-        private void CreateCard (User user, int team)
+        private void CreateLobbyUserCard (User user, int team)
         {
             LobbyUserCard lobbyUserCard = new LobbyUserCard();
 
-            lobbyUserCard.SetCard(user, _isHost);
+            lobbyUserCard.SetLobbyUserCard(user, _isHost);
             lobbyUserCard.ChangeTeam(team);
+
             lobbyUserCard.TeamSelectionChanged += LobbyUserCardTeamSelectionChanged;
             lobbyUserCard.UserKicked += LobbyUserCardUserKicked;
             bool isAdded = false;
 
-            AddCard(lobbyUserCard, isAdded);
+            AddLobbyUserCard(lobbyUserCard, isAdded);
         }
 
-        private void AddCard(LobbyUserCard lobbyUserCard, bool isAdded)
+        private void AddLobbyUserCard(LobbyUserCard lobbyUserCard, bool isAdded)
         {
             for (int gridRow = 0; gridRow < 4; gridRow++)
             {
@@ -261,8 +263,10 @@ namespace Astralis.Views
                 {
                     gridUsers.Children.Add(lobbyUserCard);
                     Grid.SetRow(lobbyUserCard, gridRow);
+
                     _freeSpaces[gridRow] = false;
                     _userCards.Add(gridRow, lobbyUserCard);
+
                     isAdded = true;
                 }
             }
@@ -300,6 +304,7 @@ namespace Astralis.Views
                 {
                     gridUsers.Children.Remove(_userCards[gridRow]);
                     _userCards.Remove(gridRow);
+
                     _freeSpaces[gridRow] = true;
                 }  
             }
@@ -312,7 +317,7 @@ namespace Astralis.Views
 
         public void ShowConnectionInLobby(User user)
         {
-            CreateCard(user, NO_TEAM);
+            CreateLobbyUserCard(user, NO_TEAM);
         }
 
         public void ShowDisconnectionInLobby(User user)
@@ -326,11 +331,12 @@ namespace Astralis.Views
         {
             for (int i = 0; i < users.Length; i++)
             {
-                CreateCard(users[i].Item1, users[i].Item2);
+                CreateLobbyUserCard(users[i].Item1, users[i].Item2);
             }
 
             User user = CreateUser();
-            CreateCard(user, NO_TEAM);
+
+            CreateLobbyUserCard(user, NO_TEAM);
         }
 
         public void UpdateLobbyUserTeam(string userNickname, int team)
@@ -343,6 +349,7 @@ namespace Astralis.Views
                     break;
                 }
             }
+
             EnableStartButton();
         }
 
@@ -359,7 +366,7 @@ namespace Astralis.Views
 
         private void EnableStartButton()
         {
-            if (NoFreeSpaces() && TeamsAreComplete() && _isHost)
+            if (NoFreeSpacesInLobby() && TeamsAreComplete() && _isHost)
             {
                 btnStartGame.IsEnabled = true;
             }
@@ -369,7 +376,7 @@ namespace Astralis.Views
             }
         }
 
-        private bool NoFreeSpaces()
+        private bool NoFreeSpacesInLobby()
         {
             bool noFreeSpaces = true;
 
@@ -477,7 +484,6 @@ namespace Astralis.Views
             string textToCopy = lblGameCode.Content.ToString();
 
             Clipboard.SetText(textToCopy);
-
             MessageBox.Show(Properties.Resources.msgCopyToClipboard + textToCopy, Properties.Resources.titleCopyToClipboard, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -502,6 +508,7 @@ namespace Astralis.Views
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
+
             GameWindow windowParent = (GameWindow)this.Parent;
 
             if (windowParent != null)
@@ -521,6 +528,7 @@ namespace Astralis.Views
                 if (ValidMail(toSendMail))
                 {
                     string mailString = _client.SendInvitationToLobby(_gameId, toSendMail);
+
                     ShowValidationMessage(mailString);
                 }
                 
@@ -549,6 +557,7 @@ namespace Astralis.Views
             if (!Regex.IsMatch(toSendMail, MAIL_REGEX))
             {
                 MessageBox.Show(Properties.Resources.msgMailIncorrect, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+
                 validMail = false;
             }
 
@@ -565,7 +574,7 @@ namespace Astralis.Views
             else if (mailString == Constants.ERROR_STRING)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                _friendWindow.Disconnect();
+                _friendWindow.UnsubscribeFromFriendManager();
             }
             else
             {
@@ -594,12 +603,12 @@ namespace Astralis.Views
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
-
         }
 
         public void GetKickedFromLobby()
         {           
             MessageBox.Show(Properties.Resources.msgKickedOut, Properties.Resources.titleKickedOut, MessageBoxButton.OK, MessageBoxImage.Information);
+
             if (!UserSession.Instance().Nickname.StartsWith(GUEST_NAME))
             {
                 NavigationService.GoBack();
@@ -624,6 +633,7 @@ namespace Astralis.Views
                 else
                 {
                     _friendWindow.SetFriendWindow();
+
                     _friendWindow.Visibility = Visibility.Visible;
                 }
             }

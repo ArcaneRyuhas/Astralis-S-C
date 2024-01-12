@@ -84,6 +84,7 @@ namespace Astralis.Views
         private void AddUser(User user, UserManagerClient client)
         {
             int userAdded = client.AddUser(user);
+
             if (userAdded == Constants.VALIDATION_SUCCESS)
             {
                 MessageBox.Show(Properties.Resources.msgUserAddedSucceed, Properties.Resources.titleUserAdded, MessageBoxButton.OK, MessageBoxImage.Information);

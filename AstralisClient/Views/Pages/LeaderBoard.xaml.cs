@@ -51,7 +51,6 @@ namespace Astralis.Views.Pages
             {
                 string nickname = userAndWins.Username;
                 string wins = userAndWins.GamesWonCount.ToString();
-
                 Label lblNickname = CreateTextBox(nickname);
                 Label lblWins = CreateTextBox(wins);
 
@@ -78,14 +77,12 @@ namespace Astralis.Views.Pages
         private void AddTextBoxToUserGrid(Label lblNickname, int rowNumber)
         {
             Grid.SetRow(lblNickname, rowNumber);
-
             gdUsersName.Children.Add(lblNickname);
         }
 
         private void AddTextBoxToWinsGrid(Label lblWins, int rowNumber)
         {
             Grid.SetRow(lblWins, rowNumber);
-
             gdUsersWins.Children.Add(lblWins);
         }
 

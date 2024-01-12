@@ -16,23 +16,23 @@ namespace Astralis.Views.Cards
         private readonly List<string> _itemsList;
         private string _userNickname;
         private int _team;
+
         public event EventHandler<Tuple<string, int>> TeamSelectionChanged;
+        public event EventHandler<string> UserKicked;
 
         public string UserNickname { get { return _userNickname; }}
         public int Team {get { return _team; }}
 
-        public event EventHandler<string> UserKicked;
-
         public LobbyUserCard()
         {
             InitializeComponent();
+
             _itemsList = new List<string> { Properties.Resources.cbxTeamOne, Properties.Resources.cbxTeamTwo};
             cbxTeam.ItemsSource = _itemsList;
         }
 
-        public void SetCard(User user, bool isHost)
+        public void SetLobbyUserCard(User user, bool isHost)
         {
-            
             _userNickname = user.Nickname;
             lblNickname.Content = _userNickname;
             imgUser.Source = ImageManager.Instance().GetImage(user.ImageId);
@@ -78,15 +78,16 @@ namespace Astralis.Views.Cards
         {
             if (cbxTeam.SelectedValue != null && IsTheClientCard())
             {
-
                 if(cbxTeam.SelectedValue.ToString() == Properties.Resources.cbxTeamOne)
                 {
                     _team = TEAM_ONE;
+
                     TeamSelectionChanged?.Invoke(this, new Tuple<string, int>(_userNickname, TEAM_ONE));
                 }
                 else
                 {
                     _team = TEAM_TWO;
+
                     TeamSelectionChanged?.Invoke(this, new Tuple<string, int>(_userNickname, TEAM_TWO));
                 }
                 

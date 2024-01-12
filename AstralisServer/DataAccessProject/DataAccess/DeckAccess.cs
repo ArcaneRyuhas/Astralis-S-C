@@ -18,7 +18,7 @@ namespace DataAccessProject.DataAccess
 
         public int CreateDefaultDeck(AstralisDBEntities context, string nickname)
         {
-            int result = INT_VALIDATION_FAILURE;
+            int result;
 
             Deck deck = new Deck
             {
@@ -26,8 +26,8 @@ namespace DataAccessProject.DataAccess
             };
 
             context.Deck.Add(deck);
-            result = context.SaveChanges();
 
+            result = context.SaveChanges();
             result += CreateRelationUserDeck(context, deck.DeckId, nickname);
 
             if (result > INT_VALIDATION_FAILURE)
@@ -40,8 +40,7 @@ namespace DataAccessProject.DataAccess
 
         private int CreateRelationUserDeck(AstralisDBEntities context, int deckId, string nickname)
         {
-            int result = INT_VALIDATION_FAILURE;
-
+            int result;
             UserDeck userDeck = new UserDeck();
             userDeck.Nickname = nickname;
             userDeck.DeckId = deckId;
@@ -69,9 +68,7 @@ namespace DataAccessProject.DataAccess
                 using (var context = new AstralisDBEntities())
                 {
                     UserDeck userDeck = new UserDeck();
-
                     userDeck.DeckId = context.UserDeck.FirstOrDefault(ud => ud.Nickname == nickname).DeckId;
-
                     Deck deck = context.Deck.Find(userDeck.DeckId);
                     cardList = deck.Card.Split(',').Select(int.Parse).ToList();
                 }

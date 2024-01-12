@@ -24,7 +24,7 @@ namespace MessageService
 
         private static readonly ILog log = LogManager.GetLogger(typeof(MessageService));
 
-        public int ConfirmUser(string nickname, string password)
+        public int ConfirmUserCredentials(string nickname, string password)
         {
             int result = VALIDATION_FAILURE;
             UserAccess userAccess = new UserAccess();
@@ -33,7 +33,7 @@ namespace MessageService
             {
                 if (userAccess.FindUserByNickname(nickname) == VALIDATION_SUCCESS)
                 {
-                    result = userAccess.ConfirmUser(nickname, password);
+                    result = userAccess.ConfirmUserCredentials(nickname, password);
                 }
                 if (result > VALIDATION_FAILURE)
                 {
@@ -417,12 +417,12 @@ namespace MessageService
 
                 foreach (string userInTheLobby in usersNickname)
                 {
-                    ShowDisconnection(userInTheLobby, user);
+                    ShowDisconnectionOfLobby(userInTheLobby, user);
                 }
             }
         }
 
-        private void ShowDisconnection(string userInTheLobby, User user)
+        private void ShowDisconnectionOfLobby(string userInTheLobby, User user)
         {
             try
             {
@@ -515,11 +515,11 @@ namespace MessageService
                         log.Error(entityException);
                     }
                 }
-                SendUsersFromLobbyToGame(result, usersNickname);
+                TellUsersToGoFromLobbyToGame(result, usersNickname);
             }
         }
 
-        private void SendUsersFromLobbyToGame(int result, List<string> usersNickname)
+        private void TellUsersToGoFromLobbyToGame(int result, List<string> usersNickname)
         {
 
             if (result > VALIDATION_FAILURE)
@@ -657,7 +657,6 @@ namespace MessageService
     public partial class MessageService : IFriendManager
     {
         private static Dictionary<string, IFriendManagerCallback> _onlineUsers = new Dictionary<string, IFriendManagerCallback>();
-        private const int IS_SUCCEDED = 0;
         private const bool ACCEPTED_FRIEND = true;
         private static Object _lock = new Object();
 
@@ -675,7 +674,7 @@ namespace MessageService
                     if (!_onlineUsers.ContainsKey(nickname))
                     {
                         _onlineUsers.Add(nickname, currentUserCallbackChannel);
-                        ShowUserConnected(nickname);
+                        ShowUserSubscribedToFriendManager(nickname);
                     }
                     else
                     {
@@ -693,7 +692,7 @@ namespace MessageService
             }
         }
 
-        private void ShowUserConnected(string nickname)
+        private void ShowUserSubscribedToFriendManager(string nickname)
         {
             foreach (var user in _onlineUsers)
             {
@@ -1035,7 +1034,7 @@ namespace MessageService
                 {
                     try
                     {
-                        _usersInGameContext[userInGame].ShowGameDrawedCard(nickname, cardId);
+                        _usersInGameContext[userInGame].ShowCardDrawedInGame(nickname, cardId);
                     }
                     catch (CommunicationObjectAbortedException communicationObjectAbortedException)
                     {
@@ -1279,7 +1278,6 @@ namespace MessageService
                     CommunicationEndedException(hostNickname, userInGame);
                     log.Error(timeoutException);
                 }
-
             }
         }
 

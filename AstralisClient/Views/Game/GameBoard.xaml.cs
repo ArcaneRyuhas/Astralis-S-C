@@ -39,9 +39,10 @@ namespace Astralis.Views.Game
         public GameBoard()
         {
             InitializeComponent();
-            Connect();
+            ConnectToGame();
             SetTeams();
             SetGameManager();
+
             lblMyNickname.Content = UserSession.Instance().Nickname;
             IsHost = false;
         }
@@ -49,19 +50,23 @@ namespace Astralis.Views.Game
         private void SetGameManager()
         {
             _gameManager = new GameManager(gdEnemySlots, gdPlayerSlots);
+
             _gameManager.SetGameBoard(this);
-            _gameManager.SetCounters(progressBarCounter);
+            _gameManager.SetGameCounters(progressBarCounter);
+
             _gameManager.UserTeam = _userTeam;
             _gameManager.EnemyTeam = _enemyTeam;
+
             _gameManager.StartExitTimer();
         }
 
-        private void Connect()
+        private void ConnectToGame()
         {
             try
             {
                 InstanceContext context = new InstanceContext(this);
                 GameManagerClient _client = new GameManagerClient(context);
+
                 _client.ConnectGame(UserSession.Instance().Nickname);
             }
             catch (CommunicationObjectFaultedException)
@@ -155,7 +160,6 @@ namespace Astralis.Views.Game
         {
             _userTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
             _userTeam.PropertyChanged += UserTeamPropertyChanged;
-
             _enemyTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
             _enemyTeam.PropertyChanged += EnemyTeamPropertyChange;
         }
@@ -201,7 +205,6 @@ namespace Astralis.Views.Game
             if (child is Grid grid)
             {
                 counter++;
-
                 Grid innerGrid = grid;
                 int cardId = ERROR_CARD_ID;
 
@@ -234,6 +237,7 @@ namespace Astralis.Views.Game
             if (child is Grid innerGrid)
             {
                 GraphicCard graphicCard = new GraphicCard();
+
                 graphicCard.SetGraphicCard(CardManager.Instance().GetCard(ERROR_CARD_ID));
 
                 foreach (GraphicCard innerCard in innerGrid.Children)
@@ -274,7 +278,9 @@ namespace Astralis.Views.Game
         public void AddCardToHand(Card card)
         {
             GraphicCard graphicCard = new GraphicCard();
+
             graphicCard.SetGraphicCard(card);
+
             graphicCard.OnCardClicked += GraphicCardClickedHandler;
 
             AddGraphicCardToGrid(graphicCard, gdPlayerHand);
@@ -289,6 +295,7 @@ namespace Astralis.Views.Game
 
             ColumnDefinition columnDefinition = new ColumnDefinition();
             columnDefinition.Width = GridLength.Auto;
+
             gridToAddCard.ColumnDefinitions.Add(columnDefinition);
         }
 
@@ -341,12 +348,13 @@ namespace Astralis.Views.Game
             if (currentCardParent != null)
             {
                 int columnIndex = Grid.GetColumn(graphicCardToRemove);
+
                 currentCardParent.Children.Remove(graphicCardToRemove);
-                RemoveColumn(currentCardParent, columnIndex);
+                RemoveGridColumn(currentCardParent, columnIndex);
             }
         }
 
-        private void PlaceCardInSlot(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void PlaceCardInGameSlot(object sender, MouseButtonEventArgs e)
         {
             if (_gameManager.IsMyTurn && _selectedCard != null)
             {
@@ -364,11 +372,10 @@ namespace Astralis.Views.Game
             if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && _userTeam.UseMana(_selectedCard.Card.Mana))
             {
                 _selectedCard.IsSelected = false;
-
                 int columnIndex = Grid.GetColumn(_selectedCard);
-                currentCardParent.Children.Remove(_selectedCard);
-                RemoveColumn(currentCardParent, columnIndex);
 
+                currentCardParent.Children.Remove(_selectedCard);
+                RemoveGridColumn(currentCardParent, columnIndex);
                 boardCardSlot.Children.Add(_selectedCard);
                 _playedCards.Add(_selectedCard.Card);
 
@@ -393,14 +400,16 @@ namespace Astralis.Views.Game
             }
         }
 
-        private void RemoveColumn(Grid grid, int columnIndex)
+        private void RemoveGridColumn(Grid grid, int columnIndex)
         {
             if (columnIndex >= 0 && columnIndex < grid.ColumnDefinitions.Count)
             {
                 grid.ColumnDefinitions.RemoveAt(columnIndex);
+
                 foreach (UIElement child in grid.Children)
                 {
                     int currentColumn = Grid.GetColumn(child);
+
                     if (currentColumn > columnIndex)
                     {
                         Grid.SetColumn(child, currentColumn - 1);
@@ -453,12 +462,14 @@ namespace Astralis.Views.Game
         {
             string myNickname = UserSession.Instance().Nickname;
             EndGame endGame = new EndGame(winnerTeam, _gameManager.UsersTeam[myNickname]);
+
             _gameManager.EndExitTimer();
 
             GameWindow gameWindow = new GameWindow();
             endGame.EndGameWindow = gameWindow;
 
             gameWindow.ChangePage(endGame);
+
             gameWindow.Visibility = Visibility.Visible;
             
             this.Close();
@@ -493,8 +504,9 @@ namespace Astralis.Views.Game
                 if (graphicCardToRemove.Card != null && graphicCard.Card != null && graphicCard.Card.Equals(graphicCardToRemove.Card))
                 {
                         int columnIndex = Grid.GetColumn(graphicCard);
+
                         gdAllyHand.Children.Remove(graphicCard);
-                        RemoveColumn(gdAllyHand, columnIndex);
+                        RemoveGridColumn(gdAllyHand, columnIndex);
                         break;
                 }
             }
@@ -509,7 +521,7 @@ namespace Astralis.Views.Game
                 int columnIndex = Grid.GetColumn(firstGraphicCard);
 
                 gdEnemyHand.Children.Remove(firstGraphicCard);
-                RemoveColumn(gdEnemyHand, columnIndex);
+                RemoveGridColumn(gdEnemyHand, columnIndex);
             }
         }
 
@@ -523,9 +535,7 @@ namespace Astralis.Views.Game
         public void ShowUsersInGame(Dictionary<string, int> users)
         {
             _gameManager.UsersTeam = users;
-
             lblUserTeam.Content += _gameManager.UsersTeam[UserSession.Instance().Nickname].ToString();
-
             _ = StartGameAsync();
         }
 
@@ -546,7 +556,6 @@ namespace Astralis.Views.Game
             GraphicCard graphicCardTwo = new GraphicCard();
 
             graphicCardTwo.SetGraphicCard(card);
-
             AddGraphicCardToGrid(graphicCardOne, gdEnemyHand);
             AddGraphicCardToGrid(graphicCardTwo, gdEnemyAllyHand);
         }
@@ -591,6 +600,7 @@ namespace Astralis.Views.Game
         private void BtnMenuClick(object sender, RoutedEventArgs e)
         {
             lblUserTurn.Content = Properties.Resources.lblUserTurnFalse;
+
             _gameManager.EndTurn();
         }
 

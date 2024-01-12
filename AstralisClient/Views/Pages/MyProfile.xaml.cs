@@ -29,6 +29,7 @@ namespace Astralis.Views.Pages
         public MyProfile(FriendWindow friendWindow)
         {
             _friendWindow = friendWindow;
+
             InitializeComponent();
             SetGraphicElements();
         }
@@ -37,6 +38,7 @@ namespace Astralis.Views.Pages
         {
             txtNickname.Text = UserSession.Instance().Nickname;
             txtMail.Text = UserSession.Instance().Mail; 
+
             SetImages();
         }
 
@@ -80,10 +82,8 @@ namespace Astralis.Views.Pages
 
             Grid.SetRow(image, gridRow);
             Grid.SetColumn(image, gridColumn);
-
             Grid.SetRow(radioButton, gridRow);
             Grid.SetColumn(radioButton, gridColumn);
-
             gdImages.Children.Add(image);
             gdImages.Children.Add(radioButton);
         }
@@ -111,13 +111,14 @@ namespace Astralis.Views.Pages
 
         private void BtnAcceptClick(object sender, RoutedEventArgs e)
         {
-
             User user = new User();
+
             SetUserInformation(user);
 
             if (ValidFields(user))
             {
                 UserManagerClient client = new UserManagerClient();
+
                 try
                 {
                     int userUpdated =  client.UpdateUser(user);
@@ -132,7 +133,7 @@ namespace Astralis.Views.Pages
                     }
 
                     client.Close();
-                    _friendWindow.Disconnect();
+                    _friendWindow.UnsubscribeFromFriendManager();
                 }
                 catch (CommunicationObjectFaultedException)
                 {

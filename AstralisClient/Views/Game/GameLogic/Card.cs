@@ -136,6 +136,7 @@ namespace Astralis.Views.Game.GameLogic
             {
                 int hash = 17;
                 hash = hash * 23 + (_type != null ? _type.GetHashCode() : 0);
+
                 return hash;
             }
         }

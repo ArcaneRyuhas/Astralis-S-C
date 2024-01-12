@@ -1,12 +1,7 @@
 ﻿using DataAccessProject.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Data.Entity.Migrations;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessProject.DataAccess
 {
@@ -15,6 +10,7 @@ namespace DataAccessProject.DataAccess
         private const int INT_VALIDATION_SUCCESS = 1;
         private const int INT_VALIDATION_FAILURE = 0;
         private const string GAME_MODE = "normal";
+        private const string GAME_BAN = "gameBan";
 
         public GameAccess() { }
 
@@ -29,6 +25,7 @@ namespace DataAccessProject.DataAccess
                     context.Database.Log = Console.WriteLine;
 
                     context.Game.Add(new Game() { gameId = gameId });
+
                     if (context.SaveChanges() > 0)
                     {
                         isSuccesfullyCreated = true;
@@ -60,6 +57,7 @@ namespace DataAccessProject.DataAccess
                 {
                     result = INT_VALIDATION_SUCCESS;
                 }
+
                 return result;
             }
         }
@@ -71,7 +69,6 @@ namespace DataAccessProject.DataAccess
             using (var context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-
                 var databaseGameId = context.Game.Find(gameId);
 
                 if (databaseGameId != null)
@@ -79,10 +76,9 @@ namespace DataAccessProject.DataAccess
                     isRepeated = true;
                 }
             }
+
             return isRepeated;
         }
-
-       
 
         public int EndGame(int winnerTeam, string gameId)
         {
@@ -97,7 +93,6 @@ namespace DataAccessProject.DataAccess
                 {
                     gameRow.winnerTeam = winnerTeam.ToString();
                     gameRow.gameMode = GAME_MODE;
-
                     result = context.SaveChanges();
                 }
 
@@ -110,11 +105,9 @@ namespace DataAccessProject.DataAccess
             return result;
         }
 
-
         public List<GamesWonInfo> GetTopGamesWon()
         {
             List<GamesWonInfo> gameInfo = new List<GamesWonInfo>();
-
             using (var context = new AstralisDBEntities())
             {
                 var query = context.Database.SqlQuery<GamesWonInfo>(
@@ -142,8 +135,6 @@ namespace DataAccessProject.DataAccess
 
             return gameInfo;
         }
-
-        private const string GAME_BAN = "gameBan";
 
         public int BanUser (string nickname)
         {
@@ -175,7 +166,8 @@ namespace DataAccessProject.DataAccess
                     }
                 }
             }
-                return result;
+
+            return result;
         }
 
         public int CanPlay(string nickname)
@@ -207,6 +199,7 @@ namespace DataAccessProject.DataAccess
             using (var context = new AstralisDBEntities())
             {
                 var existingGame = context.Game.Find(gameId);
+
                 if (existingGame != null)
                 {
                     context.Game.Remove(existingGame);
@@ -215,6 +208,7 @@ namespace DataAccessProject.DataAccess
                     result = INT_VALIDATION_SUCCESS;
                 }
             }
+
             return result;
         }
 
@@ -229,6 +223,7 @@ namespace DataAccessProject.DataAccess
                 if (existingBan != null)
                 {
                     context.Ban.Remove(existingBan);
+
                     result = context.SaveChanges();
 
                     if (result > INT_VALIDATION_FAILURE)
@@ -237,6 +232,7 @@ namespace DataAccessProject.DataAccess
                     }
                 }
             }
+
             return result;
         }
     }

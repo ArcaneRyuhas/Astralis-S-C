@@ -66,7 +66,7 @@ namespace Astralis.Views
 
         private void BtnExitClick(object sender, RoutedEventArgs e)
         {
-            _friendWindow.Disconnect();
+            _friendWindow.UnsubscribeFromFriendManager();
             CloseWindowEvent?.Invoke(this, EventArgs.Empty);
         }
 
@@ -103,12 +103,14 @@ namespace Astralis.Views
         private void BtnMyProfileClick(object sender, RoutedEventArgs e)
         {
             MyProfile myProfile = new MyProfile(_friendWindow);
+
             NavigationService.Navigate(myProfile);
         }
 
         private void BtnSettingsClick(object sender, RoutedEventArgs e)
         {
             Settings settings = new Settings();
+
             NavigationService.Navigate(settings);
         }
 

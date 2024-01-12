@@ -217,7 +217,7 @@ namespace DataAccessTestProject
             string nickname = "ConfirmUserTest";
             string password = "password";
 
-            Assert.IsTrue(userAccess.ConfirmUser(nickname, password) == INT_VALIDATION_SUCCESS);
+            Assert.IsTrue(userAccess.ConfirmUserCredentials(nickname, password) == INT_VALIDATION_SUCCESS);
         }
 
         [TestMethod]
@@ -226,7 +226,7 @@ namespace DataAccessTestProject
             string nickname = "ConfirmUserTest";
             string password = "InvalidPassword";
 
-            Assert.IsTrue(userAccess.ConfirmUser(nickname, password) == INT_VALIDATION_FAILURE);
+            Assert.IsTrue(userAccess.ConfirmUserCredentials(nickname, password) == INT_VALIDATION_FAILURE);
         }
 
         [TestMethod]
@@ -362,7 +362,7 @@ namespace DataAccessTestProject
 
             Assert.ThrowsException<EntityException>(() =>
             {
-                userAccess.ConfirmUser(nickname, password);
+                userAccess.ConfirmUserCredentials(nickname, password);
             });
         }
 

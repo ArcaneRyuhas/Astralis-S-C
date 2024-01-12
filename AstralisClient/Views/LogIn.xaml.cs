@@ -29,7 +29,6 @@ namespace Astralis.Views
             string password = CreateSha2(pbPassword.Password);
             string nickname = tbNickname.Text;
             
-
             if (NoEmptyFields())
             {
                 try
@@ -139,7 +138,6 @@ namespace Astralis.Views
         private void BtnJoinAsGuestClick(object sender, RoutedEventArgs e)
         {
             GuestInvitation guestInvitation = new GuestInvitation();
-
             guestInvitation.OnSubmit += GuestInvitationOnSubmit;
 
             guestInvitation.ShowDialog();
@@ -158,12 +156,12 @@ namespace Astralis.Views
                     if (user.Nickname != Constants.ERROR_STRING)
                     {
                         UserSession.Instance(user);
-                        GuestJoinLobby(invitationCode);
+                        JoinLobbyAsGuest(invitationCode);
                     }
                 }
                 else
                 {
-                    GuestJoinLobby(invitationCode);
+                    JoinLobbyAsGuest(invitationCode);
                 }
             }
             catch (CommunicationObjectFaultedException)
@@ -180,7 +178,7 @@ namespace Astralis.Views
             }
         }
 
-        private void GuestJoinLobby(string invitationCode)
+        private void JoinLobbyAsGuest(string invitationCode)
         {
             GameWindow gameWindow = new GameWindow();
             Lobby lobby = new Lobby(gameWindow);

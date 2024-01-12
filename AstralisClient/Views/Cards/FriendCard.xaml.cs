@@ -36,6 +36,7 @@ namespace Astralis.Views.Cards
         public void SetMainMenuCard(string nickname, bool onlineStatus, int friendStatus)
         {
             lblNickname.Content = nickname;
+
             if (friendStatus == IS_FRIEND)
             {
                 if (onlineStatus)
@@ -75,7 +76,6 @@ namespace Astralis.Views.Cards
         private void BtnDeleteFriendClick(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
-
             btnAcceptFriendRequest.Visibility = Visibility.Hidden;
 
             RemoveFriendEvent?.Invoke(this, friendUsername);
@@ -103,7 +103,6 @@ namespace Astralis.Views.Cards
         private void BtnSendGameInvitationClick(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
-
             btnSendGameInvitation.Visibility = Visibility.Hidden;
 
             SendGameInvitation?.Invoke(this, friendUsername);

@@ -76,12 +76,13 @@ namespace Astralis.Views.Pages
 
             foreach (UserWithTeam userWithTeam in usersWithTeams)
             {
-                AddCard(userWithTeam, userWithTeam.Team, gridRow);
+                AddEndGameUserCard(userWithTeam, userWithTeam.Team, gridRow);
+            
                 gridRow++;
             }
         }
 
-        private void AddCard(UserWithTeam user, int team, int gridRow)
+        private void AddEndGameUserCard(UserWithTeam user, int team, int gridRow)
         {
             EndGameUserCard endGameUserCard = new EndGameUserCard();
 

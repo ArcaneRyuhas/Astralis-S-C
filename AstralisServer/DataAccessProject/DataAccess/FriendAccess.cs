@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessProject.DataAccess
 {
@@ -27,7 +23,6 @@ namespace DataAccessProject.DataAccess
             using (var context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-
                 var friendRelationship = context.UserFriend
                     .FirstOrDefault(f =>
                         (f.Nickname1 == nickname && f.Nickname2 == nicknamefriendToRemove) ||
@@ -38,9 +33,11 @@ namespace DataAccessProject.DataAccess
                 {
                     context.UserFriend.Remove(friendRelationship);
                     context.SaveChanges();
+
                     IsSucceded = true;
                 }
             }
+
             return IsSucceded;
         }
 
@@ -49,7 +46,6 @@ namespace DataAccessProject.DataAccess
             using (var context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-
                 var existingRequest = context.UserFriend
                     .FirstOrDefault(f =>
                         (f.Nickname1 == nicknameSender && f.Nickname2 == nicknameReceiver) ||
@@ -70,7 +66,6 @@ namespace DataAccessProject.DataAccess
                 using (var context = new AstralisDBEntities())
                 {
                     context.Database.Log = Console.WriteLine;
-
                     var newFriendRequest = new UserFriend
                     {
                         Nickname1 = nicknameSender,
@@ -95,7 +90,6 @@ namespace DataAccessProject.DataAccess
             using (var context = new AstralisDBEntities())
             {
                 context.Database.Log = Console.WriteLine;
-
                 var existingRequest = context.UserFriend
                     .FirstOrDefault(f =>
                         (f.Nickname1 == nicknameReciever && f.Nickname2 == nicknameSender) ||
@@ -121,6 +115,7 @@ namespace DataAccessProject.DataAccess
                     }
                 }
             }
+
             return result;
         }
 
@@ -140,15 +135,18 @@ namespace DataAccessProject.DataAccess
                     if (onlineUsers.Contains(request.Nickname1))
                     {
                         friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
+
                         friendList.Add(request.Nickname1, friendTuple);
                     }
                     else
                     {
                         friendTuple = new Tuple<bool, int>(OFFLINE, IS_PENDING_FRIEND);
+
                         friendList.Add(request.Nickname1, friendTuple);
                     }
                 }
             }
+
             return friendList;
         }
 
@@ -169,11 +167,13 @@ namespace DataAccessProject.DataAccess
                         if (onlineUsers.Contains(friend.Nickname1))
                         {
                             friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+
                             friendList.Add(friend.Nickname1, friendTuple);
                         }
                         else
                         {
                             friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+
                             friendList.Add(friend.Nickname1, friendTuple);
                         }
 
@@ -183,17 +183,18 @@ namespace DataAccessProject.DataAccess
                         if (onlineUsers.Contains(friend.Nickname2))
                         {
                             friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
+
                             friendList.Add(friend.Nickname2, friendTuple);
                         }
                         else
                         {
                             friendTuple = new Tuple<bool, int>(OFFLINE, IS_FRIEND);
+
                             friendList.Add(friend.Nickname2, friendTuple);
                         }
                     }
                 }
             }
-           
         }
     }
 }

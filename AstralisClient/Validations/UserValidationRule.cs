@@ -13,7 +13,6 @@ namespace Astralis.Validations
         {
             Regex userRegex = new Regex(userStringRegex);
             ValidationResult result = ValidationResult.ValidResult;
-
             string input = value.ToString();
 
             if (!userRegex.IsMatch(input))
@@ -38,7 +37,6 @@ namespace Astralis.Validations
         {
             Regex mailRegex = new Regex(mailStringRegex);
             ValidationResult result = ValidationResult.ValidResult;
-
             string input = value.ToString();
 
             if (!mailRegex.IsMatch(input))

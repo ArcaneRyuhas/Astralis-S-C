@@ -1,14 +1,5 @@
-﻿using DataAccessProject.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using System.Data.SqlClient;
-using System.Diagnostics.Contracts;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessProject.DataAccess
 {
@@ -44,6 +35,7 @@ namespace DataAccessProject.DataAccess
                     maxGuestNumber = guestUsers.Max(user =>
                     {
                         int number = 0;
+
                         if (int.TryParse(user.Nickname.Substring("Guest".Length), out number))
                         {
                             return number;
@@ -55,6 +47,7 @@ namespace DataAccessProject.DataAccess
                 {
                     maxGuestNumber = INT_VALIDATION_FAILURE;
                 }
+
                 return maxGuestNumber;
             }
         }
@@ -63,33 +56,30 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-           
             using (var context = new AstralisDBEntities())
             {
+                if (FindUserByNickname(user.Nickname) == INT_VALIDATION_FAILURE)
+                {
+                    context.Database.Log = Console.WriteLine;
+                    User databaseUser = new User();
+                    databaseUser.nickName = user.Nickname;
+                    databaseUser.imageId = (short)user.ImageId;
+                    databaseUser.mail = user.Mail;
 
-                    if (FindUserByNickname(user.Nickname) == INT_VALIDATION_FAILURE)
+                    context.User.Add(databaseUser);
+
+                    result = context.SaveChanges();
+                    DeckAccess deckAccess = new DeckAccess();
+
+                    deckAccess.CreateDefaultDeck(context, user.Nickname);
+
+                    if (result > INT_VALIDATION_FAILURE)
                     {
-                        context.Database.Log = Console.WriteLine;
-
-                        User databaseUser = new User();
-                        databaseUser.nickName = user.Nickname;
-                        databaseUser.imageId = (short)user.ImageId;
-                        databaseUser.mail = user.Mail;
-
-                        context.User.Add(databaseUser);
-
-                        result = context.SaveChanges();
-
-                        DeckAccess deckAccess = new DeckAccess();
-                        deckAccess.CreateDefaultDeck(context, user.Nickname);
-
-                        if (result > INT_VALIDATION_FAILURE)
-                        {
-                            result = INT_VALIDATION_SUCCESS;
-                        }
+                        result = INT_VALIDATION_SUCCESS;
                     }
-                
+                }
             }
+
             return result;
         }
 
@@ -104,11 +94,8 @@ namespace DataAccessProject.DataAccess
                     using (var transactionContext = context.Database.BeginTransaction())
                     {
                         context.Database.Log = Console.WriteLine;
-
                         string cleanedPassword = user.Password.Trim();
-
                         var newSession = context.UserSession.Add(new UserSession() { password = cleanedPassword });
-
                         User databaseUser = new User();
                         databaseUser.nickName = user.Nickname;
                         databaseUser.mail = user.Mail;
@@ -119,10 +106,9 @@ namespace DataAccessProject.DataAccess
                         context.User.Add(databaseUser);
 
                         result = context.SaveChanges();
-
                         DeckAccess deckAccess = new DeckAccess();
-                        deckAccess.CreateDefaultDeck(context, user.Nickname);
 
+                        deckAccess.CreateDefaultDeck(context, user.Nickname);
                         transactionContext.Commit();
 
                         if (result > INT_VALIDATION_FAILURE)
@@ -155,7 +141,6 @@ namespace DataAccessProject.DataAccess
                     {
                         databaseUser.mail = user.Mail;
                         databaseUser.imageId = (short)user.ImageId;
-
                         var databaseUserSession = context.UserSession.Find(databaseUser.userSessionFk);
 
                         if (databaseUserSession != null && !string.IsNullOrEmpty(user.Password))
@@ -197,6 +182,7 @@ namespace DataAccessProject.DataAccess
                     foundUser.Nickname = USER_NOT_FOUND;
                 }
             }
+
             return foundUser;
         }
 
@@ -218,7 +204,7 @@ namespace DataAccessProject.DataAccess
             return isFound;
         }
 
-        public int ConfirmUser(string nickname, string password)
+        public int ConfirmUserCredentials(string nickname, string password)
         {
             int result = INT_VALIDATION_FAILURE;
 
@@ -227,7 +213,6 @@ namespace DataAccessProject.DataAccess
                 if (FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
                 {
                     context.Database.Log = Console.WriteLine;
-
                     var databaseUser = context.User.Find(nickname);
                     var databaseUsersession = context.UserSession.Find(databaseUser.userSessionFk);
 
@@ -235,7 +220,6 @@ namespace DataAccessProject.DataAccess
                     {
                         result = INT_VALIDATION_SUCCESS;
                     }
-
                 }
             }
 
@@ -244,7 +228,6 @@ namespace DataAccessProject.DataAccess
 
         public int DeleteUser(string nickname)
         {
-
             int result = INT_VALIDATION_FAILURE;
 
             using (var context = new AstralisDBEntities())

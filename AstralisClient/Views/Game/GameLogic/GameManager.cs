@@ -61,18 +61,15 @@ namespace Astralis.Views.Game.GameLogic
             this._gameBoard = gameBoard;
         }
 
-        public void SetCounters(ProgressBar progressBarCounter)
+        public void SetGameCounters(ProgressBar progressBarCounter)
         {
             this._progressBarCounter = progressBarCounter;
-
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += TimerTick;
-
             _exitTimer = new DispatcherTimer();
             _exitTimer.Interval = TimeSpan.FromSeconds(1);
             _exitTimer.Tick += ExitTimerTick;
-
             progressBarCounter.Maximum = _countdownValue;
             progressBarCounter.Value = _countdownValue;
         }
@@ -87,6 +84,7 @@ namespace Astralis.Views.Game.GameLogic
                 Card card = CardManager.Instance().GetCard(cardToDraw);
 
                 _userHand.Add(card);
+
                 int indexOfDrawnCard = _userHand.IndexOf(card);
 
                 _gameBoard.AddCardToHand(_userHand[indexOfDrawnCard]);
@@ -110,6 +108,7 @@ namespace Astralis.Views.Game.GameLogic
             }
 
             DoubleAnimation animation = new DoubleAnimation(_countdownValue, TimeSpan.FromSeconds(1));
+
             _progressBarCounter.BeginAnimation(ProgressBar.ValueProperty, animation);
         }
 
@@ -180,7 +179,6 @@ namespace Astralis.Views.Game.GameLogic
 
             foreach (UIElement child in gdSlots.Children)
             {
-                
                 if (child is Grid grid)
                 {
                     Grid childGrid = child as Grid;
@@ -202,7 +200,6 @@ namespace Astralis.Views.Game.GameLogic
 
         private void TurnCounter()
         {
-
             switch (_endTurnCounter)
             {
                 case 2:
@@ -237,6 +234,7 @@ namespace Astralis.Views.Game.GameLogic
         private void EndPhaseLogic()
         {
             _endTurnCounter = TURN_INITIALIZER;
+
             ChangeTurnOrder();
             StartCountdown();
             AddMana();
@@ -262,6 +260,7 @@ namespace Astralis.Views.Game.GameLogic
             {
                 UserTeam.RoundMana++;
             }
+
             UserTeam.Mana = UserTeam.RoundMana;
         }
 
@@ -302,6 +301,7 @@ namespace Astralis.Views.Game.GameLogic
                 {
                     winnerTeam = UsersTeam[_myEnemy];
                 }
+
                 _gameBoard.GameHasEnded(winnerTeam);
             }
             
@@ -369,7 +369,6 @@ namespace Astralis.Views.Game.GameLogic
 
         private void OtherTypeAttack(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard)
         {
-            
             AllyCardAttack(allyGraphicCard, enemyGraphicCard);
             EnemyCardAttack(allyGraphicCard, enemyGraphicCard);
             KillCards(allyGraphicCard, enemyGraphicCard);
@@ -378,9 +377,7 @@ namespace Astralis.Views.Game.GameLogic
         private void AllyCardAttack(GraphicCard allyGraphicCard, GraphicCard enemyGraphicCard)
         {
             GraphicCard[] teamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdPlayerSlots);
-
             int allyMagesCount = GetMagesCount(teamBoard);
-
             Card allyCard = allyGraphicCard.Card;
             Card enemyCard = enemyGraphicCard.Card;
 
@@ -402,7 +399,6 @@ namespace Astralis.Views.Game.GameLogic
             GraphicCard[] enemyTeamBoard = _gameBoard.GetAttackBoard(_gameBoard.gdEnemySlots);
             int enemyMagesCount = GetMagesCount(enemyTeamBoard);
             Card enemyCard = enemyGraphicCard.Card;
-
 
             if (enemyGraphicCard.Card.Type != Constants.WARRIOR && enemyGraphicCard.Card.Type != Constants.NO_CLASS)
             {

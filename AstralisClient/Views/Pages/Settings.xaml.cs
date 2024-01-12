@@ -35,8 +35,8 @@ namespace Astralis.Views.Pages
         {
             Window currentWindow = Window.GetWindow(this);
             GameWindow gameWindow = new GameWindow();
-            gameWindow.Show();
 
+            gameWindow.Show();
             currentWindow.Close();
         }
 

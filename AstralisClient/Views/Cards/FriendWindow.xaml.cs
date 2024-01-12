@@ -34,8 +34,10 @@ namespace Astralis.Views.Cards
         public FriendWindow(string typeFriendWindow)
         {
             this._typeFriendWindow = typeFriendWindow;
+
             InitializeComponent();
-            Connect();
+            SubscribeToFriendManager();
+
             if(typeFriendWindow == LOBBY_WINDOW)
             {
                 txtSearchUser.Visibility = Visibility.Collapsed;
@@ -43,7 +45,7 @@ namespace Astralis.Views.Cards
             }
         }
 
-        private void Connect()
+        private void SubscribeToFriendManager()
         {
             InstanceContext context = new InstanceContext(this);
             _client = new FriendManagerClient(context);
@@ -69,7 +71,7 @@ namespace Astralis.Views.Cards
             }
         }
 
-        public void Disconnect()
+        public void UnsubscribeFromFriendManager()
         {
             try
             {
@@ -95,6 +97,7 @@ namespace Astralis.Views.Cards
         public void SetFriendWindow()
         {
             _cardsAddedRow = STARTING_VALUE_FOR_ROWS;
+
             gdFriends.Children.Clear();
             gdFriends.RowDefinitions.Clear();
 
@@ -102,7 +105,7 @@ namespace Astralis.Views.Cards
             {
                 if (friendEntry.Value.Item1 == IS_ONLINE && friendEntry.Value.Item2 == IS_FRIEND)
                 {
-                    AddCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
+                    AddFriendWindowCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
                 }
             }
 
@@ -110,7 +113,7 @@ namespace Astralis.Views.Cards
             {
                 if (friendEntry.Value.Item1 == IS_OFFLINE && friendEntry.Value.Item2 == IS_FRIEND)
                 {
-                    AddCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
+                    AddFriendWindowCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
                 }
             }
 
@@ -118,11 +121,11 @@ namespace Astralis.Views.Cards
             {
                 if (friendEntry.Value.Item2 == IS_PENDING_FRIEND)
                 {
-                    AddCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
+                    AddFriendWindowCard(friendEntry.Key, friendEntry.Value.Item1, friendEntry.Value.Item2);
                 }
             }
 
-            CreateLastRow();
+            CreateLastFriendWindowRow();
 
             if (_typeFriendWindow == LOBBY_WINDOW)
             {
@@ -130,14 +133,15 @@ namespace Astralis.Views.Cards
             }
         }
 
-        private void CreateLastRow()
+        private void CreateLastFriendWindowRow()
         {
             RowDefinition lastRowDefinition = new RowDefinition();
             lastRowDefinition.Height = new GridLength(1, GridUnitType.Star);
+
             gdFriends.RowDefinitions.Add(lastRowDefinition);
         }
 
-        private void AddCard(string friendOnlineKey, bool friendOnlineValue, int friendStatus)
+        private void AddFriendWindowCard(string friendOnlineKey, bool friendOnlineValue, int friendStatus)
         {
             FriendCard card = new FriendCard();
             card.ReplyToFriendRequestEvent += ReplyToFriendRequestEvent;
@@ -155,6 +159,7 @@ namespace Astralis.Views.Cards
 
             Grid.SetRow(card, _cardsAddedRow);
             gdFriends.Children.Add(card);
+
             _cardsAddedRow++;
 
             AddFriendRow();
@@ -164,6 +169,7 @@ namespace Astralis.Views.Cards
         {
             RowDefinition rowDefinition = new RowDefinition();
             rowDefinition.Height = GridLength.Auto;
+
             gdFriends.RowDefinitions.Add(rowDefinition);
         }
 
@@ -176,7 +182,7 @@ namespace Astralis.Views.Cards
             {
                 int requestReply = _client.ReplyFriendRequest(UserSession.Instance().Nickname, friendUsername, reply);
 
-                ValidateRequest(requestReply, friendReply);
+                ValidateFriendRequest(requestReply, friendReply);
             }
             catch (CommunicationObjectFaultedException)
             {
@@ -195,7 +201,7 @@ namespace Astralis.Views.Cards
             }
         }
 
-        private void ValidateRequest(int requestReply, Tuple<string, bool> friendReply)
+        private void ValidateFriendRequest(int requestReply, Tuple<string, bool> friendReply)
         {
             string friendUsername = friendReply.Item1;
             bool reply = friendReply.Item2;
@@ -206,8 +212,8 @@ namespace Astralis.Views.Cards
                 {
                     Tuple<bool, int> friendTuple = new Tuple<bool, int>(_friendList[friendUsername].Item1, IS_FRIEND);
                     _friendList[friendUsername] = friendTuple;
-                    SetFriendWindow();
 
+                    SetFriendWindow();
                     MessageBox.Show(Properties.Resources.msgFriendRequestAccepted, "Astralis", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
@@ -220,7 +226,7 @@ namespace Astralis.Views.Cards
             else if (requestReply == Constants.ERROR)
             {
                 MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                Disconnect();
+                UnsubscribeFromFriendManager();
                 App.RestartApplication();
             }
         }
@@ -261,7 +267,7 @@ namespace Astralis.Views.Cards
             else if (removedFriendAnswer == Constants.ERROR)
             {
                 MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                Disconnect();
+                UnsubscribeFromFriendManager();
                 App.RestartApplication();
             }
         }
@@ -332,7 +338,7 @@ namespace Astralis.Views.Cards
             else if (requestSent == Constants.ERROR)
             {
                 MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
-                Disconnect();
+                UnsubscribeFromFriendManager();
                 App.RestartApplication();
             }
             else
@@ -386,6 +392,7 @@ namespace Astralis.Views.Cards
         public void ShowFriends(Dictionary<string, Tuple<bool, int>> onlineFriends)
         {
             _friendList = onlineFriends;
+
             SetFriendWindow();
         }
 
@@ -394,7 +401,6 @@ namespace Astralis.Views.Cards
             Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_PENDING_FRIEND);
 
             _friendList.Add(nickname, friendTuple);
-
             SetFriendWindow();
         }
 
@@ -403,7 +409,6 @@ namespace Astralis.Views.Cards
             Tuple<bool, int> friendTuple = new Tuple<bool, int>(ONLINE, IS_FRIEND);
 
             _friendList.Add(nickname, friendTuple);
-
             SetFriendWindow();
         }
 

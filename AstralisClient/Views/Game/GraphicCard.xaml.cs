@@ -17,6 +17,7 @@ namespace Astralis.Views.Game
 
         private bool _isSelected = false;
         private Card _card;
+
         public event EventHandler<bool> OnCardClicked;
         
 
@@ -50,7 +51,6 @@ namespace Astralis.Views.Game
             {
                 _card = card;
                 _card.PropertyChanged += CardPropertyChanged;
-
                 lblHealth.Content = card.Health.ToString();
                 lblAttack.Content = card.Attack.ToString();
                 lblMana.Content = card.Mana.ToString();
@@ -65,7 +65,6 @@ namespace Astralis.Views.Game
         private void HideCard()
         {
             gdCard.Background = null;
-
             lblHealth.Visibility = Visibility.Collapsed;
             lblAttack.Visibility = Visibility.Collapsed;
             lblMana.Visibility = Visibility.Collapsed;
