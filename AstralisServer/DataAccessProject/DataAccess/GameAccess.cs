@@ -1,40 +1,35 @@
 ﻿using DataAccessProject.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core;
-using System.Data.Entity.Migrations;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessProject.DataAccess
 {
     public class GameAccess
     {
+        private const int INT_VALIDATION_SUCCESS = 1;
+        private const int INT_VALIDATION_FAILURE = 0;
+        private const string GAME_MODE = "normal";
+        private const string GAME_BAN = "gameBan";
+
         public GameAccess() { }
 
         public bool CreateGame(string gameId)
         {
             bool isSuccesfullyCreated = false;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                try
+                if (!GameIdIsRepeated(gameId))
                 {
-                    if (!GameIdIsRepeated(gameId))
+                    context.Database.Log = Console.WriteLine;
+
+                    context.Game.Add(new Game() { gameId = gameId });
+
+                    if (context.SaveChanges() > 0)
                     {
-                        context.Database.Log = Console.WriteLine;
-                        var newSession = context.Game.Add(new Game() { gameId = gameId });
-                        if (context.SaveChanges() > 0)
-                        {
-                            isSuccesfullyCreated = true;
-                        }
+                        isSuccesfullyCreated = true;
                     }
-                }
-                catch (SqlException sqlException)
-                {
-                    throw sqlException;
                 }
             };
 
@@ -45,29 +40,24 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
 
-                    var newSession = context.Plays.Add(new Plays()
-                    {
-                        nickName = userNickname,
-                        gameId = gameId,
-                        team = team
-                    });
-                    result = context.SaveChanges();
-
-                    if (result == INT_VALIDATION_FAILURE)
-                    {
-                        result = INT_VALIDATION_SUCCESS;
-                    }
-                }
-                catch (SqlException sqlException)
+                context.Plays.Add(new Plays()
                 {
-                    throw sqlException;
+                    nickName = userNickname,
+                    gameId = gameId,
+                    team = team
+                });
+
+                result = context.SaveChanges();
+
+                if (result > INT_VALIDATION_FAILURE)
+                {
+                    result = INT_VALIDATION_SUCCESS;
                 }
+
                 return result;
             }
         }
@@ -76,75 +66,52 @@ namespace DataAccessProject.DataAccess
         {
             bool isRepeated = false;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                try
-                {
-                    context.Database.Log = Console.WriteLine;
+                context.Database.Log = Console.WriteLine;
+                Game databaseGameId = context.Game.Find(gameId);
 
-                    var databaseGameId = context.Game.Find(gameId);
-
-                    if (databaseGameId != null)
-                    {
-                        isRepeated = true;
-                    }
-                }
-                catch (SqlException sqlException)
+                if (databaseGameId != null)
                 {
-                    throw sqlException;
+                    isRepeated = true;
                 }
             }
+
             return isRepeated;
         }
-
-        private const int INT_VALIDATION_SUCCESS = 1;
-        private const int INT_VALIDATION_FAILURE = 0;
-        private const int ERROR = -1;
-        private const string GAME_MODE = "normal";
 
         public int EndGame(int winnerTeam, string gameId)
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                try
+                context.Database.Log = Console.WriteLine;
+                Game gameRow = context.Game.Find(gameId);
+
+                if (gameRow != null)
                 {
-                    context.Database.Log = Console.WriteLine;
-                    var gameRow = context.Game.Find(gameId);
-
-                    if (gameRow != null)
-                    {
-                        gameRow.winnerTeam = winnerTeam.ToString();
-                        gameRow.gameMode = GAME_MODE;
-
-                        result = context.SaveChanges();
-                    }
-
-                    if (result > INT_VALIDATION_FAILURE)
-                    {
-                        result = INT_VALIDATION_SUCCESS;
-                    }
+                    gameRow.winnerTeam = winnerTeam.ToString();
+                    gameRow.gameMode = GAME_MODE;
+                    result = context.SaveChanges();
                 }
-                catch (SqlException sqlException)
+
+                if (result > INT_VALIDATION_FAILURE)
                 {
-                    throw sqlException;
+                    result = INT_VALIDATION_SUCCESS;
                 }
             }
 
             return result;
         }
 
-
         public List<GamesWonInfo> GetTopGamesWon()
         {
             List<GamesWonInfo> gameInfo = new List<GamesWonInfo>();
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                try
-                {
-                    var query = context.Database.SqlQuery<GamesWonInfo>( 
+                var query = context.Database.SqlQuery<GamesWonInfo>(
                         @"SELECT TOP 10 p.Nickname AS Username, COUNT(*) AS GamesWonCount
                           FROM [AstralisDB].[dbo].[Plays] p
                           JOIN Game g ON p.GameId = g.GameId
@@ -153,124 +120,96 @@ namespace DataAccessProject.DataAccess
                           ORDER BY GamesWonCount DESC;"
                     );
 
-                    var results = query.ToList();
+                List<GamesWonInfo> results = query.ToList();
 
-                    foreach (var result in results)
-                    {
-                        GamesWonInfo gamesWonInfo = new GamesWonInfo()
-                        {
-                            Username = result.Username,
-                            GamesWonCount = result.GamesWonCount
-                        };
-
-                        gameInfo.Add(gamesWonInfo);
-                    }
-                }
-                catch (SqlException sqlException)
+                foreach (GamesWonInfo result in results)
                 {
-                    Console.WriteLine("Database error: " + sqlException.Message);
-                    throw sqlException;
+                    GamesWonInfo gamesWonInfo = new GamesWonInfo()
+                    {
+                        Username = result.Username,
+                        GamesWonCount = result.GamesWonCount
+                    };
+
+                    gameInfo.Add(gamesWonInfo);
                 }
             }
 
             return gameInfo;
         }
 
-        private const string GAME_BAN = "gameBan";
-
         public int BanUser (string nickname)
         {
             int result = INT_VALIDATION_FAILURE;
             UserAccess userAccess = new UserAccess();
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                try
+                if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
                 {
-                    if (userAccess.FindUserByNickname(nickname) == INT_VALIDATION_SUCCESS)
-                    {
-                        TimeSpan banDuration = TimeSpan.FromMinutes(30);
-                        DateTime currentDateTime = DateTime.Now;
-                        DateTime banExpirationTime = currentDateTime.Add(banDuration);
-
-                        Ban ban = new Ban()
-                        {
-                            Nickname = nickname,
-                            BanTime = banExpirationTime.TimeOfDay,
-                            BanType = GAME_BAN
-                        };
-
-                        context.Ban.Add(ban);
-
-                        result = context.SaveChanges();
-
-                        if (result > INT_VALIDATION_FAILURE)
-                        {
-                            result = INT_VALIDATION_SUCCESS;
-                        }
-                    }
-                }
-                catch (EntityException entityException)
-                {
-                    throw entityException;
-                }
-            }
-                return result;
-        }
-
-        public int CanPlay(string nickname)
-        {
-            int result = INT_VALIDATION_SUCCESS;
-
-            using (var context = new AstralisDBEntities())
-            {
-                try
-                {
+                    TimeSpan banDuration = TimeSpan.FromMinutes(30);
                     DateTime currentDateTime = DateTime.Now;
-                    TimeSpan currentTimeSpan = currentDateTime.TimeOfDay.Duration();
-                    Ban userBan = context.Ban.FirstOrDefault(b => b.Nickname == nickname);
-
-                    if (userBan != null && userBan.BanTime > currentTimeSpan)
+                    DateTime banExpirationTime = currentDateTime.Add(banDuration);
+                    Ban ban = new Ban()
                     {
-                        result = INT_VALIDATION_FAILURE;
-                    }
-                    else
+                        Nickname = nickname,
+                        BanTime = banExpirationTime.TimeOfDay,
+                        BanType = GAME_BAN
+                    };
+
+                    context.Ban.Add(ban);
+
+                    result = context.SaveChanges();
+
+                    if (result > INT_VALIDATION_FAILURE)
                     {
                         result = INT_VALIDATION_SUCCESS;
                     }
-                }
-                catch (EntityException entityException)
-                {
-                    result = ERROR;
-                    throw entityException;
                 }
             }
 
             return result;
         }
+
+        public int CanPlay(string nickname)
+        {
+            int result = INT_VALIDATION_FAILURE;
+
+            using (AstralisDBEntities context = new AstralisDBEntities())
+            {
+                DateTime currentDateTime = DateTime.Now;
+                TimeSpan currentTimeSpan = currentDateTime.TimeOfDay.Duration();
+                Ban userBan = context.Ban.FirstOrDefault(b => b.Nickname == nickname);
+
+                if (userBan != null && userBan.BanTime > currentTimeSpan)
+                {
+                    result = INT_VALIDATION_FAILURE;
+                }
+                else
+                {
+                    result = INT_VALIDATION_SUCCESS;
+                }
+            }
+
+            return result;
+        }
+
         public int CleanupGame(string gameId)
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                try
-                {
-                    var existingGame = context.Game.Find(gameId);
-                    if (existingGame != null)
-                    {
-                        context.Game.Remove(existingGame);
-                        context.SaveChanges();
+                Game existingGame = context.Game.Find(gameId);
 
-                        result = INT_VALIDATION_SUCCESS;
-                    }
-                }
-                catch (EntityException entityException)
+                if (existingGame != null)
                 {
-                    result = ERROR;
-                    throw entityException;
+                    context.Game.Remove(existingGame);
+                    context.SaveChanges();
+
+                    result = INT_VALIDATION_SUCCESS;
                 }
             }
+
             return result;
         }
 
@@ -278,32 +217,24 @@ namespace DataAccessProject.DataAccess
         {
             int result = INT_VALIDATION_FAILURE;
 
-            using (var context = new AstralisDBEntities())
+            using (AstralisDBEntities context = new AstralisDBEntities())
             {
-                try
-                {
-                    Ban existingBan = context.Ban.FirstOrDefault(b => b.Nickname == nickname);
+                Ban existingBan = context.Ban.FirstOrDefault(b => b.Nickname == nickname);
 
-                    if (existingBan != null)
+                if (existingBan != null)
+                {
+                    context.Ban.Remove(existingBan);
+
+                    result = context.SaveChanges();
+
+                    if (result > INT_VALIDATION_FAILURE)
                     {
-                        context.Ban.Remove(existingBan);
-                        result = context.SaveChanges();
-
-                        if (result > INT_VALIDATION_FAILURE)
-                        {
-                            result = INT_VALIDATION_SUCCESS;
-                        }
+                        result = INT_VALIDATION_SUCCESS;
                     }
-                }
-                catch (EntityException entityException)
-                {
-                    throw entityException;
                 }
             }
 
             return result;
         }
-
-
     }
 }

@@ -54,45 +54,42 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connected Services\AstralisServer\Reference.cs">
+    <Compile Include="ClientCallbackTets.cs" />
+    <Compile Include="Connected Services\AstralisService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="ClientCallbackTets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Connected Services\AstralisServer\CallbackTestProject.AstralisServer.GamesWonInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\AstralisServer\CallbackTestProject.AstralisServer.User.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\AstralisServer\item.xsd">
+    <None Include="Connected Services\AstralisService\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AstralisServer\item1.xsd">
+    <None Include="Connected Services\AstralisService\item1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AstralisServer\item2.xsd">
+    <None Include="Connected Services\AstralisService\item2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AstralisServer\item3.xsd">
+    <None Include="Connected Services\AstralisService\item3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AstralisServer\item4.xsd">
+    <None Include="Connected Services\AstralisService\item4.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\AstralisServer\UserManager.wsdl" />
+    <None Include="Connected Services\AstralisService\MessageService.wsdl" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\DataAccessProject.Contracts.GamesWonInfo.datasource" />
+    <None Include="Properties\DataSources\DataAccessProject.Contracts.User.datasource" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccessProject\DataAccessProject.csproj">
@@ -108,19 +105,19 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\AstralisServer\" />
+    <WCFMetadataStorage Include="Connected Services\AstralisService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\AstralisServer\item.disco" />
+    <None Include="Connected Services\AstralisService\item.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\AstralisServer\configuration91.svcinfo" />
+    <None Include="Connected Services\AstralisService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\AstralisServer\configuration.svcinfo" />
+    <None Include="Connected Services\AstralisService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\AstralisServer\Reference.svcmap">
+    <None Include="Connected Services\AstralisService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

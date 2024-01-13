@@ -17,19 +17,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="AddGuest">
+  <xs:element name="AddGuestUser">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="AddGuestResponse">
+  <xs:element name="AddGuestUserResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" minOccurs="0" name="AddGuestResult" nillable="true" type="q2:User" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" minOccurs="0" name="AddGuestUserResult" nillable="true" type="q2:User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ConfirmUser">
+  <xs:element name="ConfirmUserCredentials">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
@@ -37,10 +37,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ConfirmUserResponse">
+  <xs:element name="ConfirmUserCredentialsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="ConfirmUserResult" type="xs:int" />
+        <xs:element minOccurs="0" name="ConfirmUserCredentialsResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -86,18 +86,38 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UserOnline">
+  <xs:element name="IsUserOnline">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UserOnlineResponse">
+  <xs:element name="IsUserOnlineResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="UserOnlineResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="IsUserOnlineResult" type="xs:boolean" />
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveMessageResponse">
+    <xs:complexType>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
   <xs:element name="CreateLobby">
@@ -114,63 +134,49 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CanPlay">
+  <xs:element name="CanAccessToLobby">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CanPlayResponse">
+  <xs:element name="CanAccessToLobbyResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="CanPlayResult" type="xs:int" />
+        <xs:element minOccurs="0" name="CanAccessToLobbyResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GameExist">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GameExistResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="GameExistResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GameIsNotFull">
+  <xs:element name="LobbyExist">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GameIsNotFullResponse">
+  <xs:element name="LobbyExistResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="GameIsNotFullResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="LobbyExistResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="IsBanned">
+  <xs:element name="LobbyIsNotFull">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="IsBannedResponse">
+  <xs:element name="LobbyIsNotFullResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="IsBannedResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="LobbyIsNotFullResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SendFriendInvitation">
+  <xs:element name="SendInvitationToLobby">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:string" />
@@ -178,14 +184,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SendFriendInvitationResponse">
+  <xs:element name="SendInvitationToLobbyResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="SendFriendInvitationResult" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SendInvitationToLobbyResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ConnectLobby">
+  <xs:element name="ConnectToLobby">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" minOccurs="0" name="user" nillable="true" type="q6:User" />
@@ -193,7 +199,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisconnectLobby">
+  <xs:element name="DisconnectFromLobby">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" minOccurs="0" name="user" nillable="true" type="q7:User" />
@@ -208,22 +214,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SendMessage">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="StartGame">
+  <xs:element name="SendUsersFromLobbyToGame">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="gameId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="KickUser">
+  <xs:element name="KickUserFromLobby">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userNickname" nillable="true" type="xs:string" />
@@ -279,46 +277,34 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ReceiveMessage">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ReceiveMessageResponse">
+  <xs:element name="SendUserFromLobbyToGame">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartClientGame">
+  <xs:element name="SendUserFromLobbyToGameResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartClientGameResponse">
+  <xs:element name="GetKickedFromLobby">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetKicked">
+  <xs:element name="GetKickedFromLobbyResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetKickedResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ConectUser">
+  <xs:element name="SubscribeToFriendManager">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisconectUser">
+  <xs:element name="UnsubscribeToFriendManager">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
@@ -371,38 +357,38 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowUserConected">
+  <xs:element name="ShowUserSubscribedToFriendManager">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowUserConectedResponse">
+  <xs:element name="ShowUserSubscribedToFriendManagerResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowUserDisconected">
+  <xs:element name="ShowUserUnsubscribedToFriendManager">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowUserDisconectedResponse">
+  <xs:element name="ShowUserUnsubscribedToFriendManagerResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowOnlineFriends">
+  <xs:element name="ShowFriends">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="onlineFriends" nillable="true" type="q11:ArrayOfKeyValueOfstringTupleOfbooleanintU6ho3Bhd" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ShowOnlineFriendsResponse">
+  <xs:element name="ShowFriendsResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -431,14 +417,14 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="FriendDeleted">
+  <xs:element name="ShowFriendDeleted">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="FriendDeletedResponse">
+  <xs:element name="ShowFriendDeletedResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -450,21 +436,21 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DispenseCards">
+  <xs:element name="DispenseGameCards">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DispenseCardsResponse">
+  <xs:element name="DispenseGameCardsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DispenseCardsResult" nillable="true" type="q12:ArrayOfint" />
+        <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DispenseGameCardsResult" nillable="true" type="q12:ArrayOfint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DrawCard">
+  <xs:element name="DrawGameCard">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
@@ -488,14 +474,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartFirstPhase">
+  <xs:element name="StartFirstGamePhase">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="hostNickname" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SendMessageGame">
+  <xs:element name="SendMessageToGame">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
@@ -528,7 +514,7 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="DrawCardClient">
+  <xs:element name="ShowCardDrawedInGame">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
@@ -536,12 +522,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DrawCardClientResponse">
+  <xs:element name="ShowCardDrawedInGameResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="PlayerEndedTurn">
+  <xs:element name="ShowGamePlayerEndedTurn">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
@@ -549,19 +535,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="PlayerEndedTurnResponse">
+  <xs:element name="ShowGamePlayerEndedTurnResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartFirstPhaseClient">
+  <xs:element name="StartFirstGamePhaseClient">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="firstPlayers" nillable="true" type="q18:TupleOfstringstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartFirstPhaseClientResponse">
+  <xs:element name="StartFirstGamePhaseClientResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -578,19 +564,19 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ReceiveMessageGame">
+  <xs:element name="RecieveGameMessage">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ReceiveMessageGameResponse">
+  <xs:element name="RecieveGameMessageResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetUsersWithTeam">
+  <xs:element name="GetEndGameUsers">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="nickname" nillable="true" type="xs:string" />
@@ -604,14 +590,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUsers">
+  <xs:element name="ShowEndGameUsers">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataAccessProject.Contracts" minOccurs="0" name="usersWithTeams" nillable="true" type="q19:ArrayOfUserWithTeam" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SetUsersResponse">
+  <xs:element name="ShowEndGameUsersResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

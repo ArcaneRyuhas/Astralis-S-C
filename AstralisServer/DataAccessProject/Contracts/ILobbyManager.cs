@@ -5,48 +5,42 @@ using System.ServiceModel;
 namespace DataAccessProject.Contracts
 {
     [ServiceContract(CallbackContract =typeof(ILobbyManagerCallback))]
-    public interface ILobbyManager
+    public interface ILobbyManager: IMessageManager
     {
         [OperationContract()]
         string CreateLobby(User user);
 
         [OperationContract()]
-        int CanPlay(string nickname);
+        int CanAccessToLobby(string nickname);
 
         [OperationContract()]
-        bool GameExist(string gameId);
+        bool LobbyExist(string gameId);
 
         [OperationContract()]
-        bool GameIsNotFull(string gameId);
+        bool LobbyIsNotFull(string gameId);
 
         [OperationContract()]
-        bool IsBanned(string nickname);
-
-        [OperationContract()]
-        string SendFriendInvitation(string gameId, string userToSend);
+        string SendInvitationToLobby(string gameId, string userToSend);
 
         [OperationContract(IsOneWay = true)]
-        void ConnectLobby(User user, string gameId);
+        void ConnectToLobby(User user, string gameId);
 
         [OperationContract(IsOneWay = true)]
-        void DisconnectLobby(User user);
+        void DisconnectFromLobby(User user);
 
         [OperationContract(IsOneWay = true)]
         void ChangeLobbyUserTeam(string userNickname, int team);
 
         [OperationContract(IsOneWay = true)]
-        void SendMessage(string message, string gameId);
+        void SendUsersFromLobbyToGame(string gameId);
 
         [OperationContract(IsOneWay = true)]
-        void StartGame(string gameId);
-
-        [OperationContract(IsOneWay = true)]
-        void KickUser(string userNickname);
+        void KickUserFromLobby(string userNickname);
 
     }
 
     [ServiceContract]
-    public interface ILobbyManagerCallback 
+    public interface ILobbyManagerCallback: IMessageManagerCallback
     {
         [OperationContract]
         void ShowConnectionInLobby(User user);
@@ -61,12 +55,9 @@ namespace DataAccessProject.Contracts
         void UpdateLobbyUserTeam(string userNickname, int team);
 
         [OperationContract]
-        void ReceiveMessage(string message);
+        void SendUserFromLobbyToGame();
 
         [OperationContract]
-        void StartClientGame();
-
-        [OperationContract]
-        void GetKicked();
+        void GetKickedFromLobby();
     }
 }

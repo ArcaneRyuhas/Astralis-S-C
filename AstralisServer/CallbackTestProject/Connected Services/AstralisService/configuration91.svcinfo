@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="vrwOzWcWfkK9hXXuw6Os/q+dZaEDMQ9oL6pH7lPISjo=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="AjNyGDDNlaxOjiJGHTfVvNWaL86uQaIFnDR8uwwWScA=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IUserManager">
       <properties>
@@ -237,10 +237,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IOnlineUserManager">
+    <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IFriendManager">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>NetTcpBinding_IOnlineUserManager</serializedValue>
+          <serializedValue>NetTcpBinding_IFriendManager</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -711,7 +711,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_IUserManager" contract="AstralisServer.IUserManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_IUserManager">
+    <endpoint name="NetTcpBinding_IUserManager" contract="AstralisService.IUserManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_IUserManager">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://192.168.100.38:8081/MessageService</serializedValue>
@@ -726,7 +726,7 @@
           <serializedValue>NetTcpBinding_IUserManager</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>AstralisServer.IUserManager</serializedValue>
+          <serializedValue>AstralisService.IUserManager</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -796,7 +796,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_ILobbyManager" contract="AstralisServer.ILobbyManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_ILobbyManager">
+    <endpoint name="NetTcpBinding_ILobbyManager" contract="AstralisService.ILobbyManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_ILobbyManager">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://192.168.100.38:8081/MessageService</serializedValue>
@@ -811,7 +811,7 @@
           <serializedValue>NetTcpBinding_ILobbyManager</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>AstralisServer.ILobbyManager</serializedValue>
+          <serializedValue>AstralisService.ILobbyManager</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -881,7 +881,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IOnlineUserManager" contract="AstralisServer.IOnlineUserManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_IOnlineUserManager">
+    <endpoint name="NetTcpBinding_IFriendManager" contract="AstralisService.IFriendManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_IFriendManager">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://192.168.100.38:8081/MessageService</serializedValue>
@@ -893,10 +893,10 @@
           <serializedValue>netTcpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>NetTcpBinding_IOnlineUserManager</serializedValue>
+          <serializedValue>NetTcpBinding_IFriendManager</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>AstralisServer.IOnlineUserManager</serializedValue>
+          <serializedValue>AstralisService.IFriendManager</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -956,7 +956,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>NetTcpBinding_IOnlineUserManager</serializedValue>
+          <serializedValue>NetTcpBinding_IFriendManager</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -966,7 +966,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IGameManager" contract="AstralisServer.IGameManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_IGameManager">
+    <endpoint name="NetTcpBinding_IGameManager" contract="AstralisService.IGameManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_IGameManager">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://192.168.100.38:8081/MessageService</serializedValue>
@@ -981,7 +981,7 @@
           <serializedValue>NetTcpBinding_IGameManager</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>AstralisServer.IGameManager</serializedValue>
+          <serializedValue>AstralisService.IGameManager</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -1051,7 +1051,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IEndGame" contract="AstralisServer.IEndGame" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_IEndGame">
+    <endpoint name="NetTcpBinding_IEndGame" contract="AstralisService.IEndGame" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_IEndGame">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://192.168.100.38:8081/MessageService</serializedValue>
@@ -1066,7 +1066,7 @@
           <serializedValue>NetTcpBinding_IEndGame</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>AstralisServer.IEndGame</serializedValue>
+          <serializedValue>AstralisService.IEndGame</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -1136,7 +1136,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_ILeaderboardManager" contract="AstralisServer.ILeaderboardManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_ILeaderboardManager">
+    <endpoint name="NetTcpBinding_ILeaderboardManager" contract="AstralisService.ILeaderboardManager" bindingType="netTcpBinding" address="net.tcp://192.168.100.38:8081/MessageService" bindingConfiguration="NetTcpBinding_ILeaderboardManager">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://192.168.100.38:8081/MessageService</serializedValue>
@@ -1151,7 +1151,7 @@
           <serializedValue>NetTcpBinding_ILeaderboardManager</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>AstralisServer.ILeaderboardManager</serializedValue>
+          <serializedValue>AstralisService.ILeaderboardManager</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>

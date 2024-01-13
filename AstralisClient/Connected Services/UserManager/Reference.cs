@@ -270,17 +270,17 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddUser", ReplyAction="http://tempuri.org/IUserManager/AddUserResponse")]
         System.Threading.Tasks.Task<int> AddUserAsync(Astralis.UserManager.User user);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddGuest", ReplyAction="http://tempuri.org/IUserManager/AddGuestResponse")]
-        Astralis.UserManager.User AddGuest();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddGuestUser", ReplyAction="http://tempuri.org/IUserManager/AddGuestUserResponse")]
+        Astralis.UserManager.User AddGuestUser();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddGuest", ReplyAction="http://tempuri.org/IUserManager/AddGuestResponse")]
-        System.Threading.Tasks.Task<Astralis.UserManager.User> AddGuestAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/AddGuestUser", ReplyAction="http://tempuri.org/IUserManager/AddGuestUserResponse")]
+        System.Threading.Tasks.Task<Astralis.UserManager.User> AddGuestUserAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUser", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserResponse")]
-        int ConfirmUser(string nickname, string password);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUserCredentials", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserCredentialsResponse")]
+        int ConfirmUserCredentials(string nickname, string password);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUser", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserResponse")]
-        System.Threading.Tasks.Task<int> ConfirmUserAsync(string nickname, string password);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/ConfirmUserCredentials", ReplyAction="http://tempuri.org/IUserManager/ConfirmUserCredentialsResponse")]
+        System.Threading.Tasks.Task<int> ConfirmUserCredentialsAsync(string nickname, string password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/FindUserByNickname", ReplyAction="http://tempuri.org/IUserManager/FindUserByNicknameResponse")]
         int FindUserByNickname(string nickname);
@@ -300,11 +300,11 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UpdateUser", ReplyAction="http://tempuri.org/IUserManager/UpdateUserResponse")]
         System.Threading.Tasks.Task<int> UpdateUserAsync(Astralis.UserManager.User user);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UserOnline", ReplyAction="http://tempuri.org/IUserManager/UserOnlineResponse")]
-        bool UserOnline(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/IsUserOnline", ReplyAction="http://tempuri.org/IUserManager/IsUserOnlineResponse")]
+        bool IsUserOnline(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/UserOnline", ReplyAction="http://tempuri.org/IUserManager/UserOnlineResponse")]
-        System.Threading.Tasks.Task<bool> UserOnlineAsync(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserManager/IsUserOnline", ReplyAction="http://tempuri.org/IUserManager/IsUserOnlineResponse")]
+        System.Threading.Tasks.Task<bool> IsUserOnlineAsync(string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -342,20 +342,20 @@ namespace Astralis.UserManager {
             return base.Channel.AddUserAsync(user);
         }
         
-        public Astralis.UserManager.User AddGuest() {
-            return base.Channel.AddGuest();
+        public Astralis.UserManager.User AddGuestUser() {
+            return base.Channel.AddGuestUser();
         }
         
-        public System.Threading.Tasks.Task<Astralis.UserManager.User> AddGuestAsync() {
-            return base.Channel.AddGuestAsync();
+        public System.Threading.Tasks.Task<Astralis.UserManager.User> AddGuestUserAsync() {
+            return base.Channel.AddGuestUserAsync();
         }
         
-        public int ConfirmUser(string nickname, string password) {
-            return base.Channel.ConfirmUser(nickname, password);
+        public int ConfirmUserCredentials(string nickname, string password) {
+            return base.Channel.ConfirmUserCredentials(nickname, password);
         }
         
-        public System.Threading.Tasks.Task<int> ConfirmUserAsync(string nickname, string password) {
-            return base.Channel.ConfirmUserAsync(nickname, password);
+        public System.Threading.Tasks.Task<int> ConfirmUserCredentialsAsync(string nickname, string password) {
+            return base.Channel.ConfirmUserCredentialsAsync(nickname, password);
         }
         
         public int FindUserByNickname(string nickname) {
@@ -382,12 +382,12 @@ namespace Astralis.UserManager {
             return base.Channel.UpdateUserAsync(user);
         }
         
-        public bool UserOnline(string nickname) {
-            return base.Channel.UserOnline(nickname);
+        public bool IsUserOnline(string nickname) {
+            return base.Channel.IsUserOnline(nickname);
         }
         
-        public System.Threading.Tasks.Task<bool> UserOnlineAsync(string nickname) {
-            return base.Channel.UserOnlineAsync(nickname);
+        public System.Threading.Tasks.Task<bool> IsUserOnlineAsync(string nickname) {
+            return base.Channel.IsUserOnlineAsync(nickname);
         }
     }
     
@@ -395,53 +395,53 @@ namespace Astralis.UserManager {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.ILobbyManager", CallbackContract=typeof(Astralis.UserManager.ILobbyManagerCallback))]
     public interface ILobbyManager {
         
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IMessageManager/SendMessage")]
+        void SendMessage(string message, string nickname);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IMessageManager/SendMessage")]
+        System.Threading.Tasks.Task SendMessageAsync(string message, string nickname);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CreateLobby", ReplyAction="http://tempuri.org/ILobbyManager/CreateLobbyResponse")]
         string CreateLobby(Astralis.UserManager.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CreateLobby", ReplyAction="http://tempuri.org/ILobbyManager/CreateLobbyResponse")]
         System.Threading.Tasks.Task<string> CreateLobbyAsync(Astralis.UserManager.User user);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CanPlay", ReplyAction="http://tempuri.org/ILobbyManager/CanPlayResponse")]
-        int CanPlay(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CanAccessToLobby", ReplyAction="http://tempuri.org/ILobbyManager/CanAccessToLobbyResponse")]
+        int CanAccessToLobby(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CanPlay", ReplyAction="http://tempuri.org/ILobbyManager/CanPlayResponse")]
-        System.Threading.Tasks.Task<int> CanPlayAsync(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/CanAccessToLobby", ReplyAction="http://tempuri.org/ILobbyManager/CanAccessToLobbyResponse")]
+        System.Threading.Tasks.Task<int> CanAccessToLobbyAsync(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameExist", ReplyAction="http://tempuri.org/ILobbyManager/GameExistResponse")]
-        bool GameExist(string gameId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/LobbyExist", ReplyAction="http://tempuri.org/ILobbyManager/LobbyExistResponse")]
+        bool LobbyExist(string gameId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameExist", ReplyAction="http://tempuri.org/ILobbyManager/GameExistResponse")]
-        System.Threading.Tasks.Task<bool> GameExistAsync(string gameId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/LobbyExist", ReplyAction="http://tempuri.org/ILobbyManager/LobbyExistResponse")]
+        System.Threading.Tasks.Task<bool> LobbyExistAsync(string gameId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameIsNotFull", ReplyAction="http://tempuri.org/ILobbyManager/GameIsNotFullResponse")]
-        bool GameIsNotFull(string gameId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/LobbyIsNotFull", ReplyAction="http://tempuri.org/ILobbyManager/LobbyIsNotFullResponse")]
+        bool LobbyIsNotFull(string gameId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GameIsNotFull", ReplyAction="http://tempuri.org/ILobbyManager/GameIsNotFullResponse")]
-        System.Threading.Tasks.Task<bool> GameIsNotFullAsync(string gameId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/LobbyIsNotFull", ReplyAction="http://tempuri.org/ILobbyManager/LobbyIsNotFullResponse")]
+        System.Threading.Tasks.Task<bool> LobbyIsNotFullAsync(string gameId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/IsBanned", ReplyAction="http://tempuri.org/ILobbyManager/IsBannedResponse")]
-        bool IsBanned(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/SendInvitationToLobby", ReplyAction="http://tempuri.org/ILobbyManager/SendInvitationToLobbyResponse")]
+        string SendInvitationToLobby(string gameId, string userToSend);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/IsBanned", ReplyAction="http://tempuri.org/ILobbyManager/IsBannedResponse")]
-        System.Threading.Tasks.Task<bool> IsBannedAsync(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/SendInvitationToLobby", ReplyAction="http://tempuri.org/ILobbyManager/SendInvitationToLobbyResponse")]
+        System.Threading.Tasks.Task<string> SendInvitationToLobbyAsync(string gameId, string userToSend);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/SendFriendInvitation", ReplyAction="http://tempuri.org/ILobbyManager/SendFriendInvitationResponse")]
-        string SendFriendInvitation(string gameId, string userToSend);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ConnectToLobby")]
+        void ConnectToLobby(Astralis.UserManager.User user, string gameId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/SendFriendInvitation", ReplyAction="http://tempuri.org/ILobbyManager/SendFriendInvitationResponse")]
-        System.Threading.Tasks.Task<string> SendFriendInvitationAsync(string gameId, string userToSend);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ConnectToLobby")]
+        System.Threading.Tasks.Task ConnectToLobbyAsync(Astralis.UserManager.User user, string gameId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ConnectLobby")]
-        void ConnectLobby(Astralis.UserManager.User user, string gameId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/DisconnectFromLobby")]
+        void DisconnectFromLobby(Astralis.UserManager.User user);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ConnectLobby")]
-        System.Threading.Tasks.Task ConnectLobbyAsync(Astralis.UserManager.User user, string gameId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/DisconnectLobby")]
-        void DisconnectLobby(Astralis.UserManager.User user);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/DisconnectLobby")]
-        System.Threading.Tasks.Task DisconnectLobbyAsync(Astralis.UserManager.User user);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/DisconnectFromLobby")]
+        System.Threading.Tasks.Task DisconnectFromLobbyAsync(Astralis.UserManager.User user);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam")]
         void ChangeLobbyUserTeam(string userNickname, int team);
@@ -449,27 +449,24 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/ChangeLobbyUserTeam")]
         System.Threading.Tasks.Task ChangeLobbyUserTeamAsync(string userNickname, int team);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/SendMessage")]
-        void SendMessage(string message, string gameId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/SendUsersFromLobbyToGame")]
+        void SendUsersFromLobbyToGame(string gameId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/SendMessage")]
-        System.Threading.Tasks.Task SendMessageAsync(string message, string gameId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/SendUsersFromLobbyToGame")]
+        System.Threading.Tasks.Task SendUsersFromLobbyToGameAsync(string gameId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/StartGame")]
-        void StartGame(string gameId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/KickUserFromLobby")]
+        void KickUserFromLobby(string userNickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/StartGame")]
-        System.Threading.Tasks.Task StartGameAsync(string gameId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/KickUser")]
-        void KickUser(string userNickname);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/KickUser")]
-        System.Threading.Tasks.Task KickUserAsync(string userNickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILobbyManager/KickUserFromLobby")]
+        System.Threading.Tasks.Task KickUserFromLobbyAsync(string userNickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface ILobbyManagerCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageManager/ReceiveMessage", ReplyAction="http://tempuri.org/IMessageManager/ReceiveMessageResponse")]
+        void ReceiveMessage(string message);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ShowConnectionInLobby", ReplyAction="http://tempuri.org/ILobbyManager/ShowConnectionInLobbyResponse")]
         void ShowConnectionInLobby(Astralis.UserManager.User user);
@@ -483,14 +480,11 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeam", ReplyAction="http://tempuri.org/ILobbyManager/UpdateLobbyUserTeamResponse")]
         void UpdateLobbyUserTeam(string userNickname, int team);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/ReceiveMessage", ReplyAction="http://tempuri.org/ILobbyManager/ReceiveMessageResponse")]
-        void ReceiveMessage(string message);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/SendUserFromLobbyToGame", ReplyAction="http://tempuri.org/ILobbyManager/SendUserFromLobbyToGameResponse")]
+        void SendUserFromLobbyToGame();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/StartClientGame", ReplyAction="http://tempuri.org/ILobbyManager/StartClientGameResponse")]
-        void StartClientGame();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GetKicked", ReplyAction="http://tempuri.org/ILobbyManager/GetKickedResponse")]
-        void GetKicked();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyManager/GetKickedFromLobby", ReplyAction="http://tempuri.org/ILobbyManager/GetKickedFromLobbyResponse")]
+        void GetKickedFromLobby();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -521,6 +515,14 @@ namespace Astralis.UserManager {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
+        public void SendMessage(string message, string nickname) {
+            base.Channel.SendMessage(message, nickname);
+        }
+        
+        public System.Threading.Tasks.Task SendMessageAsync(string message, string nickname) {
+            return base.Channel.SendMessageAsync(message, nickname);
+        }
+        
         public string CreateLobby(Astralis.UserManager.User user) {
             return base.Channel.CreateLobby(user);
         }
@@ -529,60 +531,52 @@ namespace Astralis.UserManager {
             return base.Channel.CreateLobbyAsync(user);
         }
         
-        public int CanPlay(string nickname) {
-            return base.Channel.CanPlay(nickname);
+        public int CanAccessToLobby(string nickname) {
+            return base.Channel.CanAccessToLobby(nickname);
         }
         
-        public System.Threading.Tasks.Task<int> CanPlayAsync(string nickname) {
-            return base.Channel.CanPlayAsync(nickname);
+        public System.Threading.Tasks.Task<int> CanAccessToLobbyAsync(string nickname) {
+            return base.Channel.CanAccessToLobbyAsync(nickname);
         }
         
-        public bool GameExist(string gameId) {
-            return base.Channel.GameExist(gameId);
+        public bool LobbyExist(string gameId) {
+            return base.Channel.LobbyExist(gameId);
         }
         
-        public System.Threading.Tasks.Task<bool> GameExistAsync(string gameId) {
-            return base.Channel.GameExistAsync(gameId);
+        public System.Threading.Tasks.Task<bool> LobbyExistAsync(string gameId) {
+            return base.Channel.LobbyExistAsync(gameId);
         }
         
-        public bool GameIsNotFull(string gameId) {
-            return base.Channel.GameIsNotFull(gameId);
+        public bool LobbyIsNotFull(string gameId) {
+            return base.Channel.LobbyIsNotFull(gameId);
         }
         
-        public System.Threading.Tasks.Task<bool> GameIsNotFullAsync(string gameId) {
-            return base.Channel.GameIsNotFullAsync(gameId);
+        public System.Threading.Tasks.Task<bool> LobbyIsNotFullAsync(string gameId) {
+            return base.Channel.LobbyIsNotFullAsync(gameId);
         }
         
-        public bool IsBanned(string nickname) {
-            return base.Channel.IsBanned(nickname);
+        public string SendInvitationToLobby(string gameId, string userToSend) {
+            return base.Channel.SendInvitationToLobby(gameId, userToSend);
         }
         
-        public System.Threading.Tasks.Task<bool> IsBannedAsync(string nickname) {
-            return base.Channel.IsBannedAsync(nickname);
+        public System.Threading.Tasks.Task<string> SendInvitationToLobbyAsync(string gameId, string userToSend) {
+            return base.Channel.SendInvitationToLobbyAsync(gameId, userToSend);
         }
         
-        public string SendFriendInvitation(string gameId, string userToSend) {
-            return base.Channel.SendFriendInvitation(gameId, userToSend);
+        public void ConnectToLobby(Astralis.UserManager.User user, string gameId) {
+            base.Channel.ConnectToLobby(user, gameId);
         }
         
-        public System.Threading.Tasks.Task<string> SendFriendInvitationAsync(string gameId, string userToSend) {
-            return base.Channel.SendFriendInvitationAsync(gameId, userToSend);
+        public System.Threading.Tasks.Task ConnectToLobbyAsync(Astralis.UserManager.User user, string gameId) {
+            return base.Channel.ConnectToLobbyAsync(user, gameId);
         }
         
-        public void ConnectLobby(Astralis.UserManager.User user, string gameId) {
-            base.Channel.ConnectLobby(user, gameId);
+        public void DisconnectFromLobby(Astralis.UserManager.User user) {
+            base.Channel.DisconnectFromLobby(user);
         }
         
-        public System.Threading.Tasks.Task ConnectLobbyAsync(Astralis.UserManager.User user, string gameId) {
-            return base.Channel.ConnectLobbyAsync(user, gameId);
-        }
-        
-        public void DisconnectLobby(Astralis.UserManager.User user) {
-            base.Channel.DisconnectLobby(user);
-        }
-        
-        public System.Threading.Tasks.Task DisconnectLobbyAsync(Astralis.UserManager.User user) {
-            return base.Channel.DisconnectLobbyAsync(user);
+        public System.Threading.Tasks.Task DisconnectFromLobbyAsync(Astralis.UserManager.User user) {
+            return base.Channel.DisconnectFromLobbyAsync(user);
         }
         
         public void ChangeLobbyUserTeam(string userNickname, int team) {
@@ -593,130 +587,122 @@ namespace Astralis.UserManager {
             return base.Channel.ChangeLobbyUserTeamAsync(userNickname, team);
         }
         
-        public void SendMessage(string message, string gameId) {
-            base.Channel.SendMessage(message, gameId);
+        public void SendUsersFromLobbyToGame(string gameId) {
+            base.Channel.SendUsersFromLobbyToGame(gameId);
         }
         
-        public System.Threading.Tasks.Task SendMessageAsync(string message, string gameId) {
-            return base.Channel.SendMessageAsync(message, gameId);
+        public System.Threading.Tasks.Task SendUsersFromLobbyToGameAsync(string gameId) {
+            return base.Channel.SendUsersFromLobbyToGameAsync(gameId);
         }
         
-        public void StartGame(string gameId) {
-            base.Channel.StartGame(gameId);
+        public void KickUserFromLobby(string userNickname) {
+            base.Channel.KickUserFromLobby(userNickname);
         }
         
-        public System.Threading.Tasks.Task StartGameAsync(string gameId) {
-            return base.Channel.StartGameAsync(gameId);
-        }
-        
-        public void KickUser(string userNickname) {
-            base.Channel.KickUser(userNickname);
-        }
-        
-        public System.Threading.Tasks.Task KickUserAsync(string userNickname) {
-            return base.Channel.KickUserAsync(userNickname);
+        public System.Threading.Tasks.Task KickUserFromLobbyAsync(string userNickname) {
+            return base.Channel.KickUserFromLobbyAsync(userNickname);
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.IOnlineUserManager", CallbackContract=typeof(Astralis.UserManager.IOnlineUserManagerCallback))]
-    public interface IOnlineUserManager {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.IFriendManager", CallbackContract=typeof(Astralis.UserManager.IFriendManagerCallback))]
+    public interface IFriendManager {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/ConectUser")]
-        void ConectUser(string nickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendManager/SubscribeToFriendManager")]
+        void SubscribeToFriendManager(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/ConectUser")]
-        System.Threading.Tasks.Task ConectUserAsync(string nickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendManager/SubscribeToFriendManager")]
+        System.Threading.Tasks.Task SubscribeToFriendManagerAsync(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/DisconectUser")]
-        void DisconectUser(string nickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendManager/UnsubscribeToFriendManager")]
+        void UnsubscribeToFriendManager(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOnlineUserManager/DisconectUser")]
-        System.Threading.Tasks.Task DisconectUserAsync(string nickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFriendManager/UnsubscribeToFriendManager")]
+        System.Threading.Tasks.Task UnsubscribeToFriendManagerAsync(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/SendFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/SendFriendRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/SendFriendRequest", ReplyAction="http://tempuri.org/IFriendManager/SendFriendRequestResponse")]
         int SendFriendRequest(string nickname, string nicknameFriend);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/SendFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/SendFriendRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/SendFriendRequest", ReplyAction="http://tempuri.org/IFriendManager/SendFriendRequestResponse")]
         System.Threading.Tasks.Task<int> SendFriendRequestAsync(string nickname, string nicknameFriend);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ReplyFriendRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IFriendManager/ReplyFriendRequestResponse")]
         int ReplyFriendRequest(string nickname, string nicknameRequest, bool answer);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ReplyFriendRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ReplyFriendRequest", ReplyAction="http://tempuri.org/IFriendManager/ReplyFriendRequestResponse")]
         System.Threading.Tasks.Task<int> ReplyFriendRequestAsync(string nickname, string nicknameRequest, bool answer);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/RemoveFriend", ReplyAction="http://tempuri.org/IOnlineUserManager/RemoveFriendResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/RemoveFriend", ReplyAction="http://tempuri.org/IFriendManager/RemoveFriendResponse")]
         int RemoveFriend(string nickname, string nicknamefriendToRemove);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/RemoveFriend", ReplyAction="http://tempuri.org/IOnlineUserManager/RemoveFriendResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/RemoveFriend", ReplyAction="http://tempuri.org/IFriendManager/RemoveFriendResponse")]
         System.Threading.Tasks.Task<int> RemoveFriendAsync(string nickname, string nicknamefriendToRemove);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IOnlineUserManagerCallback {
+    public interface IFriendManagerCallback {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowUserConected", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowUserConectedResponse")]
-        void ShowUserConected(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ShowUserSubscribedToFriendManager", ReplyAction="http://tempuri.org/IFriendManager/ShowUserSubscribedToFriendManagerResponse")]
+        void ShowUserSubscribedToFriendManager(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowUserDisconected", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowUserDisconectedResponse")]
-        void ShowUserDisconected(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ShowUserUnsubscribedToFriendManager", ReplyAction="http://tempuri.org/IFriendManager/ShowUserUnsubscribedToFriendManagerResponse")]
+        void ShowUserUnsubscribedToFriendManager(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowOnlineFriends", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowOnlineFriendsResponse")]
-        void ShowOnlineFriends(System.Collections.Generic.Dictionary<string, System.Tuple<bool, int>> onlineFriends);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ShowFriends", ReplyAction="http://tempuri.org/IFriendManager/ShowFriendsResponse")]
+        void ShowFriends(System.Collections.Generic.Dictionary<string, System.Tuple<bool, int>> onlineFriends);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowFriendRequest", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowFriendRequestResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ShowFriendRequest", ReplyAction="http://tempuri.org/IFriendManager/ShowFriendRequestResponse")]
         void ShowFriendRequest(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/ShowFriendAccepted", ReplyAction="http://tempuri.org/IOnlineUserManager/ShowFriendAcceptedResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ShowFriendAccepted", ReplyAction="http://tempuri.org/IFriendManager/ShowFriendAcceptedResponse")]
         void ShowFriendAccepted(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOnlineUserManager/FriendDeleted", ReplyAction="http://tempuri.org/IOnlineUserManager/FriendDeletedResponse")]
-        void FriendDeleted(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendManager/ShowFriendDeleted", ReplyAction="http://tempuri.org/IFriendManager/ShowFriendDeletedResponse")]
+        void ShowFriendDeleted(string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IOnlineUserManagerChannel : Astralis.UserManager.IOnlineUserManager, System.ServiceModel.IClientChannel {
+    public interface IFriendManagerChannel : Astralis.UserManager.IFriendManager, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class OnlineUserManagerClient : System.ServiceModel.DuplexClientBase<Astralis.UserManager.IOnlineUserManager>, Astralis.UserManager.IOnlineUserManager {
+    public partial class FriendManagerClient : System.ServiceModel.DuplexClientBase<Astralis.UserManager.IFriendManager>, Astralis.UserManager.IFriendManager {
         
-        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance) : 
+        public FriendManagerClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
         
-        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+        public FriendManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
                 base(callbackInstance, endpointConfigurationName) {
         }
         
-        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+        public FriendManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public FriendManagerClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public OnlineUserManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public FriendManagerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void ConectUser(string nickname) {
-            base.Channel.ConectUser(nickname);
+        public void SubscribeToFriendManager(string nickname) {
+            base.Channel.SubscribeToFriendManager(nickname);
         }
         
-        public System.Threading.Tasks.Task ConectUserAsync(string nickname) {
-            return base.Channel.ConectUserAsync(nickname);
+        public System.Threading.Tasks.Task SubscribeToFriendManagerAsync(string nickname) {
+            return base.Channel.SubscribeToFriendManagerAsync(nickname);
         }
         
-        public void DisconectUser(string nickname) {
-            base.Channel.DisconectUser(nickname);
+        public void UnsubscribeToFriendManager(string nickname) {
+            base.Channel.UnsubscribeToFriendManager(nickname);
         }
         
-        public System.Threading.Tasks.Task DisconectUserAsync(string nickname) {
-            return base.Channel.DisconectUserAsync(nickname);
+        public System.Threading.Tasks.Task UnsubscribeToFriendManagerAsync(string nickname) {
+            return base.Channel.UnsubscribeToFriendManagerAsync(nickname);
         }
         
         public int SendFriendRequest(string nickname, string nicknameFriend) {
@@ -754,17 +740,17 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/ConnectGame")]
         System.Threading.Tasks.Task ConnectGameAsync(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DispenseCards", ReplyAction="http://tempuri.org/IGameManager/DispenseCardsResponse")]
-        int[] DispenseCards(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DispenseGameCards", ReplyAction="http://tempuri.org/IGameManager/DispenseGameCardsResponse")]
+        int[] DispenseGameCards(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DispenseCards", ReplyAction="http://tempuri.org/IGameManager/DispenseCardsResponse")]
-        System.Threading.Tasks.Task<int[]> DispenseCardsAsync(string nickname);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DispenseGameCards", ReplyAction="http://tempuri.org/IGameManager/DispenseGameCardsResponse")]
+        System.Threading.Tasks.Task<int[]> DispenseGameCardsAsync(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawCard")]
-        void DrawCard(string nickname, int[] cardId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawGameCard")]
+        void DrawGameCard(string nickname, int[] cardId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawCard")]
-        System.Threading.Tasks.Task DrawCardAsync(string nickname, int[] cardId);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/DrawGameCard")]
+        System.Threading.Tasks.Task DrawGameCardAsync(string nickname, int[] cardId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/EndGame")]
         void EndGame(int winnerTeam, string nickname);
@@ -778,17 +764,17 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/EndGameTurn")]
         System.Threading.Tasks.Task EndGameTurnAsync(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartFirstPhase")]
-        void StartFirstPhase(string hostNickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartFirstGamePhase")]
+        void StartFirstGamePhase(string hostNickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartFirstPhase")]
-        System.Threading.Tasks.Task StartFirstPhaseAsync(string hostNickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/StartFirstGamePhase")]
+        System.Threading.Tasks.Task StartFirstGamePhaseAsync(string hostNickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/SendMessageGame")]
-        void SendMessageGame(string message, string nickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/SendMessageToGame")]
+        void SendMessageToGame(string message, string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/SendMessageGame")]
-        System.Threading.Tasks.Task SendMessageGameAsync(string message, string nickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameManager/SendMessageToGame")]
+        System.Threading.Tasks.Task SendMessageToGameAsync(string message, string nickname);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -800,20 +786,20 @@ namespace Astralis.UserManager {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowUsersInGame", ReplyAction="http://tempuri.org/IGameManager/ShowUsersInGameResponse")]
         void ShowUsersInGame(System.Collections.Generic.Dictionary<string, int> users);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/DrawCardClient", ReplyAction="http://tempuri.org/IGameManager/DrawCardClientResponse")]
-        void DrawCardClient(string nickname, int[] cardId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowCardDrawedInGame", ReplyAction="http://tempuri.org/IGameManager/ShowCardDrawedInGameResponse")]
+        void ShowCardDrawedInGame(string nickname, int[] cardId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/PlayerEndedTurn", ReplyAction="http://tempuri.org/IGameManager/PlayerEndedTurnResponse")]
-        void PlayerEndedTurn(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ShowGamePlayerEndedTurn", ReplyAction="http://tempuri.org/IGameManager/ShowGamePlayerEndedTurnResponse")]
+        void ShowGamePlayerEndedTurn(string nickname, System.Collections.Generic.Dictionary<int, int> boardAfterTurn);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/StartFirstPhaseClient", ReplyAction="http://tempuri.org/IGameManager/StartFirstPhaseClientResponse")]
-        void StartFirstPhaseClient(System.Tuple<string, string> firstPlayers);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/StartFirstGamePhaseClient", ReplyAction="http://tempuri.org/IGameManager/StartFirstGamePhaseClientResponse")]
+        void StartFirstGamePhaseClient(System.Tuple<string, string> firstPlayers);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/EndGameClient", ReplyAction="http://tempuri.org/IGameManager/EndGameClientResponse")]
         void EndGameClient(int winnerTeam);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/ReceiveMessageGame", ReplyAction="http://tempuri.org/IGameManager/ReceiveMessageGameResponse")]
-        void ReceiveMessageGame(string message);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameManager/RecieveGameMessage", ReplyAction="http://tempuri.org/IGameManager/RecieveGameMessageResponse")]
+        void RecieveGameMessage(string message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -852,20 +838,20 @@ namespace Astralis.UserManager {
             return base.Channel.ConnectGameAsync(nickname);
         }
         
-        public int[] DispenseCards(string nickname) {
-            return base.Channel.DispenseCards(nickname);
+        public int[] DispenseGameCards(string nickname) {
+            return base.Channel.DispenseGameCards(nickname);
         }
         
-        public System.Threading.Tasks.Task<int[]> DispenseCardsAsync(string nickname) {
-            return base.Channel.DispenseCardsAsync(nickname);
+        public System.Threading.Tasks.Task<int[]> DispenseGameCardsAsync(string nickname) {
+            return base.Channel.DispenseGameCardsAsync(nickname);
         }
         
-        public void DrawCard(string nickname, int[] cardId) {
-            base.Channel.DrawCard(nickname, cardId);
+        public void DrawGameCard(string nickname, int[] cardId) {
+            base.Channel.DrawGameCard(nickname, cardId);
         }
         
-        public System.Threading.Tasks.Task DrawCardAsync(string nickname, int[] cardId) {
-            return base.Channel.DrawCardAsync(nickname, cardId);
+        public System.Threading.Tasks.Task DrawGameCardAsync(string nickname, int[] cardId) {
+            return base.Channel.DrawGameCardAsync(nickname, cardId);
         }
         
         public void EndGame(int winnerTeam, string nickname) {
@@ -884,20 +870,20 @@ namespace Astralis.UserManager {
             return base.Channel.EndGameTurnAsync(nickname, boardAfterTurn);
         }
         
-        public void StartFirstPhase(string hostNickname) {
-            base.Channel.StartFirstPhase(hostNickname);
+        public void StartFirstGamePhase(string hostNickname) {
+            base.Channel.StartFirstGamePhase(hostNickname);
         }
         
-        public System.Threading.Tasks.Task StartFirstPhaseAsync(string hostNickname) {
-            return base.Channel.StartFirstPhaseAsync(hostNickname);
+        public System.Threading.Tasks.Task StartFirstGamePhaseAsync(string hostNickname) {
+            return base.Channel.StartFirstGamePhaseAsync(hostNickname);
         }
         
-        public void SendMessageGame(string message, string nickname) {
-            base.Channel.SendMessageGame(message, nickname);
+        public void SendMessageToGame(string message, string nickname) {
+            base.Channel.SendMessageToGame(message, nickname);
         }
         
-        public System.Threading.Tasks.Task SendMessageGameAsync(string message, string nickname) {
-            return base.Channel.SendMessageGameAsync(message, nickname);
+        public System.Threading.Tasks.Task SendMessageToGameAsync(string message, string nickname) {
+            return base.Channel.SendMessageToGameAsync(message, nickname);
         }
     }
     
@@ -905,11 +891,11 @@ namespace Astralis.UserManager {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserManager.IEndGame", CallbackContract=typeof(Astralis.UserManager.IEndGameCallback))]
     public interface IEndGame {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IEndGame/GetUsersWithTeam")]
-        void GetUsersWithTeam(string nickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IEndGame/GetEndGameUsers")]
+        void GetEndGameUsers(string nickname);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IEndGame/GetUsersWithTeam")]
-        System.Threading.Tasks.Task GetUsersWithTeamAsync(string nickname);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IEndGame/GetEndGameUsers")]
+        System.Threading.Tasks.Task GetEndGameUsersAsync(string nickname);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IEndGame/GameEnded")]
         void GameEnded(string nickname);
@@ -921,8 +907,8 @@ namespace Astralis.UserManager {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IEndGameCallback {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEndGame/SetUsers", ReplyAction="http://tempuri.org/IEndGame/SetUsersResponse")]
-        void SetUsers(Astralis.UserManager.UserWithTeam[] usersWithTeams);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEndGame/ShowEndGameUsers", ReplyAction="http://tempuri.org/IEndGame/ShowEndGameUsersResponse")]
+        void ShowEndGameUsers(Astralis.UserManager.UserWithTeam[] usersWithTeams);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -953,12 +939,12 @@ namespace Astralis.UserManager {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void GetUsersWithTeam(string nickname) {
-            base.Channel.GetUsersWithTeam(nickname);
+        public void GetEndGameUsers(string nickname) {
+            base.Channel.GetEndGameUsers(nickname);
         }
         
-        public System.Threading.Tasks.Task GetUsersWithTeamAsync(string nickname) {
-            return base.Channel.GetUsersWithTeamAsync(nickname);
+        public System.Threading.Tasks.Task GetEndGameUsersAsync(string nickname) {
+            return base.Channel.GetEndGameUsersAsync(nickname);
         }
         
         public void GameEnded(string nickname) {

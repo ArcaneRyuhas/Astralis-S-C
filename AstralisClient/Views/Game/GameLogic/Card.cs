@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace Astralis.Views.Game.GameLogic
 {
@@ -36,7 +35,11 @@ namespace Astralis.Views.Game.GameLogic
 
         public int Mana 
         { 
-            get { return _mana; } 
+            get 
+            {
+                return _mana; 
+            } 
+
             set 
             { 
                 if (_mana != value) 
@@ -49,7 +52,11 @@ namespace Astralis.Views.Game.GameLogic
 
         public int Attack 
         { 
-            get { return _attack; } 
+            get 
+            { 
+                return _attack; 
+            }
+            
             set 
             { 
                 _attack = value; 
@@ -59,7 +66,10 @@ namespace Astralis.Views.Game.GameLogic
 
         public int Health 
         { 
-            get { return _health; } 
+            get 
+            { 
+                return _health; 
+            } 
 
             set 
             { 
@@ -125,10 +135,8 @@ namespace Astralis.Views.Game.GameLogic
             unchecked
             {
                 int hash = 17;
-                hash = hash * 23 + _mana.GetHashCode();
-                hash = hash * 23 + _attack.GetHashCode();
-                hash = hash * 23 + _health.GetHashCode();
                 hash = hash * 23 + (_type != null ? _type.GetHashCode() : 0);
+
                 return hash;
             }
         }

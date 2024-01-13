@@ -12,18 +12,18 @@ namespace Astralis.Views.Game.GameLogic
         private const string NO_CLASS = "empty";
         private const int ERROR_CARD_ID = 0;
 
-        private static CardManager instance;
+        private static CardManager _instance;
         private readonly Dictionary<int, ICardPrototype> _cardLibrary;
         
 
         public static CardManager Instance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new CardManager();
+                _instance = new CardManager();
             }
 
-            return instance;
+            return _instance;
         }
 
         private CardManager()
@@ -78,12 +78,12 @@ namespace Astralis.Views.Game.GameLogic
         {
             int cardId;
 
-            cardId = FindKeyByValue(card);
+            cardId = FindCardByKeyValue(card);
 
             return cardId;
         }
 
-        private int FindKeyByValue(Card value)
+        private int FindCardByKeyValue(Card value)
         {
             int cardId = ERROR_CARD_ID;
 

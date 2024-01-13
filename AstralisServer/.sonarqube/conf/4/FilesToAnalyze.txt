@@ -1,0 +1,26 @@
+﻿C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\ClientCallbackTets.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Properties\AssemblyInfo.cs
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\_common\es\Microsoft.TestPlatform.AdapterUtilities.resources.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\_common\es\Microsoft.TestPlatform.CoreUtilities.resources.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\_common\es\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.resources.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\_common\es\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.resources.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\_common\es\Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\_common\es\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\_common\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\_common\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\net46\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\packages\MSTest.TestAdapter.2.2.10\build\net46\Microsoft.TestPlatform.AdapterUtilities.dll
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\app.config
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\item.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\item1.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\item2.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\item3.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\item4.xsd
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\MessageService.wsdl
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\packages.config
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Properties\DataSources\DataAccessProject.Contracts.GamesWonInfo.datasource
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Properties\DataSources\DataAccessProject.Contracts.User.datasource
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\item.disco
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\configuration91.svcinfo
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\configuration.svcinfo
+C:\Users\mario\source\repos\ArcaneRyuhas\Astralis-S-C\AstralisServer\CallbackTestProject\Connected Services\AstralisService\Reference.svcmap

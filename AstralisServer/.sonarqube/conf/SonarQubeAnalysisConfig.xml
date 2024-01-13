@@ -129,7 +129,7 @@
     <Property Name="sonaranalyzer-vbnet.pluginKey">vbnet</Property>
     <Property Name="sonar.updatecenter.url">https://update.sonarsource.org/update-center.properties</Property>
     <Property Name="sonar.core.id">147B411E-AYveLh9bsogWqVCL7a9e</Property>
-    <Property Name="sonar.core.startTime">12/12/2023 09:05:16 p. m.</Property>
+    <Property Name="sonar.core.startTime">12/01/2024 12:43:14 a. m.</Property>
   </ServerSettings>
   <LocalSettings />
   <AnalyzersSettings>
@@ -140,20 +140,20 @@
       <AnalyzerPlugins>
         <AnalyzerPlugin Key="csharp" Version="9.13.0.79967" StaticResourceName="SonarAnalyzer-9.13.0.79967.zip">
           <AssemblyPaths>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\Google.Protobuf.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.CSharp.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\THIRD-PARTY-NOTICES.txt</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\Google.Protobuf.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\SonarAnalyzer.CSharp.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
         <AnalyzerPlugin Key="vbnet" Version="9.13.0.79967" StaticResourceName="SonarAnalyzer-9.13.0.79967.zip">
           <AssemblyPaths>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\Google.Protobuf.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.VisualBasic.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\THIRD-PARTY-NOTICES.txt</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\Google.Protobuf.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\SonarAnalyzer.VisualBasic.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
       </AnalyzerPlugins>
@@ -168,20 +168,20 @@
       <AnalyzerPlugins>
         <AnalyzerPlugin Key="csharp" Version="9.13.0.79967" StaticResourceName="SonarAnalyzer-9.13.0.79967.zip">
           <AssemblyPaths>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\Google.Protobuf.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.CSharp.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\2\THIRD-PARTY-NOTICES.txt</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\Google.Protobuf.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\SonarAnalyzer.CSharp.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\4\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
         <AnalyzerPlugin Key="vbnet" Version="9.13.0.79967" StaticResourceName="SonarAnalyzer-9.13.0.79967.zip">
           <AssemblyPaths>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\Google.Protobuf.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.VisualBasic.dll</Path>
-            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\3\THIRD-PARTY-NOTICES.txt</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\Google.Protobuf.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\SonarAnalyzer.VisualBasic.dll</Path>
+            <Path>C:\Users\mario\AppData\Local\Temp\.sonarqube\resources\5\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
       </AnalyzerPlugins>

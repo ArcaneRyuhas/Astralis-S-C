@@ -14,22 +14,22 @@ namespace DataAccessProject.Contracts
         void ConnectGame(string nickname);
 
         [OperationContract]
-        List<int> DispenseCards(string nickname);
+        List<int> DispenseGameCards(string nickname);
 
         [OperationContract(IsOneWay = true)]
-        void DrawCard(string nickname, int [] cardId); 
+        void DrawGameCard(string nickname, int [] cardId); 
 
         [OperationContract(IsOneWay = true)]
-        void EndGame(int winnerTeam, string nickname); //Solo el host manda esto
+        void EndGame(int winnerTeam, string nickname);
 
         [OperationContract(IsOneWay = true)]
         void EndGameTurn(string nickname, Dictionary<int, int> boardAfterTurn);
 
         [OperationContract(IsOneWay = true)]
-        void StartFirstPhase(string hostNickname);
+        void StartFirstGamePhase(string hostNickname);
 
         [OperationContract(IsOneWay = true)]
-        void SendMessageGame(string message, string nickname);
+        void SendMessageToGame(string message, string nickname);
     }
 
     [ServiceContract]
@@ -43,19 +43,18 @@ namespace DataAccessProject.Contracts
         void ShowUsersInGame(Dictionary<string, int> users);
 
         [OperationContract]
-        void DrawCardClient (string nickname, int [] cardId);
+        void ShowCardDrawedInGame (string nickname, int [] cardId);
 
         [OperationContract]
-        void PlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn);
+        void ShowGamePlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn);
 
         [OperationContract]
-        void StartFirstPhaseClient(Tuple<string, string> firstPlayers);
+        void StartFirstGamePhaseClient(Tuple<string, string> firstPlayers);
 
         [OperationContract]
         void EndGameClient(int winnerTeam);
 
         [OperationContract]
-        void ReceiveMessageGame(string message);
-        
+        void RecieveGameMessage(string message);
     }
 }

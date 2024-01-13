@@ -1,20 +1,16 @@
 ﻿using Astralis.UserManager;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows;
 using System.ServiceModel;
 
 namespace Astralis.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for LeaderBoard.xaml
-    /// </summary>
     public partial class LeaderBoard : Page
     {
-        private const int MAX_USER_LENGHT = 10;
         private const int INITIAL_LENGHT = 0;
+        private const int INVALID_GAMES_WON = 1;
 
         public LeaderBoard()
         {
@@ -28,12 +24,29 @@ namespace Astralis.Views.Pages
             {
                 LeaderboardManagerClient client = new LeaderboardManagerClient();
                 List<GamesWonInfo> gamesWonInfos = new List<GamesWonInfo>(client.GetLeaderboardInfo());
-
-                SetUserList(gamesWonInfos);
+                
+                if (gamesWonInfos.Count != INVALID_GAMES_WON)
+                {
+                    SetUserList(gamesWonInfos);
+                }
+                else
+                {
+                    MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            catch (EndpointNotFoundException) 
+            catch (CommunicationObjectFaultedException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -44,19 +57,15 @@ namespace Astralis.Views.Pages
 
             foreach (GamesWonInfo userAndWins in usersAndWins)
             {
-                if (rowNumber < MAX_USER_LENGHT)
-                {
-                    string nickname = userAndWins.Username;
-                    string wins = userAndWins.GamesWonCount.ToString();
+                string nickname = userAndWins.Username;
+                string wins = userAndWins.GamesWonCount.ToString();
+                Label lblNickname = CreateTextBox(nickname);
+                Label lblWins = CreateTextBox(wins);
 
-                    Label lblNickname = CreateTextBox(nickname);
-                    Label lblWins = CreateTextBox(wins);
+                AddTextBoxToUserGrid(lblNickname, rowNumber);
+                AddTextBoxToWinsGrid(lblWins, rowNumber);
 
-                    AddTextBoxToUserGrid(lblNickname, rowNumber);
-                    AddTextBoxToWinsGrid(lblWins, rowNumber);
-
-                    rowNumber++;
-                }
+                rowNumber++;
             }
         }
 
@@ -76,15 +85,12 @@ namespace Astralis.Views.Pages
         private void AddTextBoxToUserGrid(Label lblNickname, int rowNumber)
         {
             Grid.SetRow(lblNickname, rowNumber);
-
             gdUsersName.Children.Add(lblNickname);
         }
-
 
         private void AddTextBoxToWinsGrid(Label lblWins, int rowNumber)
         {
             Grid.SetRow(lblWins, rowNumber);
-
             gdUsersWins.Children.Add(lblWins);
         }
 

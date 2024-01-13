@@ -5,24 +5,27 @@ namespace Astralis.Views.Game.GameLogic
 {
     public class Team : INotifyPropertyChanged
     {
-        private int _roundMana;
         private int _mana;
         private int _health;
+
+        public int RoundMana { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Team(int mana, int health)
         {
-            _roundMana = mana;
+            RoundMana = mana;
             Mana = mana;
             Health = health;
         }
 
-        public int RoundMana { get { return _roundMana; } set { _roundMana = value; } }
-
         public int Mana
         {
-            get { return _mana; }
+            get 
+            { 
+                return _mana; 
+            }
+
             set
             {
                 if (_mana != value)
@@ -35,7 +38,11 @@ namespace Astralis.Views.Game.GameLogic
 
         public int Health
         {
-            get { return _health; }
+            get 
+            { 
+                return _health; 
+            }
+
             set
             {
                 if (_health != value)

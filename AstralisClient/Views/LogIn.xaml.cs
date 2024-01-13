@@ -17,8 +17,6 @@ namespace Astralis.Views
         private const string DELIMITER_NICKNAME_REGEX = @"^[a-zA-Z0-9]{0,30}$";
         private const string DELIMITER_PASSWORD_REGEX = @"^[a-zA-Z0-9\S]{0,40}$";
         private const int MAX_FIELDS_LENGHT = 39;
-        private const int VALIDATION_FAILURE = 0;
-        private const int VALIDATION_SUCCES = 1;
 
         public LogIn()
         {
@@ -30,9 +28,67 @@ namespace Astralis.Views
         {
             string password = CreateSha2(pbPassword.Password);
             string nickname = tbNickname.Text;
-            bool noEmptyFields = true;
+            
+            if (NoEmptyFields())
+            {
+                try
+                {
+                    AllowAccessToUser(nickname, password);
+                }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (CommunicationException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (TimeoutException)
+                {
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
 
+        private void AllowAccessToUser(string nickname, string password)
+        {
             UserManagerClient client = new UserManagerClient();
+            bool userOnline = client.IsUserOnline(nickname);
+            int userConfirmed = client.ConfirmUserCredentials(nickname, password);
+
+            if (userOnline)
+            {
+                MessageBox.Show(Properties.Resources.msgUserOnline, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else if (userConfirmed == Constants.VALIDATION_SUCCESS)
+            {
+                User user = client.GetUserByNickname(nickname);
+
+                UserSession.Instance(user);
+
+                GameWindow gameWindow = new GameWindow();
+
+                this.Close();
+                gameWindow.Show();
+            }
+            else if (userConfirmed == Constants.VALIDATION_FAILURE)
+            {
+                txbInvalidFields.Text = Properties.Resources.txbInvalidFields;
+                txbInvalidFields.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                MessageBox.Show(Properties.Resources.msgUnableToAnswer, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            client.Close();
+        }
+
+        private bool NoEmptyFields()
+        {
+            string password = CreateSha2(pbPassword.Password);
+            string nickname = tbNickname.Text;
+            bool noEmptyFields = true;
 
             if (string.IsNullOrEmpty(password))
             {
@@ -44,45 +100,7 @@ namespace Astralis.Views
                 noEmptyFields = false;
             }
 
-            if (noEmptyFields)
-            {
-                try
-                {
-                    bool userOnline = client.UserOnline(nickname);
-                    int userConfirmed = client.ConfirmUser(nickname, password);
-
-                    if (userOnline)
-                    {
-                        MessageBox.Show(Properties.Resources.msgUserOnline, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else if (userConfirmed == VALIDATION_SUCCES)
-                    {
-                        User user = client.GetUserByNickname(nickname);
-                        UserSession.Instance(user);
-
-                        GameWindow gameWindow = new GameWindow();
-                        this.Close();
-                        gameWindow.Show();
-                    }
-                    else if(userConfirmed == VALIDATION_FAILURE)
-                    {
-                        txbInvalidFields.Text = Properties.Resources.txbInvalidFields;
-                        txbInvalidFields.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-                catch (CommunicationException)
-                {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (TimeoutException)
-                {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
+            return noEmptyFields;
         }
 
         private string CreateSha2(string password)
@@ -120,7 +138,6 @@ namespace Astralis.Views
         private void BtnJoinAsGuestClick(object sender, RoutedEventArgs e)
         {
             GuestInvitation guestInvitation = new GuestInvitation();
-
             guestInvitation.OnSubmit += GuestInvitationOnSubmit;
 
             guestInvitation.ShowDialog();
@@ -132,29 +149,24 @@ namespace Astralis.Views
 
             try
             {
-                User user = client.AddGuest();
-
-                if (user.Nickname != "ERROR")
+                if(UserSession.Instance() == null)
                 {
-                    UserSession.Instance(user);
-                    GameWindow gameWindow = new GameWindow();
-                    Lobby lobby = new Lobby(gameWindow);
+                    User user = client.AddGuestUser();
 
-                    if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
+                    if (user.Nickname != Constants.ERROR_STRING)
                     {
-                        this.Close();
-                        gameWindow.ChangePage(lobby);
-                        gameWindow.Show();
-                    }
-                    else
-                    {
-                        MessageBox.Show(Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                        UserSession.Instance(user);
+                        JoinLobbyAsGuest(invitationCode);
                     }
                 }
                 else
                 {
-                    MessageBox.Show(Properties.Resources.msgLobbyError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+                    JoinLobbyAsGuest(invitationCode);
                 }
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (CommunicationException)
             {
@@ -163,6 +175,19 @@ namespace Astralis.Views
             catch (TimeoutException)
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void JoinLobbyAsGuest(string invitationCode)
+        {
+            GameWindow gameWindow = new GameWindow();
+            Lobby lobby = new Lobby(gameWindow);
+
+            if (lobby.GameIsNotFull(invitationCode) && lobby.SetLobby(invitationCode))
+            {
+                this.Close();
+                gameWindow.ChangePage(lobby);
+                gameWindow.Show();
             }
         }
 
@@ -181,6 +206,7 @@ namespace Astralis.Views
                 e.Handled = true;
             }
         }
+
         private void TextLimeterForPassword(object sender, TextCompositionEventArgs e)
         {
             PasswordBox passwordBox = (PasswordBox)sender;
@@ -191,6 +217,5 @@ namespace Astralis.Views
                 e.Handled = true;
             }
         }
-
     }
 }

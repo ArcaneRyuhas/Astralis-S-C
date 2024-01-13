@@ -9,8 +9,8 @@ namespace Astralis.Logic
     internal class ImageManager
     {
 
-        private static ImageManager instance;
-        private Dictionary<int, Bitmap> _imageMap;
+        private static ImageManager _instance;
+        private readonly Dictionary<int, Bitmap> _imageMap;
 
         private ImageManager() 
         {
@@ -32,12 +32,12 @@ namespace Astralis.Logic
 
         public static ImageManager Instance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new ImageManager();
+                _instance = new ImageManager();
             }
 
-            return instance;
+            return _instance;
         }
 
         public int GetImageCount()
@@ -48,6 +48,7 @@ namespace Astralis.Logic
         public BitmapImage GetImage(int imageId)
         {
             Bitmap image = _imageMap[imageId];
+
             return ConvertBitmapToBitmapImage(image);
         }
 
@@ -56,12 +57,15 @@ namespace Astralis.Logic
             using (MemoryStream stream = new MemoryStream())
             {
                 bitmap.Save(stream, ImageFormat.Png);
-                stream.Position = 0;
 
+                stream.Position = 0;
                 BitmapImage bitmapImage = new BitmapImage();
+
                 bitmapImage.BeginInit();
+
                 bitmapImage.StreamSource = stream;
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+
                 bitmapImage.EndInit();
 
                 return bitmapImage;

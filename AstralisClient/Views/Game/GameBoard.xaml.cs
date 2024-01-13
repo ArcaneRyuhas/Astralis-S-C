@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Astralis.UserManager;
+using System.Linq;
+using System.Windows.Input;
 
 namespace Astralis.Views.Game
 {
@@ -21,78 +23,84 @@ namespace Astralis.Views.Game
         private const int ERROR_CARD_ID = 0;
         private const int ENEMY_CARD = -1;
         private const int ALL_USERS_CONNECTED = 4;
+        private const int MAX_CHAT_LENGHT = 100;
 
         private GameManager _gameManager;
         private GameManagerClient _client;
         private GraphicCard _selectedCard;
-        private bool _isHost = false;
         private List<Card> _playedCards = new List<Card>();
         private Team _userTeam;
         private Team _enemyTeam;
 
-        public bool IsHost { get { return _isHost; } set { _isHost = value; } }
+        public bool IsHost { get; set; }
 
         public List<Card> PlayedCards { get { return _playedCards; } }
-
-        public Label LblTurnMana { get { return lblTurnMana; } }
 
         public GameBoard()
         {
             InitializeComponent();
-            InitializeGame();
+            ConnectToGame();
+            SetTeams();
+            SetGameManager();
+
+            lblMyNickname.Content = UserSession.Instance().Nickname;
+            IsHost = false;
         }
 
-        private void InitializeGame()
+        private void SetGameManager()
         {
-            Connect();
-            SetTeams();
             _gameManager = new GameManager(gdEnemySlots, gdPlayerSlots);
-            lblMyNickname.Content = UserSession.Instance().Nickname;
 
             _gameManager.SetGameBoard(this);
-            _gameManager.SetCounter(progressBarCounter);
+            _gameManager.SetGameCounters(progressBarCounter);
+
             _gameManager.UserTeam = _userTeam;
             _gameManager.EnemyTeam = _enemyTeam;
+
+            _gameManager.StartExitTimer();
         }
 
-        private void Connect()
+        private void ConnectToGame()
         {
-            _client = SetGameContext();
             try
             {
+                InstanceContext context = new InstanceContext(this);
+                _client = new GameManagerClient(context);
+
                 _client.ConnectGame(UserSession.Instance().Nickname);
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
 
-        private GameManagerClient SetGameContext()
-        {
-            InstanceContext context = new InstanceContext(this);
-            GameManagerClient client = new GameManagerClient(context);
-
-            return client;
-        }
-
         private void GetUserDeck()
         {
-            int[] userDeck = _client.DispenseCards(UserSession.Instance().Nickname);
+            int[] userDeck = _client.DispenseGameCards(UserSession.Instance().Nickname);
             _gameManager.UserDeckQueue = new Queue<int>(userDeck);
         }
 
-        //We preferred to leave the DrawFourCards in this class because we need to make graphic cards for every card that is drawn.
+        /*
+         * We preferred to leave the DrawFourCards in this class because 
+         * we need to make graphic cards for every card that is drawn and 
+         * the communication between server and client.
+         */
+
         private void DrawFourCards()
         {
             string myNickname = UserSession.Instance().Nickname;
-
             int[] drawnCard = new int[4];
 
             for (int cardsToDraw = 0; cardsToDraw < 4; cardsToDraw++)
@@ -102,16 +110,21 @@ namespace Astralis.Views.Game
 
             try
             {
-                _client.DrawCard(myNickname, drawnCard);
+                _client.DrawGameCard(myNickname, drawnCard);
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -123,26 +136,30 @@ namespace Astralis.Views.Game
 
             try
             {
-                _client.DrawCard(myNickname, drawnCard);
+                _client.DrawGameCard(myNickname, drawnCard);
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
 
-        //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges in the graphic mannerjj.
+        //We preferred to leave SetTeams method in this class because of the use of the PropertyChanges in the graphic manner.
         private void SetTeams()
         {
             _userTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
             _userTeam.PropertyChanged += UserTeamPropertyChanged;
-
             _enemyTeam = new Team(GAME_MODE_STARTING_MANA, GAME_MODE_STARTING_HEALT);
             _enemyTeam.PropertyChanged += EnemyTeamPropertyChange;
         }
@@ -153,14 +170,19 @@ namespace Astralis.Views.Game
             {
                 _client.EndGameTurn(UserSession.Instance().Nickname, GetBoardDictionary());
             }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
             catch (CommunicationException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
             }
         }
@@ -172,25 +194,29 @@ namespace Astralis.Views.Game
 
             foreach (UIElement child in gdPlayerSlots.Children)
             {
-                if (child is Grid grid)
-                {
-                    counter++;
-
-                    Grid innerGrid = grid;
-                    int cardId = ERROR_CARD_ID;
-
-                    foreach (GraphicCard innerCard in innerGrid.Children)
-                    {
-                        innerCard.OnCardClicked -= GraphicCardClickedHandler;
-                        cardId = CardManager.Instance().GetCardId(innerCard.Card.Clone());
-                        break;
-                    }
-
-                    boardDictionary.Add(counter, cardId);
-                }
+                AddCardToBoardDictionary(child, ref counter, boardDictionary);
             }
 
             return boardDictionary;
+        }
+
+        private void AddCardToBoardDictionary(UIElement child, ref int counter, Dictionary<int, int> boardDictionary)
+        {
+            if (child is Grid grid)
+            {
+                counter++;
+                Grid innerGrid = grid;
+                int cardId = ERROR_CARD_ID;
+
+                foreach (GraphicCard innerCard in innerGrid.Children)
+                {
+                    innerCard.OnCardClicked -= GraphicCardClickedHandler;
+                    cardId = CardManager.Instance().GetCardId(innerCard.Card.Clone());
+                    break;
+                }
+
+                boardDictionary.Add(counter, cardId);
+            }
         }
 
         public GraphicCard[] GetAttackBoard(Grid gdBoard)
@@ -200,23 +226,29 @@ namespace Astralis.Views.Game
 
             foreach (UIElement child in gdBoard.Children)
             {
-                if (child is Grid innerGrid)
-                {
-                    GraphicCard graphicCard = new GraphicCard();
-                    graphicCard.SetGraphicCard(CardManager.Instance().GetCard(ERROR_CARD_ID));
-
-                    foreach (GraphicCard innerCard in innerGrid.Children)
-                    {
-                        graphicCard = innerCard;
-                        break;
-                    }
-
-                    attackBoard[counter] = graphicCard;
-                    counter++;
-                }
+                AddCardToAttackList(attackBoard, ref counter, child);
             }
 
             return attackBoard;
+        }
+
+        private void AddCardToAttackList(GraphicCard[] attackBoard, ref int counter, UIElement child)
+        {
+            if (child is Grid innerGrid)
+            {
+                GraphicCard graphicCard = new GraphicCard();
+
+                graphicCard.SetGraphicCard(CardManager.Instance().GetCard(ERROR_CARD_ID));
+
+                foreach (GraphicCard innerCard in innerGrid.Children)
+                {
+                    graphicCard = innerCard;
+                    break;
+                }
+
+                attackBoard[counter] = graphicCard;
+                counter++;
+            }
         }
 
         private void UserTeamPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -246,7 +278,9 @@ namespace Astralis.Views.Game
         public void AddCardToHand(Card card)
         {
             GraphicCard graphicCard = new GraphicCard();
+
             graphicCard.SetGraphicCard(card);
+
             graphicCard.OnCardClicked += GraphicCardClickedHandler;
 
             AddGraphicCardToGrid(graphicCard, gdPlayerHand);
@@ -261,6 +295,7 @@ namespace Astralis.Views.Game
 
             ColumnDefinition columnDefinition = new ColumnDefinition();
             columnDefinition.Width = GridLength.Auto;
+
             gridToAddCard.ColumnDefinitions.Add(columnDefinition);
         }
 
@@ -272,27 +307,37 @@ namespace Astralis.Views.Game
 
                 if (leftClick)
                 {
-                    if (_selectedCard != null)
-                    {
-                        _selectedCard.IsSelected = false;
-                    }
-
-                    _selectedCard = clickedCard;
-                    _selectedCard.IsSelected = true;
+                    LeftClicOnCard(clickedCard);
                 }
                 else
                 {
-                    Grid currentCardParent = VisualTreeHelper.GetParent(clickedCard) as Grid;
-
-                    if (currentCardParent != null && currentCardParent != gdPlayerHand)
-                    {
-                        currentCardParent.Children.Remove(clickedCard);
-                        AddGraphicCardToGrid(clickedCard, gdPlayerHand);
-                        _playedCards.Remove(clickedCard.Card);
-
-                        _userTeam.Mana += clickedCard.Card.Mana;
-                    }
+                    RightClicOnCard(clickedCard);
                 }
+            }
+        }
+
+        private void LeftClicOnCard(GraphicCard clickedCard)
+        {
+            if (_selectedCard != null)
+            {
+                _selectedCard.IsSelected = false;
+            }
+
+            _selectedCard = clickedCard;
+            _selectedCard.IsSelected = true;
+        }
+
+        private void RightClicOnCard(GraphicCard clickedCard)
+        {
+            Grid currentCardParent = VisualTreeHelper.GetParent(clickedCard) as Grid;
+
+            if (currentCardParent != null && currentCardParent != gdPlayerHand)
+            {
+                currentCardParent.Children.Remove(clickedCard);
+                AddGraphicCardToGrid(clickedCard, gdPlayerHand);
+                _playedCards.Remove(clickedCard.Card);
+
+                _userTeam.Mana += clickedCard.Card.Mana;
             }
         }
 
@@ -303,55 +348,65 @@ namespace Astralis.Views.Game
             if (currentCardParent != null)
             {
                 int columnIndex = Grid.GetColumn(graphicCardToRemove);
+
                 currentCardParent.Children.Remove(graphicCardToRemove);
-                RemoveColumn(currentCardParent, columnIndex);
+                RemoveGridColumn(currentCardParent, columnIndex);
             }
         }
 
-        private void PlaceCardInSlot(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void PlaceCardInGameSlot(object sender, MouseButtonEventArgs e)
         {
             if (_gameManager.IsMyTurn && _selectedCard != null)
             {
                 Grid boardCardSlot = sender as Grid;
                 Grid currentCardParent = VisualTreeHelper.GetParent(_selectedCard) as Grid;
 
-                if (currentCardParent != boardCardSlot && currentCardParent != gdPlayerHand && boardCardSlot.Children.Count == 0)
-                {
-                    _selectedCard.IsSelected = false;
-
-                    currentCardParent.Children.Remove(_selectedCard);
-                    boardCardSlot.Children.Add(_selectedCard);
-
-                    _selectedCard.IsSelected = false;
-                    _selectedCard = null;
-                }
-
-                if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && _userTeam.UseMana(_selectedCard.Card.Mana))
-                {
-                    _selectedCard.IsSelected = false;
-
-                    int columnIndex = Grid.GetColumn(_selectedCard);
-                    currentCardParent.Children.Remove(_selectedCard);
-                    RemoveColumn(currentCardParent, columnIndex);
-
-                    boardCardSlot.Children.Add(_selectedCard);
-                    _playedCards.Add(_selectedCard.Card);
-
-                    _selectedCard.IsSelected = false;
-                    _selectedCard = null;
-                }
-
+                MoveCardFromBoardSlotToAnother(boardCardSlot, currentCardParent);
+                MoveCardFromHandToBoard(boardCardSlot, currentCardParent);
             }
         }
 
-        private void RemoveColumn(Grid grid, int columnIndex)
+        private void MoveCardFromHandToBoard(Grid boardCardSlot, Grid currentCardParent)
+        {
+            if (currentCardParent == gdPlayerHand && boardCardSlot.Children.Count == 0 && _userTeam.UseMana(_selectedCard.Card.Mana))
+            {
+                _selectedCard.IsSelected = false;
+                int columnIndex = Grid.GetColumn(_selectedCard);
+
+                currentCardParent.Children.Remove(_selectedCard);
+                RemoveGridColumn(currentCardParent, columnIndex);
+                boardCardSlot.Children.Add(_selectedCard);
+                _playedCards.Add(_selectedCard.Card);
+
+                _selectedCard.IsSelected = false;
+                _selectedCard = null;
+            }
+        }
+
+        private void MoveCardFromBoardSlotToAnother(Grid boardCardSlot, Grid currentCardParent)
+        {
+            if (currentCardParent != boardCardSlot && currentCardParent != gdPlayerHand && boardCardSlot.Children.Count == 0)
+            {
+                _selectedCard.IsSelected = false;
+
+                currentCardParent.Children.Remove(_selectedCard);
+                boardCardSlot.Children.Add(_selectedCard);
+
+                _selectedCard.IsSelected = false;
+                _selectedCard = null;
+            }
+        }
+
+        private void RemoveGridColumn(Grid grid, int columnIndex)
         {
             if (columnIndex >= 0 && columnIndex < grid.ColumnDefinitions.Count)
             {
                 grid.ColumnDefinitions.RemoveAt(columnIndex);
+
                 foreach (UIElement child in grid.Children)
                 {
                     int currentColumn = Grid.GetColumn(child);
+
                     if (currentColumn > columnIndex)
                     {
                         Grid.SetColumn(child, currentColumn - 1);
@@ -360,12 +415,12 @@ namespace Astralis.Views.Game
             }
         }
 
-        public void DrawCardClient(string nickname, int [] cardsId)
+        public void ShowCardDrawedInGame(string nickname, int [] cardId)
         {
-            foreach(int cardId in cardsId) 
+            foreach(int Id in cardId) 
             {
                 GraphicCard graphicCard = new GraphicCard();
-                Card card = CardManager.Instance().GetCard(cardId);
+                Card card = CardManager.Instance().GetCard(Id);
 
                 graphicCard.SetGraphicCard(card);
                 AddGraphicCardToGrid(graphicCard, gdAllyHand);
@@ -376,20 +431,25 @@ namespace Astralis.Views.Game
         {
             string myNickname = UserSession.Instance().Nickname;
 
-            if (_isHost)
+            if (IsHost)
             {
                 try
                 {
                     _client.EndGame(winnerTeam, myNickname);
                 }
+                catch (CommunicationObjectFaultedException)
+                {
+                    MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.RestartApplication();
+                }
                 catch (CommunicationException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.RestartApplication();
                 }
                 catch (TimeoutException)
                 {
-                    MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.RestartApplication();
                 }
             }
@@ -400,18 +460,21 @@ namespace Astralis.Views.Game
             string myNickname = UserSession.Instance().Nickname;
             EndGame endGame = new EndGame(winnerTeam, _gameManager.UsersTeam[myNickname]);
 
-            GameWindow gameWindow = new GameWindow();
+            _gameManager.EndExitTimer();
 
+            GameWindow gameWindow = new GameWindow();
             endGame.EndGameWindow = gameWindow;
+
             gameWindow.ChangePage(endGame);
+
             gameWindow.Visibility = Visibility.Visible;
             
             this.Close();
         }
 
-        public void PlayerEndedTurn(string player, Dictionary<int, int> boardAfterTurn)
+        public void ShowGamePlayerEndedTurn(string nickname, Dictionary<int, int> boardAfterTurn)
         {
-            _gameManager.PlayerEndedTurn(player, boardAfterTurn);
+            _gameManager.PlayerEndedTurn(nickname, boardAfterTurn);
         }
 
         public void TakeCardOutOfHand(string nickname, GraphicCard graphicCardToRemove, Dictionary<string, int> usersTeam)
@@ -422,28 +485,40 @@ namespace Astralis.Views.Game
             }
             else if (nickname == _gameManager.MyEnemy)
             {
-                RemoveCardFromHand(gdEnemyHand, graphicCardToRemove);
+                RemoveEnemyCardFromHand(gdEnemyHand);
             }
             else
             {
-                RemoveCardFromHand(gdEnemyAllyHand, graphicCardToRemove);
+                RemoveEnemyCardFromHand(gdEnemyAllyHand);
             }
         }
 
         private void RemoveCardFromHand(Grid gridToModify, GraphicCard graphicCardToRemove)
         {
+            //The fact of using a foreach is to find the first graphicCard in the grid and theres no other found to do it succesufully.
             foreach (GraphicCard graphicCard in gridToModify.Children)
             {
-                if (graphicCardToRemove.Card != null && graphicCard.Card != null)
+                if (graphicCardToRemove.Card != null && graphicCard.Card != null && graphicCard.Card.Equals(graphicCardToRemove.Card))
                 {
-                    if (graphicCard.Card.Equals(graphicCardToRemove.Card))
-                    {
                         int columnIndex = Grid.GetColumn(graphicCard);
+
                         gdAllyHand.Children.Remove(graphicCard);
-                        RemoveColumn(gdAllyHand, columnIndex);
+                        RemoveGridColumn(gdAllyHand, columnIndex);
                         break;
-                    }
                 }
+            }
+        }
+
+        private void RemoveEnemyCardFromHand(Grid gdEnemyHand)
+        {
+            GraphicCard firstGraphicCard = gdEnemyHand.Children.OfType<GraphicCard>().FirstOrDefault();
+
+            if (firstGraphicCard != null)
+            {
+                int columnIndex = Grid.GetColumn(firstGraphicCard);
+
+                gdEnemyHand.Children.Remove(firstGraphicCard);
+                RemoveGridColumn(gdEnemyHand, columnIndex);
             }
         }
 
@@ -457,13 +532,11 @@ namespace Astralis.Views.Game
         public void ShowUsersInGame(Dictionary<string, int> users)
         {
             _gameManager.UsersTeam = users;
-
             lblUserTeam.Content += _gameManager.UsersTeam[UserSession.Instance().Nickname].ToString();
-
             _ = StartGameAsync();
         }
 
-        public void StartFirstPhaseClient(Tuple<string, string> firstPlayers)
+        public void StartFirstGamePhaseClient(Tuple<string, string> firstPlayers)
         {
             _gameManager.StartFirstPhaseClient(firstPlayers);
             DrawFourCards();
@@ -475,12 +548,11 @@ namespace Astralis.Views.Game
             Card card = CardManager.Instance().GetCard(ENEMY_CARD);
             GraphicCard graphicCardOne = new GraphicCard();
 
-           graphicCardOne.SetGraphicCard(card);
+            graphicCardOne.SetGraphicCard(card);
 
             GraphicCard graphicCardTwo = new GraphicCard();
 
             graphicCardTwo.SetGraphicCard(card);
-
             AddGraphicCardToGrid(graphicCardOne, gdEnemyHand);
             AddGraphicCardToGrid(graphicCardTwo, gdEnemyAllyHand);
         }
@@ -492,27 +564,32 @@ namespace Astralis.Views.Game
                 await Task.Delay(2000);
                 GetUserDeck();
                 
-                if (_isHost)
+                if (IsHost)
                 {
                     try
                     {
-                        _client.StartFirstPhase(UserSession.Instance().Nickname);
+                        _client.StartFirstGamePhase(UserSession.Instance().Nickname);
+                    }
+                    catch (CommunicationObjectFaultedException)
+                    {
+                        MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                        App.RestartApplication();
                     }
                     catch (CommunicationException)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis  Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                         App.RestartApplication();
                     }
                     catch (TimeoutException)
                     {
-                        MessageBox.Show(Properties.Resources.msgConnectionError, "Astralis Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                         App.RestartApplication();
                     }
                 }
             }
         }
 
-        public void ReceiveMessageGame(string message)
+        public void RecieveGameMessage(string message)
         {
             tbChat.Text = tbChat.Text + "\n" + message;
         }
@@ -520,6 +597,7 @@ namespace Astralis.Views.Game
         private void BtnMenuClick(object sender, RoutedEventArgs e)
         {
             lblUserTurn.Content = Properties.Resources.lblUserTurnFalse;
+
             _gameManager.EndTurn();
         }
 
@@ -559,9 +637,15 @@ namespace Astralis.Views.Game
             string nickname = UserSession.Instance().Nickname;
             string message = nickname + ": " + txtChat.Text;
             txtChat.Text = Properties.Resources.txtChat;
+
             try
             {
-                _client.SendMessageGame(message, nickname);
+                _client.SendMessageToGame(message, nickname);
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
             }
             catch (CommunicationException)
             {
@@ -572,6 +656,16 @@ namespace Astralis.Views.Game
             {
                 MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.RestartApplication();
+            }
+        }
+
+        private void TextLimiterForChat(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            if (textBox.Text.Length >= MAX_CHAT_LENGHT)
+            {
+                e.Handled = true;
             }
         }
     }

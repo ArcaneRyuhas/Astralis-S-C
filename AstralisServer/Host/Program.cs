@@ -1,22 +1,37 @@
 ﻿using System;
-using System.IO;
+using System.Configuration;
 using System.ServiceModel;
 
 namespace Host
 {
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
-            log4net.Config.XmlConfigurator.Configure(new FileInfo("Log4Net.config"));
+            GetConnectionString();
 
-            using (ServiceHost host = new ServiceHost(typeof(MessageService.UserManager)))
+            using (ServiceHost host = new ServiceHost(typeof(MessageService.MessageService)))
             {
-
                 host.Open();
                 Console.WriteLine("Server is running");
                 Console.ReadLine();
             }
         }
+
+        public static void GetConnectionString()
+        {
+            string connectionString = Environment.GetEnvironmentVariable("ASTRALIS");
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringSection = config.ConnectionStrings.ConnectionStrings["AstralisDBEntities"];
+
+            if (connectionStringSection != null)
+            {
+                connectionStringSection.ConnectionString = connectionString;
+
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("connectionStrings");
+            }
+        }
     }
 }
+

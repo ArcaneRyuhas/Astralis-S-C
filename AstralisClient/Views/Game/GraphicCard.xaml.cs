@@ -17,10 +17,21 @@ namespace Astralis.Views.Game
 
         private bool _isSelected = false;
         private Card _card;
+
         public event EventHandler<bool> OnCardClicked;
         
 
-        public bool IsSelected { get { return _isSelected; } set { _isSelected = value; UpdateVisualState(); } }
+        public bool IsSelected { 
+            get 
+            { 
+                return _isSelected; 
+            } 
+            
+            set 
+            {
+                _isSelected = value; UpdateVisualState(); 
+            } 
+        }
 
         public Card Card { get { return _card; } }
 
@@ -36,26 +47,24 @@ namespace Astralis.Views.Game
 
         public void SetGraphicCard(Card card)
         {
-            if (card.Mana == 0)
+            if (card.Mana != 0)
             {
-                HideCard();
-            }
-            else
-            {
-                this._card = card;
-                this._card.PropertyChanged += CardPropertyChanged;
-
+                _card = card;
+                _card.PropertyChanged += CardPropertyChanged;
                 lblHealth.Content = card.Health.ToString();
                 lblAttack.Content = card.Attack.ToString();
                 lblMana.Content = card.Mana.ToString();
                 lblType.Content = card.Type.ToString();
+            }
+            else
+            {
+                HideCard();
             }
         }
 
         private void HideCard()
         {
             gdCard.Background = null;
-
             lblHealth.Visibility = Visibility.Collapsed;
             lblAttack.Visibility = Visibility.Collapsed;
             lblMana.Visibility = Visibility.Collapsed;

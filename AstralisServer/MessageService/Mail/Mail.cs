@@ -12,46 +12,43 @@ namespace MessageService.Mail
 {
     public class Mail
     {
-        private static Mail instance;
-        private readonly ILog log = LogManager.GetLogger(typeof(UserManager));
-        private string configPath = Path.Combine(Directory.GetCurrentDirectory(), "Mail", "Resources", "MailConfiguration.json");
-        private readonly IConfiguration configuration;
+        private static Mail _instance;
+        private readonly ILog _log = LogManager.GetLogger(typeof(MessageService));
+        private readonly string _configPath = Path.Combine(Directory.GetCurrentDirectory(), "Mail", "Resources", "MailConfiguration.json");
         private const string MAIL_DISPLAY_NAME = "Astralis";
-        private readonly string fromEmail;
-        private readonly string smtpHost;
-        private readonly string password;
-        private readonly int smtpPort;
+        private readonly string _fromEmail;
+        private readonly string _password;
         private readonly SmtpClient smtpClient;
-        private MailMessage mail = new MailMessage();
 
         public static Mail Instance()
         {
-            if(instance == null)
+            if(_instance == null)
             {
-                instance = new Mail();
+                _instance = new Mail();
             }
-            return instance;
+
+            return _instance;
         }
 
         public Mail() 
         {
-            configuration = new ConfigurationBuilder()
-            .AddJsonFile(configPath)
+             IConfiguration configuration = new ConfigurationBuilder()
+            .AddJsonFile(_configPath)
             .Build();
 
-            fromEmail = configuration["EmailSettings:Email"];
-            smtpHost = configuration["EmailSettings:SmtpHost"];
-            password = configuration["EmailSettings:Password"];
-            smtpPort = configuration.GetSection("EmailSettings")["SmtpPort"] != null ? int.Parse(configuration.GetSection("EmailSettings")["SmtpPort"]) : 0;
-            smtpClient = new SmtpClient(smtpHost, smtpPort)
+            _fromEmail = configuration["EmailSettings:Email"];
+            string smtpHost = configuration["EmailSettings:SmtpHost"];
+            _password = configuration["EmailSettings:Password"];
+            int _smtpPort = configuration.GetSection("EmailSettings")["SmtpPort"] != null ? int.Parse(configuration.GetSection("EmailSettings")["SmtpPort"]) : 0;
+            smtpClient = new SmtpClient(smtpHost, _smtpPort)
             {
                 EnableSsl = true,
             };
         }
 
-        public string sendInvitationMail(string to, string gameId)
+        public string SendInvitationMail(string to, string gameId)
         {
-            mail = new MailMessage();
+            MailMessage mail = new MailMessage();
             string message = "Message could not be sent...";
             string htmlFilePath = "Mail/Resources/astralis.html";
             string body;
@@ -64,35 +61,36 @@ namespace MessageService.Mail
                 }
 
                 body = body.Replace("[field id = \"gameCode\"]", gameId);
-                mail.From = new MailAddress(fromEmail, MAIL_DISPLAY_NAME);
+                mail.From = new MailAddress(_fromEmail, MAIL_DISPLAY_NAME);
+
                 mail.To.Add(to);
 
                 mail.Subject = "You are invited, use this code: " + gameId + "!";
                 mail.Body = body;
                 mail.IsBodyHtml = true;
-
-                smtpClient.Credentials = new NetworkCredential(fromEmail, Decrypt(password));
+                smtpClient.Credentials = new NetworkCredential(_fromEmail, Decrypt(_password));
 
                 smtpClient.Send(mail);
+
                 message = "Mail was succesfully sent";
             }
             catch (SmtpException smtpException)
             {
                 message += "SMTP error: " + smtpException.Message;
-                log.Error(message);
+                _log.Error(message);
             }
             catch (InvalidOperationException invalidOperationException)
             {
                 message += "Invalid operation: " + invalidOperationException.Message;
-                log.Error(message);
+                _log.Error(message);
             }
             catch (FileNotFoundException fileNotFoundException)
             {
-                log.Error("HTML file not found: " + fileNotFoundException.Message);
+                _log.Error("HTML file not found: " + fileNotFoundException.Message);
             }
             catch (IOException iOException)
             {
-                log.Error("Error reading HTML file: " + iOException.Message);
+                _log.Error("Error reading HTML file: " + iOException.Message);
             }
 
             return message;
@@ -101,7 +99,6 @@ namespace MessageService.Mail
         private static string Decrypt(string encryptedText)
         {
             byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
-
             byte[] decryptedBytes = ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.CurrentUser);
 
             return Encoding.UTF8.GetString(decryptedBytes);

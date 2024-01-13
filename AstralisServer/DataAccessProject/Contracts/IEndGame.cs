@@ -12,37 +12,33 @@ namespace DataAccessProject.Contracts
     public interface IEndGame
     {
         [OperationContract(IsOneWay = true)]
-        void GetUsersWithTeam(string nickname);
+        void GetEndGameUsers(string nickname);
 
         [OperationContract(IsOneWay = true)]
         void GameEnded(string nickname);
     }
 
+    [ServiceContract]
     public interface IEndGameCallback
     {
         [OperationContract()]
-        void SetUsers(List<UserWithTeam> usersWithTeams);
+        void ShowEndGameUsers(List<UserWithTeam> usersWithTeams);
     }
 
     [DataContract]
     public class UserWithTeam
     {
-        private string nickname;
-        private int imageId;
-        private string mail;
-        private int team;
+        [DataMember]
+        public string Nickname { get; set; }
 
         [DataMember]
-        public string Nickname { get { return nickname; } set { nickname = value; } }
+        public int ImageId { get; set; }
 
         [DataMember]
-        public int ImageId { get { return imageId; } set { imageId = value; } }
+        public string Mail { get; set; }
 
         [DataMember]
-        public string Mail { get { return mail; } set { mail = value; } }
-
-        [DataMember]
-        public int Team { get { return team; } set { team = value; } }
+        public int Team { get; set; }
 
     }
 }

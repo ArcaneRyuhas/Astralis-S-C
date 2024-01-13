@@ -1,31 +1,27 @@
 ﻿using Astralis.Logic;
 using Astralis.UserManager;
 using Astralis.Views.Cards;
+using System;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 
 
 namespace Astralis.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for EndGame.xaml
-    /// </summary>
+
     public partial class EndGame : Page, IEndGameCallback
     {
         private EndGameClient _client;
-        private GameWindow _endGameWindow;
-
         private const int GAME_ABORTED = 0;
         private const string GUEST_NAME = "Guest";
 
-        public GameWindow EndGameWindow {get { return _endGameWindow;} set { _endGameWindow = value; } }
+        public GameWindow EndGameWindow { get; set; }
 
         public EndGame(int winnerTeam, int myTeam)
         {
             InitializeComponent();
-            SetPlayersCard();
+            GetEndGameUsers();
             SetWinnerTeam(winnerTeam, myTeam);
         }
 
@@ -45,27 +41,48 @@ namespace Astralis.Views.Pages
             }
         }
 
-        private void SetPlayersCard()
+        private void GetEndGameUsers()
         {
             string myNickname = UserSession.Instance().Nickname;
             InstanceContext context = new InstanceContext(this);
-            _client = new EndGameClient(context);
 
-            _client.GetUsersWithTeam(myNickname);
+            try
+            {
+                _client = new EndGameClient(context);
+
+                _client.GetEndGameUsers(myNickname);
+            }
+            catch (CommunicationObjectFaultedException)
+            {
+                MessageBox.Show(Properties.Resources.msgPreviousConnectioLost, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Properties.Resources.msgConnectionError, "AstralisError", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.RestartApplication();
+            }
+
         }
 
-        public void SetUsers(UserWithTeam[] usersWithTeams)
+        public void ShowEndGameUsers(UserWithTeam[] usersWithTeams)
         {
             int gridRow = 0;
 
             foreach (UserWithTeam userWithTeam in usersWithTeams)
             {
-                AddCard(userWithTeam, userWithTeam.Team, gridRow);
+                AddEndGameUserCard(userWithTeam, userWithTeam.Team, gridRow);
+            
                 gridRow++;
             }
         }
 
-        private void AddCard(UserWithTeam user, int team, int gridRow)
+        private void AddEndGameUserCard(UserWithTeam user, int team, int gridRow)
         {
             EndGameUserCard endGameUserCard = new EndGameUserCard();
 
@@ -76,7 +93,16 @@ namespace Astralis.Views.Pages
 
         private void BtnExitClick(object sender, RoutedEventArgs e)
         {
-            if (!UserSession.Instance().Nickname.StartsWith(GUEST_NAME))
+            string nickname = UserSession.Instance().Nickname;
+
+            ExitByUser(nickname);
+            EndGameWindow.Close();
+            _client.GameEnded(nickname);
+        }
+
+        private void ExitByUser(string nickname)
+        {
+            if (!nickname.StartsWith(GUEST_NAME))
             {
                 GameWindow gameWindow = new GameWindow();
 
@@ -84,14 +110,8 @@ namespace Astralis.Views.Pages
             }
             else
             {
-                LogIn logIn = new LogIn();
-
-                logIn.Show();
-
+                App.RestartApplication();
             }
-
-            _endGameWindow.Close();
-            _client.GameEnded(UserSession.Instance().Nickname);
         }
     }
 }

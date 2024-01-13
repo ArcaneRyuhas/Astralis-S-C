@@ -25,7 +25,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="txtSearchUser" Grid.Column="1" Text="{x:Static p:Resources.txtSearchUser}" Height="26" TextAlignment="Center" Width="190" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBox x:Name="txtSearchUser" Grid.Column="1" Text="{x:Static p:Resources.txtSearchUser}" PreviewTextInput="TextLimiterForNickname" Height="26" TextAlignment="Center" Width="190" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <Button x:Name="btnSendFriendRequest" Grid.Column="0" Height="15" Width="20" HorizontalAlignment="Left" Click="BtnSendFriendRequestClick">
                     <Button.Background>
                         <ImageBrush ImageSource="FriendWindowImages/message.png"/>

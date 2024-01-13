@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:p = "clr-namespace:Astralis.Properties"
         mc:Ignorable="d" 
-      d:DesignHeight="920" d:DesignWidth="1280"
+      d:DesignHeight="900" d:DesignWidth="1180"
+      ResizeMode="NoResize"
       Title="GameBoard">
 
     <Grid Background="#FF716D67">
@@ -44,27 +45,27 @@
                         <ColumnDefinition Width="143"/>
                     </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Column="0" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="0" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
                     </Grid>
-                    <Grid Grid.Column="2" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="2" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
                     </Grid>
-                    <Grid Grid.Column="4" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="4" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
                     </Grid>
-                    <Grid Grid.Column="6" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="6" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
                     </Grid>
-                    <Grid Grid.Column="8" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInSlot">
+                    <Grid Grid.Column="8" Width="130" Height="200" MouseLeftButtonDown="PlaceCardInGameSlot">
                         <Grid.Background>
                             <ImageBrush ImageSource="InGameAssets/CardSlot.png"/>
                         </Grid.Background>
@@ -112,7 +113,7 @@
                 </Grid>
             </Grid>
 
-            <ProgressBar x:Name="progressBarCounter" Grid.Column="0"  Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Height="21" Width="370" Background="Black" Foreground="#FF12E2FD" BorderBrush="White" Margin="-145,0,0,0" >
+            <ProgressBar x:Name="progressBarCounter" Grid.Column="0"  Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Height="21" Width="370" Background="Black" Foreground="DarkRed" BorderBrush="White" Margin="-145,0,0,0" >
                 <ProgressBar.RenderTransform>
                     <RotateTransform Angle="270"/>
                 </ProgressBar.RenderTransform>
@@ -127,7 +128,7 @@
                         <TextBlock x:Name="tbChat" TextWrapping="Wrap" Foreground="#FFC32525"/>
                     </Grid>
                 </ScrollViewer>
-                <TextBox x:Name="txtChat"  HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" Text="{x:Static p:Resources.txtChat}" VerticalAlignment="Bottom" Width="280" FontSize="16" Height="20"/>
+                <TextBox x:Name="txtChat"  HorizontalAlignment="Left" PreviewTextInput="TextLimiterForChat"  Grid.Row="1" TextWrapping="Wrap" Text="{x:Static p:Resources.txtChat}" VerticalAlignment="Bottom" Width="280" FontSize="16" Height="20"/>
                 <Button x:Name="btnSendMessage" Content="{x:Static p:Resources.btnSendMessage}" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Click="BtnSendMessageClick" FontSize="20" Width="100" Template="{DynamicResource ButtonTemplateNormal}"/>
             </Grid>
         </Grid>

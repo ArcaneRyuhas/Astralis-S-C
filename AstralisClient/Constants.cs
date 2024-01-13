@@ -1,5 +1,4 @@
-﻿
-namespace Astralis
+﻿namespace Astralis
 {
     public static class Constants
     {
@@ -16,5 +15,4 @@ namespace Astralis
         public const string ERROR_STRING = "ERROR";
         public const string VALIDATION_FAILURE_STRING = "FAILURE";
     }
-
 }

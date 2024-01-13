@@ -5,9 +5,6 @@ using System.Windows.Controls;
 
 namespace Astralis.Views.Cards
 {
-    /// <summary>
-    /// Interaction logic for FriendCard.xaml
-    /// </summary>
     public partial class FriendCard : UserControl
     {
         public event EventHandler<Tuple<string, bool>> ReplyToFriendRequestEvent;
@@ -28,25 +25,25 @@ namespace Astralis.Views.Cards
         public void SetLobbyCard(string nickname, bool onlineStatus, int friendStatus)
         {
             lblNickname.Content = nickname;
-            if (friendStatus == IS_FRIEND)
-            {
-                if (onlineStatus == true)
-                {
-                    ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
-                }
-            }
             btnSendGameInvitation.Visibility = Visibility.Visible;
+
+            if (friendStatus == IS_FRIEND && onlineStatus)
+            {
+                ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
+            }
         }
 
         public void SetMainMenuCard(string nickname, bool onlineStatus, int friendStatus)
         {
             lblNickname.Content = nickname;
+
             if (friendStatus == IS_FRIEND)
             {
-                if (onlineStatus == true)
+                if (onlineStatus)
                 {
                     ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
                 }
+
                 btnDeleteFriend.Visibility = Visibility.Visible;
             }
             else
@@ -61,7 +58,7 @@ namespace Astralis.Views.Cards
         {
             string friendUsername = lblNickname.Content.ToString();
 
-            if (_onlineStatus == true)
+            if (_onlineStatus)
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }
@@ -79,7 +76,6 @@ namespace Astralis.Views.Cards
         private void BtnDeleteFriendClick(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
-
             btnAcceptFriendRequest.Visibility = Visibility.Hidden;
 
             RemoveFriendEvent?.Invoke(this, friendUsername);
@@ -89,7 +85,7 @@ namespace Astralis.Views.Cards
         {
             string friendUsername = lblNickname.Content.ToString();
 
-            if (_onlineStatus == true)
+            if (_onlineStatus)
             {
                 ellipseOnlineStatus.Fill = System.Windows.Media.Brushes.Green;
             }
@@ -107,7 +103,6 @@ namespace Astralis.Views.Cards
         private void BtnSendGameInvitationClick(object sender, RoutedEventArgs e)
         {
             string friendUsername = lblNickname.Content.ToString();
-
             btnSendGameInvitation.Visibility = Visibility.Hidden;
 
             SendGameInvitation?.Invoke(this, friendUsername);

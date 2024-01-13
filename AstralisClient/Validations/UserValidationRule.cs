@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using Astralis.Properties;
 
@@ -18,7 +13,6 @@ namespace Astralis.Validations
         {
             Regex userRegex = new Regex(userStringRegex);
             ValidationResult result = ValidationResult.ValidResult;
-
             string input = value.ToString();
 
             if (!userRegex.IsMatch(input))
@@ -43,7 +37,6 @@ namespace Astralis.Validations
         {
             Regex mailRegex = new Regex(mailStringRegex);
             ValidationResult result = ValidationResult.ValidResult;
-
             string input = value.ToString();
 
             if (!mailRegex.IsMatch(input))

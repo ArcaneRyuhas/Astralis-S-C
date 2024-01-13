@@ -619,6 +619,15 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El juego esta lleno.
+        /// </summary>
+        public static string msgGameIsFull {
+            get {
+                return ResourceManager.GetString("msgGameIsFull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El lobby esta lleno o no existe.
         /// </summary>
         public static string msgGameIsFullOrLobbyDoesntExist {
@@ -646,11 +655,38 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El correo no es valido..
+        /// </summary>
+        public static string msgMailIncorrect {
+            get {
+                return ResourceManager.GetString("msgMailIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No se encontro el lobby.
         /// </summary>
         public static string msgNoGameFound {
             get {
                 return ResourceManager.GetString("msgNoGameFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Se ha perdido la conexión previa con el servidor.
+        /// </summary>
+        public static string msgPreviousConnectioLost {
+            get {
+                return ResourceManager.GetString("msgPreviousConnectioLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No hay conexión con la base de datos..
+        /// </summary>
+        public static string msgUnableToAnswer {
+            get {
+                return ResourceManager.GetString("msgUnableToAnswer", resourceCulture);
             }
         }
         
@@ -700,7 +736,7 @@ namespace Astralis.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to El usuario se ha actualizado correctamen, se reinicará la aplicación.
+        ///   Looks up a localized string similar to El usuario se ha actualizado correctamente, se reinicará la aplicación.
         /// </summary>
         public static string msgUserUpdated {
             get {
